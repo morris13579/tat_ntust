@@ -44,13 +44,16 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void _addEvent() async {
-    String url = await NTUTConnector.getCalendarUrl();
     var directory = await getApplicationSupportDirectory();
     String savePath = "${directory.path}/calendar.ics";
     Log.d(savePath);
-    int day =
-        DateTime.now().difference(await File(savePath).lastModified()).inDays;
+    int day = 0;
+    if (await File(savePath).exists()) {
+      day =
+          DateTime.now().difference(await File(savePath).lastModified()).inDays;
+    }
     if (!await File(savePath).exists() || day >= 1) {
+      String url = await NTUTConnector.getCalendarUrl();
       MyToast.show(R.current.downloading);
       await DioConnector.instance.download(url, (responseHeaders) => savePath);
     }
