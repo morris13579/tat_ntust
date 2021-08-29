@@ -15,7 +15,6 @@ class NTUTSubSystemTask extends NTUTTask<APTreeJson> {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
       var value = await NTUTConnector.getSubSystem();
-      print(value);
       if (value != null) {
         result = value;
         return TaskStatus.Success;

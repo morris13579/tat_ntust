@@ -637,6 +637,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  icalendar_parser:
+    dependency: "direct main"
+    description:
+      name: icalendar_parser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.1"
   image:
     dependency: transitive
     description:

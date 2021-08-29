@@ -116,7 +116,6 @@ class CourseConnector {
         courseMain.note = clearString(k[5].text);
         TeacherJson teacher = TeacherJson();
         teacher.name = clearString(k[4].text);
-        print(courseMain.name);
         for (int j = 0; j < 7; j++) {
           Day day = dayEnum[j]; //初始化
           courseMain.time[day] = "";
@@ -174,7 +173,6 @@ class CourseConnector {
       ConnectorParameter parameter;
       parameter = ConnectorParameter(_courseSemestersUrl);
       Response result = await Connector.getDataByGetResponse(parameter);
-      print(result.data);
       List<CourseSemesterJson> courseSemester = (result.data as List)
           .map((e) => CourseSemesterJson.fromJson(e))
           .toList();
