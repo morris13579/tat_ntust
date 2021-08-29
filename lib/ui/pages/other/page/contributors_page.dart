@@ -85,6 +85,7 @@ class ContributorsPage extends StatelessWidget {
                 "https://api.github.com/repos/${AppLink.githubOwner}/${AppLink.githubName}/contributors")),
             builder: (BuildContext context, AsyncSnapshot<Response> snapshot) {
               if (snapshot.hasData) {
+                print(snapshot.data);
                 List<RepositoryContributor> contributorList;
                 if (snapshot.data.data is List) {
                   contributorList = (snapshot.data.data as List)

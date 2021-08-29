@@ -13,7 +13,7 @@ class AppLink {
       "https://docs.google.com/forms/d/e/1FAIpQLSfHdgBnYpc7plIH2GBYeYcStwPIgZRB_oKL3guMXWX87svryA/viewform";
 
   static final String privacyPolicyUrl =
-      "https://raw.githubusercontent.com/$githubOwner/$githubName/master/privacy-policy.md?token=AHZYST7QZFMI3CCAN4WH2HLBFM3YE";
+      "https://raw.githubusercontent.com/$githubOwner/$githubName/master/privacy-policy.md";
 
   static String feedback(String mainVersion, String log) {
     Uri url = Uri.https(
