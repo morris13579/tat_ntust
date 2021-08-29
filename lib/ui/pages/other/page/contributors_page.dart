@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -86,10 +85,16 @@ class ContributorsPage extends StatelessWidget {
                 "https://api.github.com/repos/${AppLink.githubOwner}/${AppLink.githubName}/contributors")),
             builder: (BuildContext context, AsyncSnapshot<Response> snapshot) {
               if (snapshot.hasData) {
-                List<RepositoryContributor> contributorList =
-                    (snapshot.data.data as List)
-                        .map((e) => RepositoryContributor.fromJson(e))
-                        .toList();
+                List<RepositoryContributor> contributorList;
+                if (snapshot.data.data is List) {
+                  contributorList = (snapshot.data.data as List)
+                      .map((e) => RepositoryContributor.fromJson(e))
+                      .toList();
+                } else {
+                  contributorList = [
+                    RepositoryContributor.fromJson(snapshot.data.data)
+                  ];
+                }
 
                 return ListView.builder(
                   itemCount: contributorList.length,

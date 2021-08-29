@@ -10,17 +10,17 @@ class AppLink {
   static final String githubName = "tat_ntust";
   static final String gitHub = "https://github.com/$githubOwner/$githubName";
   static final String feedbackBaseUrl =
-      "https://docs.google.com/forms/d/e/1FAIpQLSc3JFQECAA6HuzqybasZEXuVf8_ClM0UZYFjpPvMwtHbZpzDA/viewform";
+      "https://docs.google.com/forms/d/e/1FAIpQLSfHdgBnYpc7plIH2GBYeYcStwPIgZRB_oKL3guMXWX87svryA/viewform";
 
   static final String privacyPolicyUrl =
-      "https://raw.githubusercontent.com/$githubOwner/$githubName/dev/privacy-policy.md";
+      "https://raw.githubusercontent.com/$githubOwner/$githubName/master/privacy-policy.md?token=AHZYST7QZFMI3CCAN4WH2HLBFM3YE";
 
   static String feedback(String mainVersion, String log) {
     Uri url = Uri.https(
         Uri.parse(feedbackBaseUrl).host, Uri.parse(feedbackBaseUrl).path, {
-      "entry.978972557": (Platform.isAndroid) ? "Android" : "IOS",
-      "entry.823909330": mainVersion,
-      "entry.517392071": log
+      "entry.201642894": (Platform.isAndroid) ? "Android" : "IOS",
+      "entry.1614642121": mainVersion,
+      "entry.991226144": log
     });
     return url.toString();
   }
