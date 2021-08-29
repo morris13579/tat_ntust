@@ -71,13 +71,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.1"
-  bloc:
-    dependency: "direct main"
-    description:
-      name: bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "7.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -183,13 +176,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  charset_converter:
-    dependency: "direct main"
-    description:
-      name: charset_converter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   checked_yaml:
     dependency: transitive
     description:
