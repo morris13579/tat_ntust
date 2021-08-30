@@ -3,8 +3,6 @@ import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
-import 'package:flutter_app/ui/pages/ntust_login_page.dart';
-import 'package:get/get.dart';
 
 import '../dialog_task.dart';
 

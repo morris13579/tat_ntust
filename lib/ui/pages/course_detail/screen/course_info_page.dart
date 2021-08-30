@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
-import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/task/course/course_extra_info_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';

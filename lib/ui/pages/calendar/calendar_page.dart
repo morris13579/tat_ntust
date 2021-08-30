@@ -1,16 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/connector/core/dio_connector.dart';
-import 'package:flutter_app/src/connector/ntust_connector.dart';
 import 'package:flutter_app/src/task/ntust/ntust_calendar_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
-import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:icalendar_parser/icalendar_parser.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 /*

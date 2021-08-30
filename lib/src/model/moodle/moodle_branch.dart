@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:flutter_app/debug/log/Log.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'moodle_branch.g.dart';

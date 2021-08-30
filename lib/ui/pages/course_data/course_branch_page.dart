@@ -1,15 +1,12 @@
-import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
-import 'package:flutter_app/src/file/file_store.dart';
-import 'package:flutter_app/src/file/my_downloader.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
 import 'package:flutter_app/src/task/moodle/moodle_course_branch.dart';
-import 'package:flutter_app/src/task/moodle/moodle_course_directory.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
