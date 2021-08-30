@@ -54,6 +54,7 @@ class FileDownload {
     //開始下載檔案
     DioConnector.instance.download(url, (Headers responseHeaders) {
       Map<String, List<String>> headers = responseHeaders.map;
+      print(headers);
       if (headers.containsKey("content-disposition")) {
         //代表有名字
         List<String> name = headers["content-disposition"];
@@ -68,30 +69,6 @@ class FileDownload {
           realFileName = '.pdf';
         }
       }
-      if (!name.contains(".")) {
-        //代表名字不包含副檔名
-        if (realFileName != null) {
-          //代表可以從網路取得副檔名
-          fileExtension = realFileName.split(".").reversed.toList()[0];
-          realFileName = name + "." + fileExtension;
-        } else {
-          //嘗試使用網址後面找出附檔名
-          String maybeName = url.split("/").toList().last;
-          if (maybeName.contains(".")) {
-            fileExtension = maybeName.split(".").toList().last;
-            realFileName = name + "." + fileExtension;
-          }
-          //realFileName = name + "." + fileExtension;
-        }
-      } else {
-        //代表包含.
-        List<String> s = name.split(".");
-        s.removeLast();
-        if (realFileName != null && realFileName.contains(".")) {
-          realFileName = s.join() + '.' + realFileName.split(".").last;
-        }
-      }
-      realFileName = realFileName ?? name; //如果還是沒有找到副檔名直接使用原始名稱
       //print(path + "/" + realFileName);
       return path + "/" + realFileName;
     },

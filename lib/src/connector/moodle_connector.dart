@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
+import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
@@ -13,10 +17,29 @@ class MoodleUserInfo {
   MoodleUserInfo({this.studentId, this.name});
 }
 
+class MoodleCourseDirectoryInfo {
+  String elementid;
+  String id;
+  String type;
+  String sesskey;
+  String instance;
+  String name;
+
+  MoodleCourseDirectoryInfo(
+      {this.elementid,
+      this.id,
+      this.type,
+      this.sesskey,
+      this.instance,
+      this.name});
+}
+
 class MoodleConnector {
   static final String host = "https://moodle.ntust.edu.tw";
   static final String _loginUrl = "$host/login/index.php";
   static final String _userUrl = "$host/user/index.php";
+  static final String _viewUrl = "$host/course/view.php";
+  static final String _branchUrl = "$host/lib/ajax/getnavbranch.php";
 
   static Future<MoodleConnectorStatus> login(
       String account, String password) async {
@@ -28,7 +51,7 @@ class MoodleConnector {
       String logintoken;
 
       parameter = ConnectorParameter(_loginUrl);
-      result = await Connector.getDataByGet(parameter);
+      result = await Connector.getRedirects(parameter);
       tagNode = parse(result);
 
       nodes = tagNode.getElementsByTagName("input");
@@ -83,6 +106,78 @@ class MoodleConnector {
       return Uri.parse(courseUrl).queryParameters["id"];
     } catch (e) {
       throw e;
+    }
+  }
+
+  static Future<List<MoodleCourseDirectoryInfo>> getCourseDirectory(
+      String courseId) async {
+    String result;
+    Document tagNode;
+    List<Element> nodes;
+    ConnectorParameter parameter;
+    List<MoodleCourseDirectoryInfo> value = [];
+    try {
+      String id = await getCourseUrl(courseId);
+      parameter = ConnectorParameter(_viewUrl);
+      Map<String, String> data = {
+        "id": id,
+      };
+      parameter.data = data;
+      result = await Connector.getDataByGet(parameter);
+
+      tagNode = parse(result);
+      nodes = tagNode.getElementsByClassName(
+          "type_course depth_3 contains_branch current_branch");
+      nodes = nodes[0].getElementsByTagName("ul");
+      nodes = nodes[0]
+          .getElementsByClassName("type_structure depth_4 contains_branch");
+      for (var i in nodes) {
+        Element p = i.getElementsByTagName("p")[0];
+        MoodleCourseDirectoryInfo info = MoodleCourseDirectoryInfo(
+          name: i.text,
+          elementid: p.attributes["data-node-id"],
+          id: p.attributes["data-node-key"],
+          type: p.attributes["data-node-type"],
+          sesskey: "avG0zcjfKy",
+          instance: "4",
+        );
+        value.add(info);
+      }
+      return value;
+    } catch (e, stack) {
+      Log.eWithStack(e, stack);
+      return null;
+    }
+  }
+
+  static Future<MoodleBranchJson> getCourseBranch(
+      MoodleCourseDirectoryInfo info) async {
+    String result;
+    ConnectorParameter parameter;
+    try {
+      parameter = ConnectorParameter(_branchUrl);
+      Map<String, String> data = {
+        "elementid": info.elementid,
+        "id": info.id,
+        "type": info.type,
+        "sesskey": info.sesskey,
+        "instance": info.instance,
+      };
+      parameter.data = data;
+      result = await Connector.getDataByPost(parameter);
+      MoodleBranchJson branch = MoodleBranchJson.fromJson(json.decode(result));
+      List<Children> c = [];
+      branch.children ??= [];
+      for (var i in branch.children) {
+        if (i != null) {
+          c.add(i);
+        }
+      }
+      branch.children = c;
+      return branch;
+    } catch (e, stack) {
+      Log.eWithStack(e, stack);
+      return null;
     }
   }
 

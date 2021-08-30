@@ -13,17 +13,17 @@ import 'package:provider/provider.dart';
 
 import 'screen/course_member.dart';
 
-class ISchoolPage extends StatefulWidget {
+class CourseDetailPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
   final SemesterJson semester;
 
-  ISchoolPage(this.courseInfo, this.semester);
+  CourseDetailPage(this.courseInfo, this.semester);
 
   @override
-  _ISchoolPageState createState() => _ISchoolPageState();
+  _CourseDetailPageState createState() => _CourseDetailPageState();
 }
 
-class _ISchoolPageState extends State<ISchoolPage>
+class _CourseDetailPageState extends State<CourseDetailPage>
     with SingleTickerProviderStateMixin {
   TabPageList tabPageList;
   TabController _tabController;

@@ -553,6 +553,12 @@ class _CourseTablePageState extends State<CourseTablePage> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
+              _showCourseData(courseInfo);
+            },
+            child: new Text(R.current.courseData),
+          ),
+          TextButton(
+            onPressed: () {
               _showCourseDetail(courseInfo);
             },
             child: new Text(R.current.details),
@@ -599,13 +605,23 @@ class _CourseTablePageState extends State<CourseTablePage> {
     return v ?? value;
   }
 
+  void _showCourseData(CourseInfoJson courseInfo) {
+    CourseMainJson course = courseInfo.main.course;
+    Get.back();
+    if (course.id.isEmpty) {
+      MyToast.show(course.name + R.current.noSupport);
+    } else {
+      RouteUtils.toCourseDataPage(courseInfo);
+    }
+  }
+
   void _showCourseDetail(CourseInfoJson courseInfo) {
     CourseMainJson course = courseInfo.main.course;
     Get.back();
     if (course.id.isEmpty) {
       MyToast.show(course.name + R.current.noSupport);
     } else {
-      RouteUtils.toISchoolPage(courseTableData.courseSemester, courseInfo);
+      RouteUtils.toCourseDetailPage(courseTableData.courseSemester, courseInfo);
     }
   }
 

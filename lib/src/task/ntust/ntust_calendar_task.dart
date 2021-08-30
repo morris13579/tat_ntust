@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
-import 'package:flutter_app/src/connector/course_connector.dart';
 import 'package:flutter_app/src/connector/ntust_connector.dart';
-import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/task/dialog_task.dart';
 import 'package:path_provider/path_provider.dart';
 

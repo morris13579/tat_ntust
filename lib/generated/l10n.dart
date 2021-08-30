@@ -465,6 +465,46 @@ class S {
     );
   }
 
+  /// `Get course directory...`
+  String get getMoodleCourseDirectory {
+    return Intl.message(
+      'Get course directory...',
+      name: 'getMoodleCourseDirectory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get course directory error`
+  String get getMoodleCourseDirectoryError {
+    return Intl.message(
+      'Get course directory error',
+      name: 'getMoodleCourseDirectoryError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `get course branch...`
+  String get getMoodleCourseBranch {
+    return Intl.message(
+      'get course branch...',
+      name: 'getMoodleCourseBranch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `get course branch error`
+  String get getMoodleCourseBranchError {
+    return Intl.message(
+      'get course branch error',
+      name: 'getMoodleCourseBranchError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `註解`
   String get ___________________CourseTableUi___________________ {
     return Intl.message(
@@ -770,6 +810,16 @@ class S {
     return Intl.message(
       'Search credit',
       name: 'searchCredit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `course Data`
+  String get courseData {
+    return Intl.message(
+      'course Data',
+      name: 'courseData',
       desc: '',
       args: [],
     );
