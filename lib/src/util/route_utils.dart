@@ -5,8 +5,10 @@ import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
+import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
 import 'package:flutter_app/ui/pages/course_data/course_branch_page.dart';
 import 'package:flutter_app/ui/pages/course_data/course_data_page.dart';
+import 'package:flutter_app/ui/pages/course_data/course_folder_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/course_detail_page.dart';
 import 'package:flutter_app/ui/pages/file_viewer/file_viewer_page.dart';
 import 'package:flutter_app/ui/pages/log_console/log_console.dart';
@@ -57,6 +59,14 @@ class RouteUtils {
               path: path,
             ),
         transition: transition);
+  }
+
+  static Future toCourseFolderPage(
+      CourseInfoJson courseInfo, Children children) async {
+    return await Get.to(
+      () => CourseFolderPage(courseInfo, children),
+      transition: transition,
+    );
   }
 
   static Future toCourseDataPage(CourseInfoJson courseInfo) async {

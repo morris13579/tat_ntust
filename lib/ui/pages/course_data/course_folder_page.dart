@@ -1,47 +1,50 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/connector/core/connector.dart';
+import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
 import 'package:flutter_app/src/task/moodle/moodle_course_branch.dart';
+import 'package:flutter_app/src/task/moodle/moodle_course_folder.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:get/get.dart';
 
-class CourseBranchPage extends StatefulWidget {
+class CourseFolderPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
-  final MoodleCourseDirectoryInfo branch;
+  final Children children;
 
-  CourseBranchPage(this.courseInfo, this.branch);
+  CourseFolderPage(this.courseInfo, this.children);
 
   @override
-  _CourseBranchPageState createState() => _CourseBranchPageState();
+  _CourseFolderPageState createState() => _CourseFolderPageState();
 }
 
-class _CourseBranchPageState extends State<CourseBranchPage> {
+class _CourseFolderPageState extends State<CourseFolderPage> {
   bool isLoading = true;
-  MoodleBranchJson moodleBranch;
+  List<FileInfo> item = [];
 
   @override
   void initState() {
     super.initState();
-    loadbranch(widget.branch);
+    loadFolder(widget.children.link);
   }
 
-  void loadbranch(MoodleCourseDirectoryInfo info) async {
+  void loadFolder(String url) async {
     setState(() {
       isLoading = true;
     });
     TaskFlow taskFlow = TaskFlow();
-    var task = MoodleCourseBranchTask(info);
+    MoodleCourseFolderTask task = MoodleCourseFolderTask(url);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
-      moodleBranch = task.result;
-      if (moodleBranch.children.length == 0) {
+      item = task.result;
+      if (item.length == 0) {
         MyToast.show(R.current.nothingHere);
         Get.back();
       }
@@ -55,7 +58,7 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.branch.name),
+        title: Text(widget.children.name),
       ),
       body: isLoading
           ? Center(
@@ -68,9 +71,9 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
   Widget buildTree() {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: moodleBranch.children.length,
+      itemCount: item.length,
       itemBuilder: (BuildContext context, int index) {
-        Children ap = moodleBranch.children[index];
+        FileInfo ap = item[index];
         return InkWell(
           child: Container(
             height: 50,
@@ -79,11 +82,7 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
                 Expanded(
                   flex: 1,
                   //https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1624611875/${ap.icon.pix}
-                  child: Icon((ap.icon.component.contains("forum"))
-                      ? Icons.message_outlined
-                      : ap.icon.component.contains("folder")
-                          ? Icons.folder_outlined
-                          : Icons.file_copy),
+                  child: Icon(Icons.file_copy),
                 ),
                 Expanded(
                   flex: 8,
@@ -93,17 +92,10 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
             ),
           ),
           onTap: () async {
-            if (ap.icon.component.contains("forum")) {
-              RouteUtils.toWebViewPage(ap.name, ap.link, false);
-            } else if (ap.icon.component.contains("folder")) {
-              RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
-            } else {
-              await AnalyticsUtils.logDownloadFileEvent();
-              MyToast.show(R.current.downloadWillStart);
-              String dirName = widget.courseInfo.main.course.name;
-              FileDownload.download(
-                  context, ap.link + "&redirect=1", dirName, ap.name);
-            }
+            await AnalyticsUtils.logDownloadFileEvent();
+            MyToast.show(R.current.downloadWillStart);
+            String dirName = widget.courseInfo.main.course.name;
+            FileDownload.download(context, ap.url, dirName, ap.name);
           },
         );
       },

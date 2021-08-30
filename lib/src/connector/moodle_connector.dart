@@ -33,6 +33,13 @@ class MoodleCourseDirectoryInfo {
       this.name});
 }
 
+class FileInfo {
+  String name;
+  String url;
+
+  FileInfo({this.name, this.url});
+}
+
 class MoodleConnector {
   static final String host = "https://moodle.ntust.edu.tw";
   static final String _loginUrl = "$host/login/index.php";
@@ -222,8 +229,55 @@ class MoodleConnector {
           break;
         }
       }
-
       return userInfo;
+    } catch (e, stack) {
+      Log.eWithStack(e, stack);
+      return null;
+    }
+  }
+
+  static Future<List<FileInfo>> getFolder(String url) async {
+    String result;
+    Document tagNode;
+    Element node;
+    List<Element> nodes;
+    ConnectorParameter parameter;
+    List<FileInfo> fs = [];
+    try {
+      parameter = ConnectorParameter(url);
+      result = await Connector.getDataByGet(parameter);
+      tagNode = parse(result);
+      nodes = tagNode.getElementsByClassName("box generalbox foldertree");
+      nodes = nodes[0].getElementsByTagName("li");
+      for (var i in nodes.getRange(1, nodes.length)) {
+        FileInfo f = FileInfo(
+          url: i.getElementsByTagName("a")[0].attributes["href"],
+          name: i.text,
+        );
+        fs.add(f);
+      }
+      try {
+        node = tagNode.getElementsByClassName("singlebutton")[0];
+
+        node = node.getElementsByTagName("form")[0];
+        String url = node.attributes["action"];
+        nodes = node.getElementsByTagName("input");
+        Map<String,dynamic> data = {};
+        for (var i in nodes) {
+          if (i.attributes["type"] == "hidden") {
+            data[i.attributes["name"]] = i.attributes["value"];
+          }
+        }
+        FileInfo f = FileInfo(
+          url: Uri.https(Uri.parse(url).host, Uri.parse(url).path, data)
+              .toString(),
+          name: "下載全部",
+        );
+        fs.add(f);
+      } catch (e) {
+        print(e);
+      }
+      return fs;
     } catch (e, stack) {
       Log.eWithStack(e, stack);
       return null;
