@@ -121,6 +121,7 @@ class _CalendarPageState extends State<CalendarPage> {
             availableCalendarFormats: {
               CalendarFormat.month: 'Month',
             },
+            daysOfWeekHeight: 24,
             firstDay: kFirstDay,
             lastDay: kLastDay,
             focusedDay: _focusedDay,
