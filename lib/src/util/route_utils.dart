@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
+import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/ui/pages/course_detail/course_detail_page.dart';
 import 'package:flutter_app/ui/pages/file_viewer/file_viewer_page.dart';
@@ -56,9 +57,9 @@ class RouteUtils {
   }
 
   static Future toISchoolPage(
-      String studentId, CourseInfoJson courseInfo) async {
+      SemesterJson semester, CourseInfoJson courseInfo) async {
     return await Get.to(
-      () => ISchoolPage(studentId, courseInfo),
+      () => ISchoolPage(courseInfo, semester),
       transition: transition,
     );
   }

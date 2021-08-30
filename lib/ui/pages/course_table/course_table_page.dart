@@ -602,11 +602,10 @@ class _CourseTablePageState extends State<CourseTablePage> {
   void _showCourseDetail(CourseInfoJson courseInfo) {
     CourseMainJson course = courseInfo.main.course;
     Get.back();
-    String studentId = Model.instance.getCourseSetting().info.studentId;
     if (course.id.isEmpty) {
       MyToast.show(course.name + R.current.noSupport);
     } else {
-      RouteUtils.toISchoolPage(studentId, courseInfo);
+      RouteUtils.toISchoolPage(courseTableData.courseSemester, courseInfo);
     }
   }
 

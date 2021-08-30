@@ -13,9 +13,9 @@ import 'package:provider/provider.dart';
 
 class ISchoolPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
-  final String studentId;
+  final SemesterJson semester;
 
-  ISchoolPage(this.studentId, this.courseInfo);
+  ISchoolPage(this.courseInfo, this.semester);
 
   @override
   _ISchoolPageState createState() => _ISchoolPageState();
@@ -32,8 +32,14 @@ class _ISchoolPageState extends State<ISchoolPage>
   void initState() {
     super.initState();
     tabPageList = TabPageList();
-    tabPageList.add(TabPage(R.current.course, Icons.info,
-        CourseInfoPage(widget.studentId, widget.courseInfo)));
+    tabPageList.add(TabPage(
+      R.current.course,
+      Icons.info,
+      CourseInfoPage(
+        widget.courseInfo.main.course.id,
+        widget.semester,
+      ),
+    ));
     _tabController = TabController(vsync: this, length: tabPageList.length);
   }
 

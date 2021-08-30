@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
@@ -147,11 +146,12 @@ class CourseConnector {
     }
   }
 
-  static Future<CourseExtraInfoJson> getCourseExtraInfo(String courseId) async {
+  static Future<CourseExtraInfoJson> getCourseExtraInfo(
+      String courseId, SemesterJson semester) async {
     try {
       ConnectorParameter parameter;
       Map<String, String> data = {
-        "semester": "1101",
+        "semester": "${semester.year}${semester.semester}",
         "course_no": courseId,
         "language": (LanguageUtils.getLangIndex() == LangEnum.zh) ? "zh" : "en"
       };

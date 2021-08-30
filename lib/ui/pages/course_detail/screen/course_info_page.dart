@@ -4,6 +4,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/task/course/course_extra_info_task.dart';
@@ -13,10 +14,10 @@ import 'package:get/get.dart';
 import 'package:sprintf/sprintf.dart';
 
 class CourseInfoPage extends StatefulWidget {
-  final CourseInfoJson courseInfo;
-  final String studentId;
+  final String courseId;
+  final SemesterJson semester;
 
-  CourseInfoPage(this.studentId, this.courseInfo);
+  CourseInfoPage(this.courseId, this.semester);
 
   @override
   _CourseInfoPageState createState() => _CourseInfoPageState();
@@ -24,7 +25,6 @@ class CourseInfoPage extends StatefulWidget {
 
 class _CourseInfoPageState extends State<CourseInfoPage>
     with AutomaticKeepAliveClientMixin {
-  CourseMainInfoJson courseMainInfo;
   CourseExtraInfoJson courseExtraInfo;
   bool isLoading = true;
   final List<Widget> courseData = [];
@@ -55,10 +55,9 @@ class _CourseInfoPageState extends State<CourseInfoPage>
   }
 
   void _addTask() async {
-    courseMainInfo = widget.courseInfo.main;
-    String courseId = courseMainInfo.course.id;
+    String courseId = widget.courseId;
     TaskFlow taskFlow = TaskFlow();
-    var task = CourseExtraInfoTask(courseId);
+    var task = CourseExtraInfoTask(courseId, widget.semester);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
       courseExtraInfo = task.result;
