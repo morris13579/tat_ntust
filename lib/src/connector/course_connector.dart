@@ -119,6 +119,7 @@ class CourseConnector {
           Day day = dayEnum[j]; //初始化
           courseMain.time[day] = "";
         }
+        List<String> classRoomTemp = [];
         for (int j = 0; j < 7; j++) {
           Day day = dayEnum[j];
           for (int k = 0; k < 14; k++) {
@@ -129,7 +130,11 @@ class CourseConnector {
               courseMain.time[day] += timeString + " ";
               ClassroomJson classroom = ClassroomJson();
               classroom.name = clearString(ts[j].innerHtml.split("<br>")[1]);
+              if (classRoomTemp.contains(classroom.name)) {
+                continue;
+              }
               courseMainInfo.classroom.add(classroom);
+              classRoomTemp.add(classroom.name);
             }
           }
         }
