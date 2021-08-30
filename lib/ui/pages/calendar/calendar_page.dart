@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
-import 'package:flutter_app/src/connector/ntut_connector.dart';
+import 'package:flutter_app/src/connector/ntust_connector.dart';
+import 'package:flutter_app/src/task/ntust/ntust_calendar_task.dart';
+import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:icalendar_parser/icalendar_parser.dart';
@@ -44,39 +46,32 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void _addEvent() async {
-    var directory = await getApplicationSupportDirectory();
-    String savePath = "${directory.path}/calendar.ics";
-    Log.d(savePath);
-    int day = 0;
-    if (await File(savePath).exists()) {
-      day =
-          DateTime.now().difference(await File(savePath).lastModified()).inDays;
-    }
-    if (!await File(savePath).exists() || day >= 1) {
-      String url = await NTUTConnector.getCalendarUrl();
-      MyToast.show(R.current.downloading);
-      await DioConnector.instance.download(url, (responseHeaders) => savePath);
-    }
-    final icsLines = await File(savePath).readAsLines();
-    final iCalendar = ICalendar.fromLines(icsLines);
-    for (var i in iCalendar.data) {
-      IcsDateTime timeStart = i["dtstart"];
-      DateTime dt = DateTime.parse(timeStart.dt);
-      var time = DateTime.utc(dt.year, dt.month, dt.day);
-      String event = i["summary"];
-      if (_events.containsKey(time)) {
-        _events[time].add(event);
-      } else {
-        _events[time] = [event];
+    TaskFlow taskFlow = TaskFlow();
+    NTUSTCalendarTask task = NTUSTCalendarTask();
+    taskFlow.addTask(task);
+    if (await taskFlow.start(checkNetwork: false)) {
+      String savePath = task.result;
+      final icsLines = await File(savePath).readAsLines();
+      final iCalendar = ICalendar.fromLines(icsLines);
+      for (var i in iCalendar.data) {
+        IcsDateTime timeStart = i["dtstart"];
+        DateTime dt = DateTime.parse(timeStart.dt);
+        var time = DateTime.utc(dt.year, dt.month, dt.day);
+        String event = i["summary"];
+        if (_events.containsKey(time)) {
+          _events[time].add(event);
+        } else {
+          _events[time] = [event];
+        }
       }
+      var _today = DateTime.now().toUtc();
+      _today = _today.add(Duration(hours: 8)); //to TW time
+      setState(() {
+        _selectedDay = _today;
+      });
+      print(_selectedDay);
+      _selectEvent();
     }
-    var _today = DateTime.now().toUtc();
-    _today = _today.add(Duration(hours: 8)); //to TW time
-    setState(() {
-      _selectedDay = _today;
-    });
-    print(_selectedDay);
-    _selectEvent();
   }
 
   void _selectEvent() {

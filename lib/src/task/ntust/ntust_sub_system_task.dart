@@ -1,20 +1,20 @@
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/connector/ntut_connector.dart';
+import 'package:flutter_app/src/connector/ntust_connector.dart';
 import 'package:flutter_app/src/model/ntut/ap_tree_json.dart';
-import 'package:flutter_app/src/task/ntut/ntut_task.dart';
+import 'package:flutter_app/src/task/ntust/ntust_task.dart';
 
 import '../task.dart';
 
-class NTUTSubSystemTask extends NTUTTask<APTreeJson> {
+class NTUSTSubSystemTask extends NTUSTTask<APTreeJson> {
   final String arg;
 
-  NTUTSubSystemTask(this.arg) : super("NTUTSubSystemTask");
+  NTUSTSubSystemTask(this.arg) : super("NTUSTSubSystemTask");
 
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
-      var value = await NTUTConnector.getSubSystem();
+      var value = await NTUSTConnector.getSubSystem();
       if (value != null) {
         result = value;
         return TaskStatus.Success;

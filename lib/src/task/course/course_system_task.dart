@@ -1,10 +1,10 @@
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/course_connector.dart';
-import 'package:flutter_app/src/task/ntut/ntut_task.dart';
+import 'package:flutter_app/src/task/ntust/ntust_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 
-class CourseSystemTask<T> extends NTUTTask<T> {
+class CourseSystemTask<T> extends NTUSTTask<T> {
   CourseSystemTask(String name) : super(name);
   static bool isLogin = false;
 

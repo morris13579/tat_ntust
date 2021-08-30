@@ -2,7 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/task/course/course_system_task.dart';
-import 'package:flutter_app/src/task/ntut/ntut_task.dart';
+import 'package:flutter_app/src/task/ntust/ntust_task.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 
 import 'task.dart';
@@ -16,7 +16,7 @@ class TaskFlow {
   onSuccessCallBack callback;
 
   static resetLoginStatus() {
-    NTUTTask.isLogin = false;
+    NTUSTTask.isLogin = false;
     CourseSystemTask.isLogin = false;
   }
 
@@ -38,9 +38,16 @@ class TaskFlow {
     _queue.add(task);
   }
 
-  Future<bool> start() async {
+  static Future<bool> checkConnectivity() async {
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> start({bool checkNetwork: true}) async {
+    if (checkNetwork && !await checkConnectivity()) {
       MyToast.show(R.current.pleaseConnectToNetwork);
       return false;
     }

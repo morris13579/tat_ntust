@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/model/ntut/ap_tree_json.dart';
-import 'package:flutter_app/src/task/ntut/ntut_sub_system_task.dart';
+import 'package:flutter_app/src/task/ntust/ntust_sub_system_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 
@@ -29,7 +29,7 @@ class _SubSystemPageState extends State<SubSystemPage> {
       isLoading = true;
     });
     TaskFlow taskFlow = TaskFlow();
-    var task = NTUTSubSystemTask(arg);
+    var task = NTUSTSubSystemTask(arg);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
       apTree = task.result;

@@ -83,53 +83,6 @@ class Connector {
     }
   }
 
-  static Future<Map<String, String>> getLoginHeaders(String url) async {
-    try {
-      PersistCookieJar cookieJar = DioConnector.instance.cookiesManager;
-      Map<String, String> headers = Map.from(DioConnector.instance.headers);
-      var cookies = await cookieJar.loadForRequest(Uri.parse(url));
-      headers["Cookie"] =
-          cookies.toString().replaceAll("[", "").replaceAll("]", "");
-      headers.remove("content-type");
-      //Log.d(headers.toString());
-      return headers;
-    } catch (e) {
-      Log.d(e.toString());
-      return Map();
-    }
-  }
-
-  static Future<String> getFileName(String url) async {
-    String fileName;
-    try {
-      ConnectorParameter parameter = ConnectorParameter(url);
-      Map<String, List<String>> headers =
-          await DioConnector.instance.getHeadersByGet(parameter);
-      if (headers.containsKey("content-disposition")) {
-        //代表有名字
-        List<String> name = headers["content-disposition"];
-        RegExp exp = RegExp("['|\"](?<name>.+)['|\"]");
-        RegExpMatch matches = exp.firstMatch(name[0]);
-        fileName = matches.group(1);
-      } else if (headers.containsKey("content-type")) {
-        List<String> name = headers["content-type"];
-        if (name[0].toLowerCase().contains("pdf")) {
-          //是application/pdf
-          fileName = '.pdf';
-        }
-      }
-      if (headers.containsKey("content-length")) {
-        String size = headers["content-length"][0];
-        Log.d("file size = $size");
-      }
-      Log.d("getFileName $fileName");
-      return fileName;
-    } catch (e) {
-      Log.d(e.toString());
-      return null;
-    }
-  }
-
   static void printHeader(Map<String, String> headers) {
     for (String key in headers.keys) {
       Log.d(sprintf("%s : %s", [key, headers[key]]));

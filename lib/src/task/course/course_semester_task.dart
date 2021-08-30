@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/course_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
+import 'package:flutter_app/src/task/dialog_task.dart';
 import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../task.dart';
-import 'course_system_task.dart';
 
-class CourseSemesterTask extends CourseSystemTask<List<SemesterJson>> {
+class CourseSemesterTask extends DialogTask<List<SemesterJson>> {
   final id;
 
   CourseSemesterTask(this.id) : super("CourseSemesterTask");

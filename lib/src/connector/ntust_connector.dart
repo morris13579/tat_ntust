@@ -1,5 +1,5 @@
 //
-//  ntut_connector.dart
+//  ntust_connector.dart
 //  北科課程助手
 //
 //  Created by morris13579 on 2020/02/12.
@@ -15,16 +15,8 @@ import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
-enum NTUTConnectorStatus {
-  LoginSuccess,
-  PasswordExpiredWarning,
-  AccountLockWarning, //帳號鎖住
-  AccountPasswordIncorrect,
-  AuthCodeFailError, //驗證碼錯誤
-  UnknownError
-}
 
-class NTUTConnector {
+class NTUSTConnector {
   static final String host = "https://i.ntust.edu.tw";
   static final String subSystemTWUrl = "$host/student";
   static final String subSystemENUrl = "$host/EN/student";

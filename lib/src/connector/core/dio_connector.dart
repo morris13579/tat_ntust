@@ -52,15 +52,6 @@ class DioConnector {
 
   static final DioConnector instance = DioConnector._privateConstructor();
 
-
-  /*
-  static String _utf8Decoder(List<int> responseBytes, RequestOptions options,
-      ResponseBody responseBody) {
-    String result = Utf8Codec().decode(responseBytes);
-    return result;
-  }
-  */
-
   Future<void> init() async {
     try {
       Directory appDocDir = await getApplicationDocumentsDirectory();

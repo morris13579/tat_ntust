@@ -7,11 +7,10 @@ import 'package:get/get.dart';
 
 import '../dialog_task.dart';
 
-class NTUTTask<T> extends DialogTask<T> {
-  static bool _remindPasswordExpiredWarning = false;
+class NTUSTTask<T> extends DialogTask<T> {
   static bool _isLogin = false;
 
-  NTUTTask(name) : super(name);
+  NTUSTTask(name) : super(name);
 
   static set isLogin(bool value) {
     _isLogin = value;
@@ -20,7 +19,7 @@ class NTUTTask<T> extends DialogTask<T> {
   @override
   Future<TaskStatus> execute() async {
     if (_isLogin) return TaskStatus.Success;
-    name = "NTUTTask " + name;
+    name = "NTUSTTask " + name;
     String account = Model.instance.getAccount();
     String password = Model.instance.getPassword();
     if (account.isEmpty || password.isEmpty) {

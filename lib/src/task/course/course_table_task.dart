@@ -24,8 +24,7 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
       if (LanguageUtils.getLangIndex() == LangEnum.zh) {
         //根據語言選擇課表
       } else {}
-      value =
-          await CourseConnector.getCourseMainInfoList(studentId, semester);
+      value = await CourseConnector.getCourseMainInfoList(studentId, semester);
       super.onEnd();
       if (value != null) {
         CourseTableJson courseTable = CourseTableJson();
@@ -57,8 +56,6 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
         result = courseTable;
         return TaskStatus.Success;
       } else {
-        //NTUTTask.isLogin = false;
-        //CourseSystemTask.isLogin = false;
         return await super.onError(R.current.getCourseError);
       }
     }
