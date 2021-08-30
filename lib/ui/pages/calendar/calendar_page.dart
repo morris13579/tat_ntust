@@ -53,10 +53,19 @@ class _CalendarPageState extends State<CalendarPage> {
         DateTime dt = DateTime.parse(timeStart.dt);
         var time = DateTime.utc(dt.year, dt.month, dt.day);
         String event = i["summary"];
-        if (_events.containsKey(time)) {
-          _events[time].add(event);
-        } else {
-          _events[time] = [event];
+        for (var i in event.split("  ")) {
+          i = i.replaceAll(" ", "");
+          if (i != "") {
+            try {
+              int.parse(i[0]);
+              i = i.substring(2, i.length);
+            } catch (e) {}
+            if (_events.containsKey(time)) {
+              _events[time].add(i);
+            } else {
+              _events[time] = [i];
+            }
+          }
         }
       }
       var _today = DateTime.now().toUtc();
