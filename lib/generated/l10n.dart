@@ -425,6 +425,46 @@ class S {
     );
   }
 
+  /// `Login Moodle...`
+  String get loginMoodle {
+    return Intl.message(
+      'Login Moodle...',
+      name: 'loginMoodle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login Moodle error`
+  String get loginMoodleError {
+    return Intl.message(
+      'Login Moodle error',
+      name: 'loginMoodleError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get Moodle members...`
+  String get getMoodleMembers {
+    return Intl.message(
+      'Get Moodle members...',
+      name: 'getMoodleMembers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get Moodle members error`
+  String get getMoodleMembersError {
+    return Intl.message(
+      'Get Moodle members error',
+      name: 'getMoodleMembersError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `註解`
   String get ___________________CourseTableUi___________________ {
     return Intl.message(
@@ -920,6 +960,16 @@ class S {
     return Intl.message(
       '本校初選人數上限(限舊生)：%s\n本校加退選人數上限/新生第一學期初選人數上限：%s\n系統校際選課人數上限：%s',
       name: 'choosePeopleString',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `member`
+  String get member {
+    return Intl.message(
+      'member',
+      name: 'member',
       desc: '',
       args: [],
     );

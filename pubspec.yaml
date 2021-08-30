@@ -44,7 +44,7 @@ dependencies:
   #----------internet----------#
   dio: ^4.0.0
   #網路get post API
-  dio_cookie_manager: ^2.0.0
+  #dio_cookie_manager: ^2.0.0
   #用於產生cookie_jar與dio接口
   cookie_jar: ^3.0.1
   #可儲存式cookies
@@ -114,6 +114,10 @@ dependencies:
   firebase_remote_config: ^0.10.0+5
   firebase_messaging: ^10.0.6
 
+
+dependency_overrides:
+  dio_cookie_manager:
+    path: plugins/cookie_manager
 
 dev_dependencies:
   flutter_test:

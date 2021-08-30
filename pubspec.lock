@@ -303,11 +303,11 @@ packages:
     source: hosted
     version: "4.0.0"
   dio_cookie_manager:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
-      name: dio_cookie_manager
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "plugins/cookie_manager"
+      relative: true
+    source: path
     version: "2.0.0"
   eva_icons_flutter:
     dependency: "direct main"

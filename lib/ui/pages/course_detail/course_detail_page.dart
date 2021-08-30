@@ -11,6 +11,8 @@ import 'package:flutter_app/ui/pages/course_detail/tab_page.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import 'screen/course_member.dart';
+
 class ISchoolPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
   final SemesterJson semester;
@@ -38,6 +40,14 @@ class _ISchoolPageState extends State<ISchoolPage>
       CourseInfoPage(
         widget.courseInfo.main.course.id,
         widget.semester,
+      ),
+    ));
+
+    tabPageList.add(TabPage(
+      R.current.member,
+      Icons.people,
+      CourseMemberPage(
+        widget.courseInfo.main.course.id,
       ),
     ));
     _tabController = TabController(vsync: this, length: tabPageList.length);

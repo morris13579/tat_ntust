@@ -44,15 +44,22 @@ class Connector {
     }
   }
 
-  static Future<String> getRedirects(ConnectorParameter parameter) async {
+  static Future<String> getRedirects(ConnectorParameter parameter,
+      {usePost: false}) async {
     Response result;
     Options options = Options(followRedirects: false);
     int redirectsTime = 0;
     try {
       while (redirectsTime <= 4) {
         Uri uri = Uri.parse(parameter.url);
-        result = await DioConnector.instance.dio
-            .get(parameter.url, options: options);
+        if (usePost) {
+          result = await DioConnector.instance.dio
+              .post(parameter.url, options: options, data: parameter.data);
+        } else {
+          result = await DioConnector.instance.dio.get(parameter.url,
+              options: options, queryParameters: parameter.data);
+        }
+        usePost = false;
         if (result.statusCode != 302) {
           break;
         }
@@ -62,6 +69,7 @@ class Connector {
         } else {
           parameter = ConnectorParameter("https://" + uri.host + location);
         }
+        Log.d("redirects: ${parameter.url}");
       }
       if (redirectsTime == 4) {
         throw Exception("redirectsTime");

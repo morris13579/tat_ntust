@@ -7,6 +7,9 @@ import 'package:flutter_app/src/file/my_downloader.dart';
 import 'package:flutter_app/src/notifications/notifications.dart';
 import 'package:flutter_app/src/providers/app_provider.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/src/task/moodle/moodle_member_task.dart';
+import 'package:flutter_app/src/task/moodle/moodle_task.dart';
+import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
@@ -71,6 +74,9 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       _pageList.add(ScoreViewerPage());
       _pageList.add(OtherPage(_pageController));
     });
+    TaskFlow taskFlow = TaskFlow();
+    taskFlow.addTask(MoodleMemberTask("ET5009701"));
+    //await taskFlow.start();
   }
 
   void initFlutterDownloader() async {
