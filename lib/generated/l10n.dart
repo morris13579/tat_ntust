@@ -315,6 +315,16 @@ class S {
     );
   }
 
+  /// `login NTUST`
+  String get loginNTUST {
+    return Intl.message(
+      'login NTUST',
+      name: 'loginNTUST',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Network error`
   String get networkError {
     return Intl.message(
@@ -325,11 +335,31 @@ class S {
     );
   }
 
+  /// `Need validate captcha`
+  String get needValidateCaptcha {
+    return Intl.message(
+      'Need validate captcha',
+      name: 'needValidateCaptcha',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `An unknown error occurred`
   String get unknownError {
     return Intl.message(
       'An unknown error occurred',
       name: 'unknownError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account password error`
+  String get accountPasswordError {
+    return Intl.message(
+      'Account password error',
+      name: 'accountPasswordError',
       desc: '',
       args: [],
     );
@@ -500,6 +530,16 @@ class S {
     return Intl.message(
       'get course branch error',
       name: 'getMoodleCourseBranchError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download All`
+  String get downloadAll {
+    return Intl.message(
+      'Download All',
+      name: 'downloadAll',
       desc: '',
       args: [],
     );

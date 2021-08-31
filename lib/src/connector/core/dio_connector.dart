@@ -46,7 +46,7 @@ class DioConnector {
 
   Future<void> init() async {
     try {
-      Directory appDocDir = await getApplicationDocumentsDirectory();
+      Directory appDocDir = await getApplicationSupportDirectory();
       String appDocPath = appDocDir.path;
       Storage storage = FileStorage(appDocPath + "/.cookies/");
       _cookieJar = PersistCookieJar(storage: storage);

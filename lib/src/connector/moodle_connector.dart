@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
@@ -271,7 +272,7 @@ class MoodleConnector {
         FileInfo f = FileInfo(
           url: Uri.https(Uri.parse(url).host, Uri.parse(url).path, data)
               .toString(),
-          name: "下載全部",
+          name: R.current.downloadAll,
         );
         fs.add(f);
       } catch (e) {

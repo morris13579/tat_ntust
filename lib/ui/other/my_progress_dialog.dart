@@ -1,10 +1,54 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'custom_progress_dialog.dart';
+
+const double kitSize = 20;
+const kitColor = Colors.blue;
+final kits = <Widget>[
+  const SpinKitRotatingCircle(size: kitSize, color: kitColor),
+  const SpinKitRotatingPlain(size: kitSize, color: kitColor),
+  const SpinKitChasingDots(size: kitSize, color: kitColor),
+  const SpinKitPulse(size: kitSize, color: kitColor),
+  const SpinKitDoubleBounce(size: kitSize, color: kitColor),
+  const SpinKitWave(
+      size: kitSize, color: kitColor, type: SpinKitWaveType.start),
+  const SpinKitWave(
+      size: kitSize, color: kitColor, type: SpinKitWaveType.center),
+  const SpinKitWave(size: kitSize, color: kitColor, type: SpinKitWaveType.end),
+  const SpinKitThreeBounce(size: kitSize, color: kitColor),
+  const SpinKitThreeInOut(size: kitSize, color: kitColor),
+  const SpinKitWanderingCubes(size: kitSize, color: kitColor),
+  const SpinKitWanderingCubes(
+      size: kitSize, color: kitColor, shape: BoxShape.circle),
+  const SpinKitCircle(size: kitSize, color: kitColor),
+  const SpinKitFadingFour(size: kitSize, color: kitColor),
+  const SpinKitFadingFour(
+      size: kitSize, color: kitColor, shape: BoxShape.rectangle),
+  const SpinKitFadingCube(size: kitSize, color: kitColor),
+  const SpinKitCubeGrid(size: 51.0, color: Colors.white),
+  const SpinKitFoldingCube(size: kitSize, color: kitColor),
+  const SpinKitRing(size: kitSize, color: kitColor),
+  const SpinKitDualRing(size: kitSize, color: kitColor),
+  const SpinKitSpinningLines(size: kitSize, color: kitColor),
+  const SpinKitFadingGrid(size: kitSize, color: kitColor),
+  const SpinKitFadingGrid(
+      size: kitSize, color: kitColor, shape: BoxShape.rectangle),
+  const SpinKitSquareCircle(size: kitSize, color: kitColor),
+  const SpinKitSpinningCircle(size: kitSize, color: kitColor),
+  const SpinKitSpinningCircle(
+      size: kitSize, color: kitColor, shape: BoxShape.rectangle),
+  const SpinKitFadingCircle(size: kitSize, color: kitColor),
+  const SpinKitHourGlass(size: kitSize, color: kitColor),
+  const SpinKitPouringHourGlass(size: kitSize, color: kitColor),
+  const SpinKitPouringHourGlassRefined(size: kitSize, color: kitColor),
+  const SpinKitRipple(size: kitSize, color: kitColor),
+];
 
 class MyProgressDialog {
   static void showProgressDialogOld(
@@ -12,37 +56,42 @@ class MyProgressDialog {
 
   static void progressDialog(String message) async {
     BotToast.showCustomLoading(toastBuilder: (cancel) {
-      return CustomProgressDialog(
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: const BorderRadius.all(Radius.circular(5))),
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Platform.isIOS
-                  ? CupertinoActivityIndicator(
-                      radius: 15,
-                    )
-                  : CircularProgressIndicator(),
-              message == null
-                  ? Padding(
-                      padding: EdgeInsets.all(0),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Text(
-                        message,
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-            ],
-          ),
-        ),
-      );
+      return dialog(message);
     });
+  }
+
+  static Widget dialog(String message) {
+    final int number = Random().nextInt(kits.length);
+    return CustomProgressDialog(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: const BorderRadius.all(Radius.circular(5))),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              height: 60,
+              width: 100,
+              child: kits[number],
+            ),
+            message == null
+                ? Padding(
+                    padding: EdgeInsets.all(0),
+                  )
+                : Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Text(
+                      message,
+                      style: TextStyle(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+          ],
+        ),
+      ),
+    );
   }
 
   static Future<void> hideProgressDialog() async {

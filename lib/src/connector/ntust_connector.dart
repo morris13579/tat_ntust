@@ -12,12 +12,17 @@ import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/model/ntut/ap_tree_json.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
+enum NTUSTLoginStatus { Success, Fail }
 
 class NTUSTConnector {
   static final String host = "https://i.ntust.edu.tw";
+  static final String ntustLoginUrl =
+      "https://stuinfosys.ntust.edu.tw/NTUSTSSOServ/SSO/Login/CourseSelection";
+
   static final String subSystemTWUrl = "$host/student";
   static final String subSystemENUrl = "$host/EN/student";
 
