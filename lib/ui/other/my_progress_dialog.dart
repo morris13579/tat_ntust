@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -13,40 +12,28 @@ const kitColor = Colors.blue;
 final kits = <Widget>[
   const SpinKitRotatingCircle(size: kitSize, color: kitColor),
   const SpinKitRotatingPlain(size: kitSize, color: kitColor),
-  const SpinKitChasingDots(size: kitSize, color: kitColor),
+  const SpinKitChasingDots(size: kitSize + 5, color: kitColor),
   const SpinKitPulse(size: kitSize, color: kitColor),
   const SpinKitDoubleBounce(size: kitSize, color: kitColor),
   const SpinKitWave(
       size: kitSize, color: kitColor, type: SpinKitWaveType.start),
-  const SpinKitWave(
-      size: kitSize, color: kitColor, type: SpinKitWaveType.center),
-  const SpinKitWave(size: kitSize, color: kitColor, type: SpinKitWaveType.end),
   const SpinKitThreeBounce(size: kitSize, color: kitColor),
   const SpinKitThreeInOut(size: kitSize, color: kitColor),
   const SpinKitWanderingCubes(size: kitSize, color: kitColor),
-  const SpinKitWanderingCubes(
-      size: kitSize, color: kitColor, shape: BoxShape.circle),
-  const SpinKitCircle(size: kitSize, color: kitColor),
-  const SpinKitFadingFour(size: kitSize, color: kitColor),
-  const SpinKitFadingFour(
-      size: kitSize, color: kitColor, shape: BoxShape.rectangle),
+  const SpinKitCircle(size: kitSize + 5, color: kitColor),
+  const SpinKitFadingFour(size: kitSize + 5, color: kitColor),
   const SpinKitFadingCube(size: kitSize, color: kitColor),
-  const SpinKitCubeGrid(size: 51.0, color: Colors.white),
+  const SpinKitCubeGrid(size: kitSize, color: kitColor),
   const SpinKitFoldingCube(size: kitSize, color: kitColor),
   const SpinKitRing(size: kitSize, color: kitColor),
   const SpinKitDualRing(size: kitSize, color: kitColor),
   const SpinKitSpinningLines(size: kitSize, color: kitColor),
   const SpinKitFadingGrid(size: kitSize, color: kitColor),
-  const SpinKitFadingGrid(
-      size: kitSize, color: kitColor, shape: BoxShape.rectangle),
   const SpinKitSquareCircle(size: kitSize, color: kitColor),
   const SpinKitSpinningCircle(size: kitSize, color: kitColor),
-  const SpinKitSpinningCircle(
-      size: kitSize, color: kitColor, shape: BoxShape.rectangle),
-  const SpinKitFadingCircle(size: kitSize, color: kitColor),
+  const SpinKitFadingCircle(size: kitSize + 5, color: kitColor),
   const SpinKitHourGlass(size: kitSize, color: kitColor),
-  const SpinKitPouringHourGlass(size: kitSize, color: kitColor),
-  const SpinKitPouringHourGlassRefined(size: kitSize, color: kitColor),
+  const SpinKitPouringHourGlass(size: kitSize + 10, color: kitColor),
   const SpinKitRipple(size: kitSize, color: kitColor),
 ];
 

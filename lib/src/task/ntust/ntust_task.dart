@@ -1,11 +1,11 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/ntust_connector.dart';
+import 'package:flutter_app/src/connector/ntust_login_page.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
-import 'package:flutter_app/src/connector/ntust_login_page.dart';
 import 'package:get/get.dart';
 
 import '../dialog_task.dart';
