@@ -1,6 +1,7 @@
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
+import 'package:flutter_app/src/util/language_utils.dart';
 
 import '../task.dart';
 import 'moodle_task.dart';
@@ -17,6 +18,13 @@ class MoodleCourseBranchTask extends MoodleTask<MoodleBranchJson> {
       MoodleBranchJson value;
       super.onStart(R.current.getMoodleCourseBranch);
       value = await MoodleConnector.getCourseBranch(info);
+      for (var i in value.children) {
+        if (i.link != null) {
+          i.link += (LanguageUtils.getLangIndex() == LangEnum.zh)
+              ? "&lang=zh_tw"
+              : "&lang=en";
+        }
+      }
       super.onEnd();
       if (value != null) {
         result = value;

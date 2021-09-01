@@ -5,6 +5,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
+import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
@@ -128,6 +129,7 @@ class MoodleConnector {
       parameter = ConnectorParameter(_viewUrl);
       Map<String, String> data = {
         "id": id,
+        "lang": (LanguageUtils.getLangIndex() == LangEnum.zh) ? "zh_tw" : "en"
       };
       parameter.data = data;
       result = await Connector.getDataByGet(parameter);
@@ -263,7 +265,7 @@ class MoodleConnector {
         node = node.getElementsByTagName("form")[0];
         String url = node.attributes["action"];
         nodes = node.getElementsByTagName("input");
-        Map<String,dynamic> data = {};
+        Map<String, dynamic> data = {};
         for (var i in nodes) {
           if (i.attributes["type"] == "hidden") {
             data[i.attributes["name"]] = i.attributes["value"];
