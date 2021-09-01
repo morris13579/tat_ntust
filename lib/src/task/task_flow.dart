@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/task/course/course_system_task.dart';
+import 'package:flutter_app/src/task/moodle/moodle_task.dart';
 import 'package:flutter_app/src/task/ntust/ntust_task.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 
@@ -18,6 +19,7 @@ class TaskFlow {
   static resetLoginStatus() {
     NTUSTTask.isLogin = false;
     CourseSystemTask.isLogin = false;
+    MoodleTask.isLogin = false;
   }
 
   int get length {
