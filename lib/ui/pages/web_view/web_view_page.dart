@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
@@ -20,6 +21,30 @@ class _WebViewPageState extends State<WebViewPage> {
   InAppWebViewController webView;
   Uri url = Uri();
   double progress = 0;
+  int onLoadStopTime = -1;
+  Uri lastLoadUri;
+
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    print(onLoadStopTime);
+    if (onLoadStopTime >= 1) {
+      webView.goBack();
+      onLoadStopTime -= 2;
+      return true;
+    }
+    return false;
+  }
 
   Future<bool> setCookies() async {
     final cookies = await cookieJar.loadForRequest(widget.url);
@@ -116,6 +141,10 @@ class _WebViewPageState extends State<WebViewPage> {
                           onLoadStart:
                               (InAppWebViewController controller, Uri url) {
                             setState(() {
+                              if (lastLoadUri != url) {
+                                onLoadStopTime++;
+                              }
+                              lastLoadUri = url;
                               this.url = url;
                             });
                           },
