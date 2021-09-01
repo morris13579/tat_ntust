@@ -37,7 +37,6 @@ class _WebViewPageState extends State<WebViewPage> {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    print(onLoadStopTime);
     if (onLoadStopTime >= 1) {
       webView.goBack();
       onLoadStopTime -= 2;
