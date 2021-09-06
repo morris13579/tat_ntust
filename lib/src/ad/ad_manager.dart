@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_app/debug/log/Log.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,11 +9,17 @@ class AdManager {
   static final String androidAppID = "ca-app-pub-7649352174867436~2995231487";
   static final String androidInterstitialAdUnitId =
       "ca-app-pub-7649352174867436/5625619479";
+
+  static final String testAndroidInterstitialAdUnitId =
+      "ca-app-pub-3940256099942544/1033173712";
+  static final bool inTest = kDebugMode;
+
   static InterstitialAd _interstitialAd;
 
   static Future<void> init() async {
     await MobileAds.instance.initialize();
     await _createInterstitialAd();
+    Log.d("AD run in ${(inTest) ? "Debug" : "Release"} mode");
   }
 
   static Future<void> _createInterstitialAd() async {
@@ -44,6 +51,7 @@ class AdManager {
 
   static Future<void> showDownloadAD() async {
     if (!await getADEnable()) {
+      Log.d("AD is disable");
       return;
     }
     if (_interstitialAd != null) {
@@ -64,6 +72,7 @@ class AdManager {
       );
       _interstitialAd.show();
     } else {
+      Log.d("_interstitialAd is null");
       _createInterstitialAd();
     }
   }
@@ -90,7 +99,9 @@ class AdManager {
 
   static String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-      return androidInterstitialAdUnitId;
+      return (inTest)
+          ? testAndroidInterstitialAdUnitId
+          : androidInterstitialAdUnitId;
     } else if (Platform.isIOS) {
       return "<YOUR_IOS_INTERSTITIAL_AD_UNIT_ID>";
     } else {

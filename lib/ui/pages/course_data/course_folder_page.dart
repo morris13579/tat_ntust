@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/ad/ad_manager.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
@@ -30,8 +29,6 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
   void initState() {
     super.initState();
     loadFolder(widget.children.link);
-    Future.delayed(Duration(seconds: 3))
-        .then((value) => AdManager.showDownloadAD());
   }
 
   void loadFolder(String url) async {
