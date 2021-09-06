@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/ui/other/input_dialog.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:get/get.dart';
 import 'package:pretty_json/pretty_json.dart';
@@ -54,14 +54,12 @@ class _StoreEditPageState extends State<StoreEditPage> {
               itemCount: keyList.length,
               itemBuilder: (context, index) {
                 String key = keyList[index];
-                final TextEditingController controller =
-                    TextEditingController();
+                String value;
                 try {
-                  controller.text = prettyJson(
-                      json.decode(pref.get(key).toString()),
+                  value = prettyJson(json.decode(pref.get(key).toString()),
                       indent: 2);
                 } catch (e) {
-                  controller.text = pref.get(key).toString();
+                  value = pref.get(key).toString();
                 }
                 return Container(
                   padding: EdgeInsets.only(top: 5, left: 20, right: 20),
@@ -76,48 +74,22 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           IconButton(
                               icon: Icon(Icons.edit_outlined),
                               onPressed: () {
-                                Get.dialog(
-                                  AlertDialog(
-                                    title: Text(key),
-                                    content: TextField(
-                                      controller: controller,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                      ),
-                                      maxLines: 20,
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: Text(R.current.cancel),
-                                      ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          if (pref
-                                                  .get(key)
-                                                  .runtimeType
-                                                  .toString() ==
-                                              'String') {
-                                            await pref.setString(
-                                                key, controller.text);
-                                          }
-                                          if (pref
-                                                  .get(key)
-                                                  .runtimeType
-                                                  .toString() ==
-                                              'int') {
-                                            await pref.setInt(key,
-                                                int.parse(controller.text));
-                                          }
-                                          Get.back();
-                                        },
-                                        child: Text(R.current.sure),
-                                      )
-                                    ],
-                                  ),
-                                );
+                                Get.dialog(CustomInputDialog(
+                                  title: key,
+                                  initText: value,
+                                  maxLine: 20,
+                                  onCancel: (String value) {},
+                                  onOk: (String value) async {
+                                    if (pref.get(key).runtimeType.toString() ==
+                                        'String') {
+                                      await pref.setString(key, value);
+                                    }
+                                    if (pref.get(key).runtimeType.toString() ==
+                                        'int') {
+                                      await pref.setInt(key, int.parse(value));
+                                    }
+                                  },
+                                ));
                               }),
                           IconButton(
                             icon: Icon(Icons.delete_outline),

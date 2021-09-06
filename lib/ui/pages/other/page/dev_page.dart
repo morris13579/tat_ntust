@@ -1,12 +1,16 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/ad/ad_manager.dart';
 import 'package:flutter_app/src/util/cloud_messaging_utils.dart';
+import 'package:flutter_app/src/util/remote_config_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/ui/other/input_dialog.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
+import 'package:get/get.dart';
 
-enum onListViewPress { CloudMessageToken, DioLog, AppLog, StoreEdit }
+enum onListViewPress { CloudMessageToken, DioLog, AppLog, StoreEdit, ADRemove }
 
 class DevPage extends StatefulWidget {
   @override
@@ -39,6 +43,12 @@ class _DevPageState extends State<DevPage> {
       "color": Colors.green,
       "onPress": onListViewPress.StoreEdit
     },
+    {
+      "icon": Icons.code_outlined,
+      "title": "AD Remover",
+      "color": Colors.red,
+      "onPress": onListViewPress.ADRemove
+    },
   ];
 
   @override
@@ -63,6 +73,22 @@ class _DevPageState extends State<DevPage> {
         break;
       case onListViewPress.StoreEdit:
         RouteUtils.toStoreEditPage();
+        break;
+      case onListViewPress.ADRemove:
+        Get.to(() => CustomInputDialog(
+            title: "Input Valid Code",
+            initText: "",
+            hint: "Please input valid code",
+            onOk: (String value) async {
+              List<String> keyList = await RemoteConfigUtils.getRemoveADKey();
+              if (keyList.contains(value)) {
+                MyToast.show("Remove AD success");
+                AdManager.setADEnable(false);
+              } else {
+                MyToast.show("Invalid code");
+              }
+            },
+            onCancel: (String value) {}));
         break;
       default:
         MyToast.show(R.current.noFunction);

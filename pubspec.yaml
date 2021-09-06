@@ -113,6 +113,7 @@ dependencies:
   firebase_crashlytics: ^2.2.1
   firebase_remote_config: ^0.10.0+5
   firebase_messaging: ^10.0.6
+  google_mobile_ads: ^0.13.4
 
 
 dependency_overrides:

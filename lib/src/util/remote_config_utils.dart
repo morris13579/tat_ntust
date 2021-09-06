@@ -7,6 +7,7 @@ class RemoteConfigUtils {
   static RemoteConfig _remoteConfig;
 
   static String versionConfigKey = "version_config";
+  static String removeADCodeKey = "remove_ad_key";
 
   static Future<void> init() async {
     _remoteConfig = RemoteConfig.instance;
@@ -30,5 +31,11 @@ class RemoteConfigUtils {
     await _remoteConfig.fetchAndActivate();
     String result = _remoteConfig.getString(versionConfigKey);
     return RemoteConfigVersionInfo.fromJson(json.decode(result));
+  }
+
+  static Future<List<String>> getRemoveADKey() async {
+    await _remoteConfig.fetchAndActivate();
+    String result = _remoteConfig.getString(removeADCodeKey);
+    return (json.decode(result)["key"] as List).map((e) => e.toString()).toList();
   }
 }
