@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/src/store/Model.dart';
+import 'package:flutter_app/src/util/remote_config_utils.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,8 +52,17 @@ class AdManager {
   }
 
   static Future<void> showDownloadAD() async {
+    if (!await RemoteConfigUtils.getADEnable()) {
+      Log.d("AD is disable by remote config");
+      return;
+    }
     if (!await getADEnable()) {
-      Log.d("AD is disable");
+      Log.d("AD is disable by valid code");
+      return;
+    }
+    if (!Model.instance.getFirstUse("ad_download",
+        timeOut: await RemoteConfigUtils.getADInterval())) {
+      Log.d("AD is disable by interval");
       return;
     }
     if (_interstitialAd != null) {
