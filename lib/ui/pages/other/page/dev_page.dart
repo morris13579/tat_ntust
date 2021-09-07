@@ -18,7 +18,7 @@ class DevPage extends StatefulWidget {
 }
 
 class _DevPageState extends State<DevPage> {
-  final List<Map> listViewData = [
+  List<Map> listViewData = [
     {
       "icon": Icons.vpn_key_outlined,
       "title": "Cloud Messaging Token",
@@ -54,6 +54,19 @@ class _DevPageState extends State<DevPage> {
   @override
   void initState() {
     super.initState();
+    removeADItem();
+  }
+
+  Future<void> removeADItem() async {
+    if (!await AdManager.getADEnable()) {
+      int index = listViewData
+          .indexWhere((e) => e["onPress"] == onListViewPress.ADRemove);
+      if (index >= 0) {
+        setState(() {
+          listViewData.removeAt(index);
+        });
+      }
+    }
   }
 
   int pressTime = 0;
@@ -75,7 +88,7 @@ class _DevPageState extends State<DevPage> {
         RouteUtils.toStoreEditPage();
         break;
       case onListViewPress.ADRemove:
-        Get.to(() => CustomInputDialog(
+        await Get.to(() => CustomInputDialog(
             title: "Input Valid Code",
             initText: "",
             hint: "Please input valid code",
@@ -89,6 +102,7 @@ class _DevPageState extends State<DevPage> {
               }
             },
             onCancel: (String value) {}));
+        removeADItem();
         break;
       default:
         MyToast.show(R.current.noFunction);
