@@ -45,10 +45,13 @@ class Model {
   }
 
   //timeOut seconds
-  bool getFirstUse(String key, {int timeOut}) {
+  Future<bool> getFirstUse(String key, {int timeOut}) async {
+    if (pref == null) {
+      pref = await SharedPreferences.getInstance();
+    }
     if (timeOut != null) {
       int millsTimeOut = timeOut * 1000;
-      String wKey = "firstUse$key";
+      String wKey = "first_use_$key";
       int now = DateTime.now().millisecondsSinceEpoch;
       int before = _readInt(wKey);
       if (before != null && before > now) {

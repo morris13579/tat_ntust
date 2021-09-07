@@ -45,12 +45,12 @@ class RemoteConfigUtils {
   static Future<bool> getADEnable() async {
     await _remoteConfig.fetchAndActivate();
     String result = _remoteConfig.getString(enableADCodeKey);
-    return (json.decode(result)["value"] as bool);
+    return (json.decode(result)["value"] as bool) ?? false;
   }
 
   static Future<int> getADInterval() async {
     await _remoteConfig.fetchAndActivate();
     String result = _remoteConfig.getString(enableADCodeKey);
-    return (json.decode(result)["interval"] as int);
+    return (json.decode(result)["interval"] as int) ?? null;
   }
 }

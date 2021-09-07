@@ -60,8 +60,9 @@ class AdManager {
       Log.d("AD is disable by valid code");
       return;
     }
-    if (!Model.instance.getFirstUse("ad_download",
-        timeOut: await RemoteConfigUtils.getADInterval())) {
+    int intervalTime = await RemoteConfigUtils.getADInterval();
+    Log.d("AD interval time is $intervalTime sec");
+    if (!await Model.instance.getFirstUse("ad_download", timeOut: intervalTime)) {
       Log.d("AD is disable by interval");
       return;
     }
