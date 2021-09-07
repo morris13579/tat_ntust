@@ -32,8 +32,8 @@ class CustomInputDialog extends StatelessWidget {
       title: Text(title),
       content: TextField(
         controller: controller,
+        cursorColor: Colors.blue[800],
         decoration: InputDecoration(
-          border: InputBorder.none,
           hintText: hint,
         ),
         maxLines: maxLine,
