@@ -23,15 +23,15 @@ class Model {
 
   static final Model instance = Model._privateConstructor();
   SharedPreferences pref;
-  static String userDataJsonKey = "UserDataJsonKey";
+  static String userDataJsonKey = "user_data";
 
   //----------List----------//
-  static String courseTableJsonKey = "CourseTableJsonListKey";
-  static String courseSemesterJsonKey = "CourseSemesterListJson";
+  static String courseTableJsonKey = "course_table_list";
+  static String courseSemesterJsonKey = "course_semester_list";
 
   //----------Object----------//
-  static String scoreCreditJsonKey = "ScoreCreditJsonKey";
-  static String settingJsonKey = "SettingJsonKey";
+  static String scoreCreditJsonKey = "score_credit";
+  static String settingJsonKey = "setting";
   UserDataJson _userData;
   List<CourseTableJson> _courseTableList;
   List<SemesterJson> _courseSemesterList;
@@ -45,10 +45,13 @@ class Model {
   }
 
   //timeOut seconds
-  bool getFirstUse(String key, {int timeOut}) {
+  Future<bool> getFirstUse(String key, {int timeOut}) async {
+    if (pref == null) {
+      pref = await SharedPreferences.getInstance();
+    }
     if (timeOut != null) {
       int millsTimeOut = timeOut * 1000;
-      String wKey = "firstUse$key";
+      String wKey = "first_use_$key";
       int now = DateTime.now().millisecondsSinceEpoch;
       int before = _readInt(wKey);
       if (before != null && before > now) {

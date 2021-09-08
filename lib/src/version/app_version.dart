@@ -9,7 +9,7 @@ class APPVersion {
     RemoteConfigVersionInfo config = await RemoteConfigUtils.getVersionConfig();
     if (!config.isFocusUpdate) {
       if (!Model.instance.autoCheckAppUpdate ||
-          !Model.instance.getFirstUse(Model.appCheckUpdate) ||
+          !await Model.instance.getFirstUse(Model.appCheckUpdate) ||
           Model.instance.getAccount().isEmpty) return;
     }
     Model.instance.setAlreadyUse(Model.appCheckUpdate);
