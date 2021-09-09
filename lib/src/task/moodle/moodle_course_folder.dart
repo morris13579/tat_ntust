@@ -17,7 +17,7 @@ class MoodleCourseFolderTask extends MoodleTask<List<FileInfo>> {
       super.onStart(R.current.getMoodleCourseBranch);
       value = await MoodleConnector.getFolder(url);
       super.onEnd();
-      if (value != null && value.length != 0) {
+      if (value != null) {
         result = value;
         return TaskStatus.Success;
       } else {

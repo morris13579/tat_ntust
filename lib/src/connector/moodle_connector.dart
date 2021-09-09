@@ -259,26 +259,28 @@ class MoodleConnector {
         );
         fs.add(f);
       }
-      try {
-        node = tagNode.getElementsByClassName("singlebutton")[0];
+      if (fs.length != 0) {
+        try {
+          node = tagNode.getElementsByClassName("singlebutton")[0];
 
-        node = node.getElementsByTagName("form")[0];
-        String url = node.attributes["action"];
-        nodes = node.getElementsByTagName("input");
-        Map<String, dynamic> data = {};
-        for (var i in nodes) {
-          if (i.attributes["type"] == "hidden") {
-            data[i.attributes["name"]] = i.attributes["value"];
+          node = node.getElementsByTagName("form")[0];
+          String url = node.attributes["action"];
+          nodes = node.getElementsByTagName("input");
+          Map<String, dynamic> data = {};
+          for (var i in nodes) {
+            if (i.attributes["type"] == "hidden") {
+              data[i.attributes["name"]] = i.attributes["value"];
+            }
           }
+          FileInfo f = FileInfo(
+            url: Uri.https(Uri.parse(url).host, Uri.parse(url).path, data)
+                .toString(),
+            name: R.current.downloadAll,
+          );
+          fs.add(f);
+        } catch (e, stack) {
+          Log.eWithStack(e, stack);
         }
-        FileInfo f = FileInfo(
-          url: Uri.https(Uri.parse(url).host, Uri.parse(url).path, data)
-              .toString(),
-          name: R.current.downloadAll,
-        );
-        fs.add(f);
-      } catch (e) {
-        print(e);
       }
       return fs;
     } catch (e, stack) {
