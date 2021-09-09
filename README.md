@@ -11,4 +11,4 @@
 - [morris13579](https://github.com/morris13579)
 
 ## 授權
-這項專案使用 GPLv3 授權 - 詳情請參閱
+這項專案使用 GPLv3 授權 - 詳情請參閱 [LICENSE](https://github.com/morris13579/tat_ntust/blob/master/LICENSE)
