@@ -130,12 +130,14 @@ class RouteUtils {
   }
 
   static Future toWebViewPage(String title, String url,
-      [bool openWithExternalWebView = true]) async {
+      {bool openWithExternalWebView = true,
+      Function(Uri) onWebViewDownload}) async {
     return await Get.to(
       () => WebViewPage(
         title: title,
         url: Uri.parse(url),
         openWithExternalWebView: openWithExternalWebView,
+        onWebViewDownload: onWebViewDownload,
       ),
       transition: transition,
     );

@@ -94,7 +94,8 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
           ),
           onTap: () async {
             if (ap.icon.component.contains("forum")) {
-              RouteUtils.toWebViewPage(ap.name, ap.link, false);
+              RouteUtils.toWebViewPage(ap.name, ap.link,
+                  openWithExternalWebView: false);
             } else if (ap.icon.component.contains("folder")) {
               RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
             } else {

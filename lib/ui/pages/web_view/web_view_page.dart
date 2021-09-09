@@ -2,6 +2,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
+import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -9,8 +10,13 @@ class WebViewPage extends StatefulWidget {
   final Uri url;
   final String title;
   final bool openWithExternalWebView;
+  final Function(Uri) onWebViewDownload;
 
-  WebViewPage({this.title, this.url, this.openWithExternalWebView});
+  WebViewPage(
+      {this.title,
+      this.url,
+      this.openWithExternalWebView,
+      this.onWebViewDownload});
 
   @override
   _WebViewPageState createState() => _WebViewPageState();
@@ -132,7 +138,9 @@ class _WebViewPageState extends State<WebViewPage> {
                         child: InAppWebView(
                           initialUrlRequest: URLRequest(url: widget.url),
                           initialOptions: InAppWebViewGroupOptions(
-                            crossPlatform: InAppWebViewOptions(),
+                            crossPlatform: InAppWebViewOptions(
+                              useOnDownloadStart: true,
+                            ),
                           ),
                           onWebViewCreated:
                               (InAppWebViewController controller) {
@@ -167,6 +175,12 @@ class _WebViewPageState extends State<WebViewPage> {
                           onDownloadStart:
                               (InAppWebViewController controller, Uri url) {
                             Log.d("WebView download ${url.toString()}");
+                            if (widget.onWebViewDownload != null) {
+                              widget.onWebViewDownload(url);
+                            } else {
+                              String dirName = "WebView";
+                              FileDownload.download(context, url.toString(), dirName);
+                            }
                           },
                         ),
                       ),

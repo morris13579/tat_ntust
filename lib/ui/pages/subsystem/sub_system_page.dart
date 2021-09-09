@@ -79,7 +79,8 @@ class _SubSystemPageState extends State<SubSystemPage> {
           ),
           onTap: () async {
             if (ap.type == 'link') {
-              RouteUtils.toWebViewPage(ap.name, ap.url, false);
+              RouteUtils.toWebViewPage(ap.name, ap.url,
+                  openWithExternalWebView: false);
             }
           },
         );
