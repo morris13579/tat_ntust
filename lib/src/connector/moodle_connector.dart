@@ -35,11 +35,22 @@ class MoodleCourseDirectoryInfo {
       this.name});
 }
 
-class FileInfo {
+class MoodleAnnouncementInfo {
+  String name;
+  String url;
+  String author;
+  String replies;
+  String time;
+
+  MoodleAnnouncementInfo(
+      {this.name, this.author, this.replies, this.time, this.url});
+}
+
+class MoodleFileInfo {
   String name;
   String url;
 
-  FileInfo({this.name, this.url});
+  MoodleFileInfo({this.name, this.url});
 }
 
 class MoodleConnector {
@@ -159,6 +170,60 @@ class MoodleConnector {
     }
   }
 
+  static Future<List<MoodleAnnouncementInfo>> getCourseAnnouncement(
+      String url) async {
+    String result;
+    Document tagNode;
+    List<Element> nodes;
+    Element node;
+    ConnectorParameter parameter;
+    List<MoodleAnnouncementInfo> value = [];
+    try {
+      parameter = ConnectorParameter(url);
+      result = await Connector.getDataByGet(parameter);
+      tagNode = parse(result);
+      nodes = tagNode.getElementsByClassName("forumheaderlist");
+      if (nodes.length == 0) {
+        return [];
+      }
+      node = nodes.first.getElementsByTagName("tbody").first;
+      for (var i in node.getElementsByTagName("tr")) {
+        nodes = i.getElementsByTagName("td");
+        value.add(MoodleAnnouncementInfo(
+          name: nodes[0].text,
+          replies: nodes[3].text,
+          author: nodes[2].text,
+          url: nodes[0].getElementsByTagName("a").first.attributes["href"],
+          time: nodes[4].getElementsByTagName("a")[1].text,
+        ));
+      }
+      return value;
+    } catch (e, stack) {
+      Log.eWithStack(e, stack);
+      return null;
+    }
+  }
+
+  static Future<String> getCourseAnnouncementDetail(String url) async {
+    String result;
+    Document tagNode;
+    List<Element> nodes;
+    Element node;
+    ConnectorParameter parameter;
+    List<MoodleAnnouncementInfo> value = [];
+    try {
+      parameter = ConnectorParameter(url);
+      result = await Connector.getDataByGet(parameter);
+      tagNode = parse(result);
+      nodes = tagNode.getElementsByClassName(
+          "forumpost clearfix lastpost firstpost starter");
+      return nodes.first.innerHtml;
+    } catch (e, stack) {
+      Log.eWithStack(e, stack);
+      return null;
+    }
+  }
+
   static Future<MoodleBranchJson> getCourseBranch(
       MoodleCourseDirectoryInfo info) async {
     String result;
@@ -239,13 +304,13 @@ class MoodleConnector {
     }
   }
 
-  static Future<List<FileInfo>> getFolder(String url) async {
+  static Future<List<MoodleFileInfo>> getFolder(String url) async {
     String result;
     Document tagNode;
     Element node;
     List<Element> nodes;
     ConnectorParameter parameter;
-    List<FileInfo> fs = [];
+    List<MoodleFileInfo> fs = [];
     try {
       parameter = ConnectorParameter(url);
       result = await Connector.getDataByGet(parameter);
@@ -253,7 +318,7 @@ class MoodleConnector {
       nodes = tagNode.getElementsByClassName("box generalbox foldertree");
       nodes = nodes[0].getElementsByTagName("li");
       for (var i in nodes.getRange(1, nodes.length)) {
-        FileInfo f = FileInfo(
+        MoodleFileInfo f = MoodleFileInfo(
           url: i.getElementsByTagName("a")[0].attributes["href"],
           name: i.text,
         );
@@ -272,7 +337,7 @@ class MoodleConnector {
               data[i.attributes["name"]] = i.attributes["value"];
             }
           }
-          FileInfo f = FileInfo(
+          MoodleFileInfo f = MoodleFileInfo(
             url: Uri.https(Uri.parse(url).host, Uri.parse(url).path, data)
                 .toString(),
             name: R.current.downloadAll,

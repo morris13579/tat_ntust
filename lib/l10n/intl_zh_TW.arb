@@ -50,6 +50,8 @@
   "getMoodleCourseDirectoryError": "取得課程目錄錯誤",
   "getMoodleCourseBranch": "取得資料中...",
   "getMoodleCourseBranchError": "取得資料錯誤",
+  "getMoodleCourseAnnouncement": "取得課程公佈欄...",
+  "getMoodleCourseAnnouncementError": "取得課程公佈欄錯誤",
   "downloadAll": "全部打包下載",
   "___________________CourseTableUi___________________": "註解",
   "Monday": "一",
@@ -165,5 +167,8 @@
   "Contributors": "貢獻者",
   "___________________ScoreUI___________________": "註解",
   "titleScore": "成績",
-  "searchScore": "成績查詢"
+  "searchScore": "成績查詢",
+  "___________________CourseDataUi___________________": "註解",
+  "file": "檔案",
+  "announcement": "公告"
 }

@@ -535,6 +535,26 @@ class S {
     );
   }
 
+  /// `get course announcement...`
+  String get getMoodleCourseAnnouncement {
+    return Intl.message(
+      'get course announcement...',
+      name: 'getMoodleCourseAnnouncement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `get course announcement error`
+  String get getMoodleCourseAnnouncementError {
+    return Intl.message(
+      'get course announcement error',
+      name: 'getMoodleCourseAnnouncementError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Download All`
   String get downloadAll {
     return Intl.message(
@@ -1690,6 +1710,36 @@ class S {
     return Intl.message(
       'Search score',
       name: 'searchScore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `註解`
+  String get ___________________CourseDataUi___________________ {
+    return Intl.message(
+      '註解',
+      name: '___________________CourseDataUi___________________',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Files`
+  String get file {
+    return Intl.message(
+      'Files',
+      name: 'file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Announcements`
+  String get announcement {
+    return Intl.message(
+      'Announcements',
+      name: 'announcement',
       desc: '',
       args: [],
     );

@@ -50,6 +50,8 @@
   "getMoodleCourseDirectoryError": "Get course directory error",
   "getMoodleCourseBranch": "get course branch...",
   "getMoodleCourseBranchError": "get course branch error",
+  "getMoodleCourseAnnouncement": "get course announcement...",
+  "getMoodleCourseAnnouncementError": "get course announcement error",
   "downloadAll": "Download All",
   "___________________CourseTableUi___________________": "註解",
   "Monday": "MON",
@@ -165,5 +167,8 @@
   "Contributors": "Contributors",
   "___________________ScoreUI___________________": "註解",
   "titleScore": "Score",
-  "searchScore": "Search score"
+  "searchScore": "Search score",
+  "___________________CourseDataUi___________________": "註解",
+  "file": "Files",
+  "announcement": "Announcements"
 }

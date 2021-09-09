@@ -6,9 +6,10 @@ import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
-import 'package:flutter_app/ui/pages/course_data/course_branch_page.dart';
 import 'package:flutter_app/ui/pages/course_data/course_data_page.dart';
-import 'package:flutter_app/ui/pages/course_data/course_folder_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_announcement_detail_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_branch_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_folder_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/course_detail_page.dart';
 import 'package:flutter_app/ui/pages/file_viewer/file_viewer_page.dart';
 import 'package:flutter_app/ui/pages/log_console/log_console.dart';
@@ -80,6 +81,14 @@ class RouteUtils {
       CourseInfoJson courseInfo, MoodleCourseDirectoryInfo branch) async {
     return await Get.to(
       () => CourseBranchPage(courseInfo, branch),
+      transition: transition,
+    );
+  }
+
+  static Future toAnnouncementDetailPage(
+      CourseInfoJson courseInfo, MoodleAnnouncementInfo value) async {
+    return await Get.to(
+      () => CourseAnnouncementDetailPage(courseInfo, value),
       transition: transition,
     );
   }
