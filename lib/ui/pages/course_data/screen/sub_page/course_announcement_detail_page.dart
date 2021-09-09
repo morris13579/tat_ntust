@@ -9,7 +9,7 @@ import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class CourseAnnouncementDetailPage extends StatefulWidget {
   final MoodleAnnouncementInfo value;
@@ -26,6 +26,7 @@ class _CourseAnnouncementDetailPageState
     extends State<CourseAnnouncementDetailPage> {
   bool isLoading = true;
   String html;
+  bool selectAble = false;
 
   @override
   void initState() {
@@ -53,6 +54,18 @@ class _CourseAnnouncementDetailPageState
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.value.name),
+        actions: [
+          IconButton(
+            icon: Icon(
+                (selectAble) ? Icons.lock_open_outlined : Icons.lock_outline),
+            onPressed: () {
+              setState(() {
+                selectAble = !selectAble;
+              });
+            },
+            tooltip: R.current.selectAble,
+          )
+        ],
       ),
       body: isLoading
           ? Center(
@@ -60,25 +73,37 @@ class _CourseAnnouncementDetailPageState
             )
           : Container(
               padding: EdgeInsets.only(right: 20, left: 20, top: 20),
-              child: HtmlWidget(
-                html,
-                customStylesBuilder: (element) {
-                  if (element.attributes.containsKey("href")) {
-                    return {'color': '#3CB0FD'};
-                  }
-                  return null;
-                },
-                onTapUrl: (url) async {
-                  if (Uri.parse(url).path.contains("pluginfile.php")) {
-                    await AnalyticsUtils.logDownloadFileEvent();
-                    MyToast.show(R.current.downloadWillStart);
-                    String dirName = widget.courseInfo.main.course.name;
-                    FileDownload.download(context, url, dirName);
-                  } else {
-                    RouteUtils.toWebViewPage(widget.value.name, url);
-                  }
-                },
-              ),
+              child: (selectAble)
+                  ? SelectableHtml(
+                      data: html,
+                      onLinkTap:
+                          (url, renderContext, attributes, element) async {
+                        if (Uri.parse(url).path.contains("pluginfile.php")) {
+                          await AnalyticsUtils.logDownloadFileEvent();
+                          MyToast.show(R.current.downloadWillStart);
+                          String dirName = widget.courseInfo.main.course.name;
+                          FileDownload.download(
+                              context, url, dirName, element.text);
+                        } else {
+                          RouteUtils.toWebViewPage(widget.value.name, url);
+                        }
+                      },
+                    )
+                  : Html(
+                      data: html,
+                      onLinkTap:
+                          (url, renderContext, attributes, element) async {
+                        if (Uri.parse(url).path.contains("pluginfile.php")) {
+                          await AnalyticsUtils.logDownloadFileEvent();
+                          MyToast.show(R.current.downloadWillStart);
+                          String dirName = widget.courseInfo.main.course.name;
+                          FileDownload.download(
+                              context, url, dirName, element.text);
+                        } else {
+                          RouteUtils.toWebViewPage(widget.value.name, url);
+                        }
+                      },
+                    ),
             ),
     );
   }

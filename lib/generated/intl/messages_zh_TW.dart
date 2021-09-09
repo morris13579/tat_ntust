@@ -171,6 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "search" : MessageLookupByLibrary.simpleMessage("搜尋"),
     "searchCredit" : MessageLookupByLibrary.simpleMessage("查詢學分"),
     "searchScore" : MessageLookupByLibrary.simpleMessage("成績查詢"),
+    "selectAble" : MessageLookupByLibrary.simpleMessage("解鎖後文字可複製"),
     "selectDirectoryFail" : MessageLookupByLibrary.simpleMessage("無法將此路徑設定為下載路徑"),
     "selectSemester" : MessageLookupByLibrary.simpleMessage("選擇學期時間"),
     "semester" : MessageLookupByLibrary.simpleMessage("學年期"),

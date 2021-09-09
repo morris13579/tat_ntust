@@ -179,7 +179,8 @@ class _WebViewPageState extends State<WebViewPage> {
                               widget.onWebViewDownload(url);
                             } else {
                               String dirName = "WebView";
-                              FileDownload.download(context, url.toString(), dirName);
+                              FileDownload.download(
+                                  context, url.toString(), dirName);
                             }
                           },
                         ),

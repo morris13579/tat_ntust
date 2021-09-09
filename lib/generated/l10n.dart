@@ -1744,6 +1744,16 @@ class S {
       args: [],
     );
   }
+
+  /// `text selectable`
+  String get selectAble {
+    return Intl.message(
+      'text selectable',
+      name: 'selectAble',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

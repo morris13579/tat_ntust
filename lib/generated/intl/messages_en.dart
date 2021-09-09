@@ -171,6 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
     "searchCredit" : MessageLookupByLibrary.simpleMessage("Search credit"),
     "searchScore" : MessageLookupByLibrary.simpleMessage("Search score"),
+    "selectAble" : MessageLookupByLibrary.simpleMessage("text selectable"),
     "selectDirectoryFail" : MessageLookupByLibrary.simpleMessage("Cannot set this path as download path"),
     "selectSemester" : MessageLookupByLibrary.simpleMessage("Select semester"),
     "semester" : MessageLookupByLibrary.simpleMessage("Semester"),
