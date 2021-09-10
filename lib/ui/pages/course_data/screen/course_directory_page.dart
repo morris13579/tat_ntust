@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/ad/ad_manager.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/task/moodle/moodle_course_directory.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_webapi_course_directory.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
 
 class CourseDirectoryPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -19,7 +23,7 @@ class CourseDirectoryPage extends StatefulWidget {
 class _CourseDirectoryPageState extends State<CourseDirectoryPage>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
-  List<MoodleCourseDirectoryInfo> directoryList;
+  List<MoodleCoreCourseGetContents> directoryList;
 
   @override
   void initState() {
@@ -33,7 +37,7 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
       isLoading = true;
     });
     TaskFlow taskFlow = TaskFlow();
-    var task = MoodleCourseDirectoryTask(courseId);
+    var task = MoodleWebApiCourseDirectoryTask(courseId);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
       AdManager.showDownloadAD();
@@ -61,7 +65,7 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
       shrinkWrap: true,
       itemCount: directoryList.length,
       itemBuilder: (BuildContext context, int index) {
-        MoodleCourseDirectoryInfo ap = directoryList[index];
+        var ap = directoryList[index];
         return InkWell(
           child: Container(
             height: 50,
@@ -79,7 +83,11 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
             ),
           ),
           onTap: () async {
-            RouteUtils.toCourseBranchPage(widget.courseInfo, ap);
+            if(ap.modules.length != 0) {
+              RouteUtils.toCourseBranchPage(widget.courseInfo, ap);
+            }else{
+              MyToast.show(R.current.nothingHere);
+            }
           },
         );
       },

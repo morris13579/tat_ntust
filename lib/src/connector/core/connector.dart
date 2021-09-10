@@ -23,6 +23,16 @@ class Connector {
     }
   }
 
+  static Future<dynamic> getJsonByPost(ConnectorParameter parameter) async {
+    try {
+      Response result =
+          await DioConnector.instance.getDataByPostResponse(parameter);
+      return result.data;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   static Future<String> getDataByGet(ConnectorParameter parameter) async {
     try {
       String result = await DioConnector.instance.getDataByGet(parameter);

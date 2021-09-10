@@ -62,14 +62,11 @@ class FileDownload {
             RegExp("['|\"](?<name>.+)['|\"]"); //尋找 'name' , "name" 的name
         RegExpMatch matches = exp.firstMatch(name[0]);
         realFileName = matches.group(1);
-      } else if (headers.containsKey("content-type")) {
-        List<String> name = headers["content-type"];
-        if (name[0].toLowerCase().contains("pdf")) {
-          //是application/pdf
-          realFileName = '.pdf';
-        }
       }
-      //print(path + "/" + realFileName);
+      if(realFileName == null){
+        realFileName = name;
+      }
+      Log.d(path + "/" + realFileName);
       return path + "/" + realFileName;
     },
         progressCallback: onReceiveProgress,
