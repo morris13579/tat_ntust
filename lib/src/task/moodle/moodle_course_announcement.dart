@@ -6,7 +6,8 @@ import 'package:flutter_app/src/util/language_utils.dart';
 import '../task.dart';
 import 'moodle_task.dart';
 
-class MoodleCourseAnnouncementTask extends MoodleTask<List<MoodleAnnouncementInfo>> {
+class MoodleCourseAnnouncementTask
+    extends MoodleTask<List<MoodleAnnouncementInfo>> {
   final String id;
 
   MoodleCourseAnnouncementTask(this.id) : super("MoodleCourseAnnouncementTask");

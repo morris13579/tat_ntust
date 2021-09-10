@@ -70,7 +70,7 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
         return ap.modname.contains("label")
             ? Container(
                 padding:
-                    EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                    EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
                 child: Row(
                   children: [
                     Expanded(
@@ -93,7 +93,7 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
             : InkWell(
                 child: Container(
                   padding:
-                      EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                      EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
                   child: Row(
                     children: [
                       Expanded(

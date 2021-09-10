@@ -66,19 +66,18 @@ class ErrorDialog {
 
   Future<bool> show() async {
     return await Get.dialog<bool>(CustomAwesomeDialog(
-        context: Get.key.currentState.context,
-        dialogType: parameter.dialogType,
-        animType: parameter.animType,
-        title: parameter.title,
-        desc: parameter.desc,
-        btnOkText: parameter.btnOkText,
-        btnCancelText: parameter.btnCancelText,
-        useRootNavigator: false,
-        dismissOnTouchOutside: false,
-        btnCancelOnPress: parameter.btnCancelOnPress,
-        btnOkOnPress: parameter.btnOkOnPress)
-        .child) ??
+                context: Get.key.currentState.context,
+                dialogType: parameter.dialogType,
+                animType: parameter.animType,
+                title: parameter.title,
+                desc: parameter.desc,
+                btnOkText: parameter.btnOkText,
+                btnCancelText: parameter.btnCancelText,
+                useRootNavigator: false,
+                dismissOnTouchOutside: false,
+                btnCancelOnPress: parameter.btnCancelOnPress,
+                btnOkOnPress: parameter.btnOkOnPress)
+            .child) ??
         false;
   }
 }
-

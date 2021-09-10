@@ -25,7 +25,6 @@ class _CourseAnnouncementDetailPageState
     extends State<CourseAnnouncementDetailPage> {
   bool isLoading = true;
   String html;
-  bool selectAble = false;
 
   @override
   void initState() {
@@ -51,18 +50,6 @@ class _CourseAnnouncementDetailPageState
     return Scaffold(
       appBar: AppBar(
         title: Text(HtmlUnescape().convert(discussions.name)),
-        actions: [
-          IconButton(
-            icon: Icon(
-                (selectAble) ? Icons.lock_open_outlined : Icons.lock_outline),
-            onPressed: () {
-              setState(() {
-                selectAble = !selectAble;
-              });
-            },
-            tooltip: R.current.selectAble,
-          )
-        ],
       ),
       body: isLoading
           ? Center(
@@ -71,43 +58,40 @@ class _CourseAnnouncementDetailPageState
           : Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(right: 20, left: 20, top: 20),
-                  child: (selectAble)
-                      ? SelectableHtml(data: html, onLinkTap: onLinkTap)
-                      : Html(data: html, onLinkTap: onLinkTap),
-                ),
-                if(discussions.attachments != null)
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: discussions.attachments.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var ap = discussions.attachments[index];
-                    return InkWell(
-                      child: Container(
-                        height: 50,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Icon(Icons.file_copy),
-                            ),
-                            Expanded(
-                              flex: 8,
-                              child: Text(ap.filename),
-                            ),
-                          ],
+                    padding: EdgeInsets.only(right: 20, left: 20, top: 20),
+                    child: SelectableHtml(data: html, onLinkTap: onLinkTap)),
+                if (discussions.attachments != null)
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: discussions.attachments.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var ap = discussions.attachments[index];
+                      return InkWell(
+                        child: Container(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Icon(Icons.file_copy),
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: Text(ap.filename),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      onTap: () async {
-                        await AnalyticsUtils.logDownloadFileEvent();
-                        MyToast.show(R.current.downloadWillStart);
-                        String dirName = widget.courseInfo.main.course.name;
-                        FileDownload.download(
-                            context, ap.fileurl, dirName, ap.filename);
-                      },
-                    );
-                  },
-                )
+                        onTap: () async {
+                          await AnalyticsUtils.logDownloadFileEvent();
+                          MyToast.show(R.current.downloadWillStart);
+                          String dirName = widget.courseInfo.main.course.name;
+                          FileDownload.download(
+                              context, ap.fileurl, dirName, ap.filename);
+                        },
+                      );
+                    },
+                  )
               ],
             ),
     );

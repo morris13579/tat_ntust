@@ -63,7 +63,7 @@ class FileDownload {
         RegExpMatch matches = exp.firstMatch(name[0]);
         realFileName = matches.group(1);
       }
-      if(realFileName == null){
+      if (realFileName == null) {
         realFileName = name;
       }
       Log.d(path + "/" + realFileName);

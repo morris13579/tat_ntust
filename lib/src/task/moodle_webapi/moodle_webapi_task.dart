@@ -2,7 +2,6 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/dialog_task.dart';
-import 'package:flutter_app/src/task/moodle/moodle_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 

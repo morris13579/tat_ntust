@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/ad/ad_manager.dart';
-import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
-import 'package:flutter_app/src/task/moodle/moodle_course_directory.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_webapi_course_directory.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
@@ -83,9 +81,9 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
             ),
           ),
           onTap: () async {
-            if(ap.modules.length != 0) {
+            if (ap.modules.length != 0) {
               RouteUtils.toCourseBranchPage(widget.courseInfo, ap);
-            }else{
+            } else {
               MyToast.show(R.current.nothingHere);
             }
           },

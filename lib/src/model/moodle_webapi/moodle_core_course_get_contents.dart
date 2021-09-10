@@ -14,26 +14,31 @@ class MoodleCoreCourseGetContents {
   List<Modules> _modules;
 
   int get id => _id;
+
   String get name => _name;
+
   int get visible => _visible;
+
   String get summary => _summary;
+
   int get summaryformat => _summaryformat;
+
   List<Modules> get modules => _modules;
 
-  MoodleCoreCourseGetContents({
-      int id, 
-      String name, 
-      int visible, 
-      String summary, 
-      int summaryformat, 
-      List<Modules> modules}){
+  MoodleCoreCourseGetContents(
+      {int id,
+      String name,
+      int visible,
+      String summary,
+      int summaryformat,
+      List<Modules> modules}) {
     _id = id;
     _name = name;
     _visible = visible;
     _summary = summary;
     _summaryformat = summaryformat;
     _modules = modules;
-}
+  }
 
   MoodleCoreCourseGetContents.fromJson(dynamic json) {
     _id = json['id'];
@@ -61,7 +66,6 @@ class MoodleCoreCourseGetContents {
     }
     return map;
   }
-
 }
 
 /// id : 392288
@@ -90,29 +94,39 @@ class Modules {
   List<Contents> _contents;
 
   int get id => _id;
+
   String get url => _url;
+
   String get name => _name;
+
   int get instance => _instance;
+
   String get description => _description;
+
   int get visible => _visible;
+
   String get modicon => _modicon;
+
   String get modname => _modname;
+
   String get modplural => _modplural;
+
   int get indent => _indent;
+
   List<Contents> get contents => _contents;
 
-  Modules({
-      int id, 
-      String url, 
-      String name, 
-      int instance, 
-      String description, 
-      int visible, 
-      String modicon, 
-      String modname, 
-      String modplural, 
-      int indent, 
-      List<Contents> contents}){
+  Modules(
+      {int id,
+      String url,
+      String name,
+      int instance,
+      String description,
+      int visible,
+      String modicon,
+      String modname,
+      String modplural,
+      int indent,
+      List<Contents> contents}) {
     _id = id;
     _url = url;
     _name = name;
@@ -124,7 +138,7 @@ class Modules {
     _modplural = modplural;
     _indent = indent;
     _contents = contents;
-}
+  }
 
   Modules.fromJson(dynamic json) {
     _id = json['id'];
@@ -162,7 +176,6 @@ class Modules {
     }
     return map;
   }
-
 }
 
 /// type : "file"
@@ -191,29 +204,39 @@ class Contents {
   String _license;
 
   String get type => _type;
+
   String get filename => _filename;
+
   String get filepath => _filepath;
+
   int get filesize => _filesize;
+
   String get fileurl => _fileurl;
+
   int get timecreated => _timecreated;
+
   int get timemodified => _timemodified;
+
   int get sortorder => _sortorder;
+
   int get userid => _userid;
+
   String get author => _author;
+
   String get license => _license;
 
-  Contents({
-      String type, 
-      String filename, 
-      String filepath, 
-      int filesize, 
-      String fileurl, 
-      int timecreated, 
-      int timemodified, 
-      int sortorder, 
-      int userid, 
-      String author, 
-      String license}){
+  Contents(
+      {String type,
+      String filename,
+      String filepath,
+      int filesize,
+      String fileurl,
+      int timecreated,
+      int timemodified,
+      int sortorder,
+      int userid,
+      String author,
+      String license}) {
     _type = type;
     _filename = filename;
     _filepath = filepath;
@@ -225,7 +248,7 @@ class Contents {
     _userid = userid;
     _author = author;
     _license = license;
-}
+  }
 
   Contents.fromJson(dynamic json) {
     _type = json['type'];
@@ -256,5 +279,4 @@ class Contents {
     map['license'] = _license;
     return map;
   }
-
 }

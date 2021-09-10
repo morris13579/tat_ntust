@@ -2,18 +2,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'course_semester.g.dart';
 
-
-List<CourseSemesterJson> getCourseSemesterList(List<dynamic> list){
+List<CourseSemesterJson> getCourseSemesterList(List<dynamic> list) {
   List<CourseSemesterJson> result = [];
-  list.forEach((item){
+  list.forEach((item) {
     result.add(CourseSemesterJson.fromJson(item));
   });
   return result;
 }
 
 @JsonSerializable()
-class CourseSemesterJson extends Object{
-
+class CourseSemesterJson extends Object {
   @JsonKey(name: 'Semester')
   String semester;
 
@@ -29,8 +27,14 @@ class CourseSemesterJson extends Object{
   @JsonKey(name: 'CurrentSemester')
   bool currentSemester;
 
-  CourseSemesterJson(this.semester,this.static,this.loginEnable,this.showRemind,this.currentSemester,);
+  CourseSemesterJson(
+    this.semester,
+    this.static,
+    this.loginEnable,
+    this.showRemind,
+    this.currentSemester,
+  );
 
-  factory CourseSemesterJson.fromJson(Map<String, dynamic> srcJson) => _$CourseSemesterJsonFromJson(srcJson);
-
+  factory CourseSemesterJson.fromJson(Map<String, dynamic> srcJson) =>
+      _$CourseSemesterJsonFromJson(srcJson);
 }
