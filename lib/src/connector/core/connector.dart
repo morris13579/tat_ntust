@@ -105,4 +105,14 @@ class Connector {
       Log.d(sprintf("%s : %s", [key, headers[key]]));
     }
   }
+
+  static String uriAddQuery(String url, Map<String, dynamic> queryParameters) {
+    if (!url.contains('?')) {
+      url += "?";
+    }
+    for (var i in queryParameters.keys) {
+      url += '&$i=${queryParameters[i]}';
+    }
+    return url;
+  }
 }

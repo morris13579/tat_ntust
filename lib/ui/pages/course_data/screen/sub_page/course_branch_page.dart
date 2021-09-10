@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/connector/core/connector.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
@@ -109,16 +111,19 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
                 onTap: () async {
                   switch (ap.modname) {
                     case "forum":
-                      String lang =
-                          (LanguageUtils.getLangIndex() == LangEnum.zh)
-                              ? "&lang=zh_tw"
-                              : "&lang=en";
                       if (Uri.parse(ap.url).host == "moodle.ntust.edu.tw") {
                         TaskFlow taskFlow = TaskFlow();
                         taskFlow.addTask(MoodleTask("WebView"));
                         await taskFlow.start();
                       }
-                      RouteUtils.toWebViewPage(ap.name, ap.url + lang,
+                      RouteUtils.toWebViewPage(
+                          ap.name,
+                          Connector.uriAddQuery(
+                            ap.url,
+                            (LanguageUtils.getLangIndex() == LangEnum.zh)
+                                ? {"lang": "zh_tw"}
+                                : {"lang": "en"},
+                          ),
                           openWithExternalWebView: false);
                       break;
                     case "folder":
@@ -134,8 +139,14 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
                       await AnalyticsUtils.logDownloadFileEvent();
                       MyToast.show(R.current.downloadWillStart);
                       String dirName = widget.courseInfo.main.course.name;
-                      FileDownload.download(context, ap.contents.first.fileurl,
-                          dirName, ap.contents.first.filename);
+                      FileDownload.download(
+                          context,
+                          Connector.uriAddQuery(
+                            ap.contents.first.fileurl,
+                            {"token": MoodleWebApiConnector.wsToken},
+                          ),
+                          dirName,
+                          ap.contents.first.filename);
                       break;
                     default:
                       break;

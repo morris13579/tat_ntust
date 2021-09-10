@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/connector/core/connector.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
@@ -87,7 +89,13 @@ class _CourseAnnouncementDetailPageState
                           MyToast.show(R.current.downloadWillStart);
                           String dirName = widget.courseInfo.main.course.name;
                           FileDownload.download(
-                              context, ap.fileurl, dirName, ap.filename);
+                              context,
+                              Connector.uriAddQuery(
+                                ap.fileurl,
+                                {"token": MoodleWebApiConnector.wsToken},
+                              ),
+                              dirName,
+                              ap.filename);
                         },
                       );
                     },

@@ -54,7 +54,7 @@ class FileDownload {
     //開始下載檔案
     DioConnector.instance.download(url, (Headers responseHeaders) {
       Map<String, List<String>> headers = responseHeaders.map;
-      print(headers);
+      Log.d("download header $headers");
       if (headers.containsKey("content-disposition")) {
         //代表有名字
         List<String> name = headers["content-disposition"];
