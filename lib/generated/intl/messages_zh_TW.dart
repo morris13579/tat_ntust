@@ -135,6 +135,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "loginCourseError" : MessageLookupByLibrary.simpleMessage("登入課程系統錯誤"),
     "loginMoodle" : MessageLookupByLibrary.simpleMessage("登入Moodle中..."),
     "loginMoodleError" : MessageLookupByLibrary.simpleMessage("登入Moodle錯誤"),
+    "loginMoodleWebApi" : MessageLookupByLibrary.simpleMessage("登入Moodle中..."),
+    "loginMoodleWebApiError" : MessageLookupByLibrary.simpleMessage("登入Moodle錯誤\n如果一直發生錯誤，請嘗試到設定中關閉Moodle WebAPI"),
     "loginNTUST" : MessageLookupByLibrary.simpleMessage("登入台科大系統..."),
     "loginSave" : MessageLookupByLibrary.simpleMessage("帳號密碼已儲存"),
     "logout" : MessageLookupByLibrary.simpleMessage("登出"),

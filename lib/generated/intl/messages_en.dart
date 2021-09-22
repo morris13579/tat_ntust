@@ -135,6 +135,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "loginCourseError" : MessageLookupByLibrary.simpleMessage("Login course system error"),
     "loginMoodle" : MessageLookupByLibrary.simpleMessage("Login Moodle..."),
     "loginMoodleError" : MessageLookupByLibrary.simpleMessage("Login Moodle error"),
+    "loginMoodleWebApi" : MessageLookupByLibrary.simpleMessage("Login Moodle..."),
+    "loginMoodleWebApiError" : MessageLookupByLibrary.simpleMessage("Login Moodle error\nIf errors continue to occur, please try to disable Moodle WebAPI in the settings"),
     "loginNTUST" : MessageLookupByLibrary.simpleMessage("login NTUST"),
     "loginSave" : MessageLookupByLibrary.simpleMessage("Account password has been saved"),
     "logout" : MessageLookupByLibrary.simpleMessage("Sign out"),

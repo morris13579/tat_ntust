@@ -23,14 +23,14 @@ class MoodleWebApiTask<T> extends DialogTask<T> {
     if (account.isEmpty || password.isEmpty) {
       return TaskStatus.GiveUp;
     }
-    super.onStart(R.current.loginMoodle);
+    super.onStart(R.current.loginMoodleWebApi);
     var value = await MoodleWebApiConnector.login(account, password);
     super.onEnd();
     if (value == MoodleWebApiConnectorStatus.LoginSuccess) {
       _isLogin = true;
       return TaskStatus.Success;
     } else {
-      return await onError(R.current.loginMoodleError + "\n如果一直發生錯誤，請嘗試到設定中關閉Moodle WebAPI");
+      return await onError(R.current.loginMoodleWebApiError);
     }
   }
 

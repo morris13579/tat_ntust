@@ -25,8 +25,11 @@ class MoodleWebApiConnector {
         "service": "moodle_mobile_app"
       };
       result = await Connector.getJsonByPost(parameter);
-      wsToken = result["token"];
-      return MoodleWebApiConnectorStatus.LoginSuccess;
+      if (result.containsKey("token")) {
+        wsToken = result["token"];
+        return MoodleWebApiConnectorStatus.LoginSuccess;
+      }
+      return MoodleWebApiConnectorStatus.LoginFail;
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
       return MoodleWebApiConnectorStatus.LoginFail;

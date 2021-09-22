@@ -475,6 +475,26 @@ class S {
     );
   }
 
+  /// `Login Moodle...`
+  String get loginMoodleWebApi {
+    return Intl.message(
+      'Login Moodle...',
+      name: 'loginMoodleWebApi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login Moodle error\nIf errors continue to occur, please try to disable Moodle WebAPI in the settings`
+  String get loginMoodleWebApiError {
+    return Intl.message(
+      'Login Moodle error\nIf errors continue to occur, please try to disable Moodle WebAPI in the settings',
+      name: 'loginMoodleWebApiError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Get Moodle members...`
   String get getMoodleMembers {
     return Intl.message(
