@@ -46,7 +46,7 @@ class _SettingPageState extends State<SettingPage> {
       listViewData.add(_buildOpenExternalVideoSetting());
     }
     listViewData.add(_buildDarkModeSetting());
-    listViewData.add(_buildMoodelWebAPISetting());
+    listViewData.add(_buildMoodleWebAPISetting());
     listViewData.add(_buildFolderPathSetting());
     return Scaffold(
       appBar: AppBar(
@@ -168,28 +168,25 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _buildMoodelWebAPISetting() {
-    return (MediaQuery.of(context).platformBrightness !=
-            AppThemes.darkTheme.brightness)
-        ? SwitchListTile.adaptive(
-            contentPadding: EdgeInsets.all(0),
-            title: Row(
-              children: <Widget>[
-                Text(
-                  R.current.moodleSetting,
-                  style: textTitle,
-                ),
-              ],
-            ),
-            value: Model.instance.getOtherSetting().useMoodleWebApi,
-            onChanged: (value) {
-              setState(() {
-                Model.instance.getOtherSetting().useMoodleWebApi = value;
-                Model.instance.saveOtherSetting();
-              });
-            },
-          )
-        : SizedBox();
+  Widget _buildMoodleWebAPISetting() {
+    return SwitchListTile.adaptive(
+      contentPadding: EdgeInsets.all(0),
+      title: Row(
+        children: <Widget>[
+          Text(
+            R.current.moodleSetting,
+            style: textTitle,
+          ),
+        ],
+      ),
+      value: Model.instance.getOtherSetting().useMoodleWebApi,
+      onChanged: (value) {
+        setState(() {
+          Model.instance.getOtherSetting().useMoodleWebApi = value;
+          Model.instance.saveOtherSetting();
+        });
+      },
+    );
   }
 
   Widget _buildFolderPathSetting() {
