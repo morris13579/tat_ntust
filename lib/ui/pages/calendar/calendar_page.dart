@@ -14,8 +14,8 @@ lastDay是日曆的最後可用日期。幾天后用戶將無法訪問。
 focusedDay是當前的目標日期。使用此屬性來確定當前應顯示的月份。
  */
 final kNow = DateTime.now();
-final kFirstDay = DateTime(kNow.year, kNow.month - 3, kNow.day);
-final kLastDay = DateTime(kNow.year, kNow.month + 3, kNow.day);
+final kFirstDay = DateTime(kNow.year, kNow.month - 12, kNow.day);
+final kLastDay = DateTime(kNow.year, kNow.month + 12, kNow.day);
 
 class CalendarPage extends StatefulWidget {
   @override
