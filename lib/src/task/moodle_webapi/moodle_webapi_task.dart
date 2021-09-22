@@ -30,7 +30,7 @@ class MoodleWebApiTask<T> extends DialogTask<T> {
       _isLogin = true;
       return TaskStatus.Success;
     } else {
-      return await onError(R.current.loginMoodleError);
+      return await onError(R.current.loginMoodleError + "\n如果一直發生錯誤，請嘗試到設定中關閉Moodle WebAPI");
     }
   }
 
