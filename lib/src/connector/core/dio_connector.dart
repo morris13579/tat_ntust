@@ -14,6 +14,7 @@ import 'connector_parameter.dart';
 typedef SavePathCallback = String Function(Headers responseHeaders);
 
 class DioConnector {
+  static bool isInit = false;
   static Map<String, String> _headers = {
     HttpHeaders.userAgentHeader: presetUserAgent,
     "Upgrade-Insecure-Requests": "1",
@@ -45,6 +46,7 @@ class DioConnector {
   static final DioConnector instance = DioConnector._privateConstructor();
 
   Future<void> init() async {
+    if (isInit) return;
     try {
       Directory appDocDir = await getApplicationSupportDirectory();
       String appDocPath = appDocDir.path;
@@ -57,6 +59,7 @@ class DioConnector {
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
     }
+    isInit = true;
   }
 
   void deleteCookies() {

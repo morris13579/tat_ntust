@@ -72,12 +72,7 @@ class MainIcon extends Object {
   @JsonKey(name: 'alt')
   String alt;
 
-  MainIcon(
-    this.component,
-    this.pix,
-    this.classes,
-    this.alt,
-  );
+  MainIcon({this.component, this.pix, this.classes, this.alt});
 
   factory MainIcon.fromJson(Map<String, dynamic> srcJson) =>
       _$MainIconFromJson(srcJson);
@@ -116,17 +111,16 @@ class Children extends Object {
   bool haschildren;
 
   Children(
-    this.name,
-    this.type,
-    this.key,
-    this.classs,
-    this.requiresajaxloading,
-    this.icon,
-    this.title,
-    this.link,
-    this.hidden,
-    this.haschildren,
-  );
+      {this.name,
+      this.type,
+      this.key,
+      this.classs,
+      this.requiresajaxloading,
+      this.icon,
+      this.title,
+      this.link,
+      this.hidden,
+      this.haschildren});
 
   factory Children.fromJson(Map<String, dynamic> srcJson) =>
       _$ChildrenFromJson(srcJson);
@@ -149,13 +143,7 @@ class SubIcon extends Object {
   @JsonKey(name: 'title')
   String title;
 
-  SubIcon(
-    this.component,
-    this.pix,
-    this.classes,
-    this.alt,
-    this.title,
-  );
+  SubIcon({this.component, this.pix, this.classes, this.alt, this.title});
 
   factory SubIcon.fromJson(Map<String, dynamic> srcJson) =>
       _$SubIconFromJson(srcJson);

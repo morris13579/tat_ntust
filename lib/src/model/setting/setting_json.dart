@@ -65,12 +65,17 @@ class OtherSettingJson {
   String lang;
   bool autoCheckAppUpdate;
   bool useExternalVideoPlayer;
+  bool useMoodleWebApi;
 
   OtherSettingJson(
-      {this.lang, this.autoCheckAppUpdate, this.useExternalVideoPlayer}) {
+      {this.lang,
+      this.autoCheckAppUpdate,
+      this.useExternalVideoPlayer,
+      this.useMoodleWebApi}) {
     lang = JsonInit.stringInit(lang);
     autoCheckAppUpdate = autoCheckAppUpdate ?? true;
     useExternalVideoPlayer = useExternalVideoPlayer ?? false;
+    useMoodleWebApi ??= true;
   }
 
   bool get isEmpty {

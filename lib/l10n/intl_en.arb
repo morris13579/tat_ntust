@@ -135,6 +135,7 @@
   "selectDirectoryFail": "Cannot set this path as download path",
   "languageSwitch": "Use English interface",
   "willRestart": "Will restart automatically",
+  "moodleSetting" : "Use Moodle WebAPI",
   "___________________OtherUi___________________": "註解",
   "informationSystem": "Information System",
   "scoreSearch": "Score query",

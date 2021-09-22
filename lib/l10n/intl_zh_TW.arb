@@ -135,6 +135,7 @@
   "selectDirectoryFail": "無法將此路徑設定為下載路徑",
   "languageSwitch": "使用英文介面",
   "willRestart": "將自動重啟並套用語言",
+  "moodleSetting" : "使用Moodle WebAPI",
   "___________________OtherUi___________________": "註解",
   "informationSystem": "資訊系統",
   "scoreSearch": "分數查詢",

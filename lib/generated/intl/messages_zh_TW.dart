@@ -140,6 +140,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logout" : MessageLookupByLibrary.simpleMessage("登出"),
     "logoutWarning" : MessageLookupByLibrary.simpleMessage("確定要登出嗎? \n將會清除所有資料"),
     "member" : MessageLookupByLibrary.simpleMessage("成員"),
+    "moodleSetting" : MessageLookupByLibrary.simpleMessage("使用Moodle WebAPI"),
     "needValidateCaptcha" : MessageLookupByLibrary.simpleMessage("如果出現驗證碼，請手動通過驗證碼"),
     "networkError" : MessageLookupByLibrary.simpleMessage("網路發生錯誤"),
     "noAnyFavorite" : MessageLookupByLibrary.simpleMessage("無加入最愛"),

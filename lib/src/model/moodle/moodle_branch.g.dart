@@ -43,10 +43,10 @@ Map<String, dynamic> _$MoodleBranchJsonToJson(MoodleBranchJson instance) =>
 
 MainIcon _$MainIconFromJson(Map<String, dynamic> json) {
   return MainIcon(
-    json['component'] as String,
-    json['pix'] as String,
-    (json['classes'] as List)?.map((e) => e as String)?.toList(),
-    json['alt'] as String,
+    component: json['component'] as String,
+    pix: json['pix'] as String,
+    classes: (json['classes'] as List)?.map((e) => e as String)?.toList(),
+    alt: json['alt'] as String,
   );
 }
 
@@ -59,18 +59,18 @@ Map<String, dynamic> _$MainIconToJson(MainIcon instance) => <String, dynamic>{
 
 Children _$ChildrenFromJson(Map<String, dynamic> json) {
   return Children(
-    json['name'] as String,
-    json['type'] as int,
-    json['key'] as String,
-    json['class'] as String,
-    json['requiresajaxloading'] as bool,
-    json['icon'] == null
+    name: json['name'] as String,
+    type: json['type'] as int,
+    key: json['key'] as String,
+    classs: json['class'] as String,
+    requiresajaxloading: json['requiresajaxloading'] as bool,
+    icon: json['icon'] == null
         ? null
         : SubIcon.fromJson(json['icon'] as Map<String, dynamic>),
-    json['title'] as String,
-    json['link'] as String,
-    json['hidden'] as bool,
-    json['haschildren'] as bool,
+    title: json['title'] as String,
+    link: json['link'] as String,
+    hidden: json['hidden'] as bool,
+    haschildren: json['haschildren'] as bool,
   );
 }
 
@@ -89,11 +89,11 @@ Map<String, dynamic> _$ChildrenToJson(Children instance) => <String, dynamic>{
 
 SubIcon _$SubIconFromJson(Map<String, dynamic> json) {
   return SubIcon(
-    json['component'] as String,
-    json['pix'] as String,
-    (json['classes'] as List)?.map((e) => e as String)?.toList(),
-    json['alt'] as String,
-    json['title'] as String,
+    component: json['component'] as String,
+    pix: json['pix'] as String,
+    classes: (json['classes'] as List)?.map((e) => e as String)?.toList(),
+    alt: json['alt'] as String,
+    title: json['title'] as String,
   );
 }
 

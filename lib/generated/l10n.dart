@@ -1385,6 +1385,16 @@ class S {
     );
   }
 
+  /// `Use Moodle WebAPI`
+  String get moodleSetting {
+    return Intl.message(
+      'Use Moodle WebAPI',
+      name: 'moodleSetting',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `註解`
   String get ___________________OtherUi___________________ {
     return Intl.message(

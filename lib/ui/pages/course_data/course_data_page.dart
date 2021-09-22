@@ -6,8 +6,11 @@ import 'package:flutter_app/src/config/app_themes.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/providers/app_provider.dart';
+import 'package:flutter_app/src/store/Model.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_directory_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/course_directory_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/tab_page.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -32,21 +35,33 @@ class _CourseDataPageState extends State<CourseDataPage>
   void initState() {
     super.initState();
     tabPageList = TabPageList();
-    tabPageList.add(TabPage(
-      R.current.file,
-      Icons.folder,
-      CourseDirectoryPage(
-        widget.courseInfo,
-      ),
-    ));
-    tabPageList.add(TabPage(
-      R.current.announcement,
-      Icons.message,
-      CourseAnnouncementPage(
-        widget.courseInfo,
-      ),
-    ));
-    _tabController = TabController(vsync: this, length: tabPageList.length);
+    Model.instance.getInstance().then((value) {
+      bool useMoodleWebApi = Model.instance.getOtherSetting().useMoodleWebApi;
+      tabPageList.add(TabPage(
+        R.current.file,
+        Icons.folder,
+        useMoodleWebApi
+            ? CourseDirectoryWebApiPage(
+                widget.courseInfo,
+              )
+            : CourseDirectoryPage(
+                widget.courseInfo,
+              ),
+      ));
+      tabPageList.add(TabPage(
+        R.current.announcement,
+        Icons.message,
+        useMoodleWebApi
+            ? CourseAnnouncementWebApiPage(
+                widget.courseInfo,
+              )
+            : CourseAnnouncementPage(
+                widget.courseInfo,
+              ),
+      ));
+      _tabController = TabController(vsync: this, length: tabPageList.length);
+      setState(() {});
+    });
   }
 
   @override

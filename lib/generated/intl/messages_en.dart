@@ -140,6 +140,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logout" : MessageLookupByLibrary.simpleMessage("Sign out"),
     "logoutWarning" : MessageLookupByLibrary.simpleMessage("Are you sure you want to log out? \nAll data will be cleared"),
     "member" : MessageLookupByLibrary.simpleMessage("member"),
+    "moodleSetting" : MessageLookupByLibrary.simpleMessage("Use Moodle WebAPI"),
     "needValidateCaptcha" : MessageLookupByLibrary.simpleMessage("Need validate captcha"),
     "networkError" : MessageLookupByLibrary.simpleMessage("Network error"),
     "noAnyFavorite" : MessageLookupByLibrary.simpleMessage("No any favorite"),

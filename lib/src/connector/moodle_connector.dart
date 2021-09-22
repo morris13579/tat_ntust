@@ -25,6 +25,7 @@ class MoodleCourseDirectoryInfo {
   String sesskey;
   String instance;
   String name;
+  String courseId;
 
   MoodleCourseDirectoryInfo(
       {this.elementid,
@@ -32,7 +33,8 @@ class MoodleCourseDirectoryInfo {
       this.type,
       this.sesskey,
       this.instance,
-      this.name});
+      this.name,
+      this.courseId});
 }
 
 class MoodleAnnouncementInfo {
@@ -154,6 +156,7 @@ class MoodleConnector {
       for (var i in nodes) {
         Element p = i.getElementsByTagName("p")[0];
         MoodleCourseDirectoryInfo info = MoodleCourseDirectoryInfo(
+          courseId: id,
           name: i.text,
           elementid: p.attributes["data-node-id"],
           id: p.attributes["data-node-key"],
@@ -237,16 +240,38 @@ class MoodleConnector {
         "sesskey": info.sesskey,
         "instance": info.instance,
       };
+      print(info.elementid);
       parameter.data = data;
       result = await Connector.getDataByPost(parameter);
       MoodleBranchJson branch = MoodleBranchJson.fromJson(json.decode(result));
       List<Children> c = [];
       branch.children ??= [];
+      var nodes;
       for (var i in branch.children) {
         if (i != null) {
           c.add(i);
         }
       }
+      try {
+        if (info.name == "一般" || info.name == "General") {
+          String url = "$host/course/view.php?id=${info.courseId}";
+          parameter = ConnectorParameter(url);
+          result = await Connector.getDataByGet(parameter);
+          var tagNode = parse(result);
+          List<Element> nodes = tagNode.getElementsByClassName("activity");
+          for (int i = 0; i < nodes.length; i++) {
+            Element node = nodes[i];
+            if (node.className.contains("label")) {
+              c.insert(
+                  i,
+                  Children(
+                    name: node.innerHtml,
+                    icon: SubIcon(component: "label"),
+                  ));
+            }
+          }
+        }
+      } catch (e) {}
       branch.children = c;
       return branch;
     } catch (e, stack) {

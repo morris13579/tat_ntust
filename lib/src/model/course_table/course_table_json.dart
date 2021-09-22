@@ -293,7 +293,7 @@ class CourseInfoJson {
   @override
   String toString() {
     return sprintf(
-        "---------main--------  \n%s \n" + "---------extra-------- \n%s \n",
+        "---------main--------  \n%s",
         [main.toString()]);
   }
 
