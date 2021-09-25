@@ -66,6 +66,46 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
     );
   }
 
+  IconData getIcon(String type) {
+    switch (type) {
+      case "forum":
+        return Icons.message_outlined;
+      case "assign":
+        return Icons.message_outlined;
+      case "folder":
+        return Icons.folder_outlined;
+      case "label":
+        return Icons.label_outline;
+      default:
+        return Icons.file_copy_outlined;
+    }
+  }
+
+  void handleTap(Children ap) async {
+    switch (ap.icon.component) {
+      case "forum":
+        RouteUtils.toWebViewPage(ap.name, ap.link,
+            openWithExternalWebView: false);
+        break;
+      case "assign":
+        RouteUtils.toWebViewPage(ap.name, ap.link,
+            openWithExternalWebView: false);
+        break;
+      case "folder":
+        RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
+        break;
+      case "label":
+        break;
+      default:
+        await AnalyticsUtils.logDownloadFileEvent();
+        MyToast.show(R.current.downloadWillStart);
+        String dirName = widget.courseInfo.main.course.name;
+        FileDownload.download(
+            context, ap.link + "&redirect=1", dirName, ap.name);
+        break;
+    }
+  }
+
   Widget buildTree() {
     return ListView.builder(
       shrinkWrap: true,
@@ -80,13 +120,7 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
                 Expanded(
                   flex: 1,
                   //https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1624611875/${ap.icon.pix}
-                  child: Icon((ap.icon.component.contains("forum"))
-                      ? Icons.message_outlined
-                      : ap.icon.component.contains("folder")
-                          ? Icons.folder_outlined
-                          : ap.icon.component.contains("label")
-                              ? Icons.label_outline
-                              : Icons.file_copy_outlined),
+                  child: Icon(getIcon(ap.icon.component)),
                 ),
                 Expanded(
                   flex: 8,
@@ -98,18 +132,7 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
             ),
           ),
           onTap: () async {
-            if (ap.icon.component.contains("forum")) {
-              RouteUtils.toWebViewPage(ap.name, ap.link,
-                  openWithExternalWebView: false);
-            } else if (ap.icon.component.contains("folder")) {
-              RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
-            } else {
-              await AnalyticsUtils.logDownloadFileEvent();
-              MyToast.show(R.current.downloadWillStart);
-              String dirName = widget.courseInfo.main.course.name;
-              FileDownload.download(
-                  context, ap.link + "&redirect=1", dirName, ap.name);
-            }
+            handleTap(ap);
           },
         );
       },
