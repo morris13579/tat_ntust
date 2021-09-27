@@ -7,6 +7,7 @@
 //
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -51,21 +52,22 @@ class FileDownload {
             .showIndeterminateProgressNotification(value); //顯示下載進度
       }
     };
+
     //開始下載檔案
     DioConnector.instance.download(url, (Headers responseHeaders) {
       Map<String, List<String>> headers = responseHeaders.map;
       Log.d("download header $headers");
       if (headers.containsKey("content-disposition")) {
         //代表有名字
-        List<String> name = headers["content-disposition"];
+        List<String> names = headers["content-disposition"];
+        String decodeName = utf8.decode(Uint8List.fromList(names[0].codeUnits));
         RegExp exp =
             RegExp("['|\"](?<name>.+)['|\"]"); //尋找 'name' , "name" 的name
-        RegExpMatch matches = exp.firstMatch(name[0]);
+        RegExpMatch matches = exp.firstMatch(decodeName);
         realFileName = matches.group(1);
       }
-      if (realFileName == null) {
-        realFileName = name;
-      }
+      realFileName ??= name;
+      value.title = realFileName;
       Log.d(path + "/" + realFileName);
       return path + "/" + realFileName;
     },
@@ -90,7 +92,7 @@ class FileDownload {
       (onError) async {
         //顯示下載萬完成通知窗
         Log.d(onError.toString());
-        await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 100));
         Notifications.instance.cancelNotification(value.id);
         value.body = "下載失敗";
         value.id = Notifications.instance.notificationId; //取得新的id
