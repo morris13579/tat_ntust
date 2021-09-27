@@ -17,8 +17,9 @@ import 'package:provider/provider.dart';
 
 class CourseDataPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
+  final int index;
 
-  CourseDataPage(this.courseInfo);
+  CourseDataPage(this.courseInfo, this.index);
 
   @override
   _CourseDataPageState createState() => _CourseDataPageState();
@@ -37,7 +38,7 @@ class _CourseDataPageState extends State<CourseDataPage>
     tabPageList = TabPageList();
     Model.instance.getInstance().then((value) {
       bool useMoodleWebApi = Model.instance.getOtherSetting().useMoodleWebApi;
-      tabPageList.add(TabPage(
+      var filePage = TabPage(
         R.current.file,
         Icons.folder,
         useMoodleWebApi
@@ -47,8 +48,8 @@ class _CourseDataPageState extends State<CourseDataPage>
             : CourseDirectoryPage(
                 widget.courseInfo,
               ),
-      ));
-      tabPageList.add(TabPage(
+      );
+      var announcementPage = TabPage(
         R.current.announcement,
         Icons.message,
         useMoodleWebApi
@@ -58,7 +59,9 @@ class _CourseDataPageState extends State<CourseDataPage>
             : CourseAnnouncementPage(
                 widget.courseInfo,
               ),
-      ));
+      );
+      tabPageList.add((widget.index == 0) ? filePage : announcementPage);
+      tabPageList.add((widget.index == 0) ? announcementPage : filePage);
       _tabController = TabController(vsync: this, length: tabPageList.length);
       setState(() {});
     });

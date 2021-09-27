@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/src/ad/ad_manager.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/task/moodle/moodle_course_announcement.dart';
@@ -35,6 +36,7 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
     var task = MoodleCourseAnnouncementTask(courseId);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
+      AdManager.showDownloadAD();
       announcementList = task.result;
       setState(() {
         isLoading = false;
@@ -48,8 +50,8 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
     return Scaffold(
       body: isLoading
           ? Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : buildTree(),
     );
   }

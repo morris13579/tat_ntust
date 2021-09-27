@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/src/ad/ad_manager.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_webapi_course_message.dart';
@@ -36,6 +37,7 @@ class _CourseAnnouncementWebApiPageState extends State<CourseAnnouncementWebApiP
     var task = MoodleWebApiCourseMessageTask(courseId);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
+      AdManager.showDownloadAD();
       discussions = task.result.discussions;
       setState(() {
         isLoading = false;
