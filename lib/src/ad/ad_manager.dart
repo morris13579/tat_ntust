@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/debug/log/Log.dart';
-import 'package:flutter_app/src/store/Model.dart';
+import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -26,11 +26,9 @@ class FileStore {
       return "";
     }
     Directory directory = await _getFilePath();
-    if (directory == null) {
-      directory = Theme.of(context).platform == TargetPlatform.android
+    directory ??= Theme.of(context).platform == TargetPlatform.android
           ? await getExternalStorageDirectory()
           : await getApplicationSupportDirectory();
-    }
     return directory.path;
   }
 

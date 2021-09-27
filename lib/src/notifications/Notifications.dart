@@ -33,7 +33,7 @@ class Notifications {
     //     await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        const AndroidInitializationSettings('app_icon');
     // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
     // of the `IOSFlutterLocalNotificationsPlugin` class
     var initializationSettingsIOS = IOSInitializationSettings(
@@ -141,7 +141,7 @@ class Notifications {
         showProgress: true,
         indeterminate: true,
         playSound: false);
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
@@ -158,7 +158,7 @@ class Notifications {
         onlyAlertOnce: true,
         ticker: 'ticker',
         playSound: false);
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,

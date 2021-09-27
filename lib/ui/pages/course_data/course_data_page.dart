@@ -6,7 +6,7 @@ import 'package:flutter_app/src/config/app_themes.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/providers/app_provider.dart';
-import 'package:flutter_app/src/store/Model.dart';
+import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_directory_page.dart';

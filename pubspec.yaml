@@ -105,7 +105,8 @@ dependencies:
   #選擇學期
   alice_lightweight: ^3.0.0
   pretty_json: ^2.0.0
-  icalendar_parser: ^0.8.1
+  icalendar_parser: ^1.0.0
+  charset_converter: ^2.0.0
 
   # Firebase
   firebase_core: ^1.6.0

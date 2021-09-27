@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/store/Model.dart';
+import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/ui/pages/course_data/course_data_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_announcement_detail_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_announcement_detail_webapi_page.dart';
