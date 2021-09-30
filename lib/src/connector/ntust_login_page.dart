@@ -92,20 +92,13 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                     var cookies =
                         await cookieManager.getCookies(url: NTUSTLoginUri);
                     List<io.Cookie> ioCookies = [];
-                    List<String> cookiesNameList = [
-                      ".ASPXAUTH",
-                      "ntustjwtsecret",
-                      "ntustsecret"
-                    ];
                     bool add = false;
                     for (var i in cookies) {
-                      if (cookiesNameList.contains(i.name)) {
-                        io.Cookie k = io.Cookie(i.name, i.value);
-                        k.domain = ".ntust.edu.tw";
-                        k.path = "/";
-                        ioCookies.add(k);
-                        add = true;
-                      }
+                      io.Cookie k = io.Cookie(i.name, i.value);
+                      k.domain = ".ntust.edu.tw";
+                      k.path = "/";
+                      ioCookies.add(k);
+                      add = true;
                     }
                     if (add) {
                       await cookieJar.saveFromResponse(
