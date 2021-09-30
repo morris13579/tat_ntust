@@ -24,7 +24,6 @@ class FileDownload {
       [String name = "", String? referer]) async {
     String path = await FileStore.getDownloadDir(context, dirName); //取得下載路徑
     String? realFileName;
-    String fileExtension;
     referer = referer ?? url;
     Log.d("file download \n url: $url \n referer: $referer");
     //顯示下載通知窗

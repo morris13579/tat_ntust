@@ -109,21 +109,6 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     );
   }
 
-  Widget? _buildCourseInfo(String text, String info) {
-    if (info == null || info.isEmpty) {
-      return null;
-    }
-    return Container(
-      padding: EdgeInsets.only(bottom: 5),
-      child: Card(
-        child: ListTile(
-          title: Text(text),
-          subtitle: Text(info),
-        ),
-      ),
-    );
-  }
-
   Widget _buildClassmateInfo(int index, MoodleUserInfo member) {
     Color color;
     color = (index % 2 == 1)

@@ -43,7 +43,7 @@ class MoodleCourseAnnouncementTask
             break;
           }
         }
-        value = (await MoodleConnector.getCourseAnnouncement(url!))!;
+        value = (await MoodleConnector.getCourseAnnouncement(url!));
         super.onEnd();
         if (value != null) {
           result = value;

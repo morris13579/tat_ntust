@@ -220,7 +220,6 @@ class MoodleConnector {
     Document tagNode;
     List<Element> nodes;
     ConnectorParameter parameter;
-    List<MoodleAnnouncementInfo> value = [];
     try {
       parameter = ConnectorParameter(url);
       result = await Connector.getDataByGet(parameter);

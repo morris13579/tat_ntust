@@ -8,13 +8,13 @@ import 'package:flutter_app/ui/other/my_toast.dart';
 
 import 'task.dart';
 
-typedef onSuccessCallBack = Function(Task);
+typedef OnSuccessCallBack = Function(Task);
 
 class TaskFlow {
   late List<Task> _queue;
   late List<Task> _completeTask;
   late List<Task> _failTask;
-  onSuccessCallBack? callback;
+  OnSuccessCallBack? callback;
 
   static resetLoginStatus() {
     NTUSTTask.isLogin = false;

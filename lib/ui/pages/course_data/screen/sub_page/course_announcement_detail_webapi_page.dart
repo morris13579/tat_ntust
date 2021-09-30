@@ -68,45 +68,44 @@ class _CourseAnnouncementDetailWebApiPageState
                 Container(
                     padding: EdgeInsets.only(right: 20, left: 20, top: 20),
                     child: SelectableHtml(data: html, onLinkTap: onLinkTap)),
-                if (discussions.attachments != null)
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: discussions.attachments.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var ap = discussions.attachments[index];
-                      return InkWell(
-                        child: Container(
-                          color: getColor(index),
-                          height: 50,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Icon(Icons.file_copy),
-                              ),
-                              Expanded(
-                                flex: 8,
-                                child: Text(ap.filename),
-                              ),
-                            ],
-                          ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: discussions.attachments.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var ap = discussions.attachments[index];
+                    return InkWell(
+                      child: Container(
+                        color: getColor(index),
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Icon(Icons.file_copy),
+                            ),
+                            Expanded(
+                              flex: 8,
+                              child: Text(ap.filename),
+                            ),
+                          ],
                         ),
-                        onTap: () async {
-                          await AnalyticsUtils.logDownloadFileEvent();
-                          MyToast.show(R.current.downloadWillStart);
-                          String dirName = widget.courseInfo.main.course.name;
-                          FileDownload.download(
-                              context,
-                              Connector.uriAddQuery(
-                                ap.fileurl,
-                                {"token": MoodleWebApiConnector.wsToken},
-                              ),
-                              dirName,
-                              ap.filename);
-                        },
-                      );
-                    },
-                  )
+                      ),
+                      onTap: () async {
+                        await AnalyticsUtils.logDownloadFileEvent();
+                        MyToast.show(R.current.downloadWillStart);
+                        String dirName = widget.courseInfo.main.course.name;
+                        FileDownload.download(
+                            context,
+                            Connector.uriAddQuery(
+                              ap.fileurl,
+                              {"token": MoodleWebApiConnector.wsToken},
+                            ),
+                            dirName,
+                            ap.filename);
+                      },
+                    );
+                  },
+                )
               ],
             ),
     );

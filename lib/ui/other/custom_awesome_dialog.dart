@@ -144,19 +144,14 @@ class CustomAwesomeDialog {
             fade: true,
             curve: Curves.fastLinearToSlowEaseIn,
             child: _buildDialog);
-        break;
       case AnimType.LEFTSLIDE:
         return FadeIn(from: SlideFrom.LEFT, child: _buildDialog);
-        break;
       case AnimType.RIGHSLIDE:
         return FadeIn(from: SlideFrom.RIGHT, child: _buildDialog);
-        break;
       case AnimType.BOTTOMSLIDE:
         return FadeIn(from: SlideFrom.BOTTOM, child: _buildDialog);
-        break;
       case AnimType.TOPSLIDE:
         return FadeIn(from: SlideFrom.TOP, child: _buildDialog);
-        break;
       default:
         return _buildDialog;
     }

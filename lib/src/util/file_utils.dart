@@ -153,7 +153,6 @@ class FileUtils {
                 .toLowerCase()
                 .compareTo(basename(f2.path).toLowerCase()));
         }
-        break;
 
       case 1:
         list.sort((f1, f2) => basename(f1.path)
@@ -168,7 +167,6 @@ class FileUtils {
                 .compareTo(f2.toString().split(":")[0].toLowerCase()));
         }
         return list.reversed.toList();
-        break;
 
       case 2:
         return list
@@ -178,7 +176,6 @@ class FileUtils {
                   .lastModifiedSync()
                   .compareTo(File(f2.path).lastModifiedSync())
               : 1);
-        break;
 
       case 3:
         list
@@ -189,7 +186,6 @@ class FileUtils {
                   .compareTo(File(f2.path).lastModifiedSync())
               : 1);
         return list.reversed.toList();
-        break;
 
       case 4:
         list
@@ -198,7 +194,6 @@ class FileUtils {
               ? File(f1.path).lengthSync().compareTo(File(f2.path).lengthSync())
               : 0);
         return list.reversed.toList();
-        break;
 
       case 5:
         return list
@@ -206,7 +201,6 @@ class FileUtils {
                   FileSystemEntity.isFileSync(f2.path)
               ? File(f1.path).lengthSync().compareTo(File(f2.path).lengthSync())
               : 0);
-        break;
 
       default:
         return list..sort();

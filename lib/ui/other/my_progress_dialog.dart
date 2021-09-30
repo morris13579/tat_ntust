@@ -41,13 +41,13 @@ class MyProgressDialog {
   static void showProgressDialogOld(
       BuildContext context, String message) async {}
 
-  static void progressDialog(String message) async {
+  static void progressDialog(String? message) async {
     BotToast.showCustomLoading(toastBuilder: (cancel) {
       return dialog(message);
     });
   }
 
-  static Widget dialog(String message) {
+  static Widget dialog(String? message) {
     final int number = Random().nextInt(kits.length);
     return CustomProgressDialog(
       child: Container(

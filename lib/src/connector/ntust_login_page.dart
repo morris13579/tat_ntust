@@ -23,7 +23,7 @@ class LoginNTUSTPage extends StatefulWidget {
 class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
   final cookieManager = CookieManager.instance();
   final cookieJar = DioConnector.instance.cookiesManager;
-  final Uri NTUSTLoginUri = Uri.parse(NTUSTConnector.ntustLoginUrl);
+  final Uri ntustLoginUri = Uri.parse(NTUSTConnector.ntustLoginUrl);
   late InAppWebViewController webView;
   Uri url = Uri();
   double progress = 0;
@@ -45,7 +45,7 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
         child: Stack(
           children: <Widget>[
             InAppWebView(
-              initialUrlRequest: URLRequest(url: NTUSTLoginUri),
+              initialUrlRequest: URLRequest(url: ntustLoginUri),
               initialOptions: InAppWebViewGroupOptions(
                 crossPlatform: InAppWebViewOptions(),
               ),
@@ -58,7 +58,7 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                 });
               },
               onLoadStop: (InAppWebViewController controller, Uri? url) async {
-                if (url == NTUSTLoginUri) {
+                if (url == ntustLoginUri) {
                   await webView.evaluateJavascript(
                       source:
                           'document.getElementsByName("UserName")[0].value = "${widget.username}";');
@@ -88,7 +88,7 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                     });
                   } else {
                     var cookies =
-                        await cookieManager.getCookies(url: NTUSTLoginUri);
+                        await cookieManager.getCookies(url: ntustLoginUri);
                     List<io.Cookie> ioCookies = [];
                     bool add = false;
                     for (var i in cookies) {
@@ -100,7 +100,7 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                     }
                     if (add) {
                       await cookieJar.saveFromResponse(
-                          NTUSTLoginUri, ioCookies);
+                          ntustLoginUri, ioCookies);
                       Get.back(result: {"status": NTUSTLoginStatus.Success});
                     } else {
                       Get.back(result: {"status": NTUSTLoginStatus.Fail});

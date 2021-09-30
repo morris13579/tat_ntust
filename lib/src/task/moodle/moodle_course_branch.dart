@@ -18,22 +18,15 @@ class MoodleCourseBranchTask extends MoodleTask<MoodleBranchJson> {
       MoodleBranchJson? value;
       super.onStart(R.current.getMoodleCourseBranch);
       value = await MoodleConnector.getCourseBranch(info);
-      try {
-        if (value == null) {
-          throw Exception("value is null");
-        }
-        for (var i in value.children) {
-          if (i.link != null) {
+      super.onEnd();
+      if (value != null) {
+        try {
+          for (var i in value.children) {
             i.link += (LanguageUtils.getLangIndex() == LangEnum.zh)
                 ? "&lang=zh_tw"
                 : "&lang=en";
           }
-        }
-      } catch (e) {
-        return await super.onError(R.current.getMoodleCourseBranchError);
-      }
-      super.onEnd();
-      if (value != null) {
+        } catch (e) {}
         result = value;
         return TaskStatus.Success;
       } else {

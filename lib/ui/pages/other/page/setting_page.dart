@@ -223,7 +223,7 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ),
         onTap: () async {
-          String directory = await DocumentUtils.choiceFolder();
+          String? directory = await DocumentUtils.choiceFolder();
           if (directory != null) {
             setState(() {
               downloadPath = directory;

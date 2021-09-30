@@ -167,7 +167,7 @@ class _CourseInfoPageState extends State<CourseInfoPage>
   }
 
   Widget? _buildCourseInfo(String text, String info) {
-    if (info == null || info.isEmpty) {
+    if (info.isEmpty) {
       return null;
     }
     return Container(
