@@ -5,6 +5,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
+import 'package:flutter_app/src/util/html_utils.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
@@ -211,7 +212,6 @@ class MoodleConnector {
     String result;
     Document tagNode;
     List<Element> nodes;
-    Element node;
     ConnectorParameter parameter;
     List<MoodleAnnouncementInfo> value = [];
     try {
@@ -240,35 +240,52 @@ class MoodleConnector {
         "sesskey": info.sesskey,
         "instance": info.instance,
       };
-      print(info.elementid);
       parameter.data = data;
       result = await Connector.getDataByPost(parameter);
       MoodleBranchJson branch = MoodleBranchJson.fromJson(json.decode(result));
       List<Children> c = [];
       branch.children ??= [];
-      var nodes;
       for (var i in branch.children) {
         if (i != null) {
           c.add(i);
         }
       }
       try {
-        if (info.name == "一般" || info.name == "General") {
-          String url = "$host/course/view.php?id=${info.courseId}";
-          parameter = ConnectorParameter(url);
-          result = await Connector.getDataByGet(parameter);
-          var tagNode = parse(result);
-          List<Element> nodes = tagNode.getElementsByClassName("activity");
-          for (int i = 0; i < nodes.length; i++) {
-            Element node = nodes[i];
-            if (node.className.contains("label")) {
-              c.insert(
-                  i,
-                  Children(
-                    name: node.innerHtml,
-                    icon: SubIcon(component: "label"),
-                  ));
-            }
+        String url = "$host/course/view.php?id=${info.courseId}";
+        parameter = ConnectorParameter(url);
+        result = await Connector.getDataByGet(parameter);
+        var tagNode = parse(result);
+        int sectionN = 0;
+        while (true) {
+          Element node = tagNode
+              .getElementById("section-$sectionN")
+              .getElementsByClassName("hidden sectionname")
+              .first;
+          if (node.text.contains(info.name)) {
+            break;
+          }
+          sectionN++;
+          if (sectionN >= 30) break;
+        }
+        List<Element> nodes = tagNode
+            .getElementById("section-$sectionN")
+            .getElementsByClassName("activity");
+        for (int i = 0; i < nodes.length; i++) {
+          Element node = nodes[i];
+          if (node.className.contains("label")) {
+            c.insert(
+                i,
+                Children(
+                  name: node.innerHtml,
+                  icon: SubIcon(component: "label"),
+                ));
+          }
+          c[i].name = HtmlUtils.clean(c[i].name);
+          var contentAfterLink =
+              node.getElementsByClassName("contentafterlink");
+          if (contentAfterLink.length != 0) {
+            var n = contentAfterLink[0];
+            c[i].contentAfterLink = n.innerHtml;
           }
         }
       } catch (e) {}

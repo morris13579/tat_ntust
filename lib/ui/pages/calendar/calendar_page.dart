@@ -73,7 +73,6 @@ class _CalendarPageState extends State<CalendarPage> {
       setState(() {
         _selectedDay = _today;
       });
-      print(_selectedDay);
       _selectEvent();
     }
   }

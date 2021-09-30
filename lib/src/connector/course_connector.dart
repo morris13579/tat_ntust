@@ -165,7 +165,6 @@ class CourseConnector {
       Response result = await Connector.getDataByGetResponse(parameter);
       CourseExtraInfoJson courseExtraInfo =
           CourseExtraInfoJson.fromJson(result.data[0]);
-      print(courseExtraInfo);
       return courseExtraInfo;
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);

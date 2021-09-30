@@ -59,7 +59,6 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                 });
               },
               onLoadStop: (InAppWebViewController controller, Uri url) async {
-                print(url);
                 if (url == NTUSTLoginUri) {
                   await webView.evaluateJavascript(
                       source:

@@ -40,7 +40,6 @@ class HtmlUtils {
     List<RegExpMatch> matchList = exp.allMatches(html).toList();
     for (RegExpMatch match in matchList) {
       String url = match.group(0);
-      print(url);
       if (!url.contains("\"")) {
         html = html.replaceAll(
             url, r'<a href="' + url + '" target="_blank">' + url + '</a>');

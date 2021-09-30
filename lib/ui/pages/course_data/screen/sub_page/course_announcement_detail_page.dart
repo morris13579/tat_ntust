@@ -26,7 +26,6 @@ class _CourseAnnouncementDetailPageState
     extends State<CourseAnnouncementDetailPage> {
   bool isLoading = true;
   String html;
-  bool selectAble = false;
 
   @override
   void initState() {
@@ -54,57 +53,27 @@ class _CourseAnnouncementDetailPageState
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.value.name),
-        actions: [
-          IconButton(
-            icon: Icon(
-                (selectAble) ? Icons.lock_open_outlined : Icons.lock_outline),
-            onPressed: () {
-              setState(() {
-                selectAble = !selectAble;
-              });
-            },
-            tooltip: R.current.selectAble,
-          )
-        ],
       ),
       body: isLoading
           ? Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : Container(
-        padding: EdgeInsets.only(right: 20, left: 20, top: 20),
-        child: (selectAble)
-            ? SelectableHtml(
-          data: html,
-          onLinkTap:
-              (url, renderContext, attributes, element) async {
-            if (Uri.parse(url).path.contains("pluginfile.php")) {
-              await AnalyticsUtils.logDownloadFileEvent();
-              MyToast.show(R.current.downloadWillStart);
-              String dirName = widget.courseInfo.main.course.name;
-              FileDownload.download(
-                  context, url, dirName, element.text);
-            } else {
-              RouteUtils.toWebViewPage(widget.value.name, url);
-            }
-          },
-        )
-            : Html(
-          data: html,
-          onLinkTap:
-              (url, renderContext, attributes, element) async {
-            if (Uri.parse(url).path.contains("pluginfile.php")) {
-              await AnalyticsUtils.logDownloadFileEvent();
-              MyToast.show(R.current.downloadWillStart);
-              String dirName = widget.courseInfo.main.course.name;
-              FileDownload.download(
-                  context, url, dirName, element.text);
-            } else {
-              RouteUtils.toWebViewPage(widget.value.name, url);
-            }
-          },
-        ),
-      ),
+              padding: EdgeInsets.only(right: 20, left: 20, top: 20),
+              child: SelectableHtml(
+                data: html,
+                onLinkTap: (url, renderContext, attributes, element) async {
+                  if (Uri.parse(url).path.contains("pluginfile.php")) {
+                    await AnalyticsUtils.logDownloadFileEvent();
+                    MyToast.show(R.current.downloadWillStart);
+                    String dirName = widget.courseInfo.main.course.name;
+                    FileDownload.download(context, url, dirName, element.text);
+                  } else {
+                    RouteUtils.toWebViewPage(widget.value.name, url);
+                  }
+                },
+              ),
+            ),
     );
   }
 }

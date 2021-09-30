@@ -1,3 +1,4 @@
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
@@ -71,11 +72,13 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
       case "forum":
         return Icons.message_outlined;
       case "assign":
-        return Icons.message_outlined;
+        return Icons.assignment_outlined;
       case "folder":
         return Icons.folder_outlined;
       case "label":
         return Icons.label_outline;
+      case "url":
+        return Icons.link_outlined;
       default:
         return Icons.file_copy_outlined;
     }
@@ -96,6 +99,10 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
         break;
       case "label":
         break;
+      case "url":
+        RouteUtils.toWebViewPage(ap.name, ap.link + "&redirect=1",
+            openWithExternalWebView: true);
+        break;
       default:
         await AnalyticsUtils.logDownloadFileEvent();
         MyToast.show(R.current.downloadWillStart);
@@ -106,15 +113,76 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
     }
   }
 
+  final titleTextStyle = TextStyle(fontSize: 14);
+
+  Widget buildItem(Children ap, int index) {
+    switch (ap.icon.component) {
+      case "label":
+        return Container(
+            padding: EdgeInsets.only(left: 20, bottom: 10),
+            child: SelectableHtml(data: ap.name));
+      default:
+        if (ap.contentAfterLink != null) {
+          return ExpansionTileCard(
+            expandedTextColor: Theme.of(context).textTheme.bodyText1.color,
+            expandedColor: getColor(index),
+            baseColor: getColor(index),
+            title: Text(
+              ap.name,
+              style: titleTextStyle,
+            ),
+            children: [
+              Container(
+                  padding: EdgeInsets.only(left: 20),
+                  child: SelectableHtml(data: ap.contentAfterLink)),
+              Container(
+                height: 50,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        child: Icon(Icons.download_outlined),
+                        onTap: () {
+                          handleTap(ap);
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          );
+        }
+        return Container(
+          height: 50,
+          padding: EdgeInsets.only(left: 20),
+          child: Row(
+            children: [
+              Text(
+                ap.name,
+                style: titleTextStyle,
+              )
+            ],
+          ),
+        );
+    }
+  }
+
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+  }
+
   Widget buildTree() {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: moodleBranch.children.length,
       itemBuilder: (BuildContext context, int index) {
-        Children ap = moodleBranch.children[index];
+        var ap = moodleBranch.children[index];
         return InkWell(
           child: Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10),
+            color: getColor(index),
             child: Row(
               children: [
                 Expanded(
@@ -124,9 +192,7 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
                 ),
                 Expanded(
                   flex: 8,
-                  child: (ap.icon.component.contains("label"))
-                      ? SelectableHtml(data: ap.name)
-                      : Text(ap.name),
+                  child: buildItem(ap, index),
                 ),
               ],
             ),

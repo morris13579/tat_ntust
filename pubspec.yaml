@@ -91,7 +91,7 @@ dependencies:
   #課表顯示有用到
   table_calendar: ^3.0.2
   #顯示行事曆
-  #語言切換用
+  expansion_tile_card: ^2.0.0
   fluttertoast: ^8.0.8
   #Toast
   awesome_dialog: ^2.1.1

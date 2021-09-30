@@ -113,7 +113,7 @@ class _WebViewPageState extends State<WebViewPage> {
               width: 50,
               child: InkWell(
                 onTap: () async {
-                  OpenUtils.launchURL(widget.url.toString());
+                  OpenUtils.launchURL(this.url.toString());
                 },
                 child: Icon(Icons.open_in_new, color: Colors.white),
               ),

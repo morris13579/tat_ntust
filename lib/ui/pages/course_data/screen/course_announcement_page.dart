@@ -44,6 +44,12 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
     }
   }
 
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
@@ -64,6 +70,7 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
         MoodleAnnouncementInfo ap = announcementList[index];
         return InkWell(
           child: Container(
+            color: getColor(index),
             padding: EdgeInsets.only(top: 10, bottom: 10),
             child: Row(
               children: [

@@ -64,6 +64,12 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
     );
   }
 
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+  }
+
   Widget buildTree() {
     return ListView.builder(
       shrinkWrap: true,
@@ -73,6 +79,7 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
         return InkWell(
           child: Container(
             height: 50,
+            color: getColor(index),
             child: Row(
               children: [
                 Expanded(

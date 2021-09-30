@@ -35,7 +35,6 @@ class CategoryProvider extends ChangeNotifier {
       if (Directory(dir.path + "Download").existsSync()) {
         List<FileSystemEntity> files =
             Directory(dir.path + "Download").listSync();
-        print(files);
         files.forEach((file) {
           if (FileSystemEntity.isFileSync(file.path)) {
             downloads.add(file);

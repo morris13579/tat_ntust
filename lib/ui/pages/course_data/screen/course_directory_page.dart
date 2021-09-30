@@ -50,10 +50,16 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
     return Scaffold(
       body: isLoading
           ? Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : buildTree(),
     );
+  }
+
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
   }
 
   Widget buildTree() {
@@ -64,6 +70,7 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
         MoodleCourseDirectoryInfo ap = directoryList[index];
         return InkWell(
           child: Container(
+            color: getColor(index),
             height: 50,
             child: Row(
               children: [

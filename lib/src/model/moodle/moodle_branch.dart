@@ -110,6 +110,10 @@ class Children extends Object {
   @JsonKey(name: 'haschildren')
   bool haschildren;
 
+  String contentAfterLink;
+
+  bool isExpanded;
+
   Children(
       {this.name,
       this.type,
@@ -120,7 +124,9 @@ class Children extends Object {
       this.title,
       this.link,
       this.hidden,
-      this.haschildren});
+      this.haschildren,
+      this.contentAfterLink,
+      this.isExpanded});
 
   factory Children.fromJson(Map<String, dynamic> srcJson) =>
       _$ChildrenFromJson(srcJson);
