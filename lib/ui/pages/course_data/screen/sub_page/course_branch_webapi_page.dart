@@ -1,3 +1,4 @@
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
@@ -13,7 +14,6 @@ import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:html_unescape/html_unescape.dart';
 
 class CourseBranchWebApiPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -47,112 +47,173 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
     );
   }
 
-  IconData getIcon(String i) {
-    switch (i) {
+  IconData getIcon(String type) {
+    switch (type) {
       case "forum":
         return Icons.message_outlined;
+      case "assign":
+        return Icons.assignment_outlined;
       case "folder":
         return Icons.folder_outlined;
       case "label":
         return Icons.label_outline;
-      case "resource":
-        return Icons.file_copy_outlined;
+      case "url":
+        return Icons.link_outlined;
       default:
-        return Icons.link;
+        return Icons.file_copy_outlined;
     }
   }
 
-  Widget buildTree() {
-    final contents = widget.contents;
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: contents.modules.length,
-      itemBuilder: (BuildContext context, int index) {
-        var ap = contents.modules[index];
-        return ap.modname.contains("label")
-            ? Container(
-                padding:
-                    EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
+  void handleTap(Modules ap) async {
+    switch (ap.modname) {
+      case "forum":
+        if (Uri.parse(ap.url).host == "moodle.ntust.edu.tw") {
+          TaskFlow taskFlow = TaskFlow();
+          taskFlow.addTask(MoodleTask("WebView"));
+          await taskFlow.start();
+        }
+        RouteUtils.toWebViewPage(
+            ap.name,
+            Connector.uriAddQuery(
+              ap.url,
+              (LanguageUtils.getLangIndex() == LangEnum.zh)
+                  ? {"lang": "zh_tw"}
+                  : {"lang": "en"},
+            ),
+            openWithExternalWebView: false);
+        break;
+      case "assign":
+        RouteUtils.toWebViewPage(ap.name, ap.url,
+            openWithExternalWebView: false);
+        break;
+      case "folder":
+        if (ap.contents.length != 0) {
+          RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
+        } else {
+          MyToast.show(R.current.nothingHere);
+        }
+        break;
+      case "label":
+        break;
+      case "url":
+        if (Uri.parse(ap.url).host == "moodle.ntust.edu.tw") {
+          TaskFlow taskFlow = TaskFlow();
+          taskFlow.addTask(MoodleTask("WebView"));
+          await taskFlow.start();
+        }
+        RouteUtils.toWebViewPage(
+            ap.name,
+            Connector.uriAddQuery(
+              ap.url + "&redirect=1",
+              (LanguageUtils.getLangIndex() == LangEnum.zh)
+                  ? {"lang": "zh_tw"}
+                  : {"lang": "en"},
+            ),
+            openWithExternalWebView: true);
+        break;
+      default:
+        await AnalyticsUtils.logDownloadFileEvent();
+        MyToast.show(R.current.downloadWillStart);
+        String dirName = widget.courseInfo.main.course.name;
+        FileDownload.download(
+            context,
+            Connector.uriAddQuery(
+              ap.contents.first.fileurl,
+              {"token": MoodleWebApiConnector.wsToken},
+            ),
+            dirName,
+            ap.contents.first.filename);
+    }
+  }
+
+  final titleTextStyle = TextStyle(fontSize: 14);
+
+  Widget buildItem(Modules ap, int index) {
+    switch (ap.modname) {
+      case "label":
+        return Container(
+            padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+            child: SelectableHtml(data: ap.description));
+      default:
+        if (ap.description.isNotEmpty) {
+          return ExpansionTileCard(
+            expandedTextColor: Theme.of(context).textTheme.bodyText1!.color,
+            expandedColor: getColor(index),
+            baseColor: getColor(index),
+            title: Text(
+              ap.name,
+              style: titleTextStyle,
+            ),
+            children: [
+              Container(
+                  padding: EdgeInsets.only(left: 20),
+                  child: SelectableHtml(data: ap.description)),
+              Container(
+                height: 50,
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 1,
-                      child: Icon(getIcon(ap.modname)),
-                    ),
-                    Expanded(
-                      flex: 8,
-                      child: SelectableHtml(
-                        data: ap.description,
-                        onLinkTap: (url, context, attributes, element) {
-                          RouteUtils.toWebViewPage(element!.text, url!,
-                              openWithExternalWebView: false);
+                      child: InkWell(
+                        child: Icon(Icons.download_outlined),
+                        onTap: () {
+                          handleTap(ap);
                         },
                       ),
-                    ),
+                    )
                   ],
                 ),
               )
-            : InkWell(
-                child: Container(
-                  padding:
-                      EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Icon(getIcon(ap.modname)),
-                      ),
-                      Expanded(
-                          flex: 8,
-                          child: Text(HtmlUnescape().convert(ap.name))),
-                    ],
-                  ),
+            ],
+          );
+        }
+        return Container(
+          height: 50,
+          padding: EdgeInsets.only(left: 20),
+          child: Row(
+            children: [
+              Text(
+                ap.name,
+                style: titleTextStyle,
+              )
+            ],
+          ),
+        );
+    }
+  }
+
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+  }
+
+  Widget buildTree() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: widget.contents.modules.length,
+      itemBuilder: (BuildContext context, int index) {
+        var ap = widget.contents.modules[index];
+        return InkWell(
+          child: Container(
+            color: getColor(index),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  //https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1624611875/${ap.icon.pix}
+                  child: Icon(getIcon(ap.modname)),
                 ),
-                onTap: () async {
-                  switch (ap.modname) {
-                    case "forum":
-                      if (Uri.parse(ap.url).host == "moodle.ntust.edu.tw") {
-                        TaskFlow taskFlow = TaskFlow();
-                        taskFlow.addTask(MoodleTask("WebView"));
-                        await taskFlow.start();
-                      }
-                      RouteUtils.toWebViewPage(
-                          ap.name,
-                          Connector.uriAddQuery(
-                            ap.url,
-                            (LanguageUtils.getLangIndex() == LangEnum.zh)
-                                ? {"lang": "zh_tw"}
-                                : {"lang": "en"},
-                          ),
-                          openWithExternalWebView: false);
-                      break;
-                    case "folder":
-                      if (ap.contents.length != 0) {
-                        RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
-                      } else {
-                        MyToast.show(R.current.nothingHere);
-                      }
-                      break;
-                    case "label":
-                      break;
-                    case "resource":
-                      await AnalyticsUtils.logDownloadFileEvent();
-                      MyToast.show(R.current.downloadWillStart);
-                      String dirName = widget.courseInfo.main.course.name;
-                      FileDownload.download(
-                          context,
-                          Connector.uriAddQuery(
-                            ap.contents.first.fileurl,
-                            {"token": MoodleWebApiConnector.wsToken},
-                          ),
-                          dirName,
-                          ap.contents.first.filename);
-                      break;
-                    default:
-                      break;
-                  }
-                },
-              );
+                Expanded(
+                  flex: 8,
+                  child: buildItem(ap, index),
+                ),
+              ],
+            ),
+          ),
+          onTap: () async {
+            handleTap(ap);
+          },
+        );
       },
     );
   }

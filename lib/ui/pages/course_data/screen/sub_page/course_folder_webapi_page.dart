@@ -42,6 +42,12 @@ class _CourseFolderWebApiPageState extends State<CourseFolderWebApiPage> {
     );
   }
 
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+  }
+
   Widget buildTree() {
     Modules modules = widget.modules;
     return ListView.builder(
@@ -51,6 +57,7 @@ class _CourseFolderWebApiPageState extends State<CourseFolderWebApiPage> {
         var ap = modules.contents[index];
         return InkWell(
           child: Container(
+            color: getColor(index),
             height: 50,
             child: Row(
               children: [

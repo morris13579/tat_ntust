@@ -45,6 +45,12 @@ class _CourseAnnouncementDetailWebApiPageState
     }
   }
 
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+  }
+
   @override
   Widget build(BuildContext context) {
     Discussions discussions = widget.discussions;
@@ -70,6 +76,7 @@ class _CourseAnnouncementDetailWebApiPageState
                       var ap = discussions.attachments[index];
                       return InkWell(
                         child: Container(
+                          color: getColor(index),
                           height: 50,
                           child: Row(
                             children: [

@@ -15,7 +15,8 @@ class CourseDirectoryWebApiPage extends StatefulWidget {
   CourseDirectoryWebApiPage(this.courseInfo);
 
   @override
-  _CourseDirectoryWebApiPageState createState() => _CourseDirectoryWebApiPageState();
+  _CourseDirectoryWebApiPageState createState() =>
+      _CourseDirectoryWebApiPageState();
 }
 
 class _CourseDirectoryWebApiPageState extends State<CourseDirectoryWebApiPage>
@@ -46,6 +47,12 @@ class _CourseDirectoryWebApiPageState extends State<CourseDirectoryWebApiPage>
     }
   }
 
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
@@ -66,6 +73,7 @@ class _CourseDirectoryWebApiPageState extends State<CourseDirectoryWebApiPage>
         var ap = directoryList[index];
         return InkWell(
           child: Container(
+            color: getColor(index),
             height: 50,
             child: Row(
               children: [

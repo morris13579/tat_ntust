@@ -119,7 +119,7 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
     switch (ap.icon.component) {
       case "label":
         return Container(
-            padding: EdgeInsets.only(left: 20, bottom: 10),
+            padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
             child: SelectableHtml(data: ap.name));
       default:
         if (ap.contentAfterLink != null) {

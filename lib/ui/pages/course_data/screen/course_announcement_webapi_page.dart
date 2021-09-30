@@ -14,10 +14,12 @@ class CourseAnnouncementWebApiPage extends StatefulWidget {
   CourseAnnouncementWebApiPage(this.courseInfo);
 
   @override
-  _CourseAnnouncementWebApiPageState createState() => _CourseAnnouncementWebApiPageState();
+  _CourseAnnouncementWebApiPageState createState() =>
+      _CourseAnnouncementWebApiPageState();
 }
 
-class _CourseAnnouncementWebApiPageState extends State<CourseAnnouncementWebApiPage>
+class _CourseAnnouncementWebApiPageState
+    extends State<CourseAnnouncementWebApiPage>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
   late List<Discussions> discussions;
@@ -45,6 +47,12 @@ class _CourseAnnouncementWebApiPageState extends State<CourseAnnouncementWebApiP
     }
   }
 
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
@@ -70,6 +78,7 @@ class _CourseAnnouncementWebApiPageState extends State<CourseAnnouncementWebApiP
 
         return InkWell(
           child: Container(
+            color: getColor(index),
             padding: EdgeInsets.only(top: 10, bottom: 10),
             child: Row(
               children: [
