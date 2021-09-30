@@ -25,7 +25,7 @@ class NTUSTConnector {
   static final String subSystemTWUrl = "$host/student";
   static final String subSystemENUrl = "$host/EN/student";
 
-  static Future<APTreeJson> getSubSystem() async {
+  static Future<APTreeJson?> getSubSystem() async {
     String result;
     Document tagNode;
     Element node;
@@ -37,7 +37,7 @@ class NTUSTConnector {
       ConnectorParameter parameter = ConnectorParameter(subSystemUrl);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
-      node = tagNode.getElementById("service");
+      node = tagNode.getElementById("service")!;
       nodes = node.getElementsByTagName("a");
       List<APListJson> apList = [];
       for (var i in nodes) {
@@ -46,7 +46,7 @@ class NTUSTConnector {
           continue;
         }
         APListJson item =
-            APListJson(name: i.text, url: i.attributes["href"], type: "link");
+            APListJson(name: i.text, url: i.attributes["href"]!, type: "link");
         apList.add(item);
       }
       APTreeJson apTreeJson = APTreeJson(apList);
@@ -56,7 +56,7 @@ class NTUSTConnector {
     }
   }
 
-  static Future<String> getCalendarUrl() async {
+  static Future<String?> getCalendarUrl() async {
     String result;
     Document tagNode;
     Element node;
@@ -69,7 +69,7 @@ class NTUSTConnector {
       tagNode = parse(result);
       nodes = tagNode.getElementsByClassName("meditor");
       node = nodes[1].getElementsByTagName("ul").last;
-      String href = node.getElementsByTagName("a").first.attributes["href"];
+      String href = node.getElementsByTagName("a").first.attributes["href"]!;
       return "$host$href";
     } catch (e) {
       return null;

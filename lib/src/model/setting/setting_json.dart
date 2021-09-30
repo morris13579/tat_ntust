@@ -1,5 +1,4 @@
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/model/json_init.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -7,12 +6,12 @@ part 'setting_json.g.dart';
 
 @JsonSerializable()
 class SettingJson {
-  CourseSettingJson course;
-  OtherSettingJson other;
+  late CourseSettingJson course;
+  late OtherSettingJson other;
 
-  SettingJson({this.course, this.other}) {
-    course = course ?? CourseSettingJson();
-    other = other ?? OtherSettingJson();
+  SettingJson({CourseSettingJson? course, OtherSettingJson? other}) {
+    this.course = course ?? CourseSettingJson();
+    this.other = other ?? OtherSettingJson();
   }
 
   bool get isEmpty {
@@ -38,10 +37,10 @@ class SettingJson {
 
 @JsonSerializable()
 class CourseSettingJson {
-  CourseTableJson info;
+  late CourseTableJson info;
 
-  CourseSettingJson({this.info}) {
-    info = info ?? CourseTableJson();
+  CourseSettingJson({CourseTableJson? info}) {
+    this.info = info ?? CourseTableJson();
   }
 
   bool get isEmpty {
@@ -68,15 +67,10 @@ class OtherSettingJson {
   bool useMoodleWebApi;
 
   OtherSettingJson(
-      {this.lang,
-      this.autoCheckAppUpdate,
-      this.useExternalVideoPlayer,
-      this.useMoodleWebApi}) {
-    lang = JsonInit.stringInit(lang);
-    autoCheckAppUpdate ??= true;
-    useExternalVideoPlayer ??= false;
-    useMoodleWebApi ??= false;
-  }
+      {this.lang = "",
+      this.autoCheckAppUpdate = true,
+      this.useExternalVideoPlayer = false,
+      this.useMoodleWebApi = false});
 
   bool get isEmpty {
     return lang.isEmpty;

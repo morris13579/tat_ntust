@@ -16,7 +16,7 @@ class MoodleUserInfo {
   String studentId;
   String name;
 
-  MoodleUserInfo({this.studentId, this.name});
+  MoodleUserInfo({required this.studentId, required this.name});
 }
 
 class MoodleCourseDirectoryInfo {
@@ -29,13 +29,13 @@ class MoodleCourseDirectoryInfo {
   String courseId;
 
   MoodleCourseDirectoryInfo(
-      {this.elementid,
-      this.id,
-      this.type,
-      this.sesskey,
-      this.instance,
-      this.name,
-      this.courseId});
+      {required this.elementid,
+      required this.id,
+      required this.type,
+      required this.sesskey,
+      required this.instance,
+      required this.name,
+      required this.courseId});
 }
 
 class MoodleAnnouncementInfo {
@@ -46,14 +46,18 @@ class MoodleAnnouncementInfo {
   String time;
 
   MoodleAnnouncementInfo(
-      {this.name, this.author, this.replies, this.time, this.url});
+      {required this.name,
+      required this.author,
+      required this.replies,
+      required this.time,
+      required this.url});
 }
 
 class MoodleFileInfo {
   String name;
   String url;
 
-  MoodleFileInfo({this.name, this.url});
+  MoodleFileInfo({required this.name, required this.url});
 }
 
 class MoodleConnector {
@@ -70,7 +74,7 @@ class MoodleConnector {
     List<Element> nodes;
     ConnectorParameter parameter;
     try {
-      String loginToken;
+      String? loginToken;
 
       parameter = ConnectorParameter(_loginUrl);
       result = await Connector.getRedirects(parameter);
@@ -79,7 +83,7 @@ class MoodleConnector {
       nodes = tagNode.getElementsByTagName("input");
       for (var i in nodes) {
         if (i.attributes["name"] != null &&
-            i.attributes["name"].contains("logintoken")) {
+            i.attributes["name"]!.contains("logintoken")) {
           loginToken = i.attributes["value"];
           break;
         }
@@ -88,7 +92,7 @@ class MoodleConnector {
         "username": account,
         "password": password,
         "anchor": "",
-        "logintoken": loginToken
+        "logintoken": loginToken!
       };
       parameter.data = data;
       result = await Connector.getRedirects(parameter, usePost: true);
@@ -111,27 +115,30 @@ class MoodleConnector {
     List<Element> nodes;
     ConnectorParameter parameter;
     try {
-      String courseUrl;
+      String? courseUrl;
       parameter = ConnectorParameter(host);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
 
-      node = tagNode.getElementById("custom_menu_courses");
+      node = tagNode.getElementById("custom_menu_courses")!;
       nodes = node.getElementsByClassName("dropdown-menu");
       nodes = nodes[0].getElementsByTagName("a");
       for (var i in nodes) {
-        String courseTitle = i.attributes["title"];
+        String courseTitle = i.attributes["title"]!;
         if (courseTitle.contains(courseId)) {
           courseUrl = i.attributes["href"];
         }
       }
-      return Uri.parse(courseUrl).queryParameters["id"];
+      if (courseUrl == null) {
+        throw Exception("courseUrl is null");
+      }
+      return Uri.parse(courseUrl).queryParameters["id"]!;
     } catch (e) {
       throw e;
     }
   }
 
-  static Future<List<MoodleCourseDirectoryInfo>> getCourseDirectory(
+  static Future<List<MoodleCourseDirectoryInfo>?> getCourseDirectory(
       String courseId) async {
     String result;
     Document tagNode;
@@ -159,9 +166,9 @@ class MoodleConnector {
         MoodleCourseDirectoryInfo info = MoodleCourseDirectoryInfo(
           courseId: id,
           name: i.text,
-          elementid: p.attributes["data-node-id"],
-          id: p.attributes["data-node-key"],
-          type: p.attributes["data-node-type"],
+          elementid: p.attributes["data-node-id"]!,
+          id: p.attributes["data-node-key"]!,
+          type: p.attributes["data-node-type"]!,
           sesskey: "avG0zcjfKy",
           instance: "4",
         );
@@ -174,7 +181,7 @@ class MoodleConnector {
     }
   }
 
-  static Future<List<MoodleAnnouncementInfo>> getCourseAnnouncement(
+  static Future<List<MoodleAnnouncementInfo>?> getCourseAnnouncement(
       String url) async {
     String result;
     Document tagNode;
@@ -197,7 +204,7 @@ class MoodleConnector {
           name: nodes[0].text,
           replies: nodes[3].text,
           author: nodes[2].text,
-          url: nodes[0].getElementsByTagName("a").first.attributes["href"],
+          url: nodes[0].getElementsByTagName("a").first.attributes["href"]!,
           time: nodes[4].getElementsByTagName("a")[1].text,
         ));
       }
@@ -208,7 +215,7 @@ class MoodleConnector {
     }
   }
 
-  static Future<String> getCourseAnnouncementDetail(String url) async {
+  static Future<String?> getCourseAnnouncementDetail(String url) async {
     String result;
     Document tagNode;
     List<Element> nodes;
@@ -227,7 +234,7 @@ class MoodleConnector {
     }
   }
 
-  static Future<MoodleBranchJson> getCourseBranch(
+  static Future<MoodleBranchJson?> getCourseBranch(
       MoodleCourseDirectoryInfo info) async {
     String result;
     ConnectorParameter parameter;
@@ -242,10 +249,18 @@ class MoodleConnector {
       };
       parameter.data = data;
       result = await Connector.getDataByPost(parameter);
-      MoodleBranchJson branch = MoodleBranchJson.fromJson(json.decode(result));
+      Map<String, dynamic> jsonDecode = json.decode(result);
+      List<Map<String, dynamic>> cc = [];
+      for (var i in (jsonDecode['children'] as List<dynamic>)) {
+        if (i != null && i is Map) {
+          cc.add(i as Map<String, dynamic>);
+        }
+      }
+      jsonDecode['children'] = cc;
+
+      MoodleBranchJson branch = MoodleBranchJson.fromJson(jsonDecode);
       List<Children> c = [];
-      branch.children ??= [];
-      for (var i in branch.children) {
+      for (Children? i in branch.children) {
         if (i != null) {
           c.add(i);
         }
@@ -258,7 +273,7 @@ class MoodleConnector {
         int sectionN = 0;
         while (true) {
           Element node = tagNode
-              .getElementById("section-$sectionN")
+              .getElementById("section-$sectionN")!
               .getElementsByClassName("hidden sectionname")
               .first;
           if (node.text.contains(info.name)) {
@@ -268,7 +283,7 @@ class MoodleConnector {
           if (sectionN >= 30) break;
         }
         List<Element> nodes = tagNode
-            .getElementById("section-$sectionN")
+            .getElementById("section-$sectionN")!
             .getElementsByClassName("activity");
         for (int i = 0; i < nodes.length; i++) {
           Element node = nodes[i];
@@ -297,7 +312,7 @@ class MoodleConnector {
     }
   }
 
-  static Future<List<MoodleUserInfo>> getMember(String courseId) async {
+  static Future<List<MoodleUserInfo>?> getMember(String courseId) async {
     String result;
     Document tagNode;
     Element node;
@@ -315,14 +330,14 @@ class MoodleConnector {
       result = await Connector.getDataByGet(parameter);
 
       tagNode = parse(result);
-      node = tagNode.getElementById("showall");
+      node = tagNode.getElementById("showall")!;
       nodes = node.getElementsByTagName("a");
-      String listAllUrl = nodes[0].attributes["href"];
+      String listAllUrl = nodes[0].attributes["href"]!;
 
       parameter = ConnectorParameter(listAllUrl);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
-      node = tagNode.getElementById("participants");
+      node = tagNode.getElementById("participants")!;
       nodes = node.getElementsByTagName("tr");
       for (var i in nodes.getRange(1, nodes.length)) {
         if (i.attributes["class"] != "emptyrow") {
@@ -346,7 +361,7 @@ class MoodleConnector {
     }
   }
 
-  static Future<List<MoodleFileInfo>> getFolder(String url) async {
+  static Future<List<MoodleFileInfo>?> getFolder(String url) async {
     String result;
     Document tagNode;
     Element node;
@@ -361,7 +376,7 @@ class MoodleConnector {
       nodes = nodes[0].getElementsByTagName("li");
       for (var i in nodes.getRange(1, nodes.length)) {
         MoodleFileInfo f = MoodleFileInfo(
-          url: i.getElementsByTagName("a")[0].attributes["href"],
+          url: i.getElementsByTagName("a")[0].attributes["href"]!,
           name: i.text,
         );
         fs.add(f);
@@ -371,12 +386,12 @@ class MoodleConnector {
           node = tagNode.getElementsByClassName("singlebutton")[0];
 
           node = node.getElementsByTagName("form")[0];
-          String url = node.attributes["action"];
+          String url = node.attributes["action"]!;
           nodes = node.getElementsByTagName("input");
           Map<String, dynamic> data = {};
           for (var i in nodes) {
             if (i.attributes["type"] == "hidden") {
-              data[i.attributes["name"]] = i.attributes["value"];
+              data[i.attributes["name"]!] = i.attributes["value"];
             }
           }
           MoodleFileInfo f = MoodleFileInfo(

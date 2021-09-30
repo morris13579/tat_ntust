@@ -22,15 +22,15 @@ class FileUtils {
   /// Get mime information of a file
   static String getMime(String path) {
     File file = File(path);
-    String mimeType = mime(file.path);
-    return mimeType;
+    String? mimeType = mime(file.path);
+    return mimeType!;
   }
 
   /// Return all available Storage path
   static Future<List<Directory>> getStorageList() async {
-    List<Directory> paths = await getExternalStorageDirectories();
+    List<Directory>? paths = await getExternalStorageDirectories();
     List<Directory> filteredPaths = [];
-    for (Directory dir in paths) {
+    for (Directory dir in paths!) {
       filteredPaths.add(removeDataDirectory(dir.path));
     }
     return filteredPaths;
@@ -45,7 +45,7 @@ class FileUtils {
     return dir.listSync();
   }
 
-  static Future<List<FileSystemEntity>> getAllFiles({bool showHidden}) async {
+  static Future<List<FileSystemEntity>> getAllFiles({bool? showHidden}) async {
     List<Directory> storages = await getStorageList();
     List<FileSystemEntity> files = [];
     for (Directory dir in storages) {
@@ -55,7 +55,7 @@ class FileUtils {
   }
 
   static Future<List<FileSystemEntity>> getRecentFiles(
-      {bool showHidden}) async {
+      {bool? showHidden}) async {
     List<FileSystemEntity> files = await getAllFiles(showHidden: showHidden);
     files.sort((a, b) => File(a.path)
         .lastAccessedSync()
@@ -64,7 +64,7 @@ class FileUtils {
   }
 
   static Future<List<FileSystemEntity>> searchFiles(String query,
-      {bool showHidden}) async {
+      {bool? showHidden}) async {
     List<Directory> storage = await getStorageList();
     List<FileSystemEntity> files = [];
     for (Directory dir in storage) {
@@ -80,13 +80,13 @@ class FileUtils {
 
   /// Get all files
   static Future<List<FileSystemEntity>> getAllFilesInPath(String path,
-      {bool showHidden}) async {
+      {bool? showHidden = false}) async {
     List<FileSystemEntity> files = [];
     Directory d = Directory(path);
     List<FileSystemEntity> l = d.listSync();
     for (FileSystemEntity file in l) {
       if (FileSystemEntity.isFileSync(file.path)) {
-        if (!showHidden) {
+        if (!showHidden!) {
           if (!basename(file.path).startsWith(".")) {
             files.add(file);
           }
@@ -96,7 +96,7 @@ class FileUtils {
       } else {
         if (!file.path.contains("/storage/emulated/0/Android")) {
 //          print(file.path);
-          if (!showHidden) {
+          if (!showHidden!) {
             if (!basename(file.path).startsWith(".")) {
               files.addAll(
                   await getAllFilesInPath(file.path, showHidden: showHidden));

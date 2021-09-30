@@ -18,7 +18,7 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    CourseMainInfo value;
+    CourseMainInfo? value;
     if (status == TaskStatus.Success) {
       super.onStart(R.current.getCourse);
       if (LanguageUtils.getLangIndex() == LangEnum.zh) {
@@ -37,10 +37,10 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
           bool add = false;
           for (int i = 0; i < 7; i++) {
             Day day = Day.values[i];
-            String time = courseMainInfo.course.time[day];
+            String? time = courseMainInfo.course.time[day];
             courseInfo.main = courseMainInfo;
             add |=
-                courseTable.setCourseDetailByTimeString(day, time, courseInfo);
+                courseTable.setCourseDetailByTimeString(day, time!, courseInfo);
           }
           if (!add) {
             //代表課程沒有時間

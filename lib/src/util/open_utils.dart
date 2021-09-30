@@ -10,13 +10,14 @@ class OpenUtils {
   static String mxPlayerFreePackageName = "com.mxtech.videoplayer.ad";
   static String mxPlayerProPackageName = "com.mxtech.videoplayer.pro";
 
-  static Future<bool> _androidLaunch(String url, [String name]) async {
+  static Future<bool> _androidLaunch(String url,
+      [String name = "video"]) async {
     AndroidIntent intent;
     intent = AndroidIntent(
       action: 'action_view',
       data: url,
       type: "application/mpegurl",
-      arguments: {"title": name ?? "video"},
+      arguments: {"title": name},
     );
     try {
       await intent.launch();
@@ -37,7 +38,8 @@ class OpenUtils {
     return true;
   }
 
-  static Future<bool> launchMXPlayer({String url, String name}) async {
+  static Future<bool> launchMXPlayer(
+      {required String url, required String name}) async {
     bool open = true;
     if (Platform.isAndroid) {
       open = await _androidLaunch(url, name);

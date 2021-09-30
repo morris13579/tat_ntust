@@ -6,36 +6,35 @@ part of 'course_main_extra_json.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CourseExtraInfoJson _$CourseExtraInfoJsonFromJson(Map<String, dynamic> json) {
-  return CourseExtraInfoJson(
-    semester: json['Semester'] as String,
-    courseNo: json['CourseNo'] as String,
-    courseName: json['CourseName'] as String,
-    courseTeacher: json['CourseTeacher'] as String,
-    creditPoint: json['CreditPoint'] as String,
-    courseTimes: json['CourseTimes'] as String,
-    practicalTimes: json['PracticalTimes'] as String,
-    requireOption: json['RequireOption'] as String,
-    allYear: json['AllYear'] as String,
-    chooseStudent: json['ChooseStudent'] as String,
-    threeStudent: json['ThreeStudent'] as String,
-    allStudent: json['AllStudent'] as String,
-    restrict1: json['Restrict1'] as String,
-    restrict2: json['Restrict2'] as String,
-    nTURestrict: json['NTURestrict'] as String,
-    nTNURestrict: json['NTNURestrict'] as String,
-    classRoomNo: json['ClassRoomNo'] as String,
-    coreAbility: json['CoreAbility'] as String,
-    courseURL: json['CourseURL'] as String,
-    courseObject: json['CourseObject'] as String,
-    courseContent: json['CourseContent'] as String,
-    courseTextbook: json['CourseTextbook'] as String,
-    courseRefbook: json['CourseRefbook'] as String,
-    courseNote: json['CourseNote'] as String,
-    courseGrading: json['CourseGrading'] as String,
-    courseRemark: json['CourseRemark'] as String,
-  );
-}
+CourseExtraInfoJson _$CourseExtraInfoJsonFromJson(Map<String, dynamic> json) =>
+    CourseExtraInfoJson(
+      semester: json['Semester'] as String? ?? "",
+      courseNo: json['CourseNo'] as String? ?? "",
+      courseName: json['CourseName'] as String? ?? "",
+      courseTeacher: json['CourseTeacher'] as String? ?? "",
+      creditPoint: json['CreditPoint'] as String? ?? "",
+      courseTimes: json['CourseTimes'] as String? ?? "",
+      practicalTimes: json['PracticalTimes'] as String? ?? "",
+      requireOption: json['RequireOption'] as String? ?? "",
+      allYear: json['AllYear'] as String? ?? "",
+      chooseStudent: json['ChooseStudent'] as String? ?? "",
+      threeStudent: json['ThreeStudent'] as String? ?? "",
+      allStudent: json['AllStudent'] as String? ?? "",
+      restrict1: json['Restrict1'] as String? ?? "",
+      restrict2: json['Restrict2'] as String? ?? "",
+      nTURestrict: json['NTURestrict'] as String? ?? "",
+      nTNURestrict: json['NTNURestrict'] as String? ?? "",
+      classRoomNo: json['ClassRoomNo'] as String? ?? "",
+      coreAbility: json['CoreAbility'] as String? ?? "",
+      courseURL: json['CourseURL'] as String? ?? "",
+      courseObject: json['CourseObject'] as String? ?? "",
+      courseContent: json['CourseContent'] as String? ?? "",
+      courseTextbook: json['CourseTextbook'] as String? ?? "",
+      courseRefbook: json['CourseRefbook'] as String? ?? "",
+      courseNote: json['CourseNote'] as String? ?? "",
+      courseGrading: json['CourseGrading'] as String? ?? "",
+      courseRemark: json['CourseRemark'] as String? ?? "",
+    );
 
 Map<String, dynamic> _$CourseExtraInfoJsonToJson(
         CourseExtraInfoJson instance) =>
@@ -68,26 +67,21 @@ Map<String, dynamic> _$CourseExtraInfoJsonToJson(
       'CourseRemark': instance.courseRemark,
     };
 
-CourseMainInfoJson _$CourseMainInfoJsonFromJson(Map<String, dynamic> json) {
-  return CourseMainInfoJson(
-    course: json['course'] == null
-        ? null
-        : CourseMainJson.fromJson(json['course'] as Map<String, dynamic>),
-    teacher: (json['teacher'] as List)
-        ?.map((e) =>
-            e == null ? null : TeacherJson.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    classroom: (json['classroom'] as List)
-        ?.map((e) => e == null
-            ? null
-            : ClassroomJson.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    openClass: (json['openClass'] as List)
-        ?.map((e) =>
-            e == null ? null : ClassJson.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-  );
-}
+CourseMainInfoJson _$CourseMainInfoJsonFromJson(Map<String, dynamic> json) =>
+    CourseMainInfoJson(
+      course: json['course'] == null
+          ? null
+          : CourseMainJson.fromJson(json['course'] as Map<String, dynamic>),
+      teacher: (json['teacher'] as List<dynamic>?)
+          ?.map((e) => TeacherJson.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      classroom: (json['classroom'] as List<dynamic>?)
+          ?.map((e) => ClassroomJson.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      openClass: (json['openClass'] as List<dynamic>?)
+          ?.map((e) => ClassJson.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$CourseMainInfoJsonToJson(CourseMainInfoJson instance) =>
     <String, dynamic>{

@@ -20,7 +20,7 @@ class CourseAnnouncementWebApiPage extends StatefulWidget {
 class _CourseAnnouncementWebApiPageState extends State<CourseAnnouncementWebApiPage>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
-  List<Discussions> discussions;
+  late List<Discussions> discussions;
 
   @override
   void initState() {

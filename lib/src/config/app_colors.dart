@@ -7,7 +7,7 @@ class AppColors {
   // font color
   static const Color darkFontColor = Colors.black87;
   static const Color lightFontColor = Colors.white;
-  static final Color greyFontColor = Colors.grey[700];
+  static final Color greyFontColor = Colors.grey.shade700;
 
   //Colors for theme
   static Color lightPrimary = Colors.white;

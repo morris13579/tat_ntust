@@ -14,7 +14,7 @@ class CourseTableControl {
   bool isHideB = false;
   bool isHideC = false;
   bool isHideD = false;
-  CourseTableJson courseTable;
+  CourseTableJson? courseTable;
   List<String> dayStringList = [
     R.current.Monday,
     R.current.Tuesday,
@@ -60,18 +60,18 @@ class CourseTableControl {
   ];
   static int dayLength = 8;
   static int sectionLength = 14;
-  Map<String, Color> colorMap;
+  late Map<String, Color> colorMap;
 
   void set(CourseTableJson value) {
     courseTable = value;
-    isHideSaturday = !courseTable.isDayInCourseTable(Day.Saturday);
-    isHideSunday = !courseTable.isDayInCourseTable(Day.Sunday);
-    isHideUnKnown = !courseTable.isDayInCourseTable(Day.UnKnown);
-    isHideN = !courseTable.isSectionNumberInCourseTable(SectionNumber.T_N);
-    isHideA = (!courseTable.isSectionNumberInCourseTable(SectionNumber.T_A));
-    isHideB = (!courseTable.isSectionNumberInCourseTable(SectionNumber.T_B));
-    isHideC = (!courseTable.isSectionNumberInCourseTable(SectionNumber.T_C));
-    isHideD = (!courseTable.isSectionNumberInCourseTable(SectionNumber.T_D));
+    isHideSaturday = !courseTable!.isDayInCourseTable(Day.Saturday);
+    isHideSunday = !courseTable!.isDayInCourseTable(Day.Sunday);
+    isHideUnKnown = !courseTable!.isDayInCourseTable(Day.UnKnown);
+    isHideN = !courseTable!.isSectionNumberInCourseTable(SectionNumber.T_N);
+    isHideA = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.T_A));
+    isHideB = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.T_B));
+    isHideC = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.T_C));
+    isHideD = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.T_D));
     isHideA &= (isHideB & isHideC & isHideD);
     isHideB &= (isHideC & isHideD);
     isHideC &= isHideD;
@@ -89,19 +89,19 @@ class CourseTableControl {
     return intList;
   }
 
-  CourseInfoJson getCourseInfo(int intDay, int intNumber) {
+  CourseInfoJson? getCourseInfo(int intDay, int intNumber) {
     Day day = Day.values[intDay];
     SectionNumber number = SectionNumber.values[intNumber];
     //Log.d( day.toString()  + " " + number.toString() );
-    return courseTable.courseInfoMap[day][number];
+    return courseTable!.courseInfoMap[day]![number];
   }
 
   Color getCourseInfoColor(int intDay, int intNumber) {
-    CourseInfoJson courseInfo = getCourseInfo(intDay, intNumber);
+    CourseInfoJson? courseInfo = getCourseInfo(intDay, intNumber);
     for (String key in colorMap.keys) {
       if (courseInfo != null) {
         if (key == courseInfo.main.course.id) {
-          return colorMap[key];
+          return colorMap[key]!;
         }
       }
     }
@@ -110,7 +110,7 @@ class CourseTableControl {
 
   void _initColorList() {
     colorMap = Map();
-    List<String> courseInfoList = courseTable.getCourseIdList();
+    List<String> courseInfoList = courseTable!.getCourseIdList();
     int colorCount = courseInfoList.length;
     colorCount = (colorCount == 0) ? 1 : colorCount;
 

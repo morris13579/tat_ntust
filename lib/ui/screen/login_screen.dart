@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _loginPress(BuildContext context) async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       _passwordFocus.unfocus();
       _accountFocus.unfocus();
       Model.instance.setAccount(_accountControl.text.toString());
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  String _validatorAccount(String value) {
+  String? _validatorAccount(String value) {
     if (value.isNotEmpty) {
       _accountErrorMessage = '';
     } else {
@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return _accountErrorMessage.isNotEmpty ? _accountErrorMessage : null;
   }
 
-  String _validatorPassword(String value) {
+  String? _validatorPassword(String value) {
     if (value.isNotEmpty) {
       _passwordErrorMessage = '';
     } else {
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           _accountFocus.unfocus();
                           FocusScope.of(context).requestFocus(_passwordFocus);
                         },
-                        validator: (value) => _validatorAccount(value),
+                        validator: (value) => _validatorAccount(value!),
                         decoration: InputDecoration(
                           hintText: R.current.account,
                           errorStyle: TextStyle(
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onEditingComplete: () {
                           _passwordFocus.unfocus();
                         },
-                        validator: (value) => _validatorPassword(value),
+                        validator: (value) => _validatorPassword(value!),
                         decoration: InputDecoration(
                           hintText: R.current.password,
                           errorStyle: TextStyle(

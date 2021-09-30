@@ -55,7 +55,7 @@ class Connector {
 
   static Future<String> getRedirects(ConnectorParameter parameter,
       {usePost: false}) async {
-    Response result;
+    Response? result;
     Options options = Options(followRedirects: false);
     int redirectsTime = 0;
     try {
@@ -72,7 +72,7 @@ class Connector {
         if (result.statusCode != 302) {
           break;
         }
-        String location = result.headers.value("location");
+        String location = result.headers.value("location") ?? "";
         if (location.contains("http")) {
           parameter = ConnectorParameter(location);
         } else {

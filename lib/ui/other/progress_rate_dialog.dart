@@ -3,25 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
 
 bool _isShowing = false;
-BuildContext _context, _dismissingContext;
+BuildContext? _context, _dismissingContext;
 bool _barrierDismissible = true;
 String _dialogMessage = "Loading...";
 String _progressString = "0/100";
 double _progress = 0;
 
 class ProgressRateDialog {
-  _Body _dialog;
+  _Body? _dialog;
 
-  ProgressRateDialog(BuildContext context, {bool isDismissible}) {
+  ProgressRateDialog(BuildContext context, {bool isDismissible = true}) {
     _context = context;
-    _barrierDismissible = isDismissible ?? true;
   }
 
-  void update({String message, double nowProgress, String progressString}) {
+  void update({String? message, double? nowProgress, String? progressString}) {
     _progress = nowProgress ?? _progress;
     _dialogMessage = message ?? _dialogMessage;
     _progressString = progressString ?? _progressString;
-    if (_isShowing) _dialog.update();
+    if (_isShowing) _dialog!.update();
   }
 
   bool isShowing() {
@@ -32,8 +31,8 @@ class ProgressRateDialog {
     if (_isShowing) {
       try {
         _isShowing = false;
-        if (Navigator.of(_dismissingContext).canPop()) {
-          Navigator.of(_dismissingContext).pop();
+        if (Navigator.of(_dismissingContext!).canPop()) {
+          Navigator.of(_dismissingContext!).pop();
         }
       } catch (_) {}
     }
@@ -43,7 +42,7 @@ class ProgressRateDialog {
     if (_isShowing) {
       try {
         _isShowing = false;
-        Navigator.of(_dismissingContext).pop(true);
+        Navigator.of(_dismissingContext!).pop(true);
         return Future.value(true);
       } catch (_) {
         return Future.value(false);
@@ -58,12 +57,12 @@ class ProgressRateDialog {
       try {
         _dialog = new _Body();
         showDialog<dynamic>(
-          context: _context,
+          context: _context!,
           barrierDismissible: false,
           builder: (BuildContext context) {
             _dismissingContext = context;
             return WillPopScope(
-                onWillPop: () async => _barrierDismissible, child: _dialog);
+                onWillPop: () async => _barrierDismissible, child: _dialog!);
           },
         );
         // Delaying the function for 200 milliseconds

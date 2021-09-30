@@ -11,10 +11,10 @@ import 'task.dart';
 typedef onSuccessCallBack = Function(Task);
 
 class TaskFlow {
-  List<Task> _queue;
-  List<Task> _completeTask;
-  List<Task> _failTask;
-  onSuccessCallBack callback;
+  late List<Task> _queue;
+  late List<Task> _completeTask;
+  late List<Task> _failTask;
+  onSuccessCallBack? callback;
 
   static resetLoginStatus() {
     NTUSTTask.isLogin = false;
@@ -62,7 +62,7 @@ class TaskFlow {
           _queue.removeAt(0);
           _completeTask.add(task);
           if (callback != null) {
-            callback(task);
+            callback!(task);
           }
           break;
         case TaskStatus.GiveUp:

@@ -16,7 +16,7 @@ class MoodleWebApiCourseMessageTask
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
-      MoodleModForumGetForumDiscussionsPaginated value;
+      MoodleModForumGetForumDiscussionsPaginated? value;
       super.onStart(R.current.getMoodleCourseAnnouncement);
       value = await MoodleWebApiConnector.getCourseMessage(id);
       super.onEnd();

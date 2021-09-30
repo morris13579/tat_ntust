@@ -13,21 +13,21 @@ import 'package:get/get.dart';
 import 'custom_awesome_dialog.dart';
 
 class ErrorDialogParameter {
-  BuildContext context;
-  String title;
+  BuildContext? context;
+  late String? title;
   String desc;
-  String btnOkText;
-  String btnCancelText;
-  DialogType dialogType;
-  AnimType animType;
-  Function btnOkOnPress;
-  Function btnCancelOnPress;
+  late String? btnOkText;
+  late String? btnCancelText;
+  late DialogType? dialogType;
+  late AnimType? animType;
+  late Function? btnOkOnPress;
+  late Function? btnCancelOnPress;
   bool offOkBtn;
   bool offCancelBtn;
 
   ErrorDialogParameter(
       {this.context,
-      @required this.desc,
+      required this.desc,
       this.title,
       this.btnOkText,
       this.btnCancelText,
@@ -66,17 +66,17 @@ class ErrorDialog {
 
   Future<bool> show() async {
     return await Get.dialog<bool>(CustomAwesomeDialog(
-                context: Get.key.currentState.context,
-                dialogType: parameter.dialogType,
-                animType: parameter.animType,
-                title: parameter.title,
+                context: Get.key.currentState!.context,
+                dialogType: parameter.dialogType!,
+                animType: parameter.animType!,
+                title: parameter.title!,
                 desc: parameter.desc,
-                btnOkText: parameter.btnOkText,
-                btnCancelText: parameter.btnCancelText,
+                btnOkText: parameter.btnOkText!,
+                btnCancelText: parameter.btnCancelText!,
                 useRootNavigator: false,
                 dismissOnTouchOutside: false,
-                btnCancelOnPress: parameter.btnCancelOnPress,
-                btnOkOnPress: parameter.btnOkOnPress)
+                btnCancelOnPress: parameter.btnCancelOnPress!,
+                btnOkOnPress: parameter.btnOkOnPress!)
             .child) ??
         false;
   }

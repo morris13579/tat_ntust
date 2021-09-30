@@ -41,7 +41,7 @@ class Notifications {
         requestBadgePermission: false,
         requestSoundPermission: false,
         onDidReceiveLocalNotification:
-            (int id, String title, String body, String payload) async {
+            (int id, String? title, String? body, String? payload) async {
           didReceiveLocalNotificationSubject.add(ReceivedNotification(
               id: id, title: title, body: body, payload: payload));
         });
@@ -50,9 +50,10 @@ class Notifications {
       iOS: initializationSettingsIOS,
     );
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String payload) async {
-      if (payload != null) {}
-      selectNotificationSubject.add(payload);
+        onSelectNotification: (String? payload) async {
+      if (payload != null) {
+        selectNotificationSubject.add(payload);
+      }
     });
 
     _requestIOSPermissions();
@@ -179,26 +180,27 @@ class Notifications {
 
 class ReceivedNotification {
   int id;
-  String _showTitle;
-  String body;
-  String payload;
+  String? _showTitle;
+  String? body;
+  String? payload;
   final _titleLong = 26;
 
   ReceivedNotification(
-      {this.id,
-      @required String title,
-      @required this.body,
-      @required this.payload}) {
+      {this.id = 0,
+      required String? title,
+      required this.body,
+      required this.payload}) {
     id = Notifications.instance.notificationId;
     this.title = title;
   }
 
-  String get title {
+  String? get title {
     return _showTitle;
   }
 
-  set title(String value) {
-    String newTitle;
+  set title(String? value) {
+    String newTitle = "";
+    value ??= "";
     if (value.length >= _titleLong) {
       newTitle = value.substring(0, _titleLong) + "...";
     }

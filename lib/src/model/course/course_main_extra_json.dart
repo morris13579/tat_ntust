@@ -95,32 +95,32 @@ class CourseExtraInfoJson extends Object {
   String courseRemark;
 
   CourseExtraInfoJson(
-      {this.semester,
-      this.courseNo,
-      this.courseName,
-      this.courseTeacher,
-      this.creditPoint,
-      this.courseTimes,
-      this.practicalTimes,
-      this.requireOption,
-      this.allYear,
-      this.chooseStudent,
-      this.threeStudent,
-      this.allStudent,
-      this.restrict1,
-      this.restrict2,
-      this.nTURestrict,
-      this.nTNURestrict,
-      this.classRoomNo,
-      this.coreAbility,
-      this.courseURL,
-      this.courseObject,
-      this.courseContent,
-      this.courseTextbook,
-      this.courseRefbook,
-      this.courseNote,
-      this.courseGrading,
-      this.courseRemark});
+      {this.semester = "",
+      this.courseNo = "",
+      this.courseName = "",
+      this.courseTeacher = "",
+      this.creditPoint = "",
+      this.courseTimes = "",
+      this.practicalTimes = "",
+      this.requireOption = "",
+      this.allYear = "",
+      this.chooseStudent = "",
+      this.threeStudent = "",
+      this.allStudent = "",
+      this.restrict1 = "",
+      this.restrict2 = "",
+      this.nTURestrict = "",
+      this.nTNURestrict = "",
+      this.classRoomNo = "",
+      this.coreAbility = "",
+      this.courseURL = "",
+      this.courseObject = "",
+      this.courseContent = "",
+      this.courseTextbook = "",
+      this.courseRefbook = "",
+      this.courseNote = "",
+      this.courseGrading = "",
+      this.courseRemark = ""});
 
   bool get isEmpty {
     return semester.isEmpty;
@@ -132,16 +132,19 @@ class CourseExtraInfoJson extends Object {
 
 @JsonSerializable()
 class CourseMainInfoJson {
-  CourseMainJson course;
-  List<TeacherJson> teacher; //開課老師
-  List<ClassroomJson> classroom; //使用教室
-  List<ClassJson> openClass; //開課班級
+  late CourseMainJson course;
+  late List<TeacherJson> teacher; //開課老師
+  late List<ClassroomJson> classroom; //使用教室
+  late List<ClassJson> openClass; //開課班級
   CourseMainInfoJson(
-      {this.course, this.teacher, this.classroom, this.openClass}) {
-    course = course ?? CourseMainJson();
-    teacher = teacher ?? [];
-    classroom = classroom ?? [];
-    openClass = openClass ?? [];
+      {CourseMainJson? course,
+      List<TeacherJson>? teacher,
+      List<ClassroomJson>? classroom,
+      List<ClassJson>? openClass}) {
+    this.course = course ?? CourseMainJson();
+    this.teacher = teacher ?? [];
+    this.classroom = classroom ?? [];
+    this.openClass = openClass ?? [];
   }
 
   String getOpenClassName() {
@@ -197,7 +200,7 @@ class CourseMainInfoJson {
       R.current.UnKnown
     ];
     for (Day day in course.time.keys) {
-      if (course.time[day].replaceAll(RegExp('[|\n]'), "").isNotEmpty) {
+      if (course.time[day]!.replaceAll(RegExp('[|\n]'), "").isNotEmpty) {
         time += "${dayStringList[day.index]}_${course.time[day]} ";
       }
     }

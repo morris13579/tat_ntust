@@ -52,7 +52,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     TaskFlow taskFlow = TaskFlow();
     var task = MoodleMemberTask(courseId);
     taskFlow.addTask(task);
-    List<MoodleUserInfo> members;
+    late List<MoodleUserInfo> members;
     if (await taskFlow.start()) {
       members = task.result;
     }
@@ -109,7 +109,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     );
   }
 
-  Widget _buildCourseInfo(String text, String info) {
+  Widget? _buildCourseInfo(String text, String info) {
     if (info == null || info.isEmpty) {
       return null;
     }

@@ -1,18 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class CustomProgressDialog extends StatelessWidget {
   const CustomProgressDialog({
-    Key key,
-    this.child,
+    required this.child,
     this.insetAnimationDuration = const Duration(milliseconds: 100),
     this.insetAnimationCurve = Curves.decelerate,
     this.shape,
-  }) : super(key: key);
+  });
 
   /// The widget below this widget in the tree.
   ///
@@ -38,7 +36,7 @@ class CustomProgressDialog extends StatelessWidget {
   ///
   /// The default shape is a [RoundedRectangleBorder] with a radius of 2.0.
   /// {@endtemplate}
-  final ShapeBorder shape;
+  final ShapeBorder? shape;
 
   Color _getColor(BuildContext context) {
     return Theme.of(context).dialogBackgroundColor;

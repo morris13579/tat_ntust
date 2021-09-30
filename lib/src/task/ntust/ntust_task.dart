@@ -28,9 +28,9 @@ class NTUSTTask<T> extends DialogTask<T> {
     if (account.isEmpty || password.isEmpty) {
       return TaskStatus.GiveUp;
     }
-    Map<String, dynamic> value;
+    Map<String, dynamic>? value;
     NTUSTLoginStatus status;
-    String message;
+    String? message;
     value = await Get.to(
       () => LoginNTUSTPage(
         username: account,
@@ -51,7 +51,7 @@ class NTUSTTask<T> extends DialogTask<T> {
     }
   }
 
-  Future<TaskStatus> _onError(NTUSTLoginStatus value, {String message}) async {
+  Future<TaskStatus> _onError(NTUSTLoginStatus value, {String? message}) async {
     ErrorDialogParameter parameter = ErrorDialogParameter(
       desc: "",
     );

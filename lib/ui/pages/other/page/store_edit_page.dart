@@ -16,8 +16,8 @@ class StoreEditPage extends StatefulWidget {
 }
 
 class _StoreEditPageState extends State<StoreEditPage> {
-  SharedPreferences pref;
-  List<String> keyList;
+  SharedPreferences? pref;
+  List<String> keyList = [];
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
 
   Future<List<String>> initPref() async {
     pref = await SharedPreferences.getInstance();
-    return pref.getKeys().toList();
+    return pref!.getKeys().toList();
   }
 
   @override
@@ -49,17 +49,17 @@ class _StoreEditPageState extends State<StoreEditPage> {
               child: CircularProgressIndicator(),
             );
           } else {
-            keyList = keyList ?? snapshot.data;
+            keyList = snapshot.data!;
             return ListView.separated(
               itemCount: keyList.length,
               itemBuilder: (context, index) {
                 String key = keyList[index];
                 String value;
                 try {
-                  value = prettyJson(json.decode(pref.get(key).toString()),
+                  value = prettyJson(json.decode(pref!.get(key).toString()),
                       indent: 2);
                 } catch (e) {
-                  value = pref.get(key).toString();
+                  value = pref!.get(key).toString();
                 }
                 return Container(
                   padding: EdgeInsets.only(top: 5, left: 20, right: 20),
@@ -80,13 +80,13 @@ class _StoreEditPageState extends State<StoreEditPage> {
                                   maxLine: 20,
                                   onCancel: (String value) {},
                                   onOk: (String value) async {
-                                    if (pref.get(key).runtimeType.toString() ==
+                                    if (pref!.get(key).runtimeType.toString() ==
                                         'String') {
-                                      await pref.setString(key, value);
+                                      await pref!.setString(key, value);
                                     }
-                                    if (pref.get(key).runtimeType.toString() ==
+                                    if (pref!.get(key).runtimeType.toString() ==
                                         'int') {
-                                      await pref.setInt(key, int.parse(value));
+                                      await pref!.setInt(key, int.parse(value));
                                     }
                                   },
                                 ));
@@ -95,7 +95,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                             icon: Icon(Icons.delete_outline),
                             onPressed: () {
                               keyList.removeAt(index);
-                              pref.remove(key);
+                              pref!.remove(key);
                               setState(() {});
                             },
                           )

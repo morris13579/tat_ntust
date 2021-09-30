@@ -21,7 +21,7 @@ class PrivacyPolicyPage extends StatelessWidget {
           if (snapshot.hasData) {
             return Markdown(
               selectable: true,
-              data: snapshot.data,
+              data: snapshot.data!,
             );
           } else if (snapshot.hasError) {
             return Center(

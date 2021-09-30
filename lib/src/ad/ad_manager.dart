@@ -21,7 +21,7 @@ class AdManager {
 
   static final bool inTest = kDebugMode;
 
-  static InterstitialAd _interstitialAd;
+  static InterstitialAd? _interstitialAd;
 
   static Future<void> init() async {
     await MobileAds.instance.initialize();
@@ -73,7 +73,7 @@ class AdManager {
       return;
     }
     if (_interstitialAd != null) {
-      _interstitialAd.fullScreenContentCallback = FullScreenContentCallback(
+      _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdShowedFullScreenContent: (InterstitialAd ad) {
           Log.d('ad onAdShowedFullScreenContent.');
         },
@@ -88,7 +88,7 @@ class AdManager {
           _createInterstitialAd();
         },
       );
-      _interstitialAd.show();
+      _interstitialAd?.show();
     } else {
       Log.d("_interstitialAd is null");
       _createInterstitialAd();

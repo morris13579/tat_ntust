@@ -33,11 +33,11 @@ class DioConnector {
       contentType: "application/x-www-form-urlencoded",
       validateStatus: (status) {
         // 關閉狀態檢測
-        return status <= 500;
+        return status! <= 500;
       },
       responseDecoder: null);
   Dio dio = Dio(dioOptions);
-  PersistCookieJar _cookieJar;
+  late PersistCookieJar _cookieJar;
   static final Exception connectorError =
       Exception("Connector statusCode is not 200");
 
@@ -116,7 +116,7 @@ class DioConnector {
     Response response;
     try {
       String url = parameter.url;
-      Map<String, String> data = parameter.data;
+      Map<String, String>? data = parameter.data;
       _handleCharsetName(parameter.charsetName);
       _handleHeaders(parameter);
       response = await dio.get(url, queryParameters: data);
@@ -157,9 +157,9 @@ class DioConnector {
   }
 
   Future<void> download(String url, SavePathCallback savePath,
-      {ProgressCallback progressCallback,
-      CancelToken cancelToken,
-      Map<String, dynamic> header}) async {
+      {ProgressCallback? progressCallback,
+      CancelToken? cancelToken,
+      Map<String, dynamic>? header}) async {
     await dio
         .downloadUri(Uri.parse(url), savePath,
             onReceiveProgress: progressCallback,

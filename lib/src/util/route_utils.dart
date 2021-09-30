@@ -64,9 +64,9 @@ class RouteUtils {
         transition: transition);
   }
 
-  static Future toCourseDataPage(CourseInfoJson courseInfo,int index) async {
+  static Future toCourseDataPage(CourseInfoJson courseInfo, int index) async {
     return await Get.to(
-      () => CourseDataPage(courseInfo,index),
+      () => CourseDataPage(courseInfo, index),
       transition: transition,
     );
   }
@@ -138,7 +138,7 @@ class RouteUtils {
 
   static Future toWebViewPage(String title, String url,
       {bool openWithExternalWebView = true,
-      Function(Uri) onWebViewDownload}) async {
+      Function(Uri)? onWebViewDownload}) async {
     return await Get.to(
       () => WebViewPage(
         title: title,

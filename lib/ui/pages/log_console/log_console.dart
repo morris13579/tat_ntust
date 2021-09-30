@@ -254,7 +254,7 @@ class _LogConsoleState extends State<LogConsole> {
             ),
           ),
           SizedBox(width: 20),
-          DropdownButton(
+          DropdownButton<Level>(
             value: _filterLevel,
             items: [
               DropdownMenuItem(
@@ -287,7 +287,7 @@ class _LogConsoleState extends State<LogConsole> {
               )
             ],
             onChanged: (value) {
-              _filterLevel = value;
+              _filterLevel = value!;
               _refreshFilter();
             },
           )
@@ -335,7 +335,7 @@ class LogBar extends StatelessWidget {
   final bool dark;
   final Widget child;
 
-  LogBar({this.dark, this.child});
+  LogBar({required this.dark, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -346,13 +346,13 @@ class LogBar extends StatelessWidget {
           boxShadow: [
             if (!dark)
               BoxShadow(
-                color: Colors.grey[400],
+                color: Colors.grey.shade400,
                 blurRadius: 3,
               ),
           ],
         ),
         child: Material(
-          color: dark ? Colors.blueGrey[900] : Colors.white,
+          color: dark ? Colors.blueGrey.shade900 : Colors.white,
           child: Padding(
             padding: EdgeInsets.fromLTRB(15, 8, 15, 8),
             child: child,

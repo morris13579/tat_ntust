@@ -24,9 +24,9 @@ class NTUSTCalendarTask extends DialogTask<String> {
     if (!exists || forceUpdate) {
       super.onStart(R.current.downloading);
       try {
-        String url = await NTUSTConnector.getCalendarUrl();
+        String? url = await NTUSTConnector.getCalendarUrl();
         await DioConnector.instance
-            .download(url, (responseHeaders) => savePath);
+            .download(url!, (responseHeaders) => savePath);
       } catch (e) {
         super.onEnd();
         return await super.onError(R.current.downloadError);

@@ -14,7 +14,7 @@ class LoginNTUSTPage extends StatefulWidget {
   final String username;
   final String password;
 
-  LoginNTUSTPage({this.username, this.password});
+  LoginNTUSTPage({required this.username, required this.password});
 
   @override
   _LoginNTUSTPageState createState() => _LoginNTUSTPageState();
@@ -24,15 +24,14 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
   final cookieManager = CookieManager.instance();
   final cookieJar = DioConnector.instance.cookiesManager;
   final Uri NTUSTLoginUri = Uri.parse(NTUSTConnector.ntustLoginUrl);
-  InAppWebViewController webView;
+  late InAppWebViewController webView;
   Uri url = Uri();
   double progress = 0;
   bool showDialog = true;
-  Widget dialog;
+  Widget dialog = MyProgressDialog.dialog(R.current.loginNTUST);
 
   @override
   void initState() {
-    dialog = MyProgressDialog.dialog(R.current.loginNTUST);
     super.initState();
   }
 
@@ -53,12 +52,12 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
               onWebViewCreated: (InAppWebViewController controller) {
                 webView = controller;
               },
-              onLoadStart: (InAppWebViewController controller, Uri url) {
+              onLoadStart: (InAppWebViewController controller, Uri? url) {
                 setState(() {
-                  this.url = url;
+                  this.url = url!;
                 });
               },
-              onLoadStop: (InAppWebViewController controller, Uri url) async {
+              onLoadStop: (InAppWebViewController controller, Uri? url) async {
                 if (url == NTUSTLoginUri) {
                   await webView.evaluateJavascript(
                       source:
@@ -78,7 +77,7 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                   try {
                     await cookieJar.deleteAll();
                   } catch (e) {}
-                  String result = await webView.getHtml();
+                  String? result = await webView.getHtml();
                   var tagNode = parse(result);
                   var nodes = tagNode
                       .getElementsByClassName("validation-summary-errors");

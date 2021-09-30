@@ -54,7 +54,7 @@ class LanguageUtils {
 
   static String locale2String(Locale locale) {
     String countryCode = locale.countryCode ?? "";
-    String languageCode = locale.languageCode ?? "";
+    String languageCode = locale.languageCode;
     return countryCode + '_' + languageCode;
   }
 

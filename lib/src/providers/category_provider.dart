@@ -57,8 +57,8 @@ class CategoryProvider extends ChangeNotifier {
     List<FileSystemEntity> files =
         await FileUtils.getAllFiles(showHidden: showHidden);
     files.forEach((file) {
-      String mimeType = mime(file.path) == null ? "" : mime(file.path);
-      if (mimeType.split("/")[0] == type) {
+      String? mimeType = mime(file.path) == null ? "" : mime(file.path);
+      if (mimeType!.split("/")[0] == type) {
         images.add(file);
         imageTabs
             .add("${file.path.split("/")[file.path.split("/").length - 2]}");
@@ -77,7 +77,7 @@ class CategoryProvider extends ChangeNotifier {
     List<FileSystemEntity> files =
         await FileUtils.getAllFiles(showHidden: showHidden);
     files.forEach((file) {
-      String mimeType = mime(file.path);
+      String? mimeType = mime(file.path);
       if (type == "text" && extension(file.path) == ".pdf") {
         audio.add(file);
       }
@@ -108,7 +108,7 @@ class CategoryProvider extends ChangeNotifier {
 
   getHidden() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool h = prefs.getBool("hidden") == null ? false : prefs.getBool("hidden");
+    bool? h = prefs.getBool("hidden") == null ? false : prefs.getBool("hidden");
     setHidden(h);
   }
 
@@ -121,7 +121,7 @@ class CategoryProvider extends ChangeNotifier {
 
   getSort() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int h = prefs.getInt("sort") == null ? 0 : prefs.getInt("sort");
+    int? h = prefs.getInt("sort") == null ? 0 : prefs.getInt("sort");
     setSort(h);
   }
 }

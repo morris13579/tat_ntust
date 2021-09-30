@@ -4,7 +4,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_app/src/model/remote_config/remote_config_version_info.dart';
 
 class RemoteConfigUtils {
-  static RemoteConfig _remoteConfig;
+  static late RemoteConfig _remoteConfig;
 
   static String versionConfigKey = "version_config";
   static String removeADCodeKey = "remove_ad_key";
@@ -45,12 +45,12 @@ class RemoteConfigUtils {
   static Future<bool> getADEnable() async {
     await _remoteConfig.fetchAndActivate();
     String result = _remoteConfig.getString(enableADCodeKey);
-    return (json.decode(result)["value"] as bool) ?? false;
+    return (json.decode(result)["value"] as bool);
   }
 
   static Future<int> getADInterval() async {
     await _remoteConfig.fetchAndActivate();
     String result = _remoteConfig.getString(enableADCodeKey);
-    return (json.decode(result)["interval"] as int) ?? null;
+    return (json.decode(result)["interval"] as int);
   }
 }

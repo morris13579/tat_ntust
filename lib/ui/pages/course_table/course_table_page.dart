@@ -38,7 +38,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
   final FocusNode _studentFocus = new FocusNode();
   GlobalKey _key = GlobalKey();
   bool isLoading = true;
-  CourseTableJson courseTableData;
+  CourseTableJson? courseTableData;
   static double dayHeight = 25;
   static double studentIdHeight = 40;
   static double courseHeight = 60;
@@ -67,9 +67,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
 
   @override
   void setState(fn) {
-    if (context != null) {
-      super.setState(fn);
-    }
+    super.setState(fn);
   }
 
   @override
@@ -79,13 +77,13 @@ class _CourseTablePageState extends State<CourseTablePage> {
   }
 
   void _loadSetting() {
-    RenderObject renderObject = _key.currentContext.findRenderObject();
-    courseHeight = (renderObject.semanticBounds.size.height -
+    RenderObject? renderObject = _key.currentContext!.findRenderObject();
+    courseHeight = (renderObject!.semanticBounds.size.height -
             studentIdHeight -
             dayHeight) /
         showCourseTableNum; //計算高度
-    CourseTableJson courseTable = Model.instance.getCourseSetting().info;
-    if (courseTable == null || courseTable.isEmpty) {
+    CourseTableJson? courseTable = Model.instance.getCourseSetting().info;
+    if (courseTable.isEmpty) {
       _getCourseTable();
     } else {
       _showCourseTable(courseTable);
@@ -102,11 +100,11 @@ class _CourseTablePageState extends State<CourseTablePage> {
   }
 
   void _getCourseTable(
-      {SemesterJson semesterSetting, bool refresh: false}) async {
+      {SemesterJson? semesterSetting, bool refresh: false}) async {
     await Future.delayed(Duration(microseconds: 100)); //等待頁面刷新
     String studentId = Model.instance.getAccount();
     await Model.instance.clearSemesterJsonList();
-    SemesterJson semesterJson;
+    SemesterJson? semesterJson;
     if (semesterSetting == null) {
       await _getSemesterList(studentId);
       semesterJson = Model.instance.getSemesterJsonItem(0);
@@ -117,7 +115,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
       return;
     }
 
-    CourseTableJson courseTable;
+    CourseTableJson? courseTable;
     if (!refresh) {
       //是否要去找暫存的
       courseTable =
@@ -132,7 +130,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
         courseTable = task.result;
       }
     }
-    Model.instance.getCourseSetting().info = courseTable; //儲存課表
+    Model.instance.getCourseSetting().info = courseTable!; //儲存課表
     Model.instance.saveCourseSetting();
     _showCourseTable(courseTable);
   }
@@ -181,7 +179,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     switch (value) {
       case 0:
         MyToast.show(sprintf("%s:%s",
-            [R.current.credit, courseTableData.getTotalCredit().toString()]));
+            [R.current.credit, courseTableData!.getTotalCredit().toString()]));
         break;
       case 1:
         _loadFavorite();
@@ -472,7 +470,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
       ),
     );
     for (int day in courseTableControl.getDayIntList) {
-      CourseInfoJson courseInfo =
+      CourseInfoJson? courseInfo =
           courseTableControl.getCourseInfo(day, section);
       Color color = courseTableControl.getCourseInfoColor(day, section);
       courseInfo = courseInfo ?? CourseInfoJson();
@@ -498,7 +496,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
                       textAlign: TextAlign.center,
                     ),
                     onPressed: () {
-                      showCourseDetailDialog(section, courseInfo);
+                      showCourseDetailDialog(section, courseInfo!);
                     },
                   ),
                 ),
@@ -575,7 +573,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
   Future<String> _showEditDialog(String value) async {
     final TextEditingController controller = TextEditingController();
     controller.text = value;
-    String v = await Get.dialog<String>(
+    String? v = await Get.dialog<String>(
       AlertDialog(
         contentPadding: const EdgeInsets.all(16.0),
         title: Text('Edit'),
@@ -624,7 +622,8 @@ class _CourseTablePageState extends State<CourseTablePage> {
     if (course.id.isEmpty) {
       MyToast.show(course.name + R.current.noSupport);
     } else {
-      RouteUtils.toCourseDetailPage(courseTableData.courseSemester, courseInfo);
+      RouteUtils.toCourseDetailPage(
+          courseTableData!.courseSemester, courseInfo);
     }
   }
 
@@ -633,7 +632,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     _studentFocus.unfocus();
   }
 
-  void _showCourseTable(CourseTableJson courseTable) async {
+  void _showCourseTable(CourseTableJson? courseTable) async {
     if (courseTable == null) {
       return;
     }
@@ -655,9 +654,9 @@ class _CourseTablePageState extends State<CourseTablePage> {
 
   Future screenshot() async {
     double originHeight = courseHeight;
-    RenderObject renderObject = _key.currentContext.findRenderObject();
+    RenderObject? renderObject = _key.currentContext!.findRenderObject();
     double height =
-        renderObject.semanticBounds.size.height - studentIdHeight - dayHeight;
+        renderObject!.semanticBounds.size.height - studentIdHeight - dayHeight;
     Directory directory = await getApplicationSupportDirectory();
     String path = directory.path;
     setState(() {
@@ -668,15 +667,16 @@ class _CourseTablePageState extends State<CourseTablePage> {
       isLoading = true;
     });
     Log.d(path);
-    RenderRepaintBoundary boundary =
-        overRepaintKey.currentContext.findRenderObject();
+
+    final RenderRepaintBoundary boundary = overRepaintKey.currentContext!
+        .findRenderObject()! as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 2);
     setState(() {
       courseHeight = originHeight;
       isLoading = false;
     });
-    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    Uint8List pngBytes = byteData.buffer.asUint8List();
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData!.buffer.asUint8List();
     File imgFile = new File('$path/course_widget.png');
     await imgFile.writeAsBytes(pngBytes);
     final bool result = await platform.invokeMethod('update_weight');

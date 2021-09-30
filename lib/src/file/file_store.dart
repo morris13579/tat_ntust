@@ -25,11 +25,11 @@ class FileStore {
       MyToast.show(R.current.noPermission);
       return "";
     }
-    Directory directory = await _getFilePath();
+    Directory? directory = await _getFilePath();
     directory ??= Theme.of(context).platform == TargetPlatform.android
-          ? await getExternalStorageDirectory()
-          : await getApplicationSupportDirectory();
-    return directory.path;
+        ? await getExternalStorageDirectory()
+        : await getApplicationSupportDirectory();
+    return directory!.path;
   }
 
   static Future<String> getDownloadDir(
@@ -43,7 +43,7 @@ class FileStore {
     return savedDir.path;
   }
 
-  static Future<bool> setFilePath(String directory) async {
+  static Future<bool> setFilePath(String? directory) async {
     if (directory != null) {
       SharedPreferences pref = await SharedPreferences.getInstance();
       pref.setString(storeKey, directory);
@@ -53,9 +53,9 @@ class FileStore {
     }
   }
 
-  static Future<Directory> _getFilePath() async {
+  static Future<Directory?> _getFilePath() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    String path = pref.getString(storeKey);
+    String? path = pref.getString(storeKey);
     if (path != null && path.isNotEmpty) {
       return Directory(path);
     } else {

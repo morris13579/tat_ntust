@@ -16,20 +16,20 @@ class SubSystemPage extends StatefulWidget {
 
 class _SubSystemPageState extends State<SubSystemPage> {
   bool isLoading = true;
-  APTreeJson apTree;
+  APTreeJson? apTree;
 
   @override
   void initState() {
     super.initState();
-    loadTree(null);
+    loadTree();
   }
 
-  void loadTree(String arg) async {
+  void loadTree() async {
     setState(() {
       isLoading = true;
     });
     TaskFlow taskFlow = TaskFlow();
-    var task = NTUSTSubSystemTask(arg);
+    var task = NTUSTSubSystemTask();
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
       apTree = task.result;
@@ -56,9 +56,9 @@ class _SubSystemPageState extends State<SubSystemPage> {
   Widget buildTree() {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: apTree.apList.length,
+      itemCount: apTree!.apList.length,
       itemBuilder: (BuildContext context, int index) {
-        APListJson ap = apTree.apList[index];
+        APListJson ap = apTree!.apList[index];
         return InkWell(
           child: Container(
             height: 50,

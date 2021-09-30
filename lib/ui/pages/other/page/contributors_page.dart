@@ -1,17 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
 import 'package:flutter_app/src/config/app_link.dart';
-import 'package:flutter_app/src/connector/core/connector.dart';
-import 'package:flutter_app/src/connector/core/connector_parameter.dart';
-import 'package:flutter_app/src/model/github/repository_contributors.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:github/github.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContributorsPage extends StatelessWidget {
+  final github = GitHub();
+  final repositorySlug =
+      RepositorySlug(AppLink.githubOwner, AppLink.githubName);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,30 +81,21 @@ class ContributorsPage extends StatelessWidget {
               )
             ],
           ),
-          FutureBuilder<Response>(
-            future: Connector.getDataByGetResponse(ConnectorParameter(
-                "https://api.github.com/repos/${AppLink.githubOwner}/${AppLink.githubName}/contributors")),
-            builder: (BuildContext context, AsyncSnapshot<Response> snapshot) {
+          FutureBuilder<List<Contributor>>(
+            future:
+                github.repositories.listContributors(repositorySlug).toList(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<Contributor>> snapshot) {
               if (snapshot.hasData) {
-                List<RepositoryContributor> contributorList;
-                if (snapshot.data.data is List) {
-                  contributorList = (snapshot.data.data as List)
-                      .map((e) => RepositoryContributor.fromJson(e))
-                      .toList();
-                } else {
-                  contributorList = [
-                    RepositoryContributor.fromJson(snapshot.data.data)
-                  ];
-                }
-
+                List<Contributor> contributorList = snapshot.data!;
                 return ListView.builder(
                   itemCount: contributorList.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
-                    RepositoryContributor contributor = contributorList[index];
+                    Contributor contributor = contributorList[index];
                     return InkWell(
                       onTap: () {
-                        launch(contributor.htmlUrl);
+                        launch(contributor.htmlUrl!);
                       },
                       child: WidgetAnimator(
                         Container(
@@ -114,7 +106,7 @@ class ContributorsPage extends StatelessWidget {
                                 height: 50,
                                 width: 50,
                                 child: CachedNetworkImage(
-                                  imageUrl: contributor.avatarUrl,
+                                  imageUrl: contributor.avatarUrl!,
                                   imageBuilder: (context, imageProvider) =>
                                       CircleAvatar(
                                     radius: 15.0,
@@ -125,7 +117,7 @@ class ContributorsPage extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(left: 10),
                               ),
-                              Text(contributor.login)
+                              Text(contributor.login!)
                             ],
                           ),
                         ),

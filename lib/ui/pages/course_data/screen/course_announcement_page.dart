@@ -19,7 +19,7 @@ class CourseAnnouncementPage extends StatefulWidget {
 class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
-  List<MoodleAnnouncementInfo> announcementList;
+  late List<MoodleAnnouncementInfo> announcementList;
 
   @override
   void initState() {

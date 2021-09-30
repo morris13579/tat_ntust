@@ -1,4 +1,3 @@
-import 'package:flutter_app/src/model/json_init.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -9,10 +8,7 @@ class UserDataJson {
   String account;
   String password;
 
-  UserDataJson({this.account, this.password}) {
-    this.account = JsonInit.stringInit(this.account);
-    this.password = JsonInit.stringInit(this.password);
-  }
+  UserDataJson({this.account = "", this.password = ""});
 
   factory UserDataJson.fromJson(Map<String, dynamic> json) =>
       _$UserDataJsonFromJson(json);

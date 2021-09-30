@@ -3,13 +3,12 @@ import 'package:flutter_app/src/R.dart';
 
 class FilePopup extends StatelessWidget {
   final String path;
-  final Function popTap;
+  final PopupMenuItemSelected? popTap;
 
   FilePopup({
-    Key key,
-    @required this.path,
-    @required this.popTap,
-  }) : super(key: key);
+    required this.path,
+    required this.popTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class FilePopup extends StatelessWidget {
       ],
       icon: Icon(
         Icons.arrow_drop_down,
-        color: Theme.of(context).textTheme.headline6.color,
+        color: Theme.of(context).textTheme.headline6!.color,
       ),
       color: Theme.of(context).scaffoldBackgroundColor,
       offset: Offset(0, 30),

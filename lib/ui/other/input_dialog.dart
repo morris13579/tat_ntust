@@ -16,10 +16,10 @@ class CustomInputDialog extends StatelessWidget {
   final hint;
 
   CustomInputDialog({
-    @required this.title,
-    @required this.initText,
-    @required this.onOk,
-    @required this.onCancel,
+    required this.title,
+    required this.initText,
+    required this.onOk,
+    required this.onCancel,
     this.maxLine = 1,
     this.hint = "",
   }) {

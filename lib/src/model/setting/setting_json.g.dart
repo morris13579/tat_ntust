@@ -6,16 +6,14 @@ part of 'setting_json.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SettingJson _$SettingJsonFromJson(Map<String, dynamic> json) {
-  return SettingJson(
-    course: json['course'] == null
-        ? null
-        : CourseSettingJson.fromJson(json['course'] as Map<String, dynamic>),
-    other: json['other'] == null
-        ? null
-        : OtherSettingJson.fromJson(json['other'] as Map<String, dynamic>),
-  );
-}
+SettingJson _$SettingJsonFromJson(Map<String, dynamic> json) => SettingJson(
+      course: json['course'] == null
+          ? null
+          : CourseSettingJson.fromJson(json['course'] as Map<String, dynamic>),
+      other: json['other'] == null
+          ? null
+          : OtherSettingJson.fromJson(json['other'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$SettingJsonToJson(SettingJson instance) =>
     <String, dynamic>{
@@ -23,27 +21,25 @@ Map<String, dynamic> _$SettingJsonToJson(SettingJson instance) =>
       'other': instance.other,
     };
 
-CourseSettingJson _$CourseSettingJsonFromJson(Map<String, dynamic> json) {
-  return CourseSettingJson(
-    info: json['info'] == null
-        ? null
-        : CourseTableJson.fromJson(json['info'] as Map<String, dynamic>),
-  );
-}
+CourseSettingJson _$CourseSettingJsonFromJson(Map<String, dynamic> json) =>
+    CourseSettingJson(
+      info: json['info'] == null
+          ? null
+          : CourseTableJson.fromJson(json['info'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$CourseSettingJsonToJson(CourseSettingJson instance) =>
     <String, dynamic>{
       'info': instance.info,
     };
 
-OtherSettingJson _$OtherSettingJsonFromJson(Map<String, dynamic> json) {
-  return OtherSettingJson(
-    lang: json['lang'] as String,
-    autoCheckAppUpdate: json['autoCheckAppUpdate'] as bool,
-    useExternalVideoPlayer: json['useExternalVideoPlayer'] as bool,
-    useMoodleWebApi: json['useMoodleWebApi'] as bool,
-  );
-}
+OtherSettingJson _$OtherSettingJsonFromJson(Map<String, dynamic> json) =>
+    OtherSettingJson(
+      lang: json['lang'] as String? ?? "",
+      autoCheckAppUpdate: json['autoCheckAppUpdate'] as bool? ?? true,
+      useExternalVideoPlayer: json['useExternalVideoPlayer'] as bool? ?? false,
+      useMoodleWebApi: json['useMoodleWebApi'] as bool? ?? false,
+    );
 
 Map<String, dynamic> _$OtherSettingJsonToJson(OtherSettingJson instance) =>
     <String, dynamic>{

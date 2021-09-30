@@ -22,7 +22,7 @@ class Model {
   Model._privateConstructor();
 
   static final Model instance = Model._privateConstructor();
-  SharedPreferences pref;
+  late SharedPreferences pref;
   static String userDataJsonKey = "user_data";
 
   //----------List----------//
@@ -32,10 +32,10 @@ class Model {
   //----------Object----------//
   static String scoreCreditJsonKey = "score_credit";
   static String settingJsonKey = "setting";
-  UserDataJson _userData;
-  List<CourseTableJson> _courseTableList;
-  List<SemesterJson> _courseSemesterList;
-  SettingJson _setting;
+  UserDataJson _userData = UserDataJson();
+  List<CourseTableJson> _courseTableList = [];
+  List<SemesterJson> _courseSemesterList = [];
+  SettingJson _setting = SettingJson();
   Map<String, bool> _firstRun = Map();
   static String appCheckUpdate = "AppCheckUpdate";
   DefaultCacheManager cacheManager = new DefaultCacheManager();
@@ -45,15 +45,12 @@ class Model {
   }
 
   //timeOut seconds
-  Future<bool> getFirstUse(String key, {int timeOut}) async {
-    if (pref == null) {
-      pref = await SharedPreferences.getInstance();
-    }
+  Future<bool> getFirstUse(String key, {int? timeOut}) async {
     if (timeOut != null) {
       int millsTimeOut = timeOut * 1000;
       String wKey = "first_use_$key";
       int now = DateTime.now().millisecondsSinceEpoch;
-      int before = _readInt(wKey);
+      int? before = _readInt(wKey);
       if (before != null && before > now) {
         //Already Use
         return false;
@@ -64,7 +61,7 @@ class Model {
     if (!_firstRun.containsKey(key)) {
       _firstRun[key] = true;
     }
-    return _firstRun[key];
+    return _firstRun[key]!;
   }
 
   void setAlreadyUse(String key) {
@@ -88,8 +85,8 @@ class Model {
   }
 
   Future<void> loadUserData() async {
-    String readJson;
-    readJson = await _readString(userDataJsonKey);
+    String? readJson;
+    readJson = (await _readString(userDataJsonKey));
     _userData = (readJson != null)
         ? UserDataJson.fromJson(json.decode(readJson))
         : UserDataJson();
@@ -126,8 +123,8 @@ class Model {
   }
 
   Future<void> loadCourseTableList() async {
-    List<String> readJsonList = [];
-    readJsonList = await _readStringList(courseTableJsonKey);
+    List<String>? readJsonList = [];
+    readJsonList = (await _readStringList(courseTableJsonKey));
     _courseTableList = [];
     if (readJsonList != null) {
       for (String readJson in readJsonList) {
@@ -136,9 +133,9 @@ class Model {
     }
   }
 
-  String getCourseNameByCourseId(String courseId) {
+  String? getCourseNameByCourseId(String courseId) {
     //利用課程id取得課程資訊
-    String name;
+    String? name;
     for (CourseTableJson courseDetail in _courseTableList) {
       name = courseDetail.getCourseNameByCourseId(courseId);
       if (name != null) {
@@ -177,8 +174,8 @@ class Model {
     return _courseTableList;
   }
 
-  CourseTableJson getCourseTable(
-      String studentId, SemesterJson courseSemester) {
+  CourseTableJson? getCourseTable(
+      String studentId, SemesterJson? courseSemester) {
     List<CourseTableJson> tableList = _courseTableList;
     if (courseSemester == null || studentId.isEmpty) {
       return null;
@@ -204,7 +201,7 @@ class Model {
   }
 
   Future<void> loadSetting() async {
-    String readJson;
+    String? readJson;
     readJson = await _readString(settingJsonKey);
     _setting = (readJson != null)
         ? SettingJson.fromJson(json.decode(readJson))
@@ -217,7 +214,7 @@ class Model {
   }
 
   Future<void> clearCourseSetting() async {
-    _setting.course = CourseSettingJson();
+    _setting.course = CourseSettingJson(info: CourseTableJson());
     await saveCourseSetting();
   }
 
@@ -257,7 +254,7 @@ class Model {
   }
 
   Future<void> loadSemesterJsonList() async {
-    List<String> readJsonList = [];
+    List<String>? readJsonList = [];
     readJsonList = await _readStringList(courseSemesterJsonKey);
     _courseSemesterList = [];
     if (readJsonList != null) {
@@ -271,7 +268,7 @@ class Model {
     _courseSemesterList = value;
   }
 
-  SemesterJson getSemesterJsonItem(int index) {
+  SemesterJson? getSemesterJsonItem(int index) {
     if (_courseSemesterList.length > index) {
       return _courseSemesterList[index];
     } else {
@@ -294,7 +291,7 @@ class Model {
   }
 
   Future<String> getVersion() async {
-    return await _readString("version");
+    return (await _readString("version"))!;
   }
 
   Future<void> setVersion(String version) async {
@@ -304,7 +301,6 @@ class Model {
   Future<void> getInstance() async {
     pref = await SharedPreferences.getInstance();
     await DioConnector.instance.init();
-    _courseSemesterList = _courseSemesterList ?? [];
     await loadUserData();
     await loadCourseTableList();
     await loadSetting();
@@ -356,7 +352,7 @@ class Model {
     await pref.setInt(key, value);
   }
 
-  int _readInt(String key) {
+  int? _readInt(String key) {
     return pref.getInt(key);
   }
 
@@ -364,11 +360,11 @@ class Model {
     await pref.setStringList(key, value);
   }
 
-  Future<String> _readString(String key) async {
+  Future<String?> _readString(String key) async {
     return pref.getString(key);
   }
 
-  Future<List<String>> _readStringList(String key) async {
+  Future<List<String>?> _readStringList(String key) async {
     return pref.getStringList(key);
   }
 

@@ -21,7 +21,7 @@ class CourseDirectoryWebApiPage extends StatefulWidget {
 class _CourseDirectoryWebApiPageState extends State<CourseDirectoryWebApiPage>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
-  List<MoodleCoreCourseGetContents> directoryList;
+  late List<MoodleCoreCourseGetContents> directoryList;
 
   @override
   void initState() {

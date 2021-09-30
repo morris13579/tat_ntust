@@ -26,14 +26,14 @@ class CloudMessagingUtils {
  */
   }
 
-  static Future<String> getToken() async {
+  static Future<String?> getToken() async {
     return await FirebaseMessaging.instance.getToken();
   }
 
   static Future<void> _onBackGroundMessage(RemoteMessage message) async {
     ReceivedNotification receivedNotification = ReceivedNotification(
-      title: message.notification.title,
-      body: message.notification.body,
+      title: message.notification!.title,
+      body: message.notification!.body,
       payload: json.encode({
         "type": "cloud_message_background",
         "id": Notifications.instance.notificationId,
@@ -46,8 +46,8 @@ class CloudMessagingUtils {
 
   static Future<void> _onMessage(RemoteMessage message) async {
     ReceivedNotification receivedNotification = ReceivedNotification(
-      title: message.notification.title,
-      body: message.notification.body,
+      title: message.notification!.title,
+      body: message.notification!.body,
       payload: json.encode({
         "type": "cloud_message",
         "id": Notifications.instance.notificationId,

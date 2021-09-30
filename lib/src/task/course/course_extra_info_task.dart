@@ -15,7 +15,7 @@ class CourseExtraInfoTask extends DialogTask<CourseExtraInfoJson> {
   @override
   Future<TaskStatus> execute() async {
     super.onStart(R.current.getCourseDetail);
-    CourseExtraInfoJson value =
+    CourseExtraInfoJson? value =
         await CourseConnector.getCourseExtraInfo(id, semester);
     super.onEnd();
     if (value != null) {

@@ -16,6 +16,8 @@ enum CourseConnectorStatus { LoginSuccess, LoginFail, UnknownError }
 class CourseMainInfo {
   List<CourseMainInfoJson> json;
   String studentName;
+
+  CourseMainInfo({required this.json, required this.studentName});
 }
 
 class CourseConnector {
@@ -51,9 +53,8 @@ class CourseConnector {
     return v.replaceAll("\n", "").replaceAll(" ", "");
   }
 
-  static Future<CourseMainInfo> getCourseMainInfoList(
+  static Future<CourseMainInfo?> getCourseMainInfoList(
       String studentId, SemesterJson semester) async {
-    var info = CourseMainInfo();
     try {
       ConnectorParameter parameter;
       Document tagNode;
@@ -106,15 +107,18 @@ class CourseConnector {
         var k = i.getElementsByTagName("td");
         //課碼	課程名稱	學分數	必、選修	上課教師	備註
         CourseMainInfoJson courseMainInfo = CourseMainInfoJson();
-        CourseMainJson courseMain = CourseMainJson();
-        courseMain.id = clearString(k[0].text);
-        courseMain.href = "";
-        courseMain.name = k[1].text.replaceAll("  ", "").replaceAll("\n", "");
-        courseMain.credits = clearString(k[2].text);
-        courseMain.category = clearString(k[3].text);
-        courseMain.note = clearString(k[5].text);
-        TeacherJson teacher = TeacherJson();
-        teacher.name = clearString(k[4].text);
+        CourseMainJson courseMain = CourseMainJson(
+          id: clearString(k[0].text),
+          href: "",
+          name: k[1].text.replaceAll("  ", "").replaceAll("\n", ""),
+          credits: clearString(k[2].text),
+          category: clearString(k[3].text),
+          note: clearString(k[5].text),
+          hours: "",
+          time: {},
+        );
+        TeacherJson teacher =
+            TeacherJson(name: clearString(k[4].text), href: "");
         for (int j = 0; j < 7; j++) {
           Day day = dayEnum[j]; //初始化
           courseMain.time[day] = "";
@@ -127,9 +131,10 @@ class CourseConnector {
             var ts = tableNodes[k].getElementsByTagName("td");
             ts = ts.getRange(2, ts.length).toList();
             if (ts[j].text.contains(courseMain.name)) {
-              courseMain.time[day] += timeString + " ";
-              ClassroomJson classroom = ClassroomJson();
-              classroom.name = clearString(ts[j].innerHtml.split("<br>")[1]);
+              courseMain.time[day] = courseMain.time[day]! + timeString + " ";
+              ClassroomJson classroom = ClassroomJson(
+                  name: clearString(ts[j].innerHtml.split("<br>")[1]),
+                  href: '');
               if (classRoomTemp.contains(classroom.name)) {
                 continue;
               }
@@ -142,8 +147,10 @@ class CourseConnector {
         courseMainInfo.course = courseMain;
         courseMainInfoList.add(courseMainInfo);
       }
-      info.studentName = tagNode.getElementsByClassName("text-success")[7].text;
-      info.json = courseMainInfoList;
+      var info = CourseMainInfo(
+        studentName: tagNode.getElementsByClassName("text-success")[7].text,
+        json: courseMainInfoList,
+      );
       return info;
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
@@ -151,7 +158,7 @@ class CourseConnector {
     }
   }
 
-  static Future<CourseExtraInfoJson> getCourseExtraInfo(
+  static Future<CourseExtraInfoJson?> getCourseExtraInfo(
       String courseId, SemesterJson semester) async {
     try {
       ConnectorParameter parameter;
@@ -172,7 +179,7 @@ class CourseConnector {
     }
   }
 
-  static Future<List<SemesterJson>> getCourseSemesters() async {
+  static Future<List<SemesterJson>?> getCourseSemesters() async {
     try {
       ConnectorParameter parameter;
       parameter = ConnectorParameter(_courseSemestersUrl);

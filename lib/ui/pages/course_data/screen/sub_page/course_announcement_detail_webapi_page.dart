@@ -26,7 +26,7 @@ class CourseAnnouncementDetailWebApiPage extends StatefulWidget {
 class _CourseAnnouncementDetailWebApiPageState
     extends State<CourseAnnouncementDetailWebApiPage> {
   bool isLoading = true;
-  String html;
+  late String html;
 
   @override
   void initState() {

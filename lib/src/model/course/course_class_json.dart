@@ -1,5 +1,4 @@
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/model/json_init.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:quiver/core.dart';
@@ -19,23 +18,14 @@ class CourseMainJson {
   Map<Day, String> time; //時間
 
   CourseMainJson(
-      {this.name,
-      this.href,
-      this.id,
-      this.credits,
-      this.hours,
-      this.note,
-      this.category,
-      this.time}) {
-    name = JsonInit.stringInit(name);
-    id = JsonInit.stringInit(id);
-    href = JsonInit.stringInit(href);
-    note = JsonInit.stringInit(note);
-    category = JsonInit.stringInit(category);
-    credits = JsonInit.stringInit(credits);
-    hours = JsonInit.stringInit(hours);
-    time = time ?? Map();
-  }
+      {this.name = "",
+      this.href = "",
+      this.id = "",
+      this.credits = "",
+      this.hours = "",
+      this.note = "",
+      this.category = "",
+      this.time = const {}});
 
   bool get isEmpty {
     return name.isEmpty &&
@@ -75,19 +65,13 @@ class CourseExtraJson {
   String openClass; //開課班級(計算學分用)
 
   CourseExtraJson(
-      {this.name,
-      this.category,
-      this.selectNumber,
-      this.withdrawNumber,
-      this.href}) {
-    id = JsonInit.stringInit(id);
-    name = JsonInit.stringInit(name);
-    href = JsonInit.stringInit(href);
-    category = JsonInit.stringInit(category);
-    selectNumber = JsonInit.stringInit(selectNumber);
-    withdrawNumber = JsonInit.stringInit(withdrawNumber);
-    openClass = JsonInit.stringInit(openClass);
-  }
+      {this.id = "",
+      this.openClass = "",
+      this.name = "",
+      this.category = "",
+      this.selectNumber = "",
+      this.withdrawNumber = "",
+      this.href = ""});
 
   bool get isEmpty {
     return id.isEmpty &&
@@ -121,10 +105,7 @@ class ClassJson {
   String name;
   String href;
 
-  ClassJson({this.name, this.href}) {
-    name = JsonInit.stringInit(name);
-    href = JsonInit.stringInit(href);
-  }
+  ClassJson({this.name = "", this.href = ""});
 
   bool get isEmpty {
     return name.isEmpty && href.isEmpty;
@@ -147,11 +128,7 @@ class ClassroomJson {
   String href;
   bool mainUse;
 
-  ClassroomJson({this.name, this.href, this.mainUse}) {
-    name = JsonInit.stringInit(name);
-    href = JsonInit.stringInit(href);
-    mainUse = mainUse ?? false;
-  }
+  ClassroomJson({this.name = "", this.href = "", this.mainUse = false});
 
   bool get isEmpty {
     return name.isEmpty && href.isEmpty;
@@ -174,10 +151,7 @@ class TeacherJson {
   String name;
   String href;
 
-  TeacherJson({this.name, this.href}) {
-    name = JsonInit.stringInit(name);
-    href = JsonInit.stringInit(href);
-  }
+  TeacherJson({this.name = "", this.href = ""});
 
   bool get isEmpty {
     return name.isEmpty && href.isEmpty;
@@ -199,10 +173,7 @@ class SemesterJson {
   String year;
   String semester;
 
-  SemesterJson({this.year, this.semester}) {
-    year = JsonInit.stringInit(year);
-    semester = JsonInit.stringInit(semester);
-  }
+  SemesterJson({this.year = "", this.semester = ""});
 
   factory SemesterJson.fromJson(Map<String, dynamic> json) =>
       _$SemesterJsonFromJson(json);
@@ -238,19 +209,12 @@ class ClassmateJson {
   bool isSelect; //是否撤選
 
   ClassmateJson(
-      {this.className,
-      this.studentEnglishName,
-      this.studentName,
-      this.studentId,
-      this.isSelect,
-      this.href}) {
-    className = JsonInit.stringInit(className);
-    studentEnglishName = JsonInit.stringInit(studentEnglishName);
-    studentName = JsonInit.stringInit(studentName);
-    studentId = JsonInit.stringInit(studentId);
-    href = JsonInit.stringInit(href);
-    isSelect = isSelect ?? false;
-  }
+      {this.className = "",
+      this.studentEnglishName = "",
+      this.studentName = "",
+      this.studentId = "",
+      this.isSelect = false,
+      this.href = ""});
 
   bool get isEmpty {
     return className.isEmpty &&
@@ -280,7 +244,7 @@ class ClassmateJson {
   }
 
   String getName() {
-    String name;
+    String? name;
     if (LanguageUtils.getLangIndex() == LangEnum.en) {
       name = studentEnglishName;
     }

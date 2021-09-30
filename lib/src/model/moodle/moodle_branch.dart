@@ -43,16 +43,16 @@ class MoodleBranchJson extends Object {
    */
 
   MoodleBranchJson(
-      {this.name,
-      this.type,
-      this.key,
-      this.classs,
-      this.requiresajaxloading,
-      this.icon,
-      this.title,
-      this.hidden,
-      this.haschildren,
-      this.children});
+      {required this.name,
+      required this.type,
+      required this.key,
+      required this.classs,
+      required this.requiresajaxloading,
+      required this.icon,
+      required this.title,
+      required this.hidden,
+      required this.haschildren,
+      required this.children});
 
   factory MoodleBranchJson.fromJson(Map<String, dynamic> srcJson) =>
       _$MoodleBranchJsonFromJson(srcJson);
@@ -67,12 +67,18 @@ class MainIcon extends Object {
   String pix;
 
   @JsonKey(name: 'classes')
-  List<String> classes;
+  late List<String> classes;
 
   @JsonKey(name: 'alt')
   String alt;
 
-  MainIcon({this.component, this.pix, this.classes, this.alt});
+  MainIcon(
+      {this.component = "",
+      this.pix = "",
+      List<String>? classes,
+      this.alt = ""}) {
+    this.classes = classes ?? [];
+  }
 
   factory MainIcon.fromJson(Map<String, dynamic> srcJson) =>
       _$MainIconFromJson(srcJson);
@@ -110,23 +116,23 @@ class Children extends Object {
   @JsonKey(name: 'haschildren')
   bool haschildren;
 
-  String contentAfterLink;
+  String? contentAfterLink;
 
-  bool isExpanded;
+  bool? isExpanded;
 
   Children(
-      {this.name,
-      this.type,
-      this.key,
-      this.classs,
-      this.requiresajaxloading,
-      this.icon,
-      this.title,
-      this.link,
-      this.hidden,
-      this.haschildren,
+      {this.name = "",
+      this.type = 0,
+      this.key = "",
+      this.classs = "",
+      this.requiresajaxloading = false,
+      this.title = "",
+      this.link = "",
+      this.hidden = false,
+      this.haschildren = false,
       this.contentAfterLink,
-      this.isExpanded});
+      this.isExpanded,
+      required this.icon});
 
   factory Children.fromJson(Map<String, dynamic> srcJson) =>
       _$ChildrenFromJson(srcJson);
@@ -141,7 +147,7 @@ class SubIcon extends Object {
   String pix;
 
   @JsonKey(name: 'classes')
-  List<String> classes;
+  late List<String> classes;
 
   @JsonKey(name: 'alt')
   String alt;
@@ -149,7 +155,14 @@ class SubIcon extends Object {
   @JsonKey(name: 'title')
   String title;
 
-  SubIcon({this.component, this.pix, this.classes, this.alt, this.title});
+  SubIcon(
+      {this.component = "",
+      this.pix = "",
+      List<String>? classes,
+      this.alt = "",
+      this.title = ""}) {
+    this.classes = classes ?? [];
+  }
 
   factory SubIcon.fromJson(Map<String, dynamic> srcJson) =>
       _$SubIconFromJson(srcJson);

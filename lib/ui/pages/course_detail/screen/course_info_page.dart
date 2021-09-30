@@ -24,10 +24,10 @@ class CourseInfoPage extends StatefulWidget {
 
 class _CourseInfoPageState extends State<CourseInfoPage>
     with AutomaticKeepAliveClientMixin {
-  CourseExtraInfoJson courseExtraInfo;
+  late CourseExtraInfoJson courseExtraInfo;
   bool isLoading = true;
   final List<Widget> courseData = [];
-  final List<Widget> listItem = [];
+  final List<Widget?> listItem = [];
   bool canPop = true;
 
   @override
@@ -166,7 +166,7 @@ class _CourseInfoPageState extends State<CourseInfoPage>
     );
   }
 
-  Widget _buildCourseInfo(String text, String info) {
+  Widget? _buildCourseInfo(String text, String info) {
     if (info == null || info.isEmpty) {
       return null;
     }

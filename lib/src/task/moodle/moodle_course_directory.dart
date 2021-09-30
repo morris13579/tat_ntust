@@ -14,7 +14,7 @@ class MoodleCourseDirectoryTask
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
-      List<MoodleCourseDirectoryInfo> value;
+      List<MoodleCourseDirectoryInfo>? value;
       super.onStart(R.current.getMoodleCourseDirectory);
       value = await MoodleConnector.getCourseDirectory(id);
       super.onEnd();

@@ -23,14 +23,14 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  List _selectedEvents;
+  late List _selectedEvents;
   Map<DateTime, List<String>> _events = Map();
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay;
-  DateTime _rangeStart;
-  DateTime _rangeEnd;
+  late DateTime _selectedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _CalendarPageState extends State<CalendarPage> {
               i = i.substring(2, i.length);
             } catch (e) {}
             if (_events.containsKey(time)) {
-              _events[time].add(i);
+              _events[time]!.add(i);
             } else {
               _events[time] = [i];
             }
@@ -83,7 +83,7 @@ class _CalendarPageState extends State<CalendarPage> {
           _selectedDay.month == time.month &&
           _selectedDay.day == time.day) {
         setState(() {
-          _selectedEvents = _events[time];
+          _selectedEvents = _events[time] ?? [];
         });
         break;
       }

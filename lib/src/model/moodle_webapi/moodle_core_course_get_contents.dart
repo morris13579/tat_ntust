@@ -4,178 +4,104 @@
 /// summary : ""
 /// summaryformat : 1
 /// modules : [{"id":392288,"url":"https://moodle.ntust.edu.tw/mod/forum/view.php?id=392288","name":"公佈欄 Bulletin Board","instance":57664,"description":"<div class=\"no-overflow\"><img src=\"https://moodle.ntust.edu.tw/pluginfile.php/826652/mod_label/intro/message_outline.png\" alt=\"\" width=\"26\" height=\"26\" style=\"vertical-align:text-bottom;margin:0 .5em;\" class=\"img-responsive\" /><a href=\"http://moodle.ntust.edu.tw/user/index.php?roleid=3&amp;&amp;id=28914\" target=\"_blank\" rel=\"noreferrer\"> 送訊息連絡老師</a><sup></sup><a href=\"http://moodle.ntust.edu.tw/mod/forum/discuss.php?d=1798#p2260\" target=\"_blank\" rel=\"noreferrer\"><sup>(操作說明)</sup></a></div>","visible":1,"modicon":"https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1631171023/icon","modname":"forum","modplural":"討論區","indent":0,"contents":[{"type":"file","filename":"VLSIout21f.pdf","filepath":"/","filesize":118837,"fileurl":"https://moodle.ntust.edu.tw/webservice/pluginfile.php/843265/mod_resource/content/1/VLSIout21f.pdf?forcedownload=1","timecreated":1629592425,"timemodified":1629592428,"sortorder":1,"userid":5252,"author":"老師@ 林銘波","license":"allrightsreserved"}]},null]
+import 'package:json_annotation/json_annotation.dart';
 
+part 'moodle_core_course_get_contents.g.dart';
+
+/// id : 450596
+/// name : "一般"
+/// visible : 1
+/// summary : ""
+/// summaryformat : 1
+/// modules : [{"id":392288,"url":"https://moodle.ntust.edu.tw/mod/forum/view.php?id=392288","name":"公佈欄 Bulletin Board","instance":57664,"description":"<div class=\"no-overflow\"><img src=\"https://moodle.ntust.edu.tw/pluginfile.php/826652/mod_label/intro/message_outline.png\" alt=\"\" width=\"26\" height=\"26\" style=\"vertical-align:text-bottom;margin:0 .5em;\" class=\"img-responsive\" /><a href=\"http://moodle.ntust.edu.tw/user/index.php?roleid=3&amp;&amp;id=28914\" target=\"_blank\" rel=\"noreferrer\"> 送訊息連絡老師</a><sup></sup><a href=\"http://moodle.ntust.edu.tw/mod/forum/discuss.php?d=1798#p2260\" target=\"_blank\" rel=\"noreferrer\"><sup>(操作說明)</sup></a></div>","visible":1,"modicon":"https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1631171023/icon","modname":"forum","modplural":"討論區","indent":0,"contents":[{"type":"file","filename":"VLSIout21f.pdf","filepath":"/","filesize":118837,"fileurl":"https://moodle.ntust.edu.tw/webservice/pluginfile.php/843265/mod_resource/content/1/VLSIout21f.pdf?forcedownload=1","timecreated":1629592425,"timemodified":1629592428,"sortorder":1,"userid":5252,"author":"老師@ 林銘波","license":"allrightsreserved"}]},null]
+
+@JsonSerializable()
 class MoodleCoreCourseGetContents {
-  int _id;
-  String _name;
-  int _visible;
-  String _summary;
-  int _summaryformat;
-  List<Modules> _modules;
+  @JsonKey(name: 'id')
+  int id;
 
-  int get id => _id;
+  @JsonKey(name: 'name')
+  String name;
 
-  String get name => _name;
+  @JsonKey(name: 'visible')
+  int visible;
 
-  int get visible => _visible;
+  @JsonKey(name: 'summary')
+  String summary;
 
-  String get summary => _summary;
+  @JsonKey(name: 'summaryformat')
+  int summaryformat;
 
-  int get summaryformat => _summaryformat;
-
-  List<Modules> get modules => _modules;
+  @JsonKey(name: 'modules')
+  late List<Modules> modules;
 
   MoodleCoreCourseGetContents(
-      {int id,
-      String name,
-      int visible,
-      String summary,
-      int summaryformat,
-      List<Modules> modules}) {
-    _id = id;
-    _name = name;
-    _visible = visible;
-    _summary = summary;
-    _summaryformat = summaryformat;
-    _modules = modules;
+      {this.id = 0,
+      this.name = "",
+      this.summary = "",
+      this.summaryformat = 0,
+      this.visible = 0,
+      List<Modules>? modules}) {
+    this.modules = modules ?? [];
   }
 
-  MoodleCoreCourseGetContents.fromJson(dynamic json) {
-    _id = json['id'];
-    _name = json['name'];
-    _visible = json['visible'];
-    _summary = json['summary'];
-    _summaryformat = json['summaryformat'];
-    if (json['modules'] != null) {
-      _modules = [];
-      json['modules'].forEach((v) {
-        _modules.add(Modules.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map['id'] = _id;
-    map['name'] = _name;
-    map['visible'] = _visible;
-    map['summary'] = _summary;
-    map['summaryformat'] = _summaryformat;
-    if (_modules != null) {
-      map['modules'] = _modules.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
+  factory MoodleCoreCourseGetContents.fromJson(Map<String, dynamic> srcJson) =>
+      _$MoodleCoreCourseGetContentsFromJson(srcJson);
 }
 
-/// id : 392288
-/// url : "https://moodle.ntust.edu.tw/mod/forum/view.php?id=392288"
-/// name : "公佈欄 Bulletin Board"
-/// instance : 57664
-/// description : "<div class=\"no-overflow\"><img src=\"https://moodle.ntust.edu.tw/pluginfile.php/826652/mod_label/intro/message_outline.png\" alt=\"\" width=\"26\" height=\"26\" style=\"vertical-align:text-bottom;margin:0 .5em;\" class=\"img-responsive\" /><a href=\"http://moodle.ntust.edu.tw/user/index.php?roleid=3&amp;&amp;id=28914\" target=\"_blank\" rel=\"noreferrer\"> 送訊息連絡老師</a><sup></sup><a href=\"http://moodle.ntust.edu.tw/mod/forum/discuss.php?d=1798#p2260\" target=\"_blank\" rel=\"noreferrer\"><sup>(操作說明)</sup></a></div>"
-/// visible : 1
-/// modicon : "https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1631171023/icon"
-/// modname : "forum"
-/// modplural : "討論區"
-/// indent : 0
-/// contents : [{"type":"file","filename":"VLSIout21f.pdf","filepath":"/","filesize":118837,"fileurl":"https://moodle.ntust.edu.tw/webservice/pluginfile.php/843265/mod_resource/content/1/VLSIout21f.pdf?forcedownload=1","timecreated":1629592425,"timemodified":1629592428,"sortorder":1,"userid":5252,"author":"老師@ 林銘波","license":"allrightsreserved"}]
+@JsonSerializable()
+class Modules extends Object {
+  @JsonKey(name: 'id')
+  int id;
 
-class Modules {
-  int _id;
-  String _url;
-  String _name;
-  int _instance;
-  String _description;
-  int _visible;
-  String _modicon;
-  String _modname;
-  String _modplural;
-  int _indent;
-  List<Contents> _contents;
+  @JsonKey(name: 'url')
+  String url;
 
-  int get id => _id;
+  @JsonKey(name: 'name')
+  String name;
 
-  String get url => _url;
+  @JsonKey(name: 'instance')
+  int instance;
 
-  String get name => _name;
+  @JsonKey(name: 'description')
+  String description;
 
-  int get instance => _instance;
+  @JsonKey(name: 'visible')
+  int visible;
 
-  String get description => _description;
+  @JsonKey(name: 'modicon')
+  String modicon;
 
-  int get visible => _visible;
+  @JsonKey(name: 'modname')
+  String modname;
 
-  String get modicon => _modicon;
+  @JsonKey(name: 'modplural')
+  String modplural;
 
-  String get modname => _modname;
+  @JsonKey(name: 'indent')
+  int indent;
 
-  String get modplural => _modplural;
+  @JsonKey(name: 'contents')
+  late List<Contents> contents;
 
-  int get indent => _indent;
-
-  List<Contents> get contents => _contents;
-
-  Modules(
-      {int id,
-      String url,
-      String name,
-      int instance,
-      String description,
-      int visible,
-      String modicon,
-      String modname,
-      String modplural,
-      int indent,
-      List<Contents> contents}) {
-    _id = id;
-    _url = url;
-    _name = name;
-    _instance = instance;
-    _description = description;
-    _visible = visible;
-    _modicon = modicon;
-    _modname = modname;
-    _modplural = modplural;
-    _indent = indent;
-    _contents = contents;
+  Modules({
+    this.id = 0,
+    this.url = "",
+    this.name = "",
+    this.instance = 0,
+    this.description = "",
+    this.visible = 0,
+    this.modicon = "",
+    this.modname = "",
+    this.modplural = "",
+    this.indent = 0,
+    List<Contents>? contents,
+  }) {
+    this.contents = contents ?? [];
   }
 
-  Modules.fromJson(dynamic json) {
-    _id = json['id'];
-    _url = json['url'];
-    _name = json['name'];
-    _instance = json['instance'];
-    _description = json['description'];
-    _visible = json['visible'];
-    _modicon = json['modicon'];
-    _modname = json['modname'];
-    _modplural = json['modplural'];
-    _indent = json['indent'];
-    if (json['contents'] != null) {
-      _contents = [];
-      json['contents'].forEach((v) {
-        _contents.add(Contents.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map['id'] = _id;
-    map['url'] = _url;
-    map['name'] = _name;
-    map['instance'] = _instance;
-    map['description'] = _description;
-    map['visible'] = _visible;
-    map['modicon'] = _modicon;
-    map['modname'] = _modname;
-    map['modplural'] = _modplural;
-    map['indent'] = _indent;
-    if (_contents != null) {
-      map['contents'] = _contents.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
+  factory Modules.fromJson(Map<String, dynamic> srcJson) =>
+      _$ModulesFromJson(srcJson);
 }
 
 /// type : "file"
@@ -189,94 +115,55 @@ class Modules {
 /// userid : 5252
 /// author : "老師@ 林銘波"
 /// license : "allrightsreserved"
+@JsonSerializable()
+class Contents extends Object {
+  @JsonKey(name: 'type')
+  String type;
 
-class Contents {
-  String _type;
-  String _filename;
-  String _filepath;
-  int _filesize;
-  String _fileurl;
-  int _timecreated;
-  int _timemodified;
-  int _sortorder;
-  int _userid;
-  String _author;
-  String _license;
+  @JsonKey(name: 'filename')
+  String filename;
 
-  String get type => _type;
+  @JsonKey(name: 'filepath')
+  String filepath;
 
-  String get filename => _filename;
+  @JsonKey(name: 'filesize')
+  int filesize;
 
-  String get filepath => _filepath;
+  @JsonKey(name: 'fileurl')
+  String fileurl;
 
-  int get filesize => _filesize;
+  @JsonKey(name: 'timecreated')
+  int timecreated;
 
-  String get fileurl => _fileurl;
+  @JsonKey(name: 'timemodified')
+  int timemodified;
 
-  int get timecreated => _timecreated;
+  @JsonKey(name: 'sortorder')
+  int sortorder;
 
-  int get timemodified => _timemodified;
+  @JsonKey(name: 'userid')
+  int userid;
 
-  int get sortorder => _sortorder;
+  @JsonKey(name: 'author')
+  String author;
 
-  int get userid => _userid;
+  @JsonKey(name: 'license')
+  String license;
 
-  String get author => _author;
+  Contents({
+    this.type = "",
+    this.filename = "",
+    this.filepath = "",
+    this.filesize = 0,
+    this.fileurl = "",
+    this.timecreated = 0,
+    this.timemodified = 0,
+    this.sortorder = 0,
+    this.userid = 0,
+    this.author = "",
+    this.license = "",
+  });
 
-  String get license => _license;
-
-  Contents(
-      {String type,
-      String filename,
-      String filepath,
-      int filesize,
-      String fileurl,
-      int timecreated,
-      int timemodified,
-      int sortorder,
-      int userid,
-      String author,
-      String license}) {
-    _type = type;
-    _filename = filename;
-    _filepath = filepath;
-    _filesize = filesize;
-    _fileurl = fileurl;
-    _timecreated = timecreated;
-    _timemodified = timemodified;
-    _sortorder = sortorder;
-    _userid = userid;
-    _author = author;
-    _license = license;
-  }
-
-  Contents.fromJson(dynamic json) {
-    _type = json['type'];
-    _filename = json['filename'];
-    _filepath = json['filepath'];
-    _filesize = json['filesize'];
-    _fileurl = json['fileurl'];
-    _timecreated = json['timecreated'];
-    _timemodified = json['timemodified'];
-    _sortorder = json['sortorder'];
-    _userid = json['userid'];
-    _author = json['author'];
-    _license = json['license'];
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map['type'] = _type;
-    map['filename'] = _filename;
-    map['filepath'] = _filepath;
-    map['filesize'] = _filesize;
-    map['fileurl'] = _fileurl;
-    map['timecreated'] = _timecreated;
-    map['timemodified'] = _timemodified;
-    map['sortorder'] = _sortorder;
-    map['userid'] = _userid;
-    map['author'] = _author;
-    map['license'] = _license;
-    return map;
-  }
+  factory Contents.fromJson(Map<String, dynamic> srcJson) =>
+      _$ContentsFromJson(srcJson);
 }

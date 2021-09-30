@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 class CustomAlert extends StatelessWidget {
   final Widget child;
 
-  CustomAlert({Key key, @required this.child}) : super(key: key);
+  CustomAlert({required this.child});
 
-  double deviceWidth;
-  double deviceHeight;
-  double dialogHeight;
+  double? deviceWidth;
+  double? deviceHeight;
+  double? dialogHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class CustomAlert extends StatelessWidget {
     deviceHeight = orientation == Orientation.portrait
         ? screenSize.height
         : screenSize.width;
-    dialogHeight = deviceHeight * (0.50);
+    dialogHeight = deviceHeight! * (0.50);
 
     return MediaQuery(
       data: MediaQueryData(),
@@ -45,7 +45,7 @@ class CustomAlert extends StatelessWidget {
                     children: <Widget>[
                       Center(
                         child: Container(
-                          width: deviceWidth * 0.9,
+                          width: deviceWidth! * 0.9,
                           child: GestureDetector(
                             onTap: () {},
                             child: Card(

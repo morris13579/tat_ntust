@@ -4,9 +4,8 @@ class PathBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget child;
 
   PathBar({
-    Key key,
-    @required this.child,
-  }) : super(key: key);
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {

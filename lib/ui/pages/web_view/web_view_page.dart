@@ -10,12 +10,12 @@ class WebViewPage extends StatefulWidget {
   final Uri url;
   final String title;
   final bool openWithExternalWebView;
-  final Function(Uri) onWebViewDownload;
+  final Function(Uri)? onWebViewDownload;
 
   WebViewPage(
-      {this.title,
-      this.url,
-      this.openWithExternalWebView,
+      {required this.title,
+      required this.url,
+      this.openWithExternalWebView = false,
       this.onWebViewDownload});
 
   @override
@@ -25,11 +25,11 @@ class WebViewPage extends StatefulWidget {
 class _WebViewPageState extends State<WebViewPage> {
   final cookieManager = CookieManager.instance();
   final cookieJar = DioConnector.instance.cookiesManager;
-  InAppWebViewController webView;
+  InAppWebViewController? webView;
   Uri url = Uri();
   double progress = 0;
   int onLoadStopTime = -1;
-  Uri lastLoadUri;
+  Uri? lastLoadUri;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     if (onLoadStopTime >= 1) {
-      webView.goBack();
+      webView!.goBack();
       onLoadStopTime -= 2;
       return true;
     }
@@ -60,7 +60,7 @@ class _WebViewPageState extends State<WebViewPage> {
         name: cookie.name,
         value: cookie.value,
         domain: cookie.domain,
-        path: cookie.path,
+        path: cookie.path!,
         maxAge: cookie.maxAge,
         isSecure: cookie.secure,
         isHttpOnly: cookie.httpOnly,
@@ -80,7 +80,7 @@ class _WebViewPageState extends State<WebViewPage> {
             child: InkWell(
               onTap: () async {
                 if (webView != null) {
-                  await webView.goBack();
+                  await webView!.goBack();
                 }
               },
               child: Icon(Icons.arrow_back, color: Colors.white),
@@ -91,7 +91,7 @@ class _WebViewPageState extends State<WebViewPage> {
             child: InkWell(
               onTap: () async {
                 if (webView != null) {
-                  await webView.goForward();
+                  await webView!.goForward();
                 }
               },
               child: Icon(Icons.arrow_forward, color: Colors.white),
@@ -102,7 +102,7 @@ class _WebViewPageState extends State<WebViewPage> {
             child: InkWell(
               onTap: () async {
                 if (webView != null) {
-                  await webView.reload();
+                  await webView!.reload();
                 }
               },
               child: Icon(Icons.refresh, color: Colors.white),
@@ -147,20 +147,20 @@ class _WebViewPageState extends State<WebViewPage> {
                             webView = controller;
                           },
                           onLoadStart:
-                              (InAppWebViewController controller, Uri url) {
+                              (InAppWebViewController controller, Uri? url) {
                             setState(() {
                               if (lastLoadUri != url) {
                                 onLoadStopTime++;
                               }
                               lastLoadUri = url;
-                              this.url = url;
+                              this.url = url!;
                             });
                           },
                           onLoadStop: (InAppWebViewController controller,
-                              Uri url) async {
+                              Uri? url) async {
                             setState(
                               () {
-                                this.url = url;
+                                this.url = url!;
                               },
                             );
                           },
@@ -176,7 +176,7 @@ class _WebViewPageState extends State<WebViewPage> {
                               (InAppWebViewController controller, Uri url) {
                             Log.d("WebView download ${url.toString()}");
                             if (widget.onWebViewDownload != null) {
-                              widget.onWebViewDownload(url);
+                              widget.onWebViewDownload!(url);
                             } else {
                               String dirName = "WebView";
                               FileDownload.download(

@@ -84,7 +84,7 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
                       child: SelectableHtml(
                         data: ap.description,
                         onLinkTap: (url, context, attributes, element) {
-                          RouteUtils.toWebViewPage(element.text, url,
+                          RouteUtils.toWebViewPage(element!.text, url!,
                               openWithExternalWebView: false);
                         },
                       ),

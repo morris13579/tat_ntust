@@ -33,7 +33,7 @@ class MyDownloader {
         String mapId = keyList[i];
         if (mapId == id) {
           Log.d("$id find callback");
-          _callBackMap[mapId]();
+          _callBackMap[mapId]!();
           //Function.apply(_callBackMap[mapId] , []);
           _callBackMap.remove(mapId);
         }
@@ -52,7 +52,7 @@ class MyDownloader {
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
     final SendPort send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
+        IsolateNameServer.lookupPortByName('downloader_send_port')!;
     send.send([id, status, progress]);
   }
 

@@ -74,8 +74,8 @@ class _DevPageState extends State<DevPage> {
   void _onListViewPress(onListViewPress value) async {
     switch (value) {
       case onListViewPress.CloudMessageToken:
-        String token = await CloudMessagingUtils.getToken();
-        MyToast.show(token + " copy");
+        String? token = await CloudMessagingUtils.getToken();
+        MyToast.show(token! + " copy");
         FlutterClipboard.copy(token);
         break;
       case onListViewPress.DioLog:

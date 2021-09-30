@@ -6,9 +6,7 @@ import 'package:flutter_app/src/task/ntust/ntust_task.dart';
 import '../task.dart';
 
 class NTUSTSubSystemTask extends NTUSTTask<APTreeJson> {
-  final String arg;
-
-  NTUSTSubSystemTask(this.arg) : super("NTUSTSubSystemTask");
+  NTUSTSubSystemTask() : super("NTUSTSubSystemTask");
 
   @override
   Future<TaskStatus> execute() async {

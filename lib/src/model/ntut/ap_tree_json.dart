@@ -22,7 +22,7 @@ class APListJson {
   @JsonKey(name: 'type')
   String type;
 
-  APListJson({this.name, this.url, this.type});
+  APListJson({this.name = "", this.url = "", this.type = ""});
 
   factory APListJson.fromJson(Map<String, dynamic> srcJson) =>
       _$APListJsonFromJson(srcJson);

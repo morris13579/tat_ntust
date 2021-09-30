@@ -25,8 +25,8 @@ class CourseDetailPage extends StatefulWidget {
 
 class _CourseDetailPageState extends State<CourseDetailPage>
     with SingleTickerProviderStateMixin {
-  TabPageList tabPageList;
-  TabController _tabController;
+  late TabPageList tabPageList;
+  late TabController _tabController;
   PageController _pageController = PageController();
   int _currentIndex = 0;
 
@@ -56,7 +56,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
   @override
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
-      builder: (BuildContext context, AppProvider appProvider, Widget child) {
+      builder: (BuildContext context, AppProvider appProvider, Widget? child) {
         return WillPopScope(
           onWillPop: () async {
             var currentState = tabPageList.getKey(_currentIndex).currentState;

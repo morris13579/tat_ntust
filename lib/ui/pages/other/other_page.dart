@@ -163,7 +163,9 @@ class _OtherPageState extends State<OtherPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      Model.instance.getAccount() ?? R.current.pleaseLogin,
+                      (Model.instance.getAccount().isEmpty)
+                          ? R.current.pleaseLogin
+                          : Model.instance.getAccount(),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

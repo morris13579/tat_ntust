@@ -19,7 +19,7 @@ class CourseDirectoryPage extends StatefulWidget {
 class _CourseDirectoryPageState extends State<CourseDirectoryPage>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
-  List<MoodleCourseDirectoryInfo> directoryList;
+  late List<MoodleCourseDirectoryInfo> directoryList;
 
   @override
   void initState() {

@@ -21,16 +21,16 @@ import 'file_store.dart';
 
 class FileDownload {
   static Future<void> download(BuildContext context, String url, dirName,
-      [String name = "", String referer]) async {
+      [String name = "", String? referer]) async {
     String path = await FileStore.getDownloadDir(context, dirName); //取得下載路徑
-    String realFileName;
+    String? realFileName;
     String fileExtension;
     referer = referer ?? url;
     Log.d("file download \n url: $url \n referer: $referer");
     //顯示下載通知窗
     ReceivedNotification value = ReceivedNotification(
         title: name, body: R.current.prepareDownload, payload: null); //通知窗訊息
-    CancelToken cancelToken; //取消下載用
+    CancelToken? cancelToken; //取消下載用
     ProgressCallback onReceiveProgress; //下載進度回調
     await Notifications.instance.showIndeterminateProgressNotification(value);
     //顯示下載進度通知窗
@@ -59,17 +59,17 @@ class FileDownload {
       Log.d("download header $headers");
       if (headers.containsKey("content-disposition")) {
         //代表有名字
-        List<String> names = headers["content-disposition"];
+        List<String> names = headers["content-disposition"]!;
         String decodeName = utf8.decode(Uint8List.fromList(names[0].codeUnits));
         RegExp exp =
             RegExp("['|\"](?<name>.+)['|\"]"); //尋找 'name' , "name" 的name
-        RegExpMatch matches = exp.firstMatch(decodeName);
-        realFileName = matches.group(1);
+        RegExpMatch matches = exp.firstMatch(decodeName)!;
+        realFileName = matches.group(1)!;
       }
       realFileName ??= name;
       value.title = realFileName;
-      Log.d(path + "/" + realFileName);
-      return path + "/" + realFileName;
+      Log.d(path + "/" + realFileName!);
+      return path + "/" + realFileName!;
     },
         progressCallback: onReceiveProgress,
         cancelToken: cancelToken,
@@ -79,7 +79,7 @@ class FileDownload {
         await Notifications.instance.cancelNotification(value.id);
         value.body = R.current.downloadComplete;
         value.id = Notifications.instance.notificationId; //取得新的id
-        String filePath = path + '/' + realFileName;
+        String filePath = path + '/' + realFileName!;
         int id = value.id;
         value.payload = json.encode({
           "type": "download_complete",

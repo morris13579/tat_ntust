@@ -15,7 +15,7 @@ class MoodleCourseAnnouncementDetailTask extends MoodleTask<String> {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
       super.onStart(R.current.getMoodleCourseAnnouncement);
-      String value = await MoodleConnector.getCourseAnnouncementDetail(url);
+      String? value = await MoodleConnector.getCourseAnnouncementDetail(url);
       super.onEnd();
       if (value != null) {
         result = value;

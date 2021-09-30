@@ -13,7 +13,7 @@ class MoodleMemberTask extends MoodleTask<List<MoodleUserInfo>> {
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
-      List<MoodleUserInfo> value;
+      List<MoodleUserInfo>? value;
       super.onStart(R.current.getMoodleMembers);
       value = await MoodleConnector.getMember(id);
       super.onEnd();

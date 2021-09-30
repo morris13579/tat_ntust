@@ -25,7 +25,7 @@ class CourseAnnouncementDetailPage extends StatefulWidget {
 class _CourseAnnouncementDetailPageState
     extends State<CourseAnnouncementDetailPage> {
   bool isLoading = true;
-  String html;
+  late String html;
 
   @override
   void initState() {
@@ -63,11 +63,11 @@ class _CourseAnnouncementDetailPageState
               child: SelectableHtml(
                 data: html,
                 onLinkTap: (url, renderContext, attributes, element) async {
-                  if (Uri.parse(url).path.contains("pluginfile.php")) {
+                  if (Uri.parse(url!).path.contains("pluginfile.php")) {
                     await AnalyticsUtils.logDownloadFileEvent();
                     MyToast.show(R.current.downloadWillStart);
                     String dirName = widget.courseInfo.main.course.name;
-                    FileDownload.download(context, url, dirName, element.text);
+                    FileDownload.download(context, url, dirName, element!.text);
                   } else {
                     RouteUtils.toWebViewPage(widget.value.name, url);
                   }

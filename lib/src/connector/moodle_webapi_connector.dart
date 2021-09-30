@@ -11,7 +11,7 @@ class MoodleWebApiConnector {
   static final String _webAPIUrl = "$host/webservice/rest/server.php";
   static final String _webAPILoginUrl = "$host/login/token.php";
 
-  static String wsToken;
+  static String? wsToken;
 
   static Future<MoodleWebApiConnectorStatus> login(
       String account, String password) async {
@@ -71,7 +71,7 @@ class MoodleWebApiConnector {
     }
   }
 
-  static Future<List<MoodleCoreCourseGetContents>> getCourseDirectory(
+  static Future<List<MoodleCoreCourseGetContents>?> getCourseDirectory(
       String id) async {
     ConnectorParameter parameter;
     List result;
@@ -96,13 +96,16 @@ class MoodleWebApiConnector {
     }
   }
 
-  static Future<MoodleModForumGetForumDiscussionsPaginated> getCourseMessage(
+  static Future<MoodleModForumGetForumDiscussionsPaginated?> getCourseMessage(
       String id) async {
     ConnectorParameter parameter;
     Map result;
     try {
-      List<MoodleCoreCourseGetContents> v = await getCourseDirectory(id);
-      String forumId;
+      List<MoodleCoreCourseGetContents>? v = await getCourseDirectory(id);
+      if (v == null) {
+        throw Exception("List<MoodleCoreCourseGetContents> is null");
+      }
+      String? forumId;
       for (var i in v) {
         if (i.name.contains("一般")) {
           for (var j in i.modules) {
@@ -129,7 +132,7 @@ class MoodleWebApiConnector {
         "sortdirection": "desc",
       };
       result = await Connector.getJsonByPost(parameter);
-      return MoodleModForumGetForumDiscussionsPaginated.fromJson(result);
+      return MoodleModForumGetForumDiscussionsPaginated.fromJson(result as Map<String,dynamic>);
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
       return null;

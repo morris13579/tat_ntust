@@ -17,7 +17,7 @@ class CourseSemesterTask extends DialogTask<List<SemesterJson>> {
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
-      List<SemesterJson> value;
+      List<SemesterJson>? value;
       super.onStart(R.current.getCourseSemester);
       value = await CourseConnector.getCourseSemesters();
       super.onEnd();

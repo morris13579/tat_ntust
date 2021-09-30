@@ -58,7 +58,7 @@ class SortSheet extends StatelessWidget {
                                         listen: false)
                                     .sort
                             ? Colors.blue
-                            : Theme.of(context).textTheme.headline6.color,
+                            : Theme.of(context).textTheme.headline6!.color,
                       ),
                     ),
                   );

@@ -51,8 +51,8 @@ Future<Null> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppProvider>(
-        builder: (BuildContext context, AppProvider appProvider, Widget child) {
+    return Consumer<AppProvider>(builder:
+        (BuildContext context, AppProvider appProvider, Widget? child) {
       appProvider.navigatorKey = Get.key;
       return GetMaterialApp(
         title: AppConfig.appName,
@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
         ],
         supportedLocales: S.delegate.supportedLocales,
         home: MainScreen(),
-        logWriterCallback: (String text, {bool isError}) {
+        logWriterCallback: (String text, {bool? isError}) {
           Log.d(text);
         },
       );

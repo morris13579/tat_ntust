@@ -15,10 +15,13 @@ class MoodleCourseBranchTask extends MoodleTask<MoodleBranchJson> {
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
-      MoodleBranchJson value;
+      MoodleBranchJson? value;
       super.onStart(R.current.getMoodleCourseBranch);
       value = await MoodleConnector.getCourseBranch(info);
       try {
+        if (value == null) {
+          throw Exception("value is null");
+        }
         for (var i in value.children) {
           if (i.link != null) {
             i.link += (LanguageUtils.getLangIndex() == LangEnum.zh)

@@ -26,7 +26,7 @@ class CourseBranchPage extends StatefulWidget {
 
 class _CourseBranchPageState extends State<CourseBranchPage> {
   bool isLoading = true;
-  MoodleBranchJson moodleBranch;
+  late MoodleBranchJson moodleBranch;
 
   @override
   void initState() {
@@ -124,7 +124,7 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
       default:
         if (ap.contentAfterLink != null) {
           return ExpansionTileCard(
-            expandedTextColor: Theme.of(context).textTheme.bodyText1.color,
+            expandedTextColor: Theme.of(context).textTheme.bodyText1!.color,
             expandedColor: getColor(index),
             baseColor: getColor(index),
             title: Text(

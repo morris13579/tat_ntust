@@ -41,7 +41,9 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    AnalyticsUtils.observer.subscribe(this, ModalRoute.of(context));
+
+    AnalyticsUtils.observer
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
@@ -91,7 +93,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
-      builder: (BuildContext context, AppProvider appProvider, Widget child) {
+      builder: (BuildContext context, AppProvider appProvider, Widget? child) {
         appProvider.navigatorKey = Get.key;
         return WillPopScope(
           onWillPop: _onWillPop,

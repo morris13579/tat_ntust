@@ -39,7 +39,7 @@ class HtmlUtils {
         r'\"?(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]\"?');
     List<RegExpMatch> matchList = exp.allMatches(html).toList();
     for (RegExpMatch match in matchList) {
-      String url = match.group(0);
+      String url = match.group(0)!;
       if (!url.contains("\"")) {
         html = html.replaceAll(
             url, r'<a href="' + url + '" target="_blank">' + url + '</a>');

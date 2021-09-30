@@ -7,15 +7,14 @@ import 'dir_popup.dart';
 
 class DirectoryItem extends StatelessWidget {
   final FileSystemEntity file;
-  final Function tap;
-  final Function popTap;
+  final GestureTapCallback tap;
+  final PopupMenuItemSelected? popTap;
 
   DirectoryItem({
-    Key key,
-    @required this.file,
-    @required this.tap,
-    @required this.popTap,
-  }) : super(key: key);
+    required this.file,
+    required this.tap,
+    required this.popTap,
+  });
 
   @override
   Widget build(BuildContext context) {

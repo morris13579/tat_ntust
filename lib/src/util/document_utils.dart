@@ -10,26 +10,27 @@ import 'package:flutter_app/src/file/file_store.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 
 class DocumentUtils {
-  static const platform =
-      MethodChannel(AppConfig.method_channel_save_name);
+  static const platform = MethodChannel(AppConfig.method_channel_save_name);
 
-  static Future<String> _getPath() => platform.invokeMethod<String>("get_path");
+  static Future<String?>? _getPath() =>
+      platform.invokeMethod<String>("get_path");
 
-  static Future<bool> _choiceFolder() => platform.invokeMethod("choice_folder");
+  static Future<bool?>? _choiceFolder() =>
+      platform.invokeMethod("choice_folder");
 
-  static Future<dynamic> choiceFolder({int saveMode}) async {
+  static Future<dynamic> choiceFolder() async {
     if (Platform.isAndroid) {
-      String directory;
+      String? directory;
       if (await _isSupportSAF()) {
         MyToast.show("SAF");
-        bool result = await _choiceFolder();
-        if (result) {
-          directory = await _getPath();
+        bool? result = await _choiceFolder();
+        if (result!) {
+          directory = (await _getPath());
         } else {
           return null;
         }
       } else {
-        directory = await FilePicker.platform.getDirectoryPath();
+        directory = (await FilePicker.platform.getDirectoryPath());
       }
       Log.d(directory);
       if (directory == "/" || directory == null) {

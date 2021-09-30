@@ -1,31 +1,22 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'moodle_mod_forum_get_forum_discussions_paginated.g.dart';
+
 /// discussions : [{"id":242038,"name":"論文研討注意事項","groupid":-1,"timemodified":1631163160,"usermodified":51406,"timestart":0,"timeend":0,"discussion":153487,"parent":0,"userid":51406,"created":1631163160,"modified":1631163160,"mailed":1,"subject":"論文研討注意事項","message":"<p>各位同學好，附件是本學期論文研討的相關規定<br /></p>","messageformat":1,"messagetrust":0,"attachment":"1","attachments":[{"filename":"110_1論文研討的規定.pptx","mimetype":"application/vnd.openxmlformats-officedocument.presentationml.presentation","fileurl":"https://moodle.ntust.edu.tw/webservice/pluginfile.php/826780/mod_forum/attachment/242038/110_1%E8%AB%96%E6%96%87%E7%A0%94%E8%A8%8E%E7%9A%84%E8%A6%8F%E5%AE%9A.pptx"}],"totalscore":0,"mailnow":0,"userfullname":"M10902113@ 陳彥丞","usermodifiedfullname":"M10902113@ 陳彥丞","userpictureurl":"https://moodle.ntust.edu.tw/theme/image.php/essential/core/1631171023/u/f1","usermodifiedpictureurl":"https://moodle.ntust.edu.tw/theme/image.php/essential/core/1631171023/u/f1","numreplies":"0","numunread":0,"pinned":false}]
 /// warnings : []
 
+@JsonSerializable()
 class MoodleModForumGetForumDiscussionsPaginated {
-  List<Discussions> _discussions;
+  @JsonKey(name: 'discussions')
+  late List<Discussions> discussions;
 
-  List<Discussions> get discussions => _discussions;
-
-  MoodleModForumGetForumDiscussionsPaginated({List<Discussions> discussions}) {
-    _discussions = discussions;
+  MoodleModForumGetForumDiscussionsPaginated({List<Discussions>? discussions}) {
+    this.discussions = discussions ?? [];
   }
 
-  MoodleModForumGetForumDiscussionsPaginated.fromJson(dynamic json) {
-    if (json['discussions'] != null) {
-      _discussions = [];
-      json['discussions'].forEach((v) {
-        _discussions.add(Discussions.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    if (_discussions != null) {
-      map['discussions'] = _discussions.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
+  factory MoodleModForumGetForumDiscussionsPaginated.fromJson(
+          Map<String, dynamic> srcJson) =>
+      _$MoodleModForumGetForumDiscussionsPaginatedFromJson(srcJson);
 }
 
 /// id : 242038
@@ -56,256 +47,148 @@ class MoodleModForumGetForumDiscussionsPaginated {
 /// numreplies : "0"
 /// numunread : 0
 /// pinned : false
+@JsonSerializable()
+class Discussions extends Object {
+  @JsonKey(name: 'id')
+  int id;
 
-class Discussions {
-  int _id;
-  String _name;
-  int _groupid;
-  int _timemodified;
-  int _usermodified;
-  int _timestart;
-  int _timeend;
-  int _discussion;
-  int _parent;
-  int _userid;
-  int _created;
-  int _modified;
-  int _mailed;
-  String _subject;
-  String _message;
-  int _messageformat;
-  int _messagetrust;
-  String _attachment;
-  List<Attachments> _attachments;
-  int _totalscore;
-  int _mailnow;
-  String _userfullname;
-  String _usermodifiedfullname;
-  String _userpictureurl;
-  String _usermodifiedpictureurl;
-  String _numreplies;
-  int _numunread;
-  bool _pinned;
+  @JsonKey(name: 'name')
+  String name;
 
-  int get id => _id;
+  @JsonKey(name: 'groupid')
+  int groupid;
 
-  String get name => _name;
+  @JsonKey(name: 'timemodified')
+  int timemodified;
 
-  int get groupid => _groupid;
+  @JsonKey(name: 'usermodified')
+  int usermodified;
 
-  int get timemodified => _timemodified;
+  @JsonKey(name: 'timestart')
+  int timestart;
 
-  int get usermodified => _usermodified;
+  @JsonKey(name: 'timeend')
+  int timeend;
 
-  int get timestart => _timestart;
+  @JsonKey(name: 'discussion')
+  int discussion;
 
-  int get timeend => _timeend;
+  @JsonKey(name: 'parent')
+  int parent;
 
-  int get discussion => _discussion;
+  @JsonKey(name: 'userid')
+  int userid;
 
-  int get parent => _parent;
+  @JsonKey(name: 'created')
+  int created;
 
-  int get userid => _userid;
+  @JsonKey(name: 'modified')
+  int modified;
 
-  int get created => _created;
+  @JsonKey(name: 'mailed')
+  int mailed;
 
-  int get modified => _modified;
+  @JsonKey(name: 'subject')
+  String subject;
 
-  int get mailed => _mailed;
+  @JsonKey(name: 'message')
+  String message;
 
-  String get subject => _subject;
+  @JsonKey(name: 'messageformat')
+  int messageformat;
 
-  String get message => _message;
+  @JsonKey(name: 'messagetrust')
+  int messagetrust;
 
-  int get messageformat => _messageformat;
+  @JsonKey(name: 'attachment')
+  String attachment;
 
-  int get messagetrust => _messagetrust;
+  @JsonKey(name: 'attachments')
+  List<Attachments> attachments;
 
-  String get attachment => _attachment;
+  @JsonKey(name: 'totalscore')
+  int totalscore;
 
-  List<Attachments> get attachments => _attachments;
+  @JsonKey(name: 'mailnow')
+  int mailnow;
 
-  int get totalscore => _totalscore;
+  @JsonKey(name: 'userfullname')
+  String userfullname;
 
-  int get mailnow => _mailnow;
+  @JsonKey(name: 'usermodifiedfullname')
+  String usermodifiedfullname;
 
-  String get userfullname => _userfullname;
+  @JsonKey(name: 'userpictureurl')
+  String userpictureurl;
 
-  String get usermodifiedfullname => _usermodifiedfullname;
+  @JsonKey(name: 'usermodifiedpictureurl')
+  String usermodifiedpictureurl;
 
-  String get userpictureurl => _userpictureurl;
+  @JsonKey(name: 'numreplies')
+  String numreplies;
 
-  String get usermodifiedpictureurl => _usermodifiedpictureurl;
+  @JsonKey(name: 'numunread')
+  int numunread;
 
-  String get numreplies => _numreplies;
+  @JsonKey(name: 'pinned')
+  bool pinned;
 
-  int get numunread => _numunread;
+  Discussions({
+    this.id = 0,
+    this.name = "",
+    this.groupid = 0,
+    this.timemodified = 0,
+    this.usermodified = 0,
+    this.timestart = 0,
+    this.timeend = 0,
+    this.discussion = 0,
+    this.parent = 0,
+    this.userid = 0,
+    this.created = 0,
+    this.modified = 0,
+    this.mailed = 0,
+    this.subject = "",
+    this.message = "",
+    this.messageformat = 0,
+    this.messagetrust = 0,
+    this.attachment = "",
+    this.attachments = const [],
+    this.totalscore = 0,
+    this.mailnow = 0,
+    this.userfullname = "",
+    this.usermodifiedfullname = "",
+    this.userpictureurl = "",
+    this.usermodifiedpictureurl = "",
+    this.numreplies = "",
+    this.numunread = 0,
+    this.pinned = false,
+  });
 
-  bool get pinned => _pinned;
-
-  Discussions(
-      {int id,
-      String name,
-      int groupid,
-      int timemodified,
-      int usermodified,
-      int timestart,
-      int timeend,
-      int discussion,
-      int parent,
-      int userid,
-      int created,
-      int modified,
-      int mailed,
-      String subject,
-      String message,
-      int messageformat,
-      int messagetrust,
-      String attachment,
-      List<Attachments> attachments,
-      int totalscore,
-      int mailnow,
-      String userfullname,
-      String usermodifiedfullname,
-      String userpictureurl,
-      String usermodifiedpictureurl,
-      String numreplies,
-      int numunread,
-      bool pinned}) {
-    _id = id;
-    _name = name;
-    _groupid = groupid;
-    _timemodified = timemodified;
-    _usermodified = usermodified;
-    _timestart = timestart;
-    _timeend = timeend;
-    _discussion = discussion;
-    _parent = parent;
-    _userid = userid;
-    _created = created;
-    _modified = modified;
-    _mailed = mailed;
-    _subject = subject;
-    _message = message;
-    _messageformat = messageformat;
-    _messagetrust = messagetrust;
-    _attachment = attachment;
-    _attachments = attachments;
-    _totalscore = totalscore;
-    _mailnow = mailnow;
-    _userfullname = userfullname;
-    _usermodifiedfullname = usermodifiedfullname;
-    _userpictureurl = userpictureurl;
-    _usermodifiedpictureurl = usermodifiedpictureurl;
-    _numreplies = numreplies;
-    _numunread = numunread;
-    _pinned = pinned;
-  }
-
-  Discussions.fromJson(dynamic json) {
-    _id = json['id'];
-    _name = json['name'];
-    _groupid = json['groupid'];
-    _timemodified = json['timemodified'];
-    _usermodified = json['usermodified'];
-    _timestart = json['timestart'];
-    _timeend = json['timeend'];
-    _discussion = json['discussion'];
-    _parent = json['parent'];
-    _userid = json['userid'];
-    _created = json['created'];
-    _modified = json['modified'];
-    _mailed = json['mailed'];
-    _subject = json['subject'];
-    _message = json['message'];
-    _messageformat = json['messageformat'];
-    _messagetrust = json['messagetrust'];
-    _attachment = json['attachment'];
-    if (json['attachments'] != null) {
-      _attachments = [];
-      json['attachments'].forEach((v) {
-        _attachments.add(Attachments.fromJson(v));
-      });
-    }
-    _totalscore = json['totalscore'];
-    _mailnow = json['mailnow'];
-    _userfullname = json['userfullname'];
-    _usermodifiedfullname = json['usermodifiedfullname'];
-    _userpictureurl = json['userpictureurl'];
-    _usermodifiedpictureurl = json['usermodifiedpictureurl'];
-    _numreplies = json['numreplies'];
-    _numunread = json['numunread'];
-    _pinned = json['pinned'];
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map['id'] = _id;
-    map['name'] = _name;
-    map['groupid'] = _groupid;
-    map['timemodified'] = _timemodified;
-    map['usermodified'] = _usermodified;
-    map['timestart'] = _timestart;
-    map['timeend'] = _timeend;
-    map['discussion'] = _discussion;
-    map['parent'] = _parent;
-    map['userid'] = _userid;
-    map['created'] = _created;
-    map['modified'] = _modified;
-    map['mailed'] = _mailed;
-    map['subject'] = _subject;
-    map['message'] = _message;
-    map['messageformat'] = _messageformat;
-    map['messagetrust'] = _messagetrust;
-    map['attachment'] = _attachment;
-    if (_attachments != null) {
-      map['attachments'] = _attachments.map((v) => v.toJson()).toList();
-    }
-    map['totalscore'] = _totalscore;
-    map['mailnow'] = _mailnow;
-    map['userfullname'] = _userfullname;
-    map['usermodifiedfullname'] = _usermodifiedfullname;
-    map['userpictureurl'] = _userpictureurl;
-    map['usermodifiedpictureurl'] = _usermodifiedpictureurl;
-    map['numreplies'] = _numreplies;
-    map['numunread'] = _numunread;
-    map['pinned'] = _pinned;
-    return map;
-  }
+  factory Discussions.fromJson(Map<String, dynamic> srcJson) =>
+      _$DiscussionsFromJson(srcJson);
 }
 
 /// filename : "110_1論文研討的規定.pptx"
 /// mimetype : "application/vnd.openxmlformats-officedocument.presentationml.presentation"
 /// fileurl : "https://moodle.ntust.edu.tw/webservice/pluginfile.php/826780/mod_forum/attachment/242038/110_1%E8%AB%96%E6%96%87%E7%A0%94%E8%A8%8E%E7%9A%84%E8%A6%8F%E5%AE%9A.pptx"
 
-class Attachments {
-  String _filename;
-  String _mimetype;
-  String _fileurl;
+@JsonSerializable()
+class Attachments extends Object {
+  @JsonKey(name: 'filename')
+  String filename;
 
-  String get filename => _filename;
+  @JsonKey(name: 'mimetype')
+  String mimetype;
 
-  String get mimetype => _mimetype;
+  @JsonKey(name: 'fileurl')
+  String fileurl;
 
-  String get fileurl => _fileurl;
+  Attachments({
+    this.filename = "",
+    this.mimetype = "",
+    this.fileurl = "",
+  });
 
-  Attachments({String filename, String mimetype, String fileurl}) {
-    _filename = filename;
-    _mimetype = mimetype;
-    _fileurl = fileurl;
-  }
-
-  Attachments.fromJson(dynamic json) {
-    _filename = json['filename'];
-    _mimetype = json['mimetype'];
-    _fileurl = json['fileurl'];
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map['filename'] = _filename;
-    map['mimetype'] = _mimetype;
-    map['fileurl'] = _fileurl;
-    return map;
-  }
+  factory Attachments.fromJson(Map<String, dynamic> srcJson) =>
+      _$AttachmentsFromJson(srcJson);
 }

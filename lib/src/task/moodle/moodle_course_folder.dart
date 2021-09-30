@@ -13,7 +13,7 @@ class MoodleCourseFolderTask extends MoodleTask<List<MoodleFileInfo>> {
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
-      List<MoodleFileInfo> value;
+      List<MoodleFileInfo>? value;
       super.onStart(R.current.getMoodleCourseBranch);
       value = await MoodleConnector.getFolder(url);
       super.onEnd();

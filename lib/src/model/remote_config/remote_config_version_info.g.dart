@@ -7,17 +7,14 @@ part of 'remote_config_version_info.dart';
 // **************************************************************************
 
 RemoteConfigVersionInfo _$RemoteConfigVersionInfoFromJson(
-    Map<String, dynamic> json) {
-  return RemoteConfigVersionInfo(
-    last: json['last_version'] == null
-        ? null
-        : AndroidIosVersionInfo.fromJson(
-            json['last_version'] as Map<String, dynamic>),
-    lastVersionDetail: json['last_version_detail'] as String,
-    isFocusUpdate: json['is_focus_update'] as bool,
-    url: json['url'] as String,
-  );
-}
+        Map<String, dynamic> json) =>
+    RemoteConfigVersionInfo(
+      last: AndroidIosVersionInfo.fromJson(
+          json['last_version'] as Map<String, dynamic>),
+      lastVersionDetail: json['last_version_detail'] as String,
+      isFocusUpdate: json['is_focus_update'] as bool,
+      url: json['url'] as String,
+    );
 
 Map<String, dynamic> _$RemoteConfigVersionInfoToJson(
         RemoteConfigVersionInfo instance) =>
@@ -29,12 +26,11 @@ Map<String, dynamic> _$RemoteConfigVersionInfoToJson(
     };
 
 AndroidIosVersionInfo _$AndroidIosVersionInfoFromJson(
-    Map<String, dynamic> json) {
-  return AndroidIosVersionInfo(
-    android: json['android'] as String,
-    ios: json['ios'] as String,
-  );
-}
+        Map<String, dynamic> json) =>
+    AndroidIosVersionInfo(
+      android: json['android'] as String,
+      ios: json['ios'] as String,
+    );
 
 Map<String, dynamic> _$AndroidIosVersionInfoToJson(
         AndroidIosVersionInfo instance) =>

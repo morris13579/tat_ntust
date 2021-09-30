@@ -20,10 +20,9 @@ class FileViewerPage extends StatefulWidget {
   final String path;
 
   FileViewerPage({
-    Key key,
-    @required this.title,
-    @required this.path,
-  }) : super(key: key);
+    required this.title,
+    required this.path,
+  });
 
   @override
   _FileViewerPageState createState() => _FileViewerPageState();
@@ -31,7 +30,7 @@ class FileViewerPage extends StatefulWidget {
 
 class _FileViewerPageState extends State<FileViewerPage>
     with WidgetsBindingObserver {
-  String path;
+  late String path;
   List<String> paths = [];
 
   List<FileSystemEntity> files = [];
@@ -82,13 +81,13 @@ class _FileViewerPageState extends State<FileViewerPage>
     path = widget.path;
     getFiles();
     paths.add(widget.path);
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
   }
 
   @override
@@ -160,7 +159,10 @@ class _FileViewerPageState extends State<FileViewerPage>
                                   : Icons.sd_card,
                               color: index == paths.length - 1
                                   ? Theme.of(context).accentColor
-                                  : Theme.of(context).textTheme.headline6.color,
+                                  : Theme.of(context)
+                                      .textTheme
+                                      .headline6!
+                                      .color,
                             ),
                             onPressed: () {
                               print(paths[index]);
@@ -194,7 +196,7 @@ class _FileViewerPageState extends State<FileViewerPage>
                                           ? Theme.of(context).accentColor
                                           : Theme.of(context)
                                               .textTheme
-                                              .headline6
+                                              .headline6!
                                               .color,
                                     ),
                                   ),

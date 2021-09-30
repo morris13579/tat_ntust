@@ -8,7 +8,7 @@ import 'package:local_auth/error_codes.dart' as errorCode;
 import 'package:local_auth/local_auth.dart';
 
 class CheckPasswordDialog extends StatefulWidget {
-  CheckPasswordDialog({Key key}) : super(key: key);
+  CheckPasswordDialog();
 
   @override
   _CheckPasswordDialogState createState() => _CheckPasswordDialogState();
@@ -81,7 +81,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                   _originPasswordFocus.unfocus();
                 },
                 obscureText: true,
-                validator: (value) => _validatorOriginPassword(value),
+                validator: (value) => _validatorOriginPassword(value!),
                 decoration: InputDecoration(
                   hintText: R.current.originPassword,
                   errorStyle: TextStyle(
@@ -123,7 +123,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
         TextButton(
           child: Text(R.current.sure),
           onPressed: () {
-            if (_formKey.currentState.validate()) {
+            if (_formKey.currentState!.validate()) {
               Get.back<bool>(result: true);
             }
           },
@@ -132,7 +132,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
     );
   }
 
-  String _validatorOriginPassword(String value) {
+  String? _validatorOriginPassword(String value) {
     if (value == Model.instance.getPassword()) {
       _originPasswordErrorMessage = '';
     } else {
