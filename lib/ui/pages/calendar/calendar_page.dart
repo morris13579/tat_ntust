@@ -40,9 +40,9 @@ class _CalendarPageState extends State<CalendarPage> {
     _addEvent();
   }
 
-  void _addEvent() async {
+  void _addEvent({bool forceUpdate: false}) async {
     TaskFlow taskFlow = TaskFlow();
-    NTUSTCalendarTask task = NTUSTCalendarTask();
+    NTUSTCalendarTask task = NTUSTCalendarTask(forceUpdate: forceUpdate);
     taskFlow.addTask(task);
     if (await taskFlow.start(checkNetwork: false)) {
       String savePath = task.result;
@@ -119,6 +119,15 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(R.current.calendar),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _addEvent(forceUpdate: true);
+            },
+            icon: Icon(Icons.update_outlined),
+            tooltip: R.current.update,
+          )
+        ],
       ),
       body: Column(
         children: [

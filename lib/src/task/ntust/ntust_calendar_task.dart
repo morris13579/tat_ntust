@@ -10,7 +10,9 @@ import 'package:path_provider/path_provider.dart';
 import '../task.dart';
 
 class NTUSTCalendarTask extends DialogTask<String> {
-  NTUSTCalendarTask() : super("NTUSTCalendarTask");
+  bool forceUpdate;
+
+  NTUSTCalendarTask({this.forceUpdate: false}) : super("NTUSTCalendarTask");
 
   @override
   Future<TaskStatus> execute() async {
@@ -18,13 +20,8 @@ class NTUSTCalendarTask extends DialogTask<String> {
     String savePath = "${directory.path}/calendar.ics";
     Log.d(savePath);
     result = savePath;
-    int day = 0;
     bool exists = await File(savePath).exists();
-    if (exists) {
-      day =
-          DateTime.now().difference(await File(savePath).lastModified()).inDays;
-    }
-    if (!exists || day >= 1) {
+    if (!exists || forceUpdate) {
       super.onStart(R.current.downloading);
       try {
         String url = await NTUSTConnector.getCalendarUrl();
