@@ -70,7 +70,7 @@ class OtherSettingJson {
       {this.lang = "",
       this.autoCheckAppUpdate = true,
       this.useExternalVideoPlayer = false,
-      this.useMoodleWebApi = false});
+      this.useMoodleWebApi = true});
 
   bool get isEmpty {
     return lang.isEmpty;

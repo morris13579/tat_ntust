@@ -37,5 +37,7 @@ class APPVersion {
   static void updateVersionCallback() {
     //更新版本後會執行函數
     //用途資料更新...
+    Model.instance.getOtherSetting().useMoodleWebApi = true;
+    Model.instance.saveSetting();
   }
 }

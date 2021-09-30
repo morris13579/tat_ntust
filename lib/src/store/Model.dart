@@ -291,7 +291,7 @@ class Model {
   }
 
   Future<String> getVersion() async {
-    return (await _readString("version"))!;
+    return (await _readString("version")) ?? "";
   }
 
   Future<void> setVersion(String version) async {

@@ -132,7 +132,8 @@ class MoodleWebApiConnector {
         "sortdirection": "desc",
       };
       result = await Connector.getJsonByPost(parameter);
-      return MoodleModForumGetForumDiscussionsPaginated.fromJson(result as Map<String,dynamic>);
+      return MoodleModForumGetForumDiscussionsPaginated.fromJson(
+          result as Map<String, dynamic>);
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
       return null;
