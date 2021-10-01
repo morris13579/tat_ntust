@@ -3,6 +3,7 @@ import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
+import 'package:flutter_app/src/util/html_utils.dart';
 
 enum MoodleWebApiConnectorStatus { LoginSuccess, LoginFail, UnknownError }
 
@@ -87,9 +88,14 @@ class MoodleWebApiConnector {
         "courseid": courseId
       };
       result = await Connector.getJsonByPost(parameter);
-      return result
-          .map((e) => MoodleCoreCourseGetContents.fromJson(e))
-          .toList();
+      List<MoodleCoreCourseGetContents> v =
+          result.map((e) => MoodleCoreCourseGetContents.fromJson(e)).toList();
+      for (var i in v) {
+        for (var j in i.modules) {
+          j.name = HtmlUtils.clean(j.name);
+        }
+      }
+      return v;
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
       return null;
