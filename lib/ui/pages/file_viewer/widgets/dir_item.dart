@@ -27,6 +27,7 @@ class DirectoryItem extends StatelessWidget {
         child: Center(
           child: Icon(
             Icons.folder_outlined,
+            color: Theme.of(context).textTheme.bodyText1!.color,
           ),
         ),
       ),

@@ -103,6 +103,10 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
         RouteUtils.toWebViewPage(ap.name, ap.link + "&redirect=1",
             openWithExternalWebView: true);
         break;
+      case "page":
+        RouteUtils.toWebViewPage(ap.name, ap.link + "&redirect=1",
+            openWithExternalWebView: true);
+        break;
       default:
         await AnalyticsUtils.logDownloadFileEvent();
         MyToast.show(R.current.downloadWillStart);

@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/config/app_config.dart';
-import 'package:flutter_app/src/config/app_themes.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/providers/app_provider.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_webapi_page.dart';
@@ -13,7 +10,6 @@ import 'package:flutter_app/ui/pages/course_data/screen/course_directory_page.da
 import 'package:flutter_app/ui/pages/course_data/screen/course_directory_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/tab_page.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class CourseDataPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -36,55 +32,44 @@ class _CourseDataPageState extends State<CourseDataPage>
   void initState() {
     super.initState();
     tabPageList = TabPageList();
-    Model.instance.getInstance().then((value) {
-      bool useMoodleWebApi = Model.instance.getOtherSetting().useMoodleWebApi;
-      var filePage = TabPage(
-        R.current.file,
-        Icons.folder,
-        useMoodleWebApi
-            ? CourseDirectoryWebApiPage(
-                widget.courseInfo,
-              )
-            : CourseDirectoryPage(
-                widget.courseInfo,
-              ),
-      );
-      var announcementPage = TabPage(
-        R.current.announcement,
-        Icons.message,
-        useMoodleWebApi
-            ? CourseAnnouncementWebApiPage(
-                widget.courseInfo,
-              )
-            : CourseAnnouncementPage(
-                widget.courseInfo,
-              ),
-      );
-      tabPageList.add((widget.index == 0) ? filePage : announcementPage);
-      tabPageList.add((widget.index == 0) ? announcementPage : filePage);
-      _tabController = TabController(vsync: this, length: tabPageList.length);
-      setState(() {});
-    });
+    _tabController = TabController(vsync: this, length: 2);
+    bool useMoodleWebApi = Model.instance.getOtherSetting().useMoodleWebApi;
+    var filePage = TabPage(
+      R.current.file,
+      Icons.folder,
+      useMoodleWebApi
+          ? CourseDirectoryWebApiPage(
+              widget.courseInfo,
+            )
+          : CourseDirectoryPage(
+              widget.courseInfo,
+            ),
+    );
+    var announcementPage = TabPage(
+      R.current.announcement,
+      Icons.message,
+      useMoodleWebApi
+          ? CourseAnnouncementWebApiPage(
+              widget.courseInfo,
+            )
+          : CourseAnnouncementPage(
+              widget.courseInfo,
+            ),
+    );
+    tabPageList.add((widget.index == 0) ? filePage : announcementPage);
+    tabPageList.add((widget.index == 0) ? announcementPage : filePage);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppProvider>(
-      builder: (BuildContext context, AppProvider appProvider, Widget? child) {
-        return WillPopScope(
-          onWillPop: () async {
-            var currentState = tabPageList.getKey(_currentIndex).currentState;
-            bool pop = (currentState == null) ? true : currentState.canPop();
-            return pop;
-          },
-          child: MaterialApp(
-            title: AppConfig.appName,
-            theme: appProvider.theme,
-            darkTheme: AppThemes.darkTheme,
-            home: tabPageView(),
-          ),
-        );
+    return WillPopScope(
+      onWillPop: () async {
+        var currentState = tabPageList.getKey(_currentIndex).currentState;
+        bool pop = (currentState == null) ? true : currentState.canPop();
+        return pop;
       },
+      child: tabPageView(),
     );
   }
 

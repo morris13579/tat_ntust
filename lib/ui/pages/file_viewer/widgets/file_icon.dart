@@ -29,6 +29,7 @@ class FileIcon extends StatelessWidget {
     } else if (_extension == ".zip" || _extension.contains("tar")) {
       return Icon(
         FontAwesome5.file_archive,
+        color: Colors.deepOrangeAccent,
       );
     } else if (_extension == ".epub" ||
         _extension == ".pdf" ||
@@ -57,6 +58,7 @@ class FileIcon extends StatelessWidget {
           {
             return Icon(
               FontAwesome5.file,
+              color: Theme.of(context).textTheme.bodyText1!.color,
             );
           }
       }
