@@ -1,18 +1,17 @@
 import 'dart:io';
 
 class AppLink {
-  static final String androidAppPackageName = "club.ntust.tat";
-  static final String _playStore =
+  static const androidAppPackageName = "club.ntust.tat";
+  static const _playStore =
       "https://play.google.com/store/apps/details?id=$androidAppPackageName";
-  static final String _appleStore =
-      "https://apps.apple.com/tw/app/id1513875597";
-  static final String githubOwner = "morris13579";
-  static final String githubName = "tat_ntust";
-  static final String gitHub = "https://github.com/$githubOwner/$githubName";
-  static final String feedbackBaseUrl =
+  static const _appleStore = "https://apps.apple.com/tw/app/id1513875597";
+  static const githubOwner = "morris13579";
+  static const githubName = "tat_ntust";
+  static const gitHub = "https://github.com/$githubOwner/$githubName";
+  static const feedbackBaseUrl =
       "https://docs.google.com/forms/d/e/1FAIpQLSfHdgBnYpc7plIH2GBYeYcStwPIgZRB_oKL3guMXWX87svryA/viewform";
 
-  static final String privacyPolicyUrl =
+  static const privacyPolicyUrl =
       "https://raw.githubusercontent.com/$githubOwner/$githubName/master/privacy-policy.md";
 
   static String feedback(String mainVersion, String log) {

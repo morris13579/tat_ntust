@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
 
 class AppThemes {
-  static ThemeData lightTheme = ThemeData(
+  static final lightTheme = ThemeData(
     fontFamily: 'MyFont',
     brightness: Brightness.light,
     backgroundColor: AppColors.lightBG,
@@ -35,7 +35,7 @@ class AppThemes {
         ThemeData().colorScheme.copyWith(secondary: AppColors.lightAccent),
   );
 
-  static ThemeData darkTheme = ThemeData(
+  static final darkTheme = ThemeData(
     fontFamily: 'MyFont',
     brightness: Brightness.dark,
     backgroundColor: AppColors.darkBG,

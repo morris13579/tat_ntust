@@ -21,16 +21,16 @@ class CourseMainInfo {
 }
 
 class CourseConnector {
-  static final String host = "https://courseselection.ntust.edu.tw";
-  static final String _loginUrl = host;
-  static final String _courseTableUrl = "$host/ChooseList/D01/D01";
-  static final String _courseDetailUrl =
+  static const host = "https://courseselection.ntust.edu.tw";
+  static const _loginUrl = host;
+  static const _courseTableUrl = "$host/ChooseList/D01/D01";
+  static const _courseDetailUrl =
       "https://querycourse.ntust.edu.tw/querycourse/api/coursedetials";
-  static final String _setTWUrl =
+  static const _setTWUrl =
       "$host/Home/SetCulture?Culture=zh-TW&returnUrl=%2FChooseList%2FD01%2FD01";
-  static final String _setENUrl =
+  static const _setENUrl =
       "$host/Home/SetCulture?Culture=en-US&returnUrl=%2FChooseList%2FD01%2FD01";
-  static final String _courseSemestersUrl =
+  static const _courseSemestersUrl =
       "https://querycourse.ntust.edu.tw/querycourse/api/semestersinfo";
 
   static Future<CourseConnectorStatus> login() async {

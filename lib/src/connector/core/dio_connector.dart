@@ -50,8 +50,8 @@ class DioConnector {
     try {
       Directory appDocDir = await getApplicationSupportDirectory();
       String appDocPath = appDocDir.path;
-      Storage storage = FileStorage(appDocPath + "/.cookies/");
-      _cookieJar = PersistCookieJar(storage: storage);
+      _cookieJar =
+          PersistCookieJar(storage: FileStorage(appDocPath + "/.cookies/"));
       alice.setNavigatorKey(getUtils.Get.key);
       dio.interceptors.add(CookieManager(_cookieJar));
       dio.interceptors.add(RequestInterceptors());
@@ -68,7 +68,7 @@ class DioConnector {
 
   Future<String> getDataByPost(ConnectorParameter parameter) async {
     try {
-      Response response = await getDataByPostResponse(parameter);
+      var response = await getDataByPostResponse(parameter);
       if (response.statusCode == HttpStatus.ok) {
         return response.toString();
       } else {
@@ -80,9 +80,8 @@ class DioConnector {
   }
 
   Future<String> getDataByGet(ConnectorParameter parameter) async {
-    Response response;
     try {
-      response = await getDataByGetResponse(parameter);
+      var response = await getDataByGetResponse(parameter);
       if (response.statusCode == HttpStatus.ok) {
         return response.toString();
       } else {
@@ -95,9 +94,8 @@ class DioConnector {
 
   Future<Map<String, List<String>>> getHeadersByGet(
       ConnectorParameter parameter) async {
-    Response<ResponseBody> response;
     try {
-      response = await dio.get<ResponseBody>(
+      var response = await dio.get<ResponseBody>(
         parameter.url,
         options: Options(
             responseType: ResponseType.stream), // set responseType to `stream`

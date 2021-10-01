@@ -8,18 +8,18 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdManager {
-  static final String androidAppID = "ca-app-pub-7649352174867436~2995231487";
-  static final String iosAppID = "ca-app-pub-7649352174867436~3290345570";
-  static final String androidInterstitialAdUnitId =
+  static const String androidAppID = "ca-app-pub-7649352174867436~2995231487";
+  static const String iosAppID = "ca-app-pub-7649352174867436~3290345570";
+  static const String androidInterstitialAdUnitId =
       "ca-app-pub-7649352174867436/5625619479";
 
-  static final String iosInterstitialAdUnitId =
+  static const String iosInterstitialAdUnitId =
       "ca-app-pub-7649352174867436/1098957193";
 
-  static final String testInterstitialAdUnitId =
+  static const String testInterstitialAdUnitId =
       "ca-app-pub-3940256099942544/1033173712";
 
-  static final bool inTest = kDebugMode;
+  static const bool inTest = kDebugMode;
 
   static InterstitialAd? _interstitialAd;
 
@@ -105,31 +105,11 @@ class AdManager {
     }
   }
 
-  static String get bannerAdUnitId {
-    if (Platform.isAndroid) {
-      return "<YOUR_ANDROID_BANNER_AD_UNIT_ID";
-    } else if (Platform.isIOS) {
-      return "<YOUR_IOS_BANNER_AD_UNIT_ID>";
-    } else {
-      throw new UnsupportedError("Unsupported platform");
-    }
-  }
-
   static String get interstitialAdUnitId {
     if (Platform.isAndroid) {
       return (inTest) ? testInterstitialAdUnitId : androidInterstitialAdUnitId;
     } else if (Platform.isIOS) {
       return iosInterstitialAdUnitId;
-    } else {
-      throw new UnsupportedError("Unsupported platform");
-    }
-  }
-
-  static String get rewardedAdUnitId {
-    if (Platform.isAndroid) {
-      return "<YOUR_ANDROID_REWARDED_AD_UNIT_ID>";
-    } else if (Platform.isIOS) {
-      return "<YOUR_IOS_REWARDED_AD_UNIT_ID>";
     } else {
       throw new UnsupportedError("Unsupported platform");
     }

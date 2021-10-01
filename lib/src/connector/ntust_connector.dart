@@ -18,12 +18,12 @@ import 'package:html/parser.dart';
 enum NTUSTLoginStatus { Success, Fail }
 
 class NTUSTConnector {
-  static final String host = "https://i.ntust.edu.tw";
-  static final String ntustLoginUrl =
+  static const String host = "https://i.ntust.edu.tw";
+  static const String ntustLoginUrl =
       "https://stuinfosys.ntust.edu.tw/NTUSTSSOServ/SSO/Login/CourseSelection";
 
-  static final String subSystemTWUrl = "$host/student";
-  static final String subSystemENUrl = "$host/EN/student";
+  static const String subSystemTWUrl = "$host/student";
+  static const String subSystemENUrl = "$host/EN/student";
 
   static Future<APTreeJson?> getSubSystem() async {
     String result;

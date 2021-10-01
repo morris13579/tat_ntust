@@ -61,11 +61,11 @@ class MoodleFileInfo {
 }
 
 class MoodleConnector {
-  static final String host = "https://moodle.ntust.edu.tw";
-  static final String _loginUrl = "$host/login/index.php";
-  static final String _userUrl = "$host/user/index.php";
-  static final String _viewUrl = "$host/course/view.php";
-  static final String _branchUrl = "$host/lib/ajax/getnavbranch.php";
+  static const String host = "https://moodle.ntust.edu.tw";
+  static const String _loginUrl = "$host/login/index.php";
+  static const String _userUrl = "$host/user/index.php";
+  static const String _viewUrl = "$host/course/view.php";
+  static const String _branchUrl = "$host/lib/ajax/getnavbranch.php";
 
   static Future<MoodleConnectorStatus> login(
       String account, String password) async {
