@@ -54,17 +54,22 @@ class _WebViewPageState extends State<WebViewPage> {
 
   Future<bool> setCookies() async {
     final cookies = await cookieJar.loadForRequest(widget.url);
+    final cookiesName = [];
+    await cookieManager.deleteCookies(url: widget.url);
     for (var cookie in cookies) {
-      await cookieManager.setCookie(
-        url: widget.url,
-        name: cookie.name,
-        value: cookie.value,
-        domain: cookie.domain,
-        path: cookie.path!,
-        maxAge: cookie.maxAge,
-        isSecure: cookie.secure,
-        isHttpOnly: cookie.httpOnly,
-      );
+      if (!cookiesName.contains(cookie.name)) {
+        cookiesName.add(cookie.name);
+        await cookieManager.setCookie(
+          url: widget.url,
+          name: cookie.name,
+          value: cookie.value,
+          domain: cookie.domain,
+          path: cookie.path!,
+          maxAge: cookie.maxAge,
+          isSecure: cookie.secure,
+          isHttpOnly: cookie.httpOnly,
+        );
+      }
     }
     return true;
   }
