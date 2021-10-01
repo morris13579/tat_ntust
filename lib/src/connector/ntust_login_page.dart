@@ -76,7 +76,6 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                 } else {
                   try {
                     await cookieJar.deleteAll();
-                    await cookieManager.deleteAllCookies();
                   } catch (e) {}
                   String? result = await webView.getHtml();
                   var tagNode = parse(result);

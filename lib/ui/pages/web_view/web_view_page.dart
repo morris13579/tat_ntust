@@ -54,7 +54,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
   Future<bool> setCookies() async {
     final cookies = await cookieJar.loadForRequest(widget.url);
-    //await cookieManager.deleteCookies(url: widget.url);
+    await cookieManager.deleteCookies(url: widget.url);
     var existCookies = await cookieManager.getCookies(url: widget.url);
     final cookiesName = existCookies.map((e) => e.name).toList();
     for (var cookie in cookies) {
