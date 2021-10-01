@@ -64,27 +64,30 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
     }
   }
 
+  void openWebView(Modules ap, {openWithExternalWebView = false}) async {
+    if (Uri.parse(ap.url).host == "moodle.ntust.edu.tw") {
+      TaskFlow taskFlow = TaskFlow();
+      taskFlow.addTask(MoodleTask("WebView"));
+      await taskFlow.start();
+    }
+    RouteUtils.toWebViewPage(
+        ap.name,
+        Connector.uriAddQuery(
+          ap.url,
+          (LanguageUtils.getLangIndex() == LangEnum.zh)
+              ? {"lang": "zh_tw"}
+              : {"lang": "en"},
+        ),
+        openWithExternalWebView: openWithExternalWebView);
+  }
+
   void handleTap(Modules ap) async {
     switch (ap.modname) {
       case "forum":
-        if (Uri.parse(ap.url).host == "moodle.ntust.edu.tw") {
-          TaskFlow taskFlow = TaskFlow();
-          taskFlow.addTask(MoodleTask("WebView"));
-          await taskFlow.start();
-        }
-        RouteUtils.toWebViewPage(
-            ap.name,
-            Connector.uriAddQuery(
-              ap.url,
-              (LanguageUtils.getLangIndex() == LangEnum.zh)
-                  ? {"lang": "zh_tw"}
-                  : {"lang": "en"},
-            ),
-            openWithExternalWebView: false);
+        openWebView(ap);
         break;
       case "assign":
-        RouteUtils.toWebViewPage(ap.name, ap.url,
-            openWithExternalWebView: false);
+        openWebView(ap);
         break;
       case "folder":
         if (ap.contents.length != 0) {
@@ -96,20 +99,7 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
       case "label":
         break;
       case "url":
-        if (Uri.parse(ap.url).host == "moodle.ntust.edu.tw") {
-          TaskFlow taskFlow = TaskFlow();
-          taskFlow.addTask(MoodleTask("WebView"));
-          await taskFlow.start();
-        }
-        RouteUtils.toWebViewPage(
-            ap.name,
-            Connector.uriAddQuery(
-              ap.url + "&redirect=1",
-              (LanguageUtils.getLangIndex() == LangEnum.zh)
-                  ? {"lang": "zh_tw"}
-                  : {"lang": "en"},
-            ),
-            openWithExternalWebView: true);
+        openWebView(ap, openWithExternalWebView: true);
         break;
       default:
         await AnalyticsUtils.logDownloadFileEvent();
