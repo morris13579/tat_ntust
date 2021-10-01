@@ -141,11 +141,9 @@ class _LogConsoleState extends State<LogConsole> {
       theme: widget.dark
           ? ThemeData(
               brightness: Brightness.dark,
-              accentColor: Colors.blueGrey,
             )
           : ThemeData(
               brightness: Brightness.light,
-              accentColor: Colors.lightBlueAccent,
             ),
       home: Scaffold(
         appBar: AppBar(

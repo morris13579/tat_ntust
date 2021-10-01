@@ -158,7 +158,7 @@ class _FileViewerPageState extends State<FileViewerPage>
                                   ? Icons.smartphone
                                   : Icons.sd_card,
                               color: index == paths.length - 1
-                                  ? Theme.of(context).accentColor
+                                  ? Theme.of(context).colorScheme.secondary
                                   : Theme.of(context)
                                       .textTheme
                                       .headline6!
@@ -193,7 +193,7 @@ class _FileViewerPageState extends State<FileViewerPage>
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: index == paths.length - 1
-                                          ? Theme.of(context).accentColor
+                                          ? Theme.of(context).colorScheme.secondary
                                           : Theme.of(context)
                                               .textTheme
                                               .headline6!
@@ -353,7 +353,7 @@ class _FileViewerPageState extends State<FileViewerPage>
                       child: Text(
                         R.current.cancel,
                         style: TextStyle(
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                       onPressed: () => Navigator.pop(context),
@@ -448,7 +448,7 @@ class _FileViewerPageState extends State<FileViewerPage>
                       child: Text(
                         R.current.cancel,
                         style: TextStyle(
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                       onPressed: () => Navigator.pop(context),

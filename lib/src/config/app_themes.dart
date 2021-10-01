@@ -8,10 +8,10 @@ class AppThemes {
     brightness: Brightness.light,
     backgroundColor: AppColors.lightBG,
     primaryColor: AppColors.mainColor,
-    accentColor: AppColors.lightAccent,
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: AppColors.lightAccent,
     ),
+    appBarTheme: AppBarTheme(color: AppColors.lightAccent),
     toggleableActiveColor: Colors.blue,
     dividerColor: Color(0xFFF8F8F8),
     scaffoldBackgroundColor: AppColors.lightBG,
@@ -30,6 +30,9 @@ class AppThemes {
         onPrimary: Colors.black,
       ),
     ),
+  ).copyWith(
+    colorScheme:
+        ThemeData().colorScheme.copyWith(secondary: AppColors.lightAccent),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -37,17 +40,17 @@ class AppThemes {
     brightness: Brightness.dark,
     backgroundColor: AppColors.darkBG,
     primaryColor: AppColors.darkPrimary,
-    accentColor: AppColors.darkAccent,
     scaffoldBackgroundColor: AppColors.darkBG,
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: AppColors.darkAccent,
     ),
+    appBarTheme: AppBarTheme(color: AppColors.darkAccent),
     toggleableActiveColor: Colors.blueAccent,
     dividerColor: Color(0xFF2F2F2F),
     cupertinoOverrideTheme: CupertinoThemeData(
       primaryColor: AppColors.darkAccent,
     ),
-    buttonColor: AppColors.darkAccent,
+    buttonTheme: ButtonThemeData(buttonColor: AppColors.darkAccent),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         primary: Colors.white,
@@ -60,5 +63,8 @@ class AppThemes {
         onPrimary: Colors.white,
       ),
     ),
+  ).copyWith(
+    colorScheme:
+        ThemeData().colorScheme.copyWith(secondary: AppColors.darkAccent),
   );
 }
