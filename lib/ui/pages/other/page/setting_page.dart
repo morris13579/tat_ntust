@@ -107,39 +107,35 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget _buildDarkModeSetting() {
-    return (MediaQuery.of(context).platformBrightness !=
-            AppThemes.darkTheme.brightness)
-        ? SwitchListTile.adaptive(
-            contentPadding: EdgeInsets.all(0),
-            title: Row(
-              children: <Widget>[
-                Text(
-                  R.current.darkMode,
-                  style: textTitle,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10),
-                ),
-                Icon(
-                  FontAwesome5.moon,
-                ),
-              ],
-            ),
-            value:
-                Provider.of<AppProvider>(context).theme == AppThemes.lightTheme
-                    ? false
-                    : true,
-            onChanged: (v) {
-              if (v) {
-                Provider.of<AppProvider>(context, listen: false)
-                    .setTheme(AppThemes.darkTheme, "dark");
-              } else {
-                Provider.of<AppProvider>(context, listen: false)
-                    .setTheme(AppThemes.lightTheme, "light");
-              }
-            },
-          )
-        : SizedBox();
+    return SwitchListTile.adaptive(
+      contentPadding: EdgeInsets.all(0),
+      title: Row(
+        children: <Widget>[
+          Text(
+            R.current.darkMode,
+            style: textTitle,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 10),
+          ),
+          Icon(
+            FontAwesome5.moon,
+          ),
+        ],
+      ),
+      value: Provider.of<AppProvider>(context).theme == AppThemes.lightTheme
+          ? false
+          : true,
+      onChanged: (v) {
+        if (v) {
+          Provider.of<AppProvider>(context, listen: false)
+              .setTheme(AppThemes.darkTheme, "dark");
+        } else {
+          Provider.of<AppProvider>(context, listen: false)
+              .setTheme(AppThemes.lightTheme, "light");
+        }
+      },
+    );
   }
 
   Widget _buildOpenExternalVideoSetting() {

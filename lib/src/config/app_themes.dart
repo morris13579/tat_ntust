@@ -11,7 +11,7 @@ class AppThemes {
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: AppColors.lightAccent,
     ),
-    appBarTheme: AppBarTheme(color: AppColors.lightAccent),
+    appBarTheme: AppBarTheme(color: AppColors.mainColor),
     toggleableActiveColor: Colors.blue,
     dividerColor: Color(0xFFF8F8F8),
     scaffoldBackgroundColor: AppColors.lightBG,
