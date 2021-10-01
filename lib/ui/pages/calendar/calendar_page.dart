@@ -41,6 +41,7 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void _addEvent({bool forceUpdate: false}) async {
+    _events = {};
     TaskFlow taskFlow = TaskFlow();
     NTUSTCalendarTask task = NTUSTCalendarTask(forceUpdate: forceUpdate);
     taskFlow.addTask(task);
