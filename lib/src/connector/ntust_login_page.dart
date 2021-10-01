@@ -76,6 +76,7 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                 } else {
                   try {
                     await cookieJar.deleteAll();
+                    await cookieManager.deleteAllCookies();
                   } catch (e) {}
                   String? result = await webView.getHtml();
                   var tagNode = parse(result);
@@ -92,11 +93,14 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                     List<io.Cookie> ioCookies = [];
                     bool add = false;
                     for (var i in cookies) {
-                      io.Cookie k = io.Cookie(i.name, i.value);
-                      k.domain = ".ntust.edu.tw";
-                      k.path = "/";
-                      ioCookies.add(k);
-                      add = true;
+                      if ([".ASPXAUTH", "ntustjwtsecret", "ntustsecret"]
+                          .contains(i.name)) {
+                        io.Cookie k = io.Cookie(i.name, i.value);
+                        k.domain = ".ntust.edu.tw";
+                        k.path = "/";
+                        ioCookies.add(k);
+                        add = true;
+                      }
                     }
                     if (add) {
                       await cookieJar.saveFromResponse(
