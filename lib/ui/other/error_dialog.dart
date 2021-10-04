@@ -10,8 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:get/get.dart';
 
-import 'custom_awesome_dialog.dart';
-
 class ErrorDialogParameter {
   BuildContext? context;
   late String? title;
@@ -24,6 +22,8 @@ class ErrorDialogParameter {
   late Function? btnCancelOnPress;
   bool offOkBtn;
   bool offCancelBtn;
+  bool okResult;
+  bool cancelResult;
 
   ErrorDialogParameter(
       {this.context,
@@ -35,6 +35,8 @@ class ErrorDialogParameter {
       this.dialogType,
       this.btnCancelOnPress,
       this.btnOkOnPress,
+      this.okResult: true,
+      this.cancelResult: false,
       this.offOkBtn: false,
       this.offCancelBtn: false}) {
     title = title ?? R.current.alertError;
@@ -44,11 +46,11 @@ class ErrorDialogParameter {
     dialogType = dialogType ?? DialogType.ERROR;
     btnCancelOnPress = btnCancelOnPress ??
         () {
-          Get.back<bool>(result: false);
+          Get.back<bool>(result: cancelResult);
         };
     btnOkOnPress = btnOkOnPress ??
         () {
-          Get.back<bool>(result: true);
+          Get.back<bool>(result: okResult);
         };
     if (offOkBtn) {
       btnOkOnPress = null;
@@ -65,19 +67,36 @@ class ErrorDialog {
   ErrorDialog(this.parameter);
 
   Future<bool> show() async {
-    return await Get.dialog<bool>(CustomAwesomeDialog(
-                context: Get.key.currentState!.context,
-                dialogType: parameter.dialogType!,
-                animType: parameter.animType!,
-                title: parameter.title!,
-                desc: parameter.desc,
-                btnOkText: parameter.btnOkText!,
-                btnCancelText: parameter.btnCancelText!,
-                useRootNavigator: false,
-                dismissOnTouchOutside: false,
-                btnCancelOnPress: parameter.btnCancelOnPress!,
-                btnOkOnPress: parameter.btnOkOnPress!)
-            .child) ??
-        false;
+    DismissType? dismissType;
+    var dialog = AwesomeDialog(
+        context: Get.key.currentState!.context,
+        dialogType: parameter.dialogType!,
+        animType: parameter.animType!,
+        title: parameter.title!,
+        desc: parameter.desc,
+        btnOkText: parameter.btnOkText!,
+        btnCancelText: parameter.btnCancelText!,
+        useRootNavigator: false,
+        dismissOnTouchOutside: false,
+        btnCancelOnPress: parameter.btnCancelOnPress!,
+        btnOkOnPress: parameter.btnOkOnPress!,
+        onDissmissCallback: (DismissType type) {
+          dismissType = type;
+        });
+    dialog.isDissmisedBySystem = true;
+    await dialog.show();
+    bool result;
+    print(dismissType);
+    switch (dismissType) {
+      case DismissType.BTN_OK:
+        result = parameter.okResult;
+        break;
+      case DismissType.BTN_CANCEL:
+        result = parameter.cancelResult;
+        break;
+      default:
+        result = parameter.cancelResult;
+    }
+    return result;
   }
 }
