@@ -45,7 +45,10 @@ class _SettingPageState extends State<SettingPage> {
     if (Platform.isAndroid) {
       listViewData.add(_buildOpenExternalVideoSetting());
     }
-    listViewData.add(_buildDarkModeSetting());
+    if ((MediaQuery.of(context).platformBrightness ==
+        AppThemes.darkTheme.brightness)) {
+      listViewData.add(_buildDarkModeSetting());
+    }
     listViewData.add(_buildMoodleWebAPISetting());
     listViewData.add(_buildFolderPathSetting());
     return Scaffold(
