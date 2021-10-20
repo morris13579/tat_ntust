@@ -80,6 +80,11 @@ class MoodleConnector {
       result = await Connector.getRedirects(parameter);
       tagNode = parse(result);
 
+      if (result.contains(account)) {
+        //代表已經登入了
+        return MoodleConnectorStatus.LoginSuccess;
+      }
+
       nodes = tagNode.getElementsByTagName("input");
       for (var i in nodes) {
         if (i.attributes["name"] != null &&
@@ -250,9 +255,11 @@ class MoodleConnector {
       result = await Connector.getDataByPost(parameter);
       Map<String, dynamic> jsonDecode = json.decode(result);
       List<Map<String, dynamic>> cc = [];
-      for (var i in (jsonDecode['children'] as List<dynamic>)) {
-        if (i != null && i is Map) {
-          cc.add(i as Map<String, dynamic>);
+      if (jsonDecode['children'] != null) {
+        for (var i in (jsonDecode['children'] as List<dynamic>)) {
+          if (i != null && i is Map) {
+            cc.add(i as Map<String, dynamic>);
+          }
         }
       }
       jsonDecode['children'] = cc;
