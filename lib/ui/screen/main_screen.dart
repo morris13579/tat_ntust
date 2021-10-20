@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/ad/ad_manager.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/file/my_downloader.dart';
 import 'package:flutter_app/src/notifications/notifications.dart';
 import 'package:flutter_app/src/providers/app_provider.dart';
@@ -63,6 +64,8 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       APPVersion.initAndCheck();
       initFlutterDownloader();
       initNotifications();
+      MoodleWebApiConnector.testMoodleWebApi().then(
+          (value) => Model.instance.getOtherSetting().useMoodleWebApi = value);
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
     }

@@ -1,6 +1,7 @@
 import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
+import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
@@ -143,6 +144,15 @@ class MoodleWebApiConnector {
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
       return null;
+    }
+  }
+
+  static Future<bool> testMoodleWebApi() async {
+    try {
+      var r = await DioConnector.instance.dio.get(_webAPIUrl);
+      return 200 == r.statusCode;
+    } catch (e) {
+      return false;
     }
   }
 }
