@@ -43,8 +43,7 @@ class FileDownload {
     referer = referer ?? url;
 
     //顯示下載通知窗
-    var downloadReq =
-        await DioConnector.instance.dio.requestUri(Uri.parse(url));
+    var downloadReq = await DioConnector.instance.dio.head(url);
     Map<String, List<String>> headers = downloadReq.headers.map;
     String realFileName = getFileNameByHeader(headers) ?? name;
     String savePath = path + "/" + realFileName;
