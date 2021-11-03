@@ -111,7 +111,8 @@ class Notifications {
       ReceivedNotification value, int maxProgress, int nowProgress) async {
     //顯示下載進度
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        downloadChannelId, downloadChannelName, downloadChannelDescription,
+        downloadChannelId, downloadChannelName,
+        channelDescription: downloadChannelDescription,
         channelShowBadge: false,
         importance: Importance.max,
         priority: Priority.high,
@@ -134,7 +135,8 @@ class Notifications {
       ReceivedNotification value) async {
     //顯示未知下載進度
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        downloadChannelId, downloadChannelName, downloadChannelDescription,
+        downloadChannelId, downloadChannelName,
+        channelDescription: downloadChannelDescription,
         channelShowBadge: false,
         importance: Importance.max,
         priority: Priority.high,
@@ -153,7 +155,8 @@ class Notifications {
 
   Future<void> showNotification(ReceivedNotification value) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        downloadChannelId, downloadChannelName, downloadChannelDescription,
+        downloadChannelId, downloadChannelName,
+        channelDescription: downloadChannelDescription,
         importance: Importance.max,
         priority: Priority.high,
         onlyAlertOnce: true,
