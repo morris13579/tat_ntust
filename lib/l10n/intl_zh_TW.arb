@@ -11,6 +11,7 @@
   "setting": "設定",
   "restart": "重試",
   "loading": "載入中...",
+  "noAppToOpen": "沒有支持的應用程式可以開啟",
   "pleaseConnectToNetwork": "請確認網路連接狀態",
   "___________________loginUi___________________": "註解",
   "login": "登入",

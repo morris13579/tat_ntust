@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
-import 'package:flutter_app/src/util/analytics_utils.dart';
-import 'package:flutter_app/ui/other/my_toast.dart';
 
 class CourseFolderWebApiPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -73,8 +70,6 @@ class _CourseFolderWebApiPageState extends State<CourseFolderWebApiPage> {
             ),
           ),
           onTap: () async {
-            await AnalyticsUtils.logDownloadFileEvent();
-            MyToast.show(R.current.downloadWillStart);
             String dirName = widget.courseInfo.main.course.name;
             FileDownload.download(
                 context,
@@ -83,7 +78,7 @@ class _CourseFolderWebApiPageState extends State<CourseFolderWebApiPage> {
                   {"token": MoodleWebApiConnector.wsToken},
                 ),
                 dirName,
-                ap.filename);
+                name: ap.filename);
           },
         );
       },

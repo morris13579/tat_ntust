@@ -11,6 +11,7 @@
   "setting": "Settings",
   "restart": "Restart",
   "loading": "Loading...",
+  "noAppToOpen": "noAppToOpen",
   "pleaseConnectToNetwork": "Please connect to network",
   "___________________loginUi___________________": "註解",
   "login": "Login",

@@ -9,7 +9,6 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/task/moodle/moodle_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
-import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
@@ -102,8 +101,6 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
         openWebView(ap, openWithExternalWebView: true);
         break;
       default:
-        await AnalyticsUtils.logDownloadFileEvent();
-        MyToast.show(R.current.downloadWillStart);
         String dirName = widget.courseInfo.main.course.name;
         FileDownload.download(
             context,
@@ -112,7 +109,7 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
               {"token": MoodleWebApiConnector.wsToken},
             ),
             dirName,
-            ap.contents.first.filename);
+            name: ap.contents.first.filename);
     }
   }
 

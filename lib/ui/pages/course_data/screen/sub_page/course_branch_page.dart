@@ -8,7 +8,6 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
 import 'package:flutter_app/src/task/moodle/moodle_course_branch.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
-import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -108,11 +107,9 @@ class _CourseBranchPageState extends State<CourseBranchPage> {
             openWithExternalWebView: true);
         break;
       default:
-        await AnalyticsUtils.logDownloadFileEvent();
-        MyToast.show(R.current.downloadWillStart);
         String dirName = widget.courseInfo.main.course.name;
-        FileDownload.download(
-            context, ap.link + "&redirect=1", dirName, ap.name);
+        FileDownload.download(context, ap.link + "&redirect=1", dirName,
+            name: ap.name);
         break;
     }
   }

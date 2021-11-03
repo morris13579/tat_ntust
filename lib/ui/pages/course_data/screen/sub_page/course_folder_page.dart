@@ -7,7 +7,6 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
 import 'package:flutter_app/src/task/moodle/moodle_course_folder.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
-import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:get/get.dart';
 
@@ -95,10 +94,8 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
             ),
           ),
           onTap: () async {
-            await AnalyticsUtils.logDownloadFileEvent();
-            MyToast.show(R.current.downloadWillStart);
             String dirName = widget.courseInfo.main.course.name;
-            FileDownload.download(context, ap.url, dirName, ap.name);
+            FileDownload.download(context, ap.url, dirName, name: ap.name);
           },
         );
       },

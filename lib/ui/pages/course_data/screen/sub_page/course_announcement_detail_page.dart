@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/task/moodle/moodle_course_announcement_detail.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
-import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
-import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class CourseAnnouncementDetailPage extends StatefulWidget {
@@ -64,10 +61,9 @@ class _CourseAnnouncementDetailPageState
                 data: html,
                 onLinkTap: (url, renderContext, attributes, element) async {
                   if (Uri.parse(url!).path.contains("pluginfile.php")) {
-                    await AnalyticsUtils.logDownloadFileEvent();
-                    MyToast.show(R.current.downloadWillStart);
                     String dirName = widget.courseInfo.main.course.name;
-                    FileDownload.download(context, url, dirName, element!.text);
+                    FileDownload.download(context, url, dirName,
+                        name: element!.text);
                   } else {
                     RouteUtils.toWebViewPage(widget.value.name, url);
                   }

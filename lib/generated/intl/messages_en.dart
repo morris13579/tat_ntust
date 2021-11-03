@@ -204,6 +204,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "networkError": MessageLookupByLibrary.simpleMessage("Network error"),
         "noAnyFavorite":
             MessageLookupByLibrary.simpleMessage("No any favorite"),
+        "noAppToOpen": MessageLookupByLibrary.simpleMessage("noAppToOpen"),
         "noFunction": MessageLookupByLibrary.simpleMessage("No function"),
         "noPermission":
             MessageLookupByLibrary.simpleMessage("Permission denied"),

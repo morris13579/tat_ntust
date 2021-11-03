@@ -12,21 +12,55 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/debug/log/log.dart';
+import 'package:flutter_app/generated/l10n.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/notifications/notifications.dart';
+import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/file_utils.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
+import 'package:open_file/open_file.dart';
 
 import 'file_store.dart';
 
 class FileDownload {
+  static String? getFileNameByHeader(Map<String, List<String>> headers) {
+    String? name;
+    if (headers.containsKey("content-disposition")) {
+      //代表有名字
+      List<String> names = headers["content-disposition"]!;
+      String decodeName = utf8.decode(Uint8List.fromList(names[0].codeUnits));
+      RegExp exp = RegExp("['|\"](?<name>.+)['|\"]"); //尋找 'name' , "name" 的name
+      RegExpMatch matches = exp.firstMatch(decodeName)!;
+      name = matches.group(1)!;
+    }
+    return name;
+  }
+
   static Future<void> download(BuildContext context, String url, dirName,
-      [String name = "", String? referer]) async {
+      {String name = "", String? referer, withOpen = true}) async {
     String path = await FileStore.getDownloadDir(context, dirName); //取得下載路徑
-    String? realFileName;
     referer = referer ?? url;
-    Log.d("file download \n url: $url \n referer: $referer");
+
     //顯示下載通知窗
+    var downloadReq =
+        await DioConnector.instance.dio.requestUri(Uri.parse(url));
+    Map<String, List<String>> headers = downloadReq.headers.map;
+    String realFileName = getFileNameByHeader(headers) ?? name;
+    String savePath = path + "/" + realFileName;
+    try {
+      Log.d("try open $savePath");
+      OpenResult result = await OpenFile.open(savePath);
+      if (result.type == ResultType.done) {
+        return;
+      } else if (result.type == ResultType.noAppToOpen) {
+        MyToast.show(S.current.noAppToOpen);
+        return;
+      }
+    } catch (e) {}
+    await AnalyticsUtils.logDownloadFileEvent();
+    MyToast.show(R.current.downloadWillStart);
+    Log.d("file download \n url: $url \n referer: $referer");
     ReceivedNotification value = ReceivedNotification(
         title: name, body: R.current.prepareDownload, payload: null); //通知窗訊息
     CancelToken? cancelToken; //取消下載用
@@ -51,24 +85,10 @@ class FileDownload {
             .showIndeterminateProgressNotification(value); //顯示下載進度
       }
     };
-
-    //開始下載檔案
     DioConnector.instance.download(url, (Headers responseHeaders) {
-      Map<String, List<String>> headers = responseHeaders.map;
-      Log.d("download header $headers");
-      if (headers.containsKey("content-disposition")) {
-        //代表有名字
-        List<String> names = headers["content-disposition"]!;
-        String decodeName = utf8.decode(Uint8List.fromList(names[0].codeUnits));
-        RegExp exp =
-            RegExp("['|\"](?<name>.+)['|\"]"); //尋找 'name' , "name" 的name
-        RegExpMatch matches = exp.firstMatch(decodeName)!;
-        realFileName = matches.group(1)!;
-      }
-      realFileName ??= name;
       value.title = realFileName;
-      Log.d(path + "/" + realFileName!);
-      return path + "/" + realFileName!;
+      Log.d(savePath);
+      return savePath;
     },
         progressCallback: onReceiveProgress,
         cancelToken: cancelToken,
@@ -78,7 +98,7 @@ class FileDownload {
         await Notifications.instance.cancelNotification(value.id);
         value.body = R.current.downloadComplete;
         value.id = Notifications.instance.notificationId; //取得新的id
-        String filePath = path + '/' + realFileName!;
+        String filePath = path + '/' + realFileName;
         int id = value.id;
         value.payload = json.encode({
           "type": "download_complete",

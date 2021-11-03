@@ -179,6 +179,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("如果出現驗證碼，請手動通過驗證碼"),
         "networkError": MessageLookupByLibrary.simpleMessage("網路發生錯誤"),
         "noAnyFavorite": MessageLookupByLibrary.simpleMessage("無加入最愛"),
+        "noAppToOpen": MessageLookupByLibrary.simpleMessage("沒有支持的應用程式可以開啟"),
         "noFunction": MessageLookupByLibrary.simpleMessage("暫無功能"),
         "noPermission": MessageLookupByLibrary.simpleMessage("沒有權限"),
         "noSupport": MessageLookupByLibrary.simpleMessage("不支持"),

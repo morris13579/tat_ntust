@@ -160,6 +160,16 @@ class S {
     );
   }
 
+  /// `noAppToOpen`
+  String get noAppToOpen {
+    return Intl.message(
+      'noAppToOpen',
+      name: 'noAppToOpen',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please connect to network`
   String get pleaseConnectToNetwork {
     return Intl.message(
