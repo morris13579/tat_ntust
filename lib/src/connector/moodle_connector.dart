@@ -80,7 +80,7 @@ class MoodleConnector {
       result = await Connector.getRedirects(parameter);
       tagNode = parse(result);
 
-      if (result.contains(account)) {
+      if (result.contains(account.toUpperCase())) {
         //代表已經登入了
         return MoodleConnectorStatus.LoginSuccess;
       }
