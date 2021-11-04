@@ -562,7 +562,10 @@ class _CourseTablePageState extends State<CourseTablePage> {
           ),
           TextButton(
             onPressed: () {
-              _showCourseDetail(courseInfo);
+              _showCourseDetail(courseInfo, 0);
+            },
+            onLongPress: () {
+              _showCourseDetail(courseInfo, 1);
             },
             child: new Text(R.current.details),
           ),
@@ -618,14 +621,14 @@ class _CourseTablePageState extends State<CourseTablePage> {
     }
   }
 
-  void _showCourseDetail(CourseInfoJson courseInfo) {
+  void _showCourseDetail(CourseInfoJson courseInfo, int index) {
     CourseMainJson course = courseInfo.main.course;
     Get.back();
     if (course.id.isEmpty) {
       MyToast.show(course.name + R.current.noSupport);
     } else {
       RouteUtils.toCourseDetailPage(
-          courseTableData!.courseSemester, courseInfo);
+          courseTableData!.courseSemester, courseInfo, index);
     }
   }
 

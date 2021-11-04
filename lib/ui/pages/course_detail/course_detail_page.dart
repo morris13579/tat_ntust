@@ -16,8 +16,9 @@ import 'screen/course_member.dart';
 class CourseDetailPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
   final SemesterJson semester;
+  final int index;
 
-  CourseDetailPage(this.courseInfo, this.semester);
+  CourseDetailPage(this.courseInfo, this.semester, this.index);
 
   @override
   _CourseDetailPageState createState() => _CourseDetailPageState();
@@ -34,22 +35,26 @@ class _CourseDetailPageState extends State<CourseDetailPage>
   void initState() {
     super.initState();
     tabPageList = TabPageList();
-    tabPageList.add(TabPage(
+    var courseInfoPage = TabPage(
       R.current.course,
       Icons.info,
       CourseInfoPage(
         widget.courseInfo.main.course.id,
         widget.semester,
       ),
-    ));
+    );
 
-    tabPageList.add(TabPage(
+    var courseMemberPage = TabPage(
       R.current.member,
       Icons.people,
       CourseMemberPage(
         widget.courseInfo.main.course.id,
       ),
-    ));
+    );
+
+    tabPageList.add((widget.index == 0) ? courseInfoPage : courseMemberPage);
+    tabPageList.add((widget.index == 0) ? courseMemberPage : courseInfoPage);
+
     _tabController = TabController(vsync: this, length: tabPageList.length);
   }
 
