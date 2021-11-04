@@ -66,6 +66,7 @@ class MoodleConnector {
   static const String _userUrl = "$host/user/index.php";
   static const String _viewUrl = "$host/course/view.php";
   static const String _branchUrl = "$host/lib/ajax/getnavbranch.php";
+  static String? id;
 
   static Future<MoodleConnectorStatus> login(
       String account, String password) async {
@@ -134,10 +135,12 @@ class MoodleConnector {
           courseUrl = i.attributes["href"];
         }
       }
+      id = null;
       if (courseUrl == null) {
         throw Exception("courseUrl is null");
       }
-      return Uri.parse(courseUrl).queryParameters["id"]!;
+      id = Uri.parse(courseUrl).queryParameters["id"];
+      return id!;
     } catch (e) {
       throw e;
     }

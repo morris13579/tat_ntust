@@ -269,6 +269,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "titleOther": MessageLookupByLibrary.simpleMessage("Other"),
         "titleScore": MessageLookupByLibrary.simpleMessage("Score"),
         "totalMember": MessageLookupByLibrary.simpleMessage("Total member: "),
+        "unSupportThisClass":
+            MessageLookupByLibrary.simpleMessage("un support this class"),
         "unknownError":
             MessageLookupByLibrary.simpleMessage("An unknown error occurred"),
         "update": MessageLookupByLibrary.simpleMessage("Update"),

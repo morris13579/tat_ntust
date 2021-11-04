@@ -78,8 +78,8 @@ class ErrorDialog {
         btnCancelText: parameter.btnCancelText!,
         useRootNavigator: false,
         dismissOnTouchOutside: false,
-        btnCancelOnPress: parameter.btnCancelOnPress!,
-        btnOkOnPress: parameter.btnOkOnPress!,
+        btnCancelOnPress: parameter.btnCancelOnPress,
+        btnOkOnPress: parameter.btnOkOnPress,
         onDissmissCallback: (DismissType type) {
           dismissType = type;
         });

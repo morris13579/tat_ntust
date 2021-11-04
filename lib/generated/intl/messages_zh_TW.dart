@@ -232,6 +232,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "titleOther": MessageLookupByLibrary.simpleMessage("其它"),
         "titleScore": MessageLookupByLibrary.simpleMessage("成績"),
         "totalMember": MessageLookupByLibrary.simpleMessage("總共成員人數: "),
+        "unSupportThisClass": MessageLookupByLibrary.simpleMessage("不支持查詢此課程"),
         "unknownError": MessageLookupByLibrary.simpleMessage("發生未知錯誤"),
         "update": MessageLookupByLibrary.simpleMessage("更新"),
         "versionInfo": MessageLookupByLibrary.simpleMessage("版本資訊"),

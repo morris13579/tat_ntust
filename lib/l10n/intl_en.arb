@@ -109,6 +109,7 @@
   "choosePeopleString": "本校初選人數上限(限舊生)：%s\n本校加退選人數上限/新生第一學期初選人數上限：%s\n系統校際選課人數上限：%s",
   "member": "member",
   "totalMember": "Total member: ",
+  "unSupportThisClass": "un support this class",
   "___________________FileViewerPage___________________": "註解",
   "sortBy": "Sort by",
   "createNewFolder": "Create New folder",

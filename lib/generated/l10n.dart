@@ -1140,6 +1140,16 @@ class S {
     );
   }
 
+  /// `un support this class`
+  String get unSupportThisClass {
+    return Intl.message(
+      'un support this class',
+      name: 'unSupportThisClass',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `註解`
   String get ___________________FileViewerPage___________________ {
     return Intl.message(

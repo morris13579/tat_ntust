@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/ad/ad_manager.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
-import 'package:flutter_app/src/task/moodle_webapi/moodle_webapi_course_message.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_webapi_course_message_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:intl/intl.dart';

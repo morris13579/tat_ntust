@@ -4,7 +4,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/ad/ad_manager.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
-import 'package:flutter_app/src/task/moodle_webapi/moodle_webapi_course_directory.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_webapi_course_directory_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';

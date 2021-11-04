@@ -1,7 +1,9 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
+import 'package:flutter_app/ui/other/error_dialog.dart';
 
 import '../task.dart';
 import 'moodle_task.dart';
@@ -20,6 +22,17 @@ class MoodleCourseAnnouncementTask
       List<MoodleAnnouncementInfo>? value;
       super.onStart(R.current.getMoodleCourseAnnouncement);
       vv = await MoodleConnector.getCourseDirectory(id);
+      if (MoodleConnector.id == null) {
+        ErrorDialogParameter parameter = ErrorDialogParameter(
+          title: R.current.warning,
+          dialogType: DialogType.INFO,
+          desc: R.current.unSupportThisClass,
+          okResult: false,
+          btnOkText: R.current.sure,
+          offCancelBtn: true,
+        );
+        return await super.onErrorParameter(parameter);
+      }
       if (vv != null) {
         String? url;
         for (var i in vv) {
