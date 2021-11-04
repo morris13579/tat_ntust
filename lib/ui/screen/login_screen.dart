@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/src/R.dart';
@@ -17,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final FocusNode _passwordFocus = new FocusNode();
   final FocusNode _accountFocus = new FocusNode();
+  bool passwordShow = false;
   String _accountErrorMessage = '';
   String _passwordErrorMessage = '';
 
@@ -29,8 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _loginPress(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      _passwordFocus.unfocus();
-      _accountFocus.unfocus();
+      FocusScope.of(context).unfocus();
       Model.instance.setAccount(_accountControl.text.toString());
       Model.instance.setPassword(_passwordControl.text.toString());
       await Model.instance.saveUserData();
@@ -123,31 +124,47 @@ class _LoginScreenState extends State<LoginScreen> {
                     Material(
                       elevation: 2,
                       borderRadius: BorderRadius.all(Radius.circular(32)),
-                      child: TextFormField(
-                        controller: _passwordControl,
-                        cursorColor: Colors.blue[800],
-                        obscureText: true,
-                        focusNode: _passwordFocus,
-                        onEditingComplete: () {
-                          _passwordFocus.unfocus();
-                        },
-                        validator: (value) => _validatorPassword(value!),
-                        decoration: InputDecoration(
-                          hintText: R.current.password,
-                          errorStyle: TextStyle(
-                            height: 0,
-                            fontSize: 0,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _passwordControl,
+                              cursorColor: Colors.blue[800],
+                              obscureText: !passwordShow,
+                              focusNode: _passwordFocus,
+                              onEditingComplete: () {
+                                _passwordFocus.unfocus();
+                              },
+                              validator: (value) => _validatorPassword(value!),
+                              decoration: InputDecoration(
+                                hintText: R.current.password,
+                                errorStyle: TextStyle(
+                                  height: 0,
+                                  fontSize: 0,
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.grey,
+                                ),
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 25,
+                                  vertical: 13,
+                                ),
+                              ),
+                            ),
                           ),
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.grey,
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 25,
-                            vertical: 13,
-                          ),
-                        ),
+                          IconButton(
+                            icon: (!passwordShow)
+                                ? Icon(EvaIcons.eyeOffOutline)
+                                : Icon(EvaIcons.eyeOutline),
+                            onPressed: () {
+                              setState(() {
+                                passwordShow = !passwordShow;
+                              });
+                            },
+                          )
+                        ],
                       ),
                     ),
                     SizedBox(

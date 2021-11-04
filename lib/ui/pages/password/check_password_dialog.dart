@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/debug/log/log.dart';
@@ -18,6 +19,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
   final TextEditingController _originPasswordController =
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool passwordShow = false;
   final FocusNode _originPasswordFocus = new FocusNode();
   String _originPasswordErrorMessage = "";
 
@@ -72,23 +74,39 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
           children: <Widget>[
             Material(
               elevation: 2,
-              child: TextFormField(
-                controller: _originPasswordController,
-                cursorColor: Colors.blue[800],
-                textInputAction: TextInputAction.done,
-                focusNode: _originPasswordFocus,
-                onEditingComplete: () {
-                  _originPasswordFocus.unfocus();
-                },
-                obscureText: true,
-                validator: (value) => _validatorOriginPassword(value!),
-                decoration: InputDecoration(
-                  hintText: R.current.originPassword,
-                  errorStyle: TextStyle(
-                    height: 0,
-                    fontSize: 0,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _originPasswordController,
+                      cursorColor: Colors.blue[800],
+                      textInputAction: TextInputAction.done,
+                      focusNode: _originPasswordFocus,
+                      onEditingComplete: () {
+                        _originPasswordFocus.unfocus();
+                      },
+                      obscureText: !passwordShow,
+                      validator: (value) => _validatorOriginPassword(value!),
+                      decoration: InputDecoration(
+                        hintText: R.current.originPassword,
+                        errorStyle: TextStyle(
+                          height: 0,
+                          fontSize: 0,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  IconButton(
+                    icon: (!passwordShow)
+                        ? Icon(EvaIcons.eyeOffOutline)
+                        : Icon(EvaIcons.eyeOutline),
+                    onPressed: () {
+                      setState(() {
+                        passwordShow = !passwordShow;
+                      });
+                    },
+                  )
+                ],
               ),
             ),
             SizedBox(

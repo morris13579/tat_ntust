@@ -56,7 +56,9 @@ class _CourseTablePageState extends State<CourseTablePage> {
       if (userData.account.isEmpty || userData.password.isEmpty) {
         RouteUtils.toLoginScreen().then((value) {
           if (value != null && value) {
-            _loadSetting();
+            Future.delayed(Duration(milliseconds: 200)).then((_) {
+              _loadSetting();
+            });
           }
         }); //尚未登入
       } else {
