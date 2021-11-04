@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/generated/l10n.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/task/moodle/moodle_member_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
@@ -56,8 +57,8 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     if (await taskFlow.start()) {
       members = task.result;
     }
-
-    for (int i = 0; i < members.length; i++) {
+    listItem.add(_buildClassmateNumber(0, members.length));
+    for (int i = 1; i < members.length; i++) {
       listItem.add(_buildClassmateInfo(i, members[i]));
     }
     isLoading = false;
@@ -105,6 +106,28 @@ class _CourseMemberPageState extends State<CourseMemberPage>
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildClassmateNumber(int index, int number) {
+    Color color;
+    color = (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+    return Container(
+      padding: EdgeInsets.all(5),
+      color: color,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              "${S.current.totalMember} $number",
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }

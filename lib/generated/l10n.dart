@@ -1130,6 +1130,16 @@ class S {
     );
   }
 
+  /// `Total member: `
+  String get totalMember {
+    return Intl.message(
+      'Total member: ',
+      name: 'totalMember',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `註解`
   String get ___________________FileViewerPage___________________ {
     return Intl.message(
