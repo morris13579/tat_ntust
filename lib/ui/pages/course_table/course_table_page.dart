@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -18,8 +19,8 @@ import 'package:flutter_app/src/task/course/course_semester_task.dart';
 import 'package:flutter_app/src/task/course/course_table_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -329,43 +330,40 @@ class _CourseTablePageState extends State<CourseTablePage> {
                 itemCount: value.length,
                 shrinkWrap: true, //使清單最小化
                 itemBuilder: (BuildContext context, int index) {
-                  return Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: Container(
-                      height: 50,
-                      child: TextButton(
-                        child: Container(
-                          child: Text(sprintf("%s %s %s-%s", [
-                            value[index].studentId,
-                            value[index].studentName,
-                            value[index].courseSemester.year,
-                            value[index].courseSemester.semester
-                          ])),
-                        ),
-                        onPressed: () {
-                          Model.instance.getCourseSetting().info =
-                              value[index]; //儲存課表
-                          Model.instance.saveCourseSetting();
-                          _showCourseTable(value[index]);
-                          Model.instance.clearSemesterJsonList(); //須清除已儲存學期
-                          Get.back();
-                        },
+                  return Container(
+                    height: 50,
+                    child: TextButton(
+                      child: Container(
+                        child: Text(sprintf("%s %s %s-%s", [
+                          value[index].studentId,
+                          value[index].studentName,
+                          value[index].courseSemester.year,
+                          value[index].courseSemester.semester
+                        ])),
                       ),
-                    ),
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: R.current.delete,
-                        color: Colors.red,
-                        icon: Icons.delete_forever,
-                        onTap: () async {
+                      onPressed: () {
+                        Model.instance.getCourseSetting().info =
+                            value[index]; //儲存課表
+                        Model.instance.saveCourseSetting();
+                        _showCourseTable(value[index]);
+                        Model.instance.clearSemesterJsonList(); //須清除已儲存學期
+                        Get.back();
+                      },
+                      onLongPress: () async {
+                        ErrorDialogParameter parameter = ErrorDialogParameter(
+                            desc: "",
+                            btnOkText: R.current.sure,
+                            title: R.current.delete,
+                            dialogType: DialogType.WARNING);
+                        var result = await ErrorDialog(parameter).show();
+                        if (result) {
                           Model.instance.removeCourseTable(value[index]);
                           value.remove(index);
                           await Model.instance.saveCourseTableList();
                           setState(() {});
-                        },
-                      ),
-                    ],
+                        }
+                      },
+                    ),
                   );
                 },
               ),
