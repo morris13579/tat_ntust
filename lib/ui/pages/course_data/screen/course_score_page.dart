@@ -70,6 +70,7 @@ class _CourseScorePageState extends State<CourseScorePage>
           //指定索引及固定列宽
           0: FixedColumnWidth(75.0),
         },
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         //設定表格樣式
         border: TableBorder.all(style: BorderStyle.solid),
         children: <TableRow>[
@@ -88,7 +89,10 @@ class _CourseScorePageState extends State<CourseScorePage>
             .map(
               (e) => TableRow(
                 children: <Widget>[
-                  Text(e.name),
+                  Container(
+                    padding: EdgeInsets.only(top: 5, bottom: 5),
+                    child: Text(e.name),
+                  ),
                   Text(e.weight),
                   Text(e.score),
                   Text(e.fullRange),

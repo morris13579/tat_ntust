@@ -399,8 +399,6 @@ class MoodleConnector {
       parameter = ConnectorParameter(_scoreUrl);
       String id = await getCourseUrl(courseId);
       parameter.data = {"id": id};
-      print(parameter.url);
-      print(id);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
       nodes = tagNode
@@ -418,7 +416,7 @@ class MoodleConnector {
           th = node
               .getElementsByTagName('th')
               .first
-              .getElementsByTagName("span");
+              .children;
           td = node.getElementsByTagName('td');
         } catch (e) {
           continue;
