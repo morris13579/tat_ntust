@@ -58,7 +58,9 @@ class _CourseScorePageState extends State<CourseScorePage>
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : buildTree(),
+          : SingleChildScrollView(
+              child: buildTree(),
+            ),
     );
   }
 
