@@ -940,10 +940,10 @@ class S {
     );
   }
 
-  /// `course Data`
+  /// `Moodle`
   String get courseData {
     return Intl.message(
-      'course Data',
+      'Moodle',
       name: 'courseData',
       desc: '',
       args: [],

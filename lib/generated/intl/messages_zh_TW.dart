@@ -89,7 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "coreAbility": MessageLookupByLibrary.simpleMessage("專業核心能力"),
         "course": MessageLookupByLibrary.simpleMessage("課程"),
         "courseContent": MessageLookupByLibrary.simpleMessage("課程大綱"),
-        "courseData": MessageLookupByLibrary.simpleMessage("上課資料"),
+        "courseData": MessageLookupByLibrary.simpleMessage("Moodle"),
         "courseGrading": MessageLookupByLibrary.simpleMessage("評量方式"),
         "courseId": MessageLookupByLibrary.simpleMessage("課號"),
         "courseName": MessageLookupByLibrary.simpleMessage("課程名稱"),

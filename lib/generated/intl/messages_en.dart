@@ -95,7 +95,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "coreAbility": MessageLookupByLibrary.simpleMessage("Core ability"),
         "course": MessageLookupByLibrary.simpleMessage("Course"),
         "courseContent": MessageLookupByLibrary.simpleMessage("Course content"),
-        "courseData": MessageLookupByLibrary.simpleMessage("course Data"),
+        "courseData": MessageLookupByLibrary.simpleMessage("Moodle"),
         "courseGrading": MessageLookupByLibrary.simpleMessage("Course grading"),
         "courseId": MessageLookupByLibrary.simpleMessage("Course number"),
         "courseName": MessageLookupByLibrary.simpleMessage("Course Title"),
