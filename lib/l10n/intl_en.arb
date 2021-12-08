@@ -55,6 +55,8 @@
   "getMoodleCourseBranchError": "get course branch error",
   "getMoodleCourseAnnouncement": "get course announcement...",
   "getMoodleCourseAnnouncementError": "get course announcement error",
+  "getMoodleScore": "get score...",
+  "getMoodleScoreError": "get score error",
   "downloadAll": "Download All",
   "___________________CourseTableUi___________________": "註解",
   "Monday": "MON",
@@ -177,5 +179,11 @@
   "___________________CourseDataUi___________________": "註解",
   "file": "Files",
   "announcement": "Announcements",
-  "selectAble": "text selectable"
+  "score": "Score",
+  "selectAble": "text selectable",
+  "rankItem": "rank name",
+  "weight": "weight",
+  "fullRange": "fullRange",
+  "percentage": "percentage",
+  "contribute": "contribute"
 }

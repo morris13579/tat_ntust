@@ -60,12 +60,32 @@ class MoodleFileInfo {
   MoodleFileInfo({required this.name, required this.url});
 }
 
+class MoodleScoreItem {
+  String name;
+  String weight; //計算後權量
+  String score; //成績
+  String fullRange; //全距
+  String percentage; //百分比
+  String feedback; //回饋
+  String contribute; //貢獻到課程總分
+  MoodleScoreItem({
+    required this.name,
+    required this.weight,
+    required this.score,
+    required this.fullRange,
+    required this.percentage,
+    required this.feedback,
+    required this.contribute,
+  });
+}
+
 class MoodleConnector {
   static const String host = "https://moodle.ntust.edu.tw";
   static const String _loginUrl = "$host/login/index.php";
   static const String _userUrl = "$host/user/index.php";
   static const String _viewUrl = "$host/course/view.php";
   static const String _branchUrl = "$host/lib/ajax/getnavbranch.php";
+  static const String _scoreUrl = "$host/grade/report/user/index.php";
   static String? id;
 
   static Future<MoodleConnectorStatus> login(
@@ -364,6 +384,56 @@ class MoodleConnector {
         }
       }
       return userInfo;
+    } catch (e, stack) {
+      Log.eWithStack(e, stack);
+      return null;
+    }
+  }
+
+  static Future<List<MoodleScoreItem>?> getScore(String courseId) async {
+    String result;
+    Document tagNode;
+    List<Element> nodes;
+    ConnectorParameter parameter;
+    try {
+      parameter = ConnectorParameter(_scoreUrl);
+      String id = await getCourseUrl(courseId);
+      parameter.data = {"id": id};
+      print(parameter.url);
+      print(id);
+      result = await Connector.getDataByGet(parameter);
+      tagNode = parse(result);
+      nodes = tagNode
+          .getElementsByTagName("table")
+          .first
+          .getElementsByTagName("tbody")
+          .first
+          .getElementsByTagName("tr");
+      nodes = nodes.getRange(2, nodes.length).toList();
+      print(nodes.map((e) => e.text).toList());
+      List<MoodleScoreItem> value = [];
+      for (var node in nodes) {
+        List<Element> th, td;
+        try {
+          th = node
+              .getElementsByTagName('th')
+              .first
+              .getElementsByTagName("span");
+          td = node.getElementsByTagName('td');
+        } catch (e) {
+          continue;
+        }
+        value.add(MoodleScoreItem(
+          name: th.first.text,
+          weight: td[0].text,
+          score: td[1].text,
+          fullRange: td[2].text,
+          percentage: td[3].text,
+          feedback: td[4].text,
+          contribute: td[5].text,
+        ));
+      }
+      return value;
     } catch (e, stack) {
       Log.eWithStack(e, stack);
       return null;

@@ -600,6 +600,26 @@ class S {
     );
   }
 
+  /// `get score...`
+  String get getMoodleScore {
+    return Intl.message(
+      'get score...',
+      name: 'getMoodleScore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `get score error`
+  String get getMoodleScoreError {
+    return Intl.message(
+      'get score error',
+      name: 'getMoodleScoreError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Download All`
   String get downloadAll {
     return Intl.message(
@@ -1820,11 +1840,71 @@ class S {
     );
   }
 
+  /// `Score`
+  String get score {
+    return Intl.message(
+      'Score',
+      name: 'score',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `text selectable`
   String get selectAble {
     return Intl.message(
       'text selectable',
       name: 'selectAble',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `rank name`
+  String get rankItem {
+    return Intl.message(
+      'rank name',
+      name: 'rankItem',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `weight`
+  String get weight {
+    return Intl.message(
+      'weight',
+      name: 'weight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `fullRange`
+  String get fullRange {
+    return Intl.message(
+      'fullRange',
+      name: 'fullRange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `percentage`
+  String get percentage {
+    return Intl.message(
+      'percentage',
+      name: 'percentage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `contribute`
+  String get contribute {
+    return Intl.message(
+      'contribute',
+      name: 'contribute',
       desc: '',
       args: [],
     );

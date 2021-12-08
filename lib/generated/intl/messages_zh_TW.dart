@@ -85,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "classRoomNo": MessageLookupByLibrary.simpleMessage("上課時間教室"),
         "classroom": MessageLookupByLibrary.simpleMessage("教室"),
         "closeOnce": MessageLookupByLibrary.simpleMessage("再按一次關閉"),
+        "contribute": MessageLookupByLibrary.simpleMessage("貢獻到課程總分"),
         "coreAbility": MessageLookupByLibrary.simpleMessage("專業核心能力"),
         "course": MessageLookupByLibrary.simpleMessage("課程"),
         "courseContent": MessageLookupByLibrary.simpleMessage("課程大綱"),
@@ -125,6 +126,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "findNewVersion": MessageLookupByLibrary.simpleMessage("發現新版本"),
         "folderNameAlreadyExists":
             MessageLookupByLibrary.simpleMessage("資料夾名稱已經存在!"),
+        "fullRange": MessageLookupByLibrary.simpleMessage("全距"),
         "getCourse": MessageLookupByLibrary.simpleMessage("取得課表..."),
         "getCourseDetail": MessageLookupByLibrary.simpleMessage("課程資料讀取中..."),
         "getCourseDetailError":
@@ -148,6 +150,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "getMoodleMembers": MessageLookupByLibrary.simpleMessage("取得課程成員中..."),
         "getMoodleMembersError":
             MessageLookupByLibrary.simpleMessage("取得課程成員錯誤"),
+        "getMoodleScore": MessageLookupByLibrary.simpleMessage("取得課程成績中..."),
+        "getMoodleScoreError": MessageLookupByLibrary.simpleMessage("取得課程成績錯誤"),
         "github": MessageLookupByLibrary.simpleMessage("Github"),
         "importCourse": MessageLookupByLibrary.simpleMessage("導入其他課程"),
         "informationSystem": MessageLookupByLibrary.simpleMessage("資訊系統"),
@@ -194,6 +198,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "password": MessageLookupByLibrary.simpleMessage("密碼"),
         "passwordNotSame": MessageLookupByLibrary.simpleMessage("與原始密碼不一致"),
         "passwordNull": MessageLookupByLibrary.simpleMessage("請輸入密碼"),
+        "percentage": MessageLookupByLibrary.simpleMessage("百分比"),
         "pleaseConnectToNetwork":
             MessageLookupByLibrary.simpleMessage("請確認網路連接狀態"),
         "pleaseEnterStudentId":
@@ -202,12 +207,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "practicalTimes": MessageLookupByLibrary.simpleMessage("實習時數"),
         "prepareDownload": MessageLookupByLibrary.simpleMessage("準備下載中..."),
         "projectLink": MessageLookupByLibrary.simpleMessage("專案連結"),
+        "rankItem": MessageLookupByLibrary.simpleMessage("評分項目"),
         "refresh": MessageLookupByLibrary.simpleMessage("重新整理"),
         "rename": MessageLookupByLibrary.simpleMessage("重新命名"),
         "renameItem": MessageLookupByLibrary.simpleMessage("重新命名"),
         "requireOption": MessageLookupByLibrary.simpleMessage("選必修"),
         "restart": MessageLookupByLibrary.simpleMessage("重試"),
         "save": MessageLookupByLibrary.simpleMessage("儲存"),
+        "score": MessageLookupByLibrary.simpleMessage("成績"),
         "scoreSearch": MessageLookupByLibrary.simpleMessage("分數查詢"),
         "search": MessageLookupByLibrary.simpleMessage("搜尋"),
         "searchCredit": MessageLookupByLibrary.simpleMessage("查詢學分"),
@@ -237,6 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "update": MessageLookupByLibrary.simpleMessage("更新"),
         "versionInfo": MessageLookupByLibrary.simpleMessage("版本資訊"),
         "warning": MessageLookupByLibrary.simpleMessage("警告"),
+        "weight": MessageLookupByLibrary.simpleMessage("權量"),
         "willRestart": MessageLookupByLibrary.simpleMessage("將自動重啟並套用語言")
       };
 }

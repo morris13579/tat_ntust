@@ -55,6 +55,8 @@
   "getMoodleCourseBranchError": "取得資料錯誤",
   "getMoodleCourseAnnouncement": "取得課程公佈欄...",
   "getMoodleCourseAnnouncementError": "取得課程公佈欄錯誤",
+  "getMoodleScore": "取得課程成績中...",
+  "getMoodleScoreError": "取得課程成績錯誤",
   "downloadAll": "全部打包下載",
   "___________________CourseTableUi___________________": "註解",
   "Monday": "一",
@@ -177,5 +179,11 @@
   "___________________CourseDataUi___________________": "註解",
   "file": "檔案",
   "announcement": "公告",
-  "selectAble": "解鎖後文字可複製"
+  "score": "成績",
+  "selectAble": "解鎖後文字可複製",
+  "rankItem": "評分項目",
+  "weight": "權量",
+  "fullRange": "全距",
+  "percentage": "百分比",
+  "contribute": "貢獻到課程總分"
 }

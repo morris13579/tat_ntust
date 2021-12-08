@@ -91,6 +91,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "classroom": MessageLookupByLibrary.simpleMessage("Classroom"),
         "closeOnce":
             MessageLookupByLibrary.simpleMessage("Press again to close"),
+        "contribute": MessageLookupByLibrary.simpleMessage("contribute"),
         "coreAbility": MessageLookupByLibrary.simpleMessage("Core ability"),
         "course": MessageLookupByLibrary.simpleMessage("Course"),
         "courseContent": MessageLookupByLibrary.simpleMessage("Course content"),
@@ -137,6 +138,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Find new version"),
         "folderNameAlreadyExists": MessageLookupByLibrary.simpleMessage(
             "A Folder with that name already exists!"),
+        "fullRange": MessageLookupByLibrary.simpleMessage("fullRange"),
         "getCourse": MessageLookupByLibrary.simpleMessage("Get schedule..."),
         "getCourseDetail":
             MessageLookupByLibrary.simpleMessage("Reading course materials..."),
@@ -165,6 +167,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Get Moodle members..."),
         "getMoodleMembersError":
             MessageLookupByLibrary.simpleMessage("Get Moodle members error"),
+        "getMoodleScore": MessageLookupByLibrary.simpleMessage("get score..."),
+        "getMoodleScoreError":
+            MessageLookupByLibrary.simpleMessage("get score error"),
         "github": MessageLookupByLibrary.simpleMessage("Github"),
         "importCourse": MessageLookupByLibrary.simpleMessage("Import course"),
         "informationSystem":
@@ -225,6 +230,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Different from the original password"),
         "passwordNull":
             MessageLookupByLibrary.simpleMessage("Please enter the password"),
+        "percentage": MessageLookupByLibrary.simpleMessage("percentage"),
         "pleaseConnectToNetwork":
             MessageLookupByLibrary.simpleMessage("Please connect to network"),
         "pleaseEnterStudentId":
@@ -235,12 +241,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "prepareDownload":
             MessageLookupByLibrary.simpleMessage("Prepare download..."),
         "projectLink": MessageLookupByLibrary.simpleMessage("Project link"),
+        "rankItem": MessageLookupByLibrary.simpleMessage("rank name"),
         "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "renameItem": MessageLookupByLibrary.simpleMessage("Rename item"),
         "requireOption": MessageLookupByLibrary.simpleMessage("Require option"),
         "restart": MessageLookupByLibrary.simpleMessage("Restart"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
+        "score": MessageLookupByLibrary.simpleMessage("Score"),
         "scoreSearch": MessageLookupByLibrary.simpleMessage("Score query"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "searchCredit": MessageLookupByLibrary.simpleMessage("Search credit"),
@@ -276,6 +284,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "update": MessageLookupByLibrary.simpleMessage("Update"),
         "versionInfo": MessageLookupByLibrary.simpleMessage("Version info"),
         "warning": MessageLookupByLibrary.simpleMessage("Warning"),
+        "weight": MessageLookupByLibrary.simpleMessage("weight"),
         "willRestart":
             MessageLookupByLibrary.simpleMessage("Will restart automatically")
       };

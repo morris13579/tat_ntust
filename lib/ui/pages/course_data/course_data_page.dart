@@ -8,6 +8,7 @@ import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_page
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_directory_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_directory_webapi_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/course_score_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/tab_page.dart';
 import 'package:get/get.dart';
 
@@ -32,7 +33,7 @@ class _CourseDataPageState extends State<CourseDataPage>
   void initState() {
     super.initState();
     tabPageList = TabPageList();
-    _tabController = TabController(vsync: this, length: 2);
+    _tabController = TabController(vsync: this, length: 3);
     bool useMoodleWebApi = Model.instance.getOtherSetting().useMoodleWebApi;
     var filePage = TabPage(
       R.current.file,
@@ -58,6 +59,11 @@ class _CourseDataPageState extends State<CourseDataPage>
     );
     tabPageList.add((widget.index == 0) ? filePage : announcementPage);
     tabPageList.add((widget.index == 0) ? announcementPage : filePage);
+    tabPageList.add(TabPage(
+      R.current.score,
+      Icons.score,
+      CourseScorePage(widget.courseInfo),
+    ));
     setState(() {});
   }
 
