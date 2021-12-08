@@ -408,7 +408,6 @@ class MoodleConnector {
           .first
           .getElementsByTagName("tr");
       nodes = nodes.getRange(2, nodes.length).toList();
-      print(nodes.map((e) => e.text).toList());
       List<MoodleScoreItem> value = [];
       for (var node in nodes) {
         List<Element> th, td;
