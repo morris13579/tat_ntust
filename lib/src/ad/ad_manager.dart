@@ -54,7 +54,13 @@ class AdManager {
   static Future<bool> getADEnable() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var validCode = await RemoteConfigUtils.getRemoveADKey();
-    var key = pref.getString(_adPrefKey) ?? "";
+    var key;
+    try {
+      key = pref.getString(_adPrefKey) ?? "";
+    } catch (e) {
+      pref.remove(_adPrefKey);
+      key = "";
+    }
     return !validCode.contains(key);
   }
 

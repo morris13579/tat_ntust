@@ -64,8 +64,6 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       APPVersion.initAndCheck();
       initFlutterDownloader();
       initNotifications();
-      MoodleWebApiConnector.testMoodleWebApi().then(
-          (value) => Model.instance.getOtherSetting().useMoodleWebApi = value);
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
     }
