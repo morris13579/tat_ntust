@@ -230,10 +230,14 @@ class MoodleConnector {
         nodes = i.getElementsByTagName("td");
         value.add(MoodleAnnouncementInfo(
           name: nodes[0].text,
-          replies: nodes[3].text,
-          author: nodes[2].text,
+          replies: i.getElementsByClassName("replies").first.text,
+          author: i.getElementsByClassName("author").first.text,
           url: nodes[0].getElementsByTagName("a").first.attributes["href"]!,
-          time: nodes[4].getElementsByTagName("a")[1].text,
+          time: i
+              .getElementsByClassName("lastpost")
+              .first
+              .getElementsByTagName("a")[1]
+              .text,
         ));
       }
       return value;
@@ -412,10 +416,7 @@ class MoodleConnector {
       for (var node in nodes) {
         List<Element> th, td;
         try {
-          th = node
-              .getElementsByTagName('th')
-              .first
-              .children;
+          th = node.getElementsByTagName('th').first.children;
           td = node.getElementsByTagName('td');
         } catch (e) {
           continue;
