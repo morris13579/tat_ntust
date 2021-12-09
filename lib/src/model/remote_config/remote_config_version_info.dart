@@ -15,14 +15,23 @@ class RemoteConfigVersionInfo {
   @JsonKey(name: "last_version_detail")
   String lastVersionDetail;
 
-  @JsonKey(name: "url")
-  String url;
+  @JsonKey(name: "link")
+  AndroidIosVersionInfo link;
 
-  RemoteConfigVersionInfo(
-      {required this.last,
-      required this.lastVersionDetail,
-      required this.isFocusUpdate,
-      required this.url});
+  String get url {
+    return (Platform.isAndroid) ? link.android : link.ios;
+  }
+
+  String get version {
+    return (Platform.isIOS) ? last.ios : last.android;
+  }
+
+  RemoteConfigVersionInfo({
+    required this.last,
+    required this.lastVersionDetail,
+    required this.isFocusUpdate,
+    required this.link,
+  });
 
   factory RemoteConfigVersionInfo.fromJson(Map<String, dynamic> srcJson) =>
       _$RemoteConfigVersionInfoFromJson(srcJson);
@@ -40,8 +49,4 @@ class AndroidIosVersionInfo {
 
   factory AndroidIosVersionInfo.fromJson(Map<String, dynamic> srcJson) =>
       _$AndroidIosVersionInfoFromJson(srcJson);
-
-  String get version {
-    return (Platform.isIOS) ? ios : android;
-  }
 }

@@ -13,7 +13,8 @@ RemoteConfigVersionInfo _$RemoteConfigVersionInfoFromJson(
           json['last_version'] as Map<String, dynamic>),
       lastVersionDetail: json['last_version_detail'] as String,
       isFocusUpdate: json['is_focus_update'] as bool,
-      url: json['url'] as String,
+      link:
+          AndroidIosVersionInfo.fromJson(json['link'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$RemoteConfigVersionInfoToJson(
@@ -22,7 +23,7 @@ Map<String, dynamic> _$RemoteConfigVersionInfoToJson(
       'is_focus_update': instance.isFocusUpdate,
       'last_version': instance.last,
       'last_version_detail': instance.lastVersionDetail,
-      'url': instance.url,
+      'link': instance.link,
     };
 
 AndroidIosVersionInfo _$AndroidIosVersionInfoFromJson(
