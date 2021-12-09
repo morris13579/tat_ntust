@@ -88,20 +88,21 @@ class _DevPageState extends State<DevPage> {
         RouteUtils.toStoreEditPage();
         break;
       case onListViewPress.ADRemove:
-        await Get.to(() => CustomInputDialog(
-            title: "Input Valid Code",
-            initText: "",
-            hint: "Please input valid code",
-            onOk: (String value) async {
-              List<String> keyList = await RemoteConfigUtils.getRemoveADKey();
-              if (keyList.contains(value)) {
-                MyToast.show("Remove AD success");
-                AdManager.setADEnable(value);
-              } else {
-                MyToast.show("Invalid code");
-              }
-            },
-            onCancel: (String value) {}));
+        await Get.dialog(CustomInputDialog(
+          title: "Input Valid Code",
+          initText: "",
+          hint: "Please input valid code",
+          onOk: (String value) async {
+            List<String> keyList = await RemoteConfigUtils.getRemoveADKey();
+            if (keyList.contains(value)) {
+              MyToast.show("Remove AD success");
+              AdManager.setADEnable(value);
+            } else {
+              MyToast.show("Invalid code");
+            }
+          },
+          onCancel: (String value) {},
+        ));
         removeADItem();
         break;
       default:
