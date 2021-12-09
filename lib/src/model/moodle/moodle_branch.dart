@@ -36,10 +36,10 @@ class MoodleBranchJson extends Object {
 
   /*
     children: (json['children'] as List)
-        ?.map((e) => (e == null || e == "")
-            ? null
-            : Children.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+          ?.map((e) => (e == null || e == "")
+              ? null
+              : Children.fromJson(e as Map<String, dynamic>))
+          ?.toList() as List<Children>,
    */
 
   MoodleBranchJson(

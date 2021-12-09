@@ -54,6 +54,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("註解"),
         "___________________ScoreUI___________________":
             MessageLookupByLibrary.simpleMessage("註解"),
+        "___________________ScoreUi___________________":
+            MessageLookupByLibrary.simpleMessage("註解"),
         "___________________SettingUi___________________":
             MessageLookupByLibrary.simpleMessage("註解"),
         "___________________loginUi___________________":
@@ -170,6 +172,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "getMoodleScore": MessageLookupByLibrary.simpleMessage("get score..."),
         "getMoodleScoreError":
             MessageLookupByLibrary.simpleMessage("get score error"),
+        "getScore": MessageLookupByLibrary.simpleMessage("get score..."),
+        "getScoreError":
+            MessageLookupByLibrary.simpleMessage("get score error"),
         "github": MessageLookupByLibrary.simpleMessage("Github"),
         "importCourse": MessageLookupByLibrary.simpleMessage("Import course"),
         "informationSystem":
@@ -247,6 +252,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "renameItem": MessageLookupByLibrary.simpleMessage("Rename item"),
         "requireOption": MessageLookupByLibrary.simpleMessage("Require option"),
         "restart": MessageLookupByLibrary.simpleMessage("Restart"),
+        "resultsOfVariousSubjects":
+            MessageLookupByLibrary.simpleMessage("Score"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "score": MessageLookupByLibrary.simpleMessage("Score"),
         "scoreSearch": MessageLookupByLibrary.simpleMessage("Score query"),

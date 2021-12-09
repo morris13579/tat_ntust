@@ -68,10 +68,12 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                   await webView.evaluateJavascript(
                       source: 'document.getElementById("btnLogIn").click();');
                   Future.delayed(Duration(seconds: 5)).then((value) {
-                    setState(() {
-                      showDialog = false;
-                    });
-                    MyToast.show(R.current.needValidateCaptcha);
+                    if (this.mounted) {
+                      setState(() {
+                        showDialog = false;
+                      });
+                      MyToast.show(R.current.needValidateCaptcha);
+                    }
                   });
                 } else {
                   try {

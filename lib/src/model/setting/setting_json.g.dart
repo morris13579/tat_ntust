@@ -38,7 +38,7 @@ OtherSettingJson _$OtherSettingJsonFromJson(Map<String, dynamic> json) =>
       lang: json['lang'] as String? ?? "",
       autoCheckAppUpdate: json['autoCheckAppUpdate'] as bool? ?? true,
       useExternalVideoPlayer: json['useExternalVideoPlayer'] as bool? ?? false,
-      useMoodleWebApi: json['useMoodleWebApi'] as bool? ?? false,
+      useMoodleWebApi: json['useMoodleWebApi'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$OtherSettingJsonToJson(OtherSettingJson instance) =>

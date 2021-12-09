@@ -17,7 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FileStore {
-  static String storeKey = "downloadPath";
+  static String storeKey = "download_path";
 
   static Future<String> findLocalPath(BuildContext context) async {
     bool checkPermission = await PermissionsUtils.check(context);

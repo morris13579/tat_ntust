@@ -620,6 +620,26 @@ class S {
     );
   }
 
+  /// `get score...`
+  String get getScore {
+    return Intl.message(
+      'get score...',
+      name: 'getScore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `get score error`
+  String get getScoreError {
+    return Intl.message(
+      'get score error',
+      name: 'getScoreError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Download All`
   String get downloadAll {
     return Intl.message(
@@ -1905,6 +1925,26 @@ class S {
     return Intl.message(
       'contribute',
       name: 'contribute',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `註解`
+  String get ___________________ScoreUi___________________ {
+    return Intl.message(
+      '註解',
+      name: '___________________ScoreUi___________________',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Score`
+  String get resultsOfVariousSubjects {
+    return Intl.message(
+      'Score',
+      name: 'resultsOfVariousSubjects',
       desc: '',
       args: [],
     );

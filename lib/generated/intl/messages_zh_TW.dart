@@ -54,6 +54,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("註解"),
         "___________________ScoreUI___________________":
             MessageLookupByLibrary.simpleMessage("註解"),
+        "___________________ScoreUi___________________":
+            MessageLookupByLibrary.simpleMessage("註解"),
         "___________________SettingUi___________________":
             MessageLookupByLibrary.simpleMessage("註解"),
         "___________________loginUi___________________":
@@ -152,6 +154,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("取得課程成員錯誤"),
         "getMoodleScore": MessageLookupByLibrary.simpleMessage("取得課程成績中..."),
         "getMoodleScoreError": MessageLookupByLibrary.simpleMessage("取得課程成績錯誤"),
+        "getScore": MessageLookupByLibrary.simpleMessage("取得成績中..."),
+        "getScoreError": MessageLookupByLibrary.simpleMessage("取得成績錯誤"),
         "github": MessageLookupByLibrary.simpleMessage("Github"),
         "importCourse": MessageLookupByLibrary.simpleMessage("導入其他課程"),
         "informationSystem": MessageLookupByLibrary.simpleMessage("資訊系統"),
@@ -213,6 +217,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "renameItem": MessageLookupByLibrary.simpleMessage("重新命名"),
         "requireOption": MessageLookupByLibrary.simpleMessage("選必修"),
         "restart": MessageLookupByLibrary.simpleMessage("重試"),
+        "resultsOfVariousSubjects":
+            MessageLookupByLibrary.simpleMessage("各科成績"),
         "save": MessageLookupByLibrary.simpleMessage("儲存"),
         "score": MessageLookupByLibrary.simpleMessage("成績"),
         "scoreSearch": MessageLookupByLibrary.simpleMessage("分數查詢"),

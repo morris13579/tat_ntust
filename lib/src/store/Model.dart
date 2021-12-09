@@ -9,6 +9,7 @@ import 'dart:convert';
 
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
+import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/model/setting/setting_json.dart';
 import 'package:flutter_app/src/model/userdata/user_data_json.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -19,10 +20,7 @@ import '../model/course/course_class_json.dart';
 //flutter packages pub run build_runner build 創建Json
 //flutter packages pub run build_runner build --delete-conflicting-outputs
 class Model {
-  Model._privateConstructor();
-
-  static final Model instance = Model._privateConstructor();
-  late SharedPreferences pref;
+  static final Model instance = Model();
   static String userDataJsonKey = "user_data";
 
   //----------List----------//
@@ -35,6 +33,7 @@ class Model {
   UserDataJson _userData = UserDataJson();
   List<CourseTableJson> _courseTableList = [];
   List<SemesterJson> _courseSemesterList = [];
+  ScoreRankJson _score = ScoreRankJson();
   SettingJson _setting = SettingJson();
   Map<String, bool> _firstRun = Map();
   static String appCheckUpdate = "AppCheckUpdate";
@@ -50,7 +49,7 @@ class Model {
       int millsTimeOut = timeOut * 1000;
       String wKey = "first_use_$key";
       int now = DateTime.now().millisecondsSinceEpoch;
-      int? before = _readInt(wKey);
+      int? before = await _readInt(wKey);
       if (before != null && before > now) {
         //Already Use
         return false;
@@ -190,6 +189,32 @@ class Model {
     return null;
   }
 
+  //--------------------ScoreJson--------------------//
+  Future<void> saveScore() async {
+    await _save(scoreCreditJsonKey, _score);
+  }
+
+  void setScore(ScoreRankJson value) {
+    _score = value;
+  }
+
+  Future<void> clearScore() async {
+    _score = ScoreRankJson();
+    await saveScore();
+  }
+
+  ScoreRankJson getScore() {
+    return _score;
+  }
+
+  Future<void> loadScore() async {
+    String? readJson;
+    readJson = await _readString(scoreCreditJsonKey);
+    _score = (readJson != null)
+        ? ScoreRankJson.fromJson(json.decode(readJson))
+        : ScoreRankJson();
+  }
+
   //--------------------SettingJson--------------------//
   Future<void> saveSetting() async {
     await _save(settingJsonKey, _setting);
@@ -297,12 +322,12 @@ class Model {
   }
 
   Future<void> getInstance() async {
-    pref = await SharedPreferences.getInstance();
     await DioConnector.instance.init();
     await loadUserData();
     await loadCourseTableList();
     await loadSetting();
     await loadSemesterJsonList();
+    await loadScore();
     //DioConnector.instance.deleteCookies();
   }
 
@@ -311,6 +336,7 @@ class Model {
     await clearSemesterJsonList();
     await clearCourseTableList();
     await clearCourseSetting();
+    await clearScore();
     DioConnector.instance.deleteCookies();
     await cacheManager.emptyCache(); //clears all data in cache.
     await getInstance();
@@ -343,30 +369,37 @@ class Model {
   //基本讀寫
 
   Future<void> _writeString(String key, String value) async {
+    var pref = await SharedPreferences.getInstance();
     await pref.setString(key, value);
   }
 
   Future<void> _writeInt(String key, int value) async {
+    var pref = await SharedPreferences.getInstance();
     await pref.setInt(key, value);
   }
 
-  int? _readInt(String key) {
+  Future<int?> _readInt(String key) async {
+    var pref = await SharedPreferences.getInstance();
     return pref.getInt(key);
   }
 
   Future<void> _writeStringList(String key, List<String> value) async {
+    var pref = await SharedPreferences.getInstance();
     await pref.setStringList(key, value);
   }
 
   Future<String?> _readString(String key) async {
+    var pref = await SharedPreferences.getInstance();
     return pref.getString(key);
   }
 
   Future<List<String>?> _readStringList(String key) async {
+    var pref = await SharedPreferences.getInstance();
     return pref.getStringList(key);
   }
 
   Future<void> _clearSetting(String key) async {
+    var pref = await SharedPreferences.getInstance();
     await pref.remove(key);
   }
 }

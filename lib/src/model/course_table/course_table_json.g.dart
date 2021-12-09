@@ -14,9 +14,9 @@ CourseTableJson _$CourseTableJsonFromJson(Map<String, dynamic> json) =>
               json['courseSemester'] as Map<String, dynamic>),
       courseInfoMap: (json['courseInfoMap'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(
-            _$enumDecode(_$DayEnumMap, k),
+            $enumDecode(_$DayEnumMap, k),
             (e as Map<String, dynamic>).map(
-              (k, e) => MapEntry(_$enumDecode(_$SectionNumberEnumMap, k),
+              (k, e) => MapEntry($enumDecode(_$SectionNumberEnumMap, k),
                   CourseInfoJson.fromJson(e as Map<String, dynamic>)),
             )),
       ),
@@ -33,32 +33,6 @@ Map<String, dynamic> _$CourseTableJsonToJson(CourseTableJson instance) =>
           _$DayEnumMap[k],
           e.map((k, e) => MapEntry(_$SectionNumberEnumMap[k], e)))),
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$SectionNumberEnumMap = {
   SectionNumber.T_1: 'T_1',

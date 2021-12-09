@@ -57,6 +57,8 @@
   "getMoodleCourseAnnouncementError": "get course announcement error",
   "getMoodleScore": "get score...",
   "getMoodleScoreError": "get score error",
+  "getScore": "get score...",
+  "getScoreError": "get score error",
   "downloadAll": "Download All",
   "___________________CourseTableUi___________________": "註解",
   "Monday": "MON",
@@ -185,5 +187,7 @@
   "weight": "weight",
   "fullRange": "fullRange",
   "percentage": "percentage",
-  "contribute": "contribute"
+  "contribute": "contribute",
+  "___________________ScoreUi___________________": "註解",
+  "resultsOfVariousSubjects": "Score"
 }

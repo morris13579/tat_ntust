@@ -16,7 +16,7 @@ CourseMainJson _$CourseMainJsonFromJson(Map<String, dynamic> json) =>
       note: json['note'] as String? ?? "",
       category: json['category'] as String? ?? "",
       time: (json['time'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(_$enumDecode(_$DayEnumMap, k), e as String),
+            (k, e) => MapEntry($enumDecode(_$DayEnumMap, k), e as String),
           ) ??
           const {},
     );
@@ -32,32 +32,6 @@ Map<String, dynamic> _$CourseMainJsonToJson(CourseMainJson instance) =>
       'category': instance.category,
       'time': instance.time.map((k, e) => MapEntry(_$DayEnumMap[k], e)),
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$DayEnumMap = {
   Day.Monday: 'Monday',
