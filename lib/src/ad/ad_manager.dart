@@ -46,14 +46,16 @@ class AdManager {
 
   static final String _adPrefKey = "ad_key";
 
-  static Future<void> setADEnable(bool value) async {
+  static Future<void> setADEnable(String value) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setBool(_adPrefKey, value);
+    await pref.setString(_adPrefKey, value);
   }
 
   static Future<bool> getADEnable() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getBool("ad_key") ?? true;
+    var validCode = await RemoteConfigUtils.getRemoveADKey();
+    var key = pref.getString(_adPrefKey) ?? "";
+    return !validCode.contains(key);
   }
 
   static Future<void> showDownloadAD() async {

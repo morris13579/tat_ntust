@@ -96,7 +96,7 @@ class _DevPageState extends State<DevPage> {
               List<String> keyList = await RemoteConfigUtils.getRemoveADKey();
               if (keyList.contains(value)) {
                 MyToast.show("Remove AD success");
-                AdManager.setADEnable(false);
+                AdManager.setADEnable(value);
               } else {
                 MyToast.show("Invalid code");
               }

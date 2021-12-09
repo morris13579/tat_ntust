@@ -54,7 +54,7 @@ class Model {
         //Already Use
         return false;
       } else {
-        _writeInt(wKey, now + millsTimeOut);
+        await _writeInt(wKey, now + millsTimeOut);
       }
     }
     if (!_firstRun.containsKey(key)) {
