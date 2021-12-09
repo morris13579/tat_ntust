@@ -239,6 +239,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "startClass": MessageLookupByLibrary.simpleMessage("開課班級"),
         "success": MessageLookupByLibrary.simpleMessage("成功"),
         "sure": MessageLookupByLibrary.simpleMessage("確定"),
+        "testMoodleApi":
+            MessageLookupByLibrary.simpleMessage("測試moodle api..."),
         "time": MessageLookupByLibrary.simpleMessage("時間"),
         "titleCourse": MessageLookupByLibrary.simpleMessage("課表"),
         "titleNotification": MessageLookupByLibrary.simpleMessage("訊息"),

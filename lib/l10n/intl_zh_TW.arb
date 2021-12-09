@@ -59,6 +59,7 @@
   "getMoodleScoreError": "取得課程成績錯誤",
   "getScore": "取得成績中...",
   "getScoreError": "取得成績錯誤",
+  "testMoodleApi": "測試moodle api...",
   "downloadAll": "全部打包下載",
   "___________________CourseTableUi___________________": "註解",
   "Monday": "一",

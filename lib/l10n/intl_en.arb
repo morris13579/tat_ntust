@@ -59,6 +59,7 @@
   "getMoodleScoreError": "get score error",
   "getScore": "get score...",
   "getScoreError": "get score error",
+  "testMoodleApi": "test moodle api...",
   "downloadAll": "Download All",
   "___________________CourseTableUi___________________": "註解",
   "Monday": "MON",

@@ -47,7 +47,7 @@ class Model {
   Future<bool> getFirstUse(String key, {int? timeOut}) async {
     if (timeOut != null) {
       int millsTimeOut = timeOut * 1000;
-      String wKey = "first_use_$key";
+      String wKey = "${key}_timestamp";
       int now = DateTime.now().millisecondsSinceEpoch;
       int? before = await _readInt(wKey);
       if (before != null && before > now) {

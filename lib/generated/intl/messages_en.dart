@@ -277,6 +277,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "startClass": MessageLookupByLibrary.simpleMessage("Start class"),
         "success": MessageLookupByLibrary.simpleMessage("success"),
         "sure": MessageLookupByLibrary.simpleMessage("Sure"),
+        "testMoodleApi":
+            MessageLookupByLibrary.simpleMessage("test moodle api..."),
         "time": MessageLookupByLibrary.simpleMessage("Time"),
         "titleCourse": MessageLookupByLibrary.simpleMessage("Course"),
         "titleNotification":

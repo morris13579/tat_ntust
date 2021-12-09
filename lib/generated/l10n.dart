@@ -640,6 +640,16 @@ class S {
     );
   }
 
+  /// `test moodle api...`
+  String get testMoodleApi {
+    return Intl.message(
+      'test moodle api...',
+      name: 'testMoodleApi',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Download All`
   String get downloadAll {
     return Intl.message(

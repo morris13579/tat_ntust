@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/ui/other/my_progress_dialog.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_directory_page.dart';
@@ -25,7 +27,7 @@ class CourseDataPage extends StatefulWidget {
 class _CourseDataPageState extends State<CourseDataPage>
     with SingleTickerProviderStateMixin {
   late TabPageList tabPageList;
-  late TabController _tabController;
+  TabController? _tabController;
   PageController _pageController = PageController();
   int _currentIndex = 0;
 
@@ -33,8 +35,18 @@ class _CourseDataPageState extends State<CourseDataPage>
   void initState() {
     super.initState();
     tabPageList = TabPageList();
-    _tabController = TabController(vsync: this, length: 3);
+    testMoodleWebApi();
+  }
+
+  void testMoodleWebApi() async {
+    if (Model.instance.getOtherSetting().useMoodleWebApi) {
+      MyProgressDialog.progressDialog(R.current.testMoodleApi);
+      var result = await MoodleWebApiConnector.testMoodleWebApi();
+      MyProgressDialog.hideAllDialog();
+      Model.instance.getOtherSetting().useMoodleWebApi = result;
+    }
     bool useMoodleWebApi = Model.instance.getOtherSetting().useMoodleWebApi;
+    _tabController = TabController(vsync: this, length: 3);
     var filePage = TabPage(
       R.current.file,
       Icons.folder,
@@ -107,7 +119,7 @@ class _CourseDataPageState extends State<CourseDataPage>
           controller: _pageController,
           children: tabPageList.getTabPageList,
           onPageChanged: (index) {
-            _tabController.animateTo(index); //與上面tab同步
+            _tabController?.animateTo(index); //與上面tab同步
             _currentIndex = index;
           },
         ),
