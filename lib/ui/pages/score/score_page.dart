@@ -7,6 +7,7 @@ import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/store/Model.dart';
 import 'package:flutter_app/src/task/score/score_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class ScoreViewerPage extends StatefulWidget {
@@ -217,9 +218,16 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
                   ),
                   Container(
                     width: 40,
-                    child: Text(score.score,
+                    child: GestureDetector(
+                      child: Text(
+                        score.score,
                         style: TextStyle(fontSize: 16.0),
-                        textAlign: TextAlign.end),
+                        textAlign: TextAlign.end,
+                      ),
+                      onTap: () {
+                        MyToast.show(score.score);
+                      },
+                    ),
                   ),
                 ],
               ),
