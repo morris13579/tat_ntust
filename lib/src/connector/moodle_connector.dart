@@ -27,6 +27,7 @@ class MoodleCourseDirectoryInfo {
   String instance;
   String name;
   String courseId;
+  bool expandAble;
 
   MoodleCourseDirectoryInfo(
       {required this.elementid,
@@ -35,7 +36,8 @@ class MoodleCourseDirectoryInfo {
       required this.sesskey,
       required this.instance,
       required this.name,
-      required this.courseId});
+      required this.courseId,
+      this.expandAble: false});
 }
 
 class MoodleAnnouncementInfo {
@@ -202,6 +204,27 @@ class MoodleConnector {
         );
         value.add(info);
       }
+      try {
+        String url = "$host/course/view.php?id=$id";
+        parameter = ConnectorParameter(url);
+        result = await Connector.getDataByGet(parameter);
+        var tagNode = parse(result);
+        int sectionN = 0;
+        while (true) {
+          Element node = tagNode
+              .getElementById("section-$sectionN")!
+              .getElementsByClassName("hidden sectionname")
+              .first;
+          List<Element> nodes = tagNode
+              .getElementById("section-$sectionN")!
+              .getElementsByClassName("activity");
+          if (nodes.length > 0) {
+            value[sectionN].expandAble = true;
+          }
+          sectionN++;
+          if (sectionN >= 30) break;
+        }
+      } catch (e) {}
       return value;
     } catch (e, stack) {
       Log.eWithStack(e, stack);

@@ -82,6 +82,7 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
                   flex: 8,
                   child: Text(ap.name),
                 ),
+                if (ap.expandAble) Icon(Icons.expand_more)
               ],
             ),
           ),
