@@ -42,11 +42,11 @@ class APPVersion {
     try {
       version = Version.parse(preVersion);
     } catch (e) {
-      return;
+      version = Version.parse("0.0.0");
     }
     Model.instance.getOtherSetting().useMoodleWebApi = true;
     await Model.instance.saveSetting();
-    if (version < Version.parse("1.2.3")) {
+    if (version < Version.parse("1.2.4")) {
       await Model.instance.clearCourseSetting();
       await Model.instance.saveCourseSetting();
     }
