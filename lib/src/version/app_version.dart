@@ -3,9 +3,10 @@ import 'package:flutter_app/src/model/remote_config/remote_config_version_info.d
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
 import 'package:flutter_app/src/version/update/app_update.dart';
+import 'package:version/version.dart';
 
 class APPVersion {
-  static void initAndCheck() async {
+  static Future<void> initAndCheck() async {
     RemoteConfigVersionInfo config = await RemoteConfigUtils.getVersionConfig();
     if (!config.isFocusUpdate) {
       if (!Model.instance.autoCheckAppUpdate ||
@@ -14,7 +15,7 @@ class APPVersion {
     }
     Model.instance.setAlreadyUse(Model.appCheckUpdate);
     await check();
-    checkIFAPPUpdate(); //檢查是否有更新
+    await checkIFAPPUpdate(); //檢查是否有更新
   }
 
   static Future<bool> check() async {
@@ -30,14 +31,24 @@ class APPVersion {
     Log.d(" preVersion: $preVersion \n version: $version");
     if (preVersion != version) {
       await Model.instance.setVersion(version);
-      updateVersionCallback();
+      await updateVersionCallback(preVersion);
     }
   }
 
-  static void updateVersionCallback() {
+  static Future<void> updateVersionCallback(String preVersion) async {
     //更新版本後會執行函數
     //用途資料更新...
+    Version version;
+    try {
+      version = Version.parse(preVersion);
+    } catch (e) {
+      return;
+    }
     Model.instance.getOtherSetting().useMoodleWebApi = true;
-    Model.instance.saveSetting();
+    await Model.instance.saveSetting();
+    if (version < Version.parse("1.2.1")) {
+      await Model.instance.clearCourseSetting();
+      await Model.instance.saveCourseSetting();
+    }
   }
 }

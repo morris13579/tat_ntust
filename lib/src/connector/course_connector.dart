@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
@@ -27,10 +26,8 @@ class CourseConnector {
   static const host = "https://courseselection.ntust.edu.tw";
   static const _loginUrl = host;
   static const _courseTableUrl = "$host/ChooseList/D01/D01";
-  static const _setTWUrl =
-      "$host/Home/SetCulture?Culture=zh-TW&returnUrl=%2FChooseList%2FD01%2FD01";
-  static const _setENUrl =
-      "$host/Home/SetCulture?Culture=en-US&returnUrl=%2FChooseList%2FD01%2FD01";
+  static const _setTWUrl = "$host/Home/SetCulture?Culture=zh-TW";
+  static const _setENUrl = "$host/Home/SetCulture?Culture=en-US";
   static const queryHost = "https://querycourse.ntust.edu.tw";
   static const _courseDetailUrl = "$queryHost/querycourse/api/coursedetials";
   static const _courseSearchUrl = "$queryHost/querycourse/api/courses";
@@ -62,10 +59,13 @@ class CourseConnector {
       String langUrl =
           (LanguageUtils.getLangIndex() == LangEnum.zh) ? _setTWUrl : _setENUrl;
 
-      parameter = ConnectorParameter(langUrl);
-      String result = await Connector.getRedirects(parameter);
       parameter = ConnectorParameter(host);
+      String result = await Connector.getRedirects(parameter); //sso login
 
+      parameter = ConnectorParameter(langUrl);
+      result = await Connector.getRedirects(parameter);
+
+      parameter = ConnectorParameter(host);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
       node = tagNode.getElementById("navigation")!;
@@ -250,7 +250,8 @@ class CourseConnector {
           "CourseTeacher": "",
           "Dimension": "",
           "ForeignLanguage": 0,
-          "Language": "zh",
+          "language":
+              (LanguageUtils.getLangIndex() == LangEnum.zh) ? "zh" : "en",
           "OnleyNTUST": 0,
           "OnlyGeneral": 0,
           "OnlyMaster": 0,

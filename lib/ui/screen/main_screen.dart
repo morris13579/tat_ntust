@@ -58,9 +58,9 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     try {
       await RemoteConfigUtils.init();
       await initLanguage();
+      await APPVersion.initAndCheck();
       AdManager.init();
       Log.init();
-      APPVersion.initAndCheck();
       initFlutterDownloader();
       initNotifications();
     } catch (e, stack) {
