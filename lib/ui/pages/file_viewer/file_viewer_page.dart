@@ -193,7 +193,9 @@ class _FileViewerPageState extends State<FileViewerPage>
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: index == paths.length - 1
-                                          ? Theme.of(context).colorScheme.secondary
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
                                           : Theme.of(context)
                                               .textTheme
                                               .headline6!

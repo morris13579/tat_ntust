@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 class OverRepaintBoundary extends StatefulWidget {
   final Widget child;
 
-  const OverRepaintBoundary({required Key key, required this.child}) : super(key: key);
+  const OverRepaintBoundary({required Key key, required this.child})
+      : super(key: key);
 
   @override
   OverRepaintBoundaryState createState() => OverRepaintBoundaryState();
