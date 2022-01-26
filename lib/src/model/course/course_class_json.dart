@@ -172,13 +172,24 @@ class TeacherJson {
 class SemesterJson {
   String year;
   String semester;
+  String urlPath;
 
-  SemesterJson({this.year = "", this.semester = ""});
+  SemesterJson({this.year = "", this.semester = "", this.urlPath = ""});
 
   factory SemesterJson.fromJson(Map<String, dynamic> json) =>
       _$SemesterJsonFromJson(json);
 
   Map<String, dynamic> toJson() => _$SemesterJsonToJson(this);
+
+  bool get isValid {
+    try {
+      int.parse(year);
+      if (semester != "H") int.parse(semester);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   bool get isEmpty {
     return year.isEmpty && semester.isEmpty;
@@ -191,9 +202,13 @@ class SemesterJson {
 
   @override
   bool operator ==(dynamic o) {
-    return (int.parse(o.semester) == int.parse(semester) &&
-        int.parse(o.year) == int.parse(year) &&
-        o is SemesterJson);
+    try {
+      return (int.parse(o.semester) == int.parse(semester) &&
+          int.parse(o.year) == int.parse(year) &&
+          o is SemesterJson);
+    } catch (e) {
+      return o.semester == semester && o.year == year && o is SemesterJson;
+    }
   }
 
   int get hashCode => hash2(semester.hashCode, year.hashCode);

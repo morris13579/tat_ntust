@@ -49,12 +49,60 @@ class CourseConnector {
     }
   }
 
+  static Future<List<SemesterJson>?> getCourseSemester() async {
+    try {
+      ConnectorParameter parameter;
+      Document tagNode;
+      Element node;
+      List<Element> nodes;
+      List<SemesterJson> value = [];
+      String langUrl =
+          (LanguageUtils.getLangIndex() == LangEnum.zh) ? _setTWUrl : _setENUrl;
+
+      parameter = ConnectorParameter(langUrl);
+      String result = await Connector.getRedirects(parameter);
+      parameter = ConnectorParameter(host);
+
+      result = await Connector.getDataByGet(parameter);
+      tagNode = parse(result);
+      node = tagNode.getElementById("navigation")!;
+      nodes = node
+          .getElementsByClassName("dropdown")[3]
+          .getElementsByClassName("dropdown-menu")[0]
+          .getElementsByTagName("a");
+      for (var i in nodes) {
+        if (i.text.split("(").length > 1) {
+          value.add(SemesterJson(
+            year: i.text.split("(")[1].substring(0, 3),
+            semester: i.text.split("(")[1].substring(3, 4),
+            urlPath: i.attributes["href"]!,
+          ));
+        } else {
+          value.add(SemesterJson(
+            year: i.text,
+            semester: "",
+            urlPath: i.attributes["href"]!,
+          ));
+        }
+      }
+      return value;
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
+      return null;
+    }
+  }
+
   static String clearString(String v) {
     return v.replaceAll("\n", "").replaceAll(" ", "");
   }
 
   static Future<CourseMainInfo?> getCourseMainInfoList(
-      String studentId, SemesterJson semester) async {
+      String studentId, SemesterJson semester,
+      {String? courseUrlPath}) async {
+    if (courseUrlPath != null) {
+      courseUrlPath = "$host/$courseUrlPath";
+    }
+    String courseUrl = courseUrlPath ?? _courseTableUrl;
     try {
       ConnectorParameter parameter;
       Document tagNode;
@@ -92,7 +140,7 @@ class CourseConnector {
       parameter = ConnectorParameter(langUrl);
       String result = await Connector.getRedirects(parameter);
 
-      parameter = ConnectorParameter(_courseTableUrl);
+      parameter = ConnectorParameter(courseUrl);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
       List<CourseMainInfoJson> courseMainInfoList = [];

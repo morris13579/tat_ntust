@@ -104,12 +104,14 @@ Map<String, dynamic> _$TeacherJsonToJson(TeacherJson instance) =>
 SemesterJson _$SemesterJsonFromJson(Map<String, dynamic> json) => SemesterJson(
       year: json['year'] as String? ?? "",
       semester: json['semester'] as String? ?? "",
+      urlPath: json['urlPath'] as String? ?? "",
     );
 
 Map<String, dynamic> _$SemesterJsonToJson(SemesterJson instance) =>
     <String, dynamic>{
       'year': instance.year,
       'semester': instance.semester,
+      'urlPath': instance.urlPath,
     };
 
 ClassmateJson _$ClassmateJsonFromJson(Map<String, dynamic> json) =>

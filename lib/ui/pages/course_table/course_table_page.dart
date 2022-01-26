@@ -106,7 +106,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
       {SemesterJson? semesterSetting, bool refresh: false}) async {
     await Future.delayed(Duration(microseconds: 100)); //等待頁面刷新
     String studentId = Model.instance.getAccount();
-    await Model.instance.clearSemesterJsonList();
+    //await Model.instance.clearSemesterJsonList();
     SemesterJson? semesterJson;
     if (semesterSetting == null) {
       await _getSemesterList(studentId);
@@ -116,6 +116,20 @@ class _CourseTablePageState extends State<CourseTablePage> {
     }
     if (semesterJson == null) {
       return;
+    }
+    if (!semesterJson.isValid) {
+      SemesterJson select;
+      select = await CourseSemesterTask.selectSemesterDialog();
+      semesterJson.year = select.year;
+      semesterJson.semester = select.semester;
+      var s = Model.instance.getSemesterList();
+      List<SemesterJson> v = [];
+      for (var i in s) {
+        if (!v.contains(i)) {
+          v.add(i);
+        }
+      }
+      Model.instance.setSemesterJsonList(v);
     }
 
     CourseTableJson? courseTable;
@@ -138,11 +152,14 @@ class _CourseTablePageState extends State<CourseTablePage> {
     _showCourseTable(courseTable);
   }
 
-  Widget _getSemesterItem(SemesterJson semester) {
-    String semesterString = semester.year + "-" + semester.semester;
+  Widget _buildSemesterItem(SemesterJson semester) {
+    String semesterString = semester.year;
+    if (semester.semester.isNotEmpty) {
+      semesterString += ("-" + semester.semester);
+    }
     return TextButton(
       child: Text(semesterString),
-      onPressed: () {
+      onPressed: () async {
         Get.back();
         _getCourseTable(semesterSetting: semester); //取得課表
       },
@@ -170,7 +187,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
               itemCount: semesterList.length,
               shrinkWrap: true, //使清單最小化
               itemBuilder: (BuildContext context, int index) {
-                return _getSemesterItem(semesterList[index]);
+                return _buildSemesterItem(semesterList[index]);
               },
             ),
           ),
@@ -215,7 +232,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
             child: InkWell(
               onTap: () {
                 _getCourseTable(
-                  semesterSetting: null,
+                  semesterSetting: semesterSetting,
                   refresh: true,
                 );
               },

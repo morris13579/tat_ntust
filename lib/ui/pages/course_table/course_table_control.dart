@@ -112,7 +112,7 @@ class CourseTableControl {
     colorMap = Map();
     List<String> courseInfoList = courseTable!.getCourseIdList();
     int colorCount = courseInfoList.length;
-    colorCount = (colorCount == 0) ? 1 : colorCount;
+    //colorCount = (colorCount == 0) ? 1 : colorCount;
 
     final colors = AppColors.courseTableColors.toList()..shuffle();
 

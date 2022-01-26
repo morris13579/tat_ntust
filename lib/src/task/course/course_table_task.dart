@@ -7,11 +7,12 @@ import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 
 import '../task.dart';
+import 'course_semester_task.dart';
 import 'course_system_task.dart';
 
 class CourseTableTask extends CourseSystemTask<CourseTableJson> {
   final String studentId;
-  final SemesterJson semester;
+  SemesterJson semester;
 
   CourseTableTask(this.studentId, this.semester) : super("CourseTableTask");
 
@@ -21,10 +22,8 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
     CourseMainInfo? value;
     if (status == TaskStatus.Success) {
       super.onStart(R.current.getCourse);
-      if (LanguageUtils.getLangIndex() == LangEnum.zh) {
-        //根據語言選擇課表
-      } else {}
-      value = await CourseConnector.getCourseMainInfoList(studentId, semester);
+      value = await CourseConnector.getCourseMainInfoList(studentId, semester,
+          courseUrlPath: semester.urlPath);
       super.onEnd();
       if (value != null) {
         CourseTableJson courseTable = CourseTableJson();
