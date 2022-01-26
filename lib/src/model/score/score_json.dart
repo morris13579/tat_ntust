@@ -29,6 +29,19 @@ class ScoreRankJson {
     }
   }
 
+  Future<List<String>> getCourseIdBySemester(SemesterJson semester) async {
+    List<String> value = [];
+    for (var i in info) {
+      if (i.semester == semester) {
+        for (var j in i.item) {
+          value.add(j.courseId);
+        }
+        break;
+      }
+    }
+    return value;
+  }
+
   void addScoreBySemester(SemesterJson semester, ScoreItemJson item) {
     bool add = false;
     for (var i in info) {

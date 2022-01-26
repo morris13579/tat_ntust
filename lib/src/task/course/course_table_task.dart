@@ -26,8 +26,8 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
       if (semester.urlPath.isNotEmpty) {
         value = await CourseConnector.getCourseMainInfoList(studentId, semester,
             courseUrlPath: semester.urlPath);
-      }else{
-
+      } else {
+        value = await CourseConnector.getCourseMainInfoListByCourseId(semester);
       }
       super.onEnd();
       if (value != null) {

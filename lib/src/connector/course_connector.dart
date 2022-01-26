@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
+import 'package:flutter_app/src/model/course/course_search_json.dart';
 import 'package:flutter_app/src/model/course/course_semester.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
+import 'package:flutter_app/src/store/Model.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
@@ -24,14 +28,14 @@ class CourseConnector {
   static const host = "https://courseselection.ntust.edu.tw";
   static const _loginUrl = host;
   static const _courseTableUrl = "$host/ChooseList/D01/D01";
-  static const _courseDetailUrl =
-      "https://querycourse.ntust.edu.tw/querycourse/api/coursedetials";
   static const _setTWUrl =
       "$host/Home/SetCulture?Culture=zh-TW&returnUrl=%2FChooseList%2FD01%2FD01";
   static const _setENUrl =
       "$host/Home/SetCulture?Culture=en-US&returnUrl=%2FChooseList%2FD01%2FD01";
-  static const _courseSemestersUrl =
-      "https://querycourse.ntust.edu.tw/querycourse/api/semestersinfo";
+  static const queryHost = "https://querycourse.ntust.edu.tw";
+  static const _courseDetailUrl = "$queryHost/querycourse/api/coursedetials";
+  static const _courseSearchUrl = "$queryHost/querycourse/api/courses";
+  static const _courseSemestersUrl = "$queryHost/querycourse/api/semestersinfo";
 
   static Future<CourseConnectorStatus> login() async {
     String result;
@@ -197,6 +201,107 @@ class CourseConnector {
       }
       var info = CourseMainInfo(
         studentName: tagNode.getElementsByClassName("text-success")[7].text,
+        json: courseMainInfoList,
+      );
+      return info;
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
+      return null;
+    }
+  }
+
+  static Future<CourseMainInfo?> getCourseMainInfoListByCourseId(
+      SemesterJson semester) async {
+    ConnectorParameter parameter;
+    var courseIds =
+        await Model.instance.getScore().getCourseIdBySemester(semester);
+    try {
+      List<Day> dayEnum = [
+        Day.Monday,
+        Day.Tuesday,
+        Day.Wednesday,
+        Day.Thursday,
+        Day.Friday,
+        Day.Saturday,
+        Day.Sunday,
+      ];
+
+      List<String> timeEnum = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "N",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "A",
+        "B",
+        "C",
+        "D"
+      ];
+      List<CourseMainInfoJson> courseMainInfoList = [];
+      for (var courseId in courseIds) {
+        Map data = {
+          "CourseName": "",
+          "CourseNo": courseId,
+          "CourseNotes": "",
+          "CourseTeacher": "",
+          "Dimension": "",
+          "ForeignLanguage": 0,
+          "Language": "zh",
+          "OnleyNTUST": 0,
+          "OnlyGeneral": 0,
+          "OnlyMaster": 0,
+          "OnlyNode": 0,
+          "OnlyUnderGraduate": 0,
+          "Semester": "${semester.year}${semester.semester}"
+        };
+        parameter = ConnectorParameter(_courseSearchUrl, data: data);
+        var json = await Connector.getDataByPostResponse(parameter);
+        if (json.data.length == 0) continue;
+        CourseSearchJson info = CourseSearchJson.fromJson(json.data[0]);
+
+        CourseMainInfoJson courseMainInfo = CourseMainInfoJson();
+        CourseMainJson courseMain = CourseMainJson(
+          id: courseId,
+          href: "",
+          name: info.courseName,
+          credits: info.creditPoint,
+          category: "",
+          note: info.contents,
+          hours: "",
+          time: {},
+        );
+        for (int j = 0; j < 7; j++) {
+          Day day = dayEnum[j]; //初始化
+          courseMain.time[day] = "";
+        }
+        var dayString = ["M", "T", "W", "R", "F", "S", "U"];
+        for (var t in info.node.split(",")) {
+          int dayIndex = dayString.indexOf(t.substring(0, 1));
+          int timeIndex;
+          try {
+            timeIndex = int.parse(t.substring(1)) - 1;
+          } catch (e) {
+            timeIndex = t.codeUnitAt(1) - 'A'.codeUnitAt(0) + 10;
+          }
+          Day day = dayEnum[dayIndex];
+          courseMain.time[day] =
+              courseMain.time[day]! + timeEnum[timeIndex] + " ";
+        }
+        TeacherJson teacher = TeacherJson(name: info.courseTeacher, href: "");
+        ClassroomJson classroom =
+            ClassroomJson(name: info.classRoomNo, href: '');
+        courseMainInfo.classroom.add(classroom);
+        courseMainInfo.teacher.add(teacher);
+        courseMainInfo.course = courseMain;
+        courseMainInfoList.add(courseMainInfo);
+      }
+      var info = CourseMainInfo(
+        studentName: "",
         json: courseMainInfoList,
       );
       return info;
