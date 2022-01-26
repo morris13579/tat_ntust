@@ -29,8 +29,8 @@ class APPVersion {
     String version = await AppUpdate.getAppVersion();
     String preVersion = await Model.instance.getVersion();
     Log.d(" preVersion: $preVersion \n version: $version");
+    await Model.instance.setVersion(version);
     if (preVersion != version) {
-      await Model.instance.setVersion(version);
       await updateVersionCallback(preVersion);
     }
   }
@@ -46,7 +46,7 @@ class APPVersion {
     }
     Model.instance.getOtherSetting().useMoodleWebApi = true;
     await Model.instance.saveSetting();
-    if (version < Version.parse("1.2.2")) {
+    if (version < Version.parse("1.2.3")) {
       await Model.instance.clearCourseSetting();
       await Model.instance.saveCourseSetting();
     }
