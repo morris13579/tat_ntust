@@ -980,6 +980,16 @@ class S {
     );
   }
 
+  /// `The currently selected semester is %s, please be sure to select the correct one or it may cause an error`
+  String get selectSemesterWarning {
+    return Intl.message(
+      'The currently selected semester is %s, please be sure to select the correct one or it may cause an error',
+      name: 'selectSemesterWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `註解`
   String get ___________________CourseInfoUi___________________ {
     return Intl.message(

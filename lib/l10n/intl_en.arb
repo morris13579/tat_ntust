@@ -93,6 +93,7 @@
   "search": "Search",
   "searchCredit": "Search credit",
   "courseData": "Moodle",
+  "selectSemesterWarning": "The currently selected semester is %s, please be sure to select the correct one or it may cause an error",
   "___________________CourseInfoUi___________________": "註解",
   "course": "Course",
   "semester": "Semester",

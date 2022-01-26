@@ -115,6 +115,7 @@
   "member": "成員",
   "totalMember": "總共成員人數: ",
   "unSupportThisClass": "不支持查詢此課程",
+  "selectSemesterWarning": "目前選擇的學期是%s，請一定要選擇正確不然可能會導致錯誤",
   "___________________FileViewerPage___________________": "註解",
   "sortBy": "排序",
   "createNewFolder": "創建新資料夾",

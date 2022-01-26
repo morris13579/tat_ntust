@@ -22,6 +22,7 @@ import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sprintf/sprintf.dart';
@@ -118,9 +119,14 @@ class _CourseTablePageState extends State<CourseTablePage> {
       return;
     }
     if (!semesterJson.isValid) {
-      SemesterJson select;
-      MyToast.show(semesterJson.year);
-      select = await CourseSemesterTask.selectSemesterDialog();
+      SemesterJson? select;
+      MyToast.show(
+        sprintf(R.current.selectSemesterWarning, [semesterJson.year]),
+        toastLength: Toast.LENGTH_LONG,
+      );
+      select =
+          await CourseSemesterTask.selectSemesterDialog(allowSelectNull: true);
+      if (select == null) return;
       semesterJson.year = select.year;
       semesterJson.semester = select.semester;
       var s = Model.instance.getSemesterList();

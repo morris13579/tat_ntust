@@ -38,7 +38,7 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
         return TaskStatus.Success;
       } else {
         result = [];
-        result.add(await selectSemesterDialog());
+        result.add((await selectSemesterDialog())!);
         return TaskStatus.Success;
         //return await super.onError(R.current.getCourseSemesterError);
       }
@@ -46,7 +46,8 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
     return status;
   }
 
-  static Future<SemesterJson> selectSemesterDialog() async {
+  static Future<SemesterJson?> selectSemesterDialog(
+      {allowSelectNull: false}) async {
     DateTime dateTime = DateTime.now();
     int year = dateTime.year - 1911;
     int semester = (dateTime.month <= 8 && dateTime.month >= 1) ? 2 : 1;
@@ -55,56 +56,56 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
     }
     SemesterJson before =
         SemesterJson(semester: semester.toString(), year: year.toString());
-    SemesterJson select = await Get.dialog<SemesterJson>(
-          StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return AlertDialog(
-                title: Text(R.current.selectSemester),
-                content: Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+    SemesterJson? select = await Get.dialog<SemesterJson>(
+      StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return AlertDialog(
+            title: Text(R.current.selectSemester),
+            content: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: NumberPicker(
-                                value: year,
-                                minValue: 100,
-                                maxValue: 120,
-                                onChanged: (value) =>
-                                    setState(() => year = value)),
-                          ),
-                          Expanded(
-                            child: NumberPicker(
-                                value: semester,
-                                minValue: 1,
-                                maxValue: 3,
-                                onChanged: (value) =>
-                                    setState(() => semester = value)),
-                          ),
-                        ],
-                      )
+                      Expanded(
+                        child: NumberPicker(
+                            value: year,
+                            minValue: 100,
+                            maxValue: 120,
+                            onChanged: (value) => setState(() => year = value)),
+                      ),
+                      Expanded(
+                        child: NumberPicker(
+                            value: semester,
+                            minValue: 1,
+                            maxValue: 3,
+                            onChanged: (value) =>
+                                setState(() => semester = value)),
+                      ),
                     ],
-                  ),
-                ),
-                actions: [
-                  TextButton(
-                      child: Text(R.current.sure),
-                      onPressed: () {
-                        Get.back<SemesterJson>(
-                          result: SemesterJson(
-                            semester:
-                                (semester == 3) ? "H" : semester.toString(),
-                            year: year.toString(),
-                          ),
-                        );
-                      })
+                  )
                 ],
-              );
-            },
-          ),
-        ) ??
-        before;
+              ),
+            ),
+            actions: [
+              TextButton(
+                  child: Text(R.current.sure),
+                  onPressed: () {
+                    Get.back<SemesterJson>(
+                      result: SemesterJson(
+                        semester: (semester == 3) ? "H" : semester.toString(),
+                        year: year.toString(),
+                      ),
+                    );
+                  })
+            ],
+          );
+        },
+      ),
+    );
+    if (!allowSelectNull) {
+      select ??= before;
+    }
     return select;
   }
 }

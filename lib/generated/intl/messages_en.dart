@@ -266,6 +266,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Cannot set this path as download path"),
         "selectSemester":
             MessageLookupByLibrary.simpleMessage("Select semester"),
+        "selectSemesterWarning": MessageLookupByLibrary.simpleMessage(
+            "The currently selected semester is %s, please be sure to select the correct one or it may cause an error"),
         "semester": MessageLookupByLibrary.simpleMessage("Semester"),
         "setAsAndroidWeight":
             MessageLookupByLibrary.simpleMessage("Set as android weight"),

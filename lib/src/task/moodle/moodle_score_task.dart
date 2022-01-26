@@ -6,8 +6,7 @@ import 'package:flutter_app/ui/other/error_dialog.dart';
 import '../task.dart';
 import 'moodle_task.dart';
 
-class MoodleScoreTask
-    extends MoodleTask<List<MoodleScoreItem>> {
+class MoodleScoreTask extends MoodleTask<List<MoodleScoreItem>> {
   final String id;
 
   MoodleScoreTask(this.id) : super("MoodleScoreTask");

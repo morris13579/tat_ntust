@@ -230,6 +230,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectDirectoryFail":
             MessageLookupByLibrary.simpleMessage("無法將此路徑設定為下載路徑"),
         "selectSemester": MessageLookupByLibrary.simpleMessage("選擇學期時間"),
+        "selectSemesterWarning": MessageLookupByLibrary.simpleMessage(
+            "目前選擇的學期是%s，請一定要選擇正確不然可能會導致錯誤"),
         "semester": MessageLookupByLibrary.simpleMessage("學年期"),
         "setAsAndroidWeight": MessageLookupByLibrary.simpleMessage("設為小工具課表"),
         "setting": MessageLookupByLibrary.simpleMessage("設定"),
