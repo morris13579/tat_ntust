@@ -119,6 +119,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     }
     if (!semesterJson.isValid) {
       SemesterJson select;
+      MyToast.show(semesterJson.year);
       select = await CourseSemesterTask.selectSemesterDialog();
       semesterJson.year = select.year;
       semesterJson.semester = select.semester;

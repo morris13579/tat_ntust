@@ -4,10 +4,8 @@ import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/store/model.dart';
-import 'package:flutter_app/src/util/language_utils.dart';
 
 import '../task.dart';
-import 'course_semester_task.dart';
 import 'course_system_task.dart';
 
 class CourseTableTask extends CourseSystemTask<CourseTableJson> {
