@@ -4,6 +4,7 @@ import 'package:flutter_app/src/connector/course_connector.dart';
 import 'package:flutter_app/src/connector/score_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
+import 'package:flutter_app/src/store/Model.dart';
 import 'package:flutter_app/src/task/score/score_system_task.dart';
 import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -20,16 +21,19 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
       List<SemesterJson>? value;
-      ScoreRankJson? v;
       super.onStart(R.current.getCourseSemester);
       value = await CourseConnector.getCourseSemester();
-      value ??= [];
-      v = await ScoreConnector.getScoreRank();
-      super.onEnd();
-      if (v != null) {
+      try {
+        ScoreRankJson? v = await ScoreConnector.getScoreRank();
+        Model.instance.setScore(v!);
+        Model.instance.saveScore();
+        value ??= [];
         for (var i in v.info) {
           if (!value.contains(i.semester)) value.add(i.semester);
         }
+      } catch (e) {}
+      super.onEnd();
+      if (value != null) {
         result = value;
         return TaskStatus.Success;
       } else {

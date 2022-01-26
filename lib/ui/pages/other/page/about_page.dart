@@ -1,4 +1,5 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
@@ -19,7 +20,7 @@ class AboutPage extends StatefulWidget {
 class _AboutPageState extends State<AboutPage> {
   List<Map> listViewData = [];
 
-  static bool inDevMode = false;
+  static bool inDevMode = false | kDebugMode;
 
   @override
   void initState() {

@@ -22,8 +22,13 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
     CourseMainInfo? value;
     if (status == TaskStatus.Success) {
       super.onStart(R.current.getCourse);
-      value = await CourseConnector.getCourseMainInfoList(studentId, semester,
-          courseUrlPath: semester.urlPath);
+      print(semester.urlPath);
+      if (semester.urlPath.isNotEmpty) {
+        value = await CourseConnector.getCourseMainInfoList(studentId, semester,
+            courseUrlPath: semester.urlPath);
+      }else{
+
+      }
       super.onEnd();
       if (value != null) {
         CourseTableJson courseTable = CourseTableJson();
