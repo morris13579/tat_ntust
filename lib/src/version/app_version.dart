@@ -46,9 +46,11 @@ class APPVersion {
     }
     Model.instance.getOtherSetting().useMoodleWebApi = true;
     await Model.instance.saveSetting();
-    if (version < Version.parse("1.2.4")) {
+    if (version < Version.parse("1.2.5")) {
       await Model.instance.clearCourseSetting();
       await Model.instance.saveCourseSetting();
+      await Model.instance.clearCourseTableList();
+      await Model.instance.saveCourseTableList();
     }
   }
 }
