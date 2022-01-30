@@ -7,18 +7,22 @@ import 'package:version/version.dart';
 
 class APPVersion {
   static Future<void> initAndCheck() async {
+    try {
+      await checkIFAPPUpdate(); //檢查是否有更新
+      check();
+    } catch (e) {
+      Log.e(e);
+    }
+  }
+
+  static Future<bool> check() async {
     RemoteConfigVersionInfo config = await RemoteConfigUtils.getVersionConfig();
     if (!config.isFocusUpdate) {
       if (!Model.instance.autoCheckAppUpdate ||
           !await Model.instance.getFirstUse(Model.appCheckUpdate) ||
-          Model.instance.getAccount().isEmpty) return;
+          Model.instance.getAccount().isEmpty) return false; //跳過檢查
     }
     Model.instance.setAlreadyUse(Model.appCheckUpdate);
-    await check();
-    await checkIFAPPUpdate(); //檢查是否有更新
-  }
-
-  static Future<bool> check() async {
     Log.d("Start check update");
     bool value = await AppUpdate.checkUpdate();
     return value;
