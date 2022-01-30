@@ -50,7 +50,7 @@ class APPVersion {
     }
     Model.instance.getOtherSetting().useMoodleWebApi = true;
     await Model.instance.saveSetting();
-    if (version < Version.parse("1.2.5")) {
+    if (version < Version.parse("1.2.6")) {
       await Model.instance.clearCourseSetting();
       await Model.instance.saveCourseSetting();
       await Model.instance.clearCourseTableList();
