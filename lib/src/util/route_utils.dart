@@ -8,8 +8,8 @@ import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/ui/pages/course_data/course_data_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_announcement_detail_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_announcement_detail_webapi_page.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_branch_page.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_branch_webapi_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_info_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_info_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_folder_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_folder_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/course_detail_page.dart';
@@ -80,12 +80,12 @@ class RouteUtils {
     }
   }
 
-  static Future toCourseBranchPage(
+  static Future toCourseInfoPage(
       CourseInfoJson courseInfo, dynamic value) async {
     if (Model.instance.getOtherSetting().useMoodleWebApi) {
-      return await Get.to(() => CourseBranchWebApiPage(courseInfo, value));
+      return await Get.to(() => CourseInfoWebApiPage(courseInfo, value));
     } else {
-      return await Get.to(() => CourseBranchPage(courseInfo, value));
+      return await Get.to(() => CourseInfoPage(courseInfo, value));
     }
   }
 

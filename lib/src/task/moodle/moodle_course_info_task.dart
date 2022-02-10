@@ -1,23 +1,23 @@
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
-import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
+import 'package:flutter_app/src/model/moodle/moodle_info.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 
 import '../task.dart';
 import 'moodle_task.dart';
 
-class MoodleCourseBranchTask extends MoodleTask<MoodleBranchJson> {
+class MoodleCourseInfoTask extends MoodleTask<MoodleInfoJson> {
   final MoodleCourseDirectoryInfo info;
 
-  MoodleCourseBranchTask(this.info) : super("MoodleCourseBranchTask");
+  MoodleCourseInfoTask(this.info) : super("MoodleCourseInfoTask");
 
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
-      MoodleBranchJson? value;
-      super.onStart(R.current.getMoodleCourseBranch);
-      value = await MoodleConnector.getCourseBranch(info);
+      MoodleInfoJson? value;
+      super.onStart(R.current.getMoodleCourseInfo);
+      value = await MoodleConnector.getCourseInfo(info);
       super.onEnd();
       if (value != null) {
         try {
@@ -30,7 +30,7 @@ class MoodleCourseBranchTask extends MoodleTask<MoodleBranchJson> {
         result = value;
         return TaskStatus.Success;
       } else {
-        return await super.onError(R.current.getMoodleCourseBranchError);
+        return await super.onError(R.current.getMoodleCourseInfoError);
       }
     }
     return status;

@@ -560,21 +560,21 @@ class S {
     );
   }
 
-  /// `get course branch...`
-  String get getMoodleCourseBranch {
+  /// `get course info...`
+  String get getMoodleCourseInfo {
     return Intl.message(
-      'get course branch...',
-      name: 'getMoodleCourseBranch',
+      'get course info...',
+      name: 'getMoodleCourseInfo',
       desc: '',
       args: [],
     );
   }
 
-  /// `get course branch error`
-  String get getMoodleCourseBranchError {
+  /// `get course info error`
+  String get getMoodleCourseInfoError {
     return Intl.message(
-      'get course branch error',
-      name: 'getMoodleCourseBranchError',
+      'get course info error',
+      name: 'getMoodleCourseInfoError',
       desc: '',
       args: [],
     );

@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'moodle_branch.dart';
+part of 'moodle_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-MoodleBranchJson _$MoodleBranchJsonFromJson(Map<String, dynamic> json) =>
-    MoodleBranchJson(
+MoodleInfoJson _$MoodleInfoJsonFromJson(Map<String, dynamic> json) =>
+    MoodleInfoJson(
       name: json['name'] as String,
       type: json['type'] as int,
       key: json['key'] as String,
@@ -22,7 +22,7 @@ MoodleBranchJson _$MoodleBranchJsonFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$MoodleBranchJsonToJson(MoodleBranchJson instance) =>
+Map<String, dynamic> _$MoodleInfoJsonToJson(MoodleInfoJson instance) =>
     <String, dynamic>{
       'name': instance.name,
       'type': instance.type,

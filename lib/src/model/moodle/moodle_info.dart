@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'moodle_branch.g.dart';
+part 'moodle_info.g.dart';
 
 @JsonSerializable()
-class MoodleBranchJson extends Object {
+class MoodleInfoJson extends Object {
   @JsonKey(name: 'name')
   String name;
 
@@ -42,7 +42,7 @@ class MoodleBranchJson extends Object {
           ?.toList() as List<Children>,
    */
 
-  MoodleBranchJson(
+  MoodleInfoJson(
       {required this.name,
       required this.type,
       required this.key,
@@ -54,8 +54,8 @@ class MoodleBranchJson extends Object {
       required this.haschildren,
       required this.children});
 
-  factory MoodleBranchJson.fromJson(Map<String, dynamic> srcJson) =>
-      _$MoodleBranchJsonFromJson(srcJson);
+  factory MoodleInfoJson.fromJson(Map<String, dynamic> srcJson) =>
+      _$MoodleInfoJsonFromJson(srcJson);
 }
 
 @JsonSerializable()

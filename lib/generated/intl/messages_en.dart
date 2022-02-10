@@ -158,14 +158,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "getMoodleCourseAnnouncementError":
             MessageLookupByLibrary.simpleMessage(
                 "get course announcement error"),
-        "getMoodleCourseBranch":
-            MessageLookupByLibrary.simpleMessage("get course branch..."),
-        "getMoodleCourseBranchError":
-            MessageLookupByLibrary.simpleMessage("get course branch error"),
         "getMoodleCourseDirectory":
             MessageLookupByLibrary.simpleMessage("Get course directory..."),
         "getMoodleCourseDirectoryError":
             MessageLookupByLibrary.simpleMessage("Get course directory error"),
+        "getMoodleCourseInfo":
+            MessageLookupByLibrary.simpleMessage("get course info..."),
+        "getMoodleCourseInfoError":
+            MessageLookupByLibrary.simpleMessage("get course info error"),
         "getMoodleMembers":
             MessageLookupByLibrary.simpleMessage("Get Moodle members..."),
         "getMoodleMembersError":

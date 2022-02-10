@@ -82,12 +82,13 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
                   flex: 8,
                   child: Text(ap.name),
                 ),
-                if (ap.expandAble) Icon(Icons.expand_more)
+                if (ap.expandAble)
+                  Icon(Icons.arrow_forward_ios_rounded, size: 16)
               ],
             ),
           ),
           onTap: () async {
-            RouteUtils.toCourseBranchPage(widget.courseInfo, ap);
+            RouteUtils.toCourseInfoPage(widget.courseInfo, ap);
           },
         );
       },

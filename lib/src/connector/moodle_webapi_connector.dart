@@ -9,7 +9,7 @@ import 'package:flutter_app/src/util/html_utils.dart';
 enum MoodleWebApiConnectorStatus { LoginSuccess, LoginFail, UnknownError }
 
 class MoodleWebApiConnector {
-  static const String host = "https://moodle.ntust.edu.tw";
+  static const String host = "https://moodle2.ntust.edu.tw";
   static const String _webAPIUrl = "$host/webservice/rest/server.php";
   static const String _webAPILoginUrl = "$host/login/token.php";
 

@@ -2,41 +2,61 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/connector/core/connector.dart';
-import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
+import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
-import 'package:flutter_app/src/task/moodle/moodle_task.dart';
+import 'package:flutter_app/src/model/moodle/moodle_info.dart';
+import 'package:flutter_app/src/task/moodle/moodle_course_info_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
-import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 
-class CourseBranchWebApiPage extends StatefulWidget {
+class CourseInfoPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
-  final MoodleCoreCourseGetContents contents;
+  final MoodleCourseDirectoryInfo branch;
 
-  CourseBranchWebApiPage(this.courseInfo, this.contents);
+  CourseInfoPage(this.courseInfo, this.branch);
 
   @override
-  _CourseBranchWebApiPageState createState() => _CourseBranchWebApiPageState();
+  _CourseInfoPageState createState() => _CourseInfoPageState();
 }
 
-class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
-  bool isLoading = false;
+class _CourseInfoPageState extends State<CourseInfoPage> {
+  bool isLoading = true;
+  late MoodleInfoJson moodleBranch;
 
   @override
   void initState() {
     super.initState();
+    loadBranch(widget.branch);
+  }
+
+  void loadBranch(MoodleCourseDirectoryInfo info) async {
+    setState(() {
+      isLoading = true;
+    });
+    TaskFlow taskFlow = TaskFlow();
+    var task = MoodleCourseInfoTask(info);
+    taskFlow.addTask(task);
+    if (await taskFlow.start()) {
+      moodleBranch = task.result;
+      if (moodleBranch.children.length == 0) {
+        MyToast.show(R.current.nothingHere);
+        Get.back();
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.contents.name),
+        title: Text(widget.branch.name),
       ),
       body: isLoading
           ? Center(
@@ -63,66 +83,47 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
     }
   }
 
-  void openWebView(Modules ap, {openWithExternalWebView = false}) async {
-    if (Uri.parse(ap.url).host == "moodle.ntust.edu.tw") {
-      TaskFlow taskFlow = TaskFlow();
-      taskFlow.addTask(MoodleTask("WebView"));
-      await taskFlow.start();
-    }
-    RouteUtils.toWebViewPage(
-        ap.name,
-        Connector.uriAddQuery(
-          ap.url,
-          (LanguageUtils.getLangIndex() == LangEnum.zh)
-              ? {"lang": "zh_tw"}
-              : {"lang": "en"},
-        ),
-        openWithExternalWebView: openWithExternalWebView);
-  }
-
-  void handleTap(Modules ap) async {
-    switch (ap.modname) {
+  void handleTap(Children ap) async {
+    switch (ap.icon.component) {
       case "forum":
-        openWebView(ap);
+        RouteUtils.toWebViewPage(ap.name, ap.link,
+            openWithExternalWebView: false);
         break;
       case "assign":
-        openWebView(ap);
+        RouteUtils.toWebViewPage(ap.name, ap.link,
+            openWithExternalWebView: false);
         break;
       case "folder":
-        if (ap.contents.length != 0) {
-          RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
-        } else {
-          MyToast.show(R.current.nothingHere);
-        }
+        RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
         break;
       case "label":
         break;
       case "url":
-        openWebView(ap, openWithExternalWebView: true);
+        RouteUtils.toWebViewPage(ap.name, ap.link + "&redirect=1",
+            openWithExternalWebView: true);
+        break;
+      case "page":
+        RouteUtils.toWebViewPage(ap.name, ap.link + "&redirect=1",
+            openWithExternalWebView: true);
         break;
       default:
         String dirName = widget.courseInfo.main.course.name;
-        FileDownload.download(
-            context,
-            Connector.uriAddQuery(
-              ap.contents.first.fileurl,
-              {"token": MoodleWebApiConnector.wsToken},
-            ),
-            dirName,
-            name: ap.contents.first.filename);
+        FileDownload.download(context, ap.link + "&redirect=1", dirName,
+            name: ap.name);
+        break;
     }
   }
 
   final titleTextStyle = TextStyle(fontSize: 14);
 
-  Widget buildItem(Modules ap, int index) {
-    switch (ap.modname) {
+  Widget buildItem(Children ap, int index) {
+    switch (ap.icon.component) {
       case "label":
         return Container(
             padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-            child: SelectableHtml(data: ap.description));
+            child: SelectableHtml(data: ap.name));
       default:
-        if (ap.description.isNotEmpty) {
+        if (ap.contentAfterLink != null) {
           return ExpansionTileCard(
             expandedTextColor: Theme.of(context).textTheme.bodyText1!.color,
             expandedColor: getColor(index),
@@ -134,7 +135,7 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
             children: [
               Container(
                   padding: EdgeInsets.only(left: 20),
-                  child: SelectableHtml(data: ap.description)),
+                  child: SelectableHtml(data: ap.contentAfterLink)),
               Container(
                 height: 50,
                 child: Row(
@@ -177,9 +178,9 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
   Widget buildTree() {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: widget.contents.modules.length,
+      itemCount: moodleBranch.children.length,
       itemBuilder: (BuildContext context, int index) {
-        var ap = widget.contents.modules[index];
+        var ap = moodleBranch.children[index];
         return InkWell(
           child: Container(
             color: getColor(index),
@@ -188,7 +189,7 @@ class _CourseBranchWebApiPageState extends State<CourseBranchWebApiPage> {
                 Expanded(
                   flex: 1,
                   //https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1624611875/${ap.icon.pix}
-                  child: Icon(getIcon(ap.modname)),
+                  child: Icon(getIcon(ap.icon.component)),
                 ),
                 Expanded(
                   flex: 8,

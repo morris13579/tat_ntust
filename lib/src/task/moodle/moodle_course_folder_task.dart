@@ -14,14 +14,14 @@ class MoodleCourseFolderTask extends MoodleTask<List<MoodleFileInfo>> {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
       List<MoodleFileInfo>? value;
-      super.onStart(R.current.getMoodleCourseBranch);
+      super.onStart(R.current.getMoodleCourseInfo);
       value = await MoodleConnector.getFolder(url);
       super.onEnd();
       if (value != null) {
         result = value;
         return TaskStatus.Success;
       } else {
-        return await super.onError(R.current.getMoodleCourseBranchError);
+        return await super.onError(R.current.getMoodleCourseInfoError);
       }
     }
     return status;

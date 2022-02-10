@@ -4,7 +4,7 @@ import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
-import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
+import 'package:flutter_app/src/model/moodle/moodle_info.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
@@ -82,11 +82,11 @@ class MoodleScoreItem {
 }
 
 class MoodleConnector {
-  static const String host = "https://moodle.ntust.edu.tw";
+  static const String host = "https://moodle2.ntust.edu.tw";
   static const String _loginUrl = "$host/login/index.php";
   static const String _userUrl = "$host/user/index.php";
   static const String _viewUrl = "$host/course/view.php";
-  static const String _branchUrl = "$host/lib/ajax/getnavbranch.php";
+  static const String _announcementView = "$host/mod/forum/view.php";
   static const String _scoreUrl = "$host/grade/report/user/index.php";
   static String? id;
 
@@ -140,7 +140,7 @@ class MoodleConnector {
     String result;
     Document tagNode;
     Element node;
-    List<Element> nodes;
+    List<Element>? nodes;
     ConnectorParameter parameter;
     try {
       String? courseUrl;
@@ -148,11 +148,16 @@ class MoodleConnector {
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
 
-      node = tagNode.getElementById("custom_menu_courses")!;
-      nodes = node.getElementsByClassName("dropdown-menu");
-      nodes = nodes[0].getElementsByTagName("a");
+      node = tagNode.getElementById("nav-drawer")!;
+      for (var i in node.getElementsByTagName("li")) {
+        if (i.attributes["data-key"] == "mycourses") {
+          nodes = i.getElementsByTagName("ul");
+          break;
+        }
+      }
+      nodes = nodes![0].getElementsByTagName("a");
       for (var i in nodes) {
-        String courseTitle = i.attributes["title"]!;
+        String courseTitle = i.text;
         if (courseTitle.contains(courseId)) {
           courseUrl = i.attributes["href"];
         }
@@ -186,45 +191,29 @@ class MoodleConnector {
       result = await Connector.getDataByGet(parameter);
 
       tagNode = parse(result);
-      nodes = tagNode.getElementsByClassName(
-          "type_course depth_3 contains_branch current_branch");
-      nodes = nodes[0].getElementsByTagName("ul");
-      nodes = nodes[0]
-          .getElementsByClassName("type_structure depth_4 contains_branch");
-      for (var i in nodes) {
-        Element p = i.getElementsByTagName("p")[0];
-        MoodleCourseDirectoryInfo info = MoodleCourseDirectoryInfo(
-          courseId: id,
-          name: i.text,
-          elementid: p.attributes["data-node-id"]!,
-          id: p.attributes["data-node-key"]!,
-          type: p.attributes["data-node-type"]!,
-          sesskey: "avG0zcjfKy",
-          instance: "4",
-        );
-        value.add(info);
-      }
-      try {
-        String url = "$host/course/view.php?id=$id";
-        parameter = ConnectorParameter(url);
-        result = await Connector.getDataByGet(parameter);
-        var tagNode = parse(result);
-        int sectionN = 0;
-        while (true) {
-          Element node = tagNode
-              .getElementById("section-$sectionN")!
-              .getElementsByClassName("hidden sectionname")
-              .first;
-          List<Element> nodes = tagNode
-              .getElementById("section-$sectionN")!
-              .getElementsByClassName("activity");
-          if (nodes.length > 0) {
-            value[sectionN].expandAble = true;
+      nodes = tagNode.getElementsByClassName("course-content");
+      nodes = nodes[0].getElementsByTagName("li");
+      for (int i = 0; i < nodes.length; i++) {
+        try {
+          var node = nodes[i];
+          var title =
+              node.getElementsByTagName("span")[0].getElementsByTagName("a")[0];
+          MoodleCourseDirectoryInfo info = MoodleCourseDirectoryInfo(
+            courseId: id,
+            name: title.text,
+            elementid: "",
+            id: "",
+            type: "",
+            sesskey: "",
+            instance: "",
+          );
+          List<Element> items = node.getElementsByClassName("activity");
+          if (items.length > 0) {
+            info.expandAble = true;
           }
-          sectionN++;
-          if (sectionN >= 30) break;
-        }
-      } catch (e) {}
+          value.add(info);
+        } catch (e) {}
+      }
       return value;
     } catch (e, stack) {
       Log.eWithStack(e, stack);
@@ -233,7 +222,7 @@ class MoodleConnector {
   }
 
   static Future<List<MoodleAnnouncementInfo>?> getCourseAnnouncement(
-      String url) async {
+      String courseId) async {
     String result;
     Document tagNode;
     List<Element> nodes;
@@ -241,6 +230,17 @@ class MoodleConnector {
     ConnectorParameter parameter;
     List<MoodleAnnouncementInfo> value = [];
     try {
+      String id = await getCourseUrl(courseId);
+      parameter = ConnectorParameter(_viewUrl);
+      Map<String, String> data = {
+        "id": id,
+        "lang": (LanguageUtils.getLangIndex() == LangEnum.zh) ? "zh_tw" : "en"
+      };
+      parameter.data = data;
+      result = await Connector.getDataByGet(parameter);
+      tagNode = parse(result);
+      nodes = tagNode.getElementsByClassName("activityinstance");
+      String url = nodes[0].getElementsByTagName("a")[0].attributes['href']!;
       parameter = ConnectorParameter(url);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
@@ -288,12 +288,12 @@ class MoodleConnector {
     }
   }
 
-  static Future<MoodleBranchJson?> getCourseBranch(
+  static Future<MoodleInfoJson?> getCourseInfo(
       MoodleCourseDirectoryInfo info) async {
     String result;
     ConnectorParameter parameter;
     try {
-      parameter = ConnectorParameter(_branchUrl);
+      parameter = ConnectorParameter(_viewUrl);
       Map<String, String> data = {
         "elementid": info.elementid,
         "id": info.id,
@@ -314,7 +314,7 @@ class MoodleConnector {
       }
       jsonDecode['children'] = cc;
 
-      MoodleBranchJson branch = MoodleBranchJson.fromJson(jsonDecode);
+      MoodleInfoJson branch = MoodleInfoJson.fromJson(jsonDecode);
       List<Children> c = [];
       for (Children? i in branch.children) {
         if (i != null) {
@@ -395,9 +395,9 @@ class MoodleConnector {
       tagNode = parse(result);
       node = tagNode.getElementById("participants")!;
       nodes = node.getElementsByTagName("tr");
-      for (var i in nodes.getRange(1, nodes.length)) {
+      for (var i in nodes.getRange(0, nodes.length)) {
         if (i.attributes["class"] != "emptyrow") {
-          String text = i.getElementsByTagName("td")[1].text;
+          String text = i.getElementsByTagName("a")[0].text;
           List<String> c = text.split("@");
           String studentId = c.first.replaceAll(" ", "");
           String name = c.last.replaceAll(" ", "");
@@ -434,7 +434,7 @@ class MoodleConnector {
           .getElementsByTagName("tbody")
           .first
           .getElementsByTagName("tr");
-      nodes = nodes.getRange(2, nodes.length).toList();
+      nodes = nodes.getRange(1, nodes.length).toList();
       List<MoodleScoreItem> value = [];
       for (var node in nodes) {
         List<Element> th, td;

@@ -85,12 +85,14 @@ class _CourseDirectoryWebApiPageState extends State<CourseDirectoryWebApiPage>
                   flex: 8,
                   child: Text(ap.name),
                 ),
+                if (ap.modules.length != 0)
+                  Icon(Icons.arrow_forward_ios_rounded, size: 16)
               ],
             ),
           ),
           onTap: () async {
             if (ap.modules.length != 0) {
-              RouteUtils.toCourseBranchPage(widget.courseInfo, ap);
+              RouteUtils.toCourseInfoPage(widget.courseInfo, ap);
             } else {
               MyToast.show(R.current.nothingHere);
             }

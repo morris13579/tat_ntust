@@ -142,14 +142,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("取得課程公佈欄..."),
         "getMoodleCourseAnnouncementError":
             MessageLookupByLibrary.simpleMessage("取得課程公佈欄錯誤"),
-        "getMoodleCourseBranch":
-            MessageLookupByLibrary.simpleMessage("取得資料中..."),
-        "getMoodleCourseBranchError":
-            MessageLookupByLibrary.simpleMessage("取得資料錯誤"),
         "getMoodleCourseDirectory":
             MessageLookupByLibrary.simpleMessage("取得課程目錄中..."),
         "getMoodleCourseDirectoryError":
             MessageLookupByLibrary.simpleMessage("取得課程目錄錯誤"),
+        "getMoodleCourseInfo": MessageLookupByLibrary.simpleMessage("取得資料中..."),
+        "getMoodleCourseInfoError":
+            MessageLookupByLibrary.simpleMessage("取得資料錯誤"),
         "getMoodleMembers": MessageLookupByLibrary.simpleMessage("取得課程成員中..."),
         "getMoodleMembersError":
             MessageLookupByLibrary.simpleMessage("取得課程成員錯誤"),

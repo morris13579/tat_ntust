@@ -4,7 +4,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/model/moodle/moodle_branch.dart';
+import 'package:flutter_app/src/model/moodle/moodle_info.dart';
 import 'package:flutter_app/src/task/moodle/moodle_course_folder_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
