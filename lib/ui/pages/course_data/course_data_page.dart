@@ -7,9 +7,7 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/ui/other/my_progress_dialog.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_page.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_directory_page.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/course_directory_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_score_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/tab_page.dart';
 import 'package:get/get.dart';
@@ -45,30 +43,20 @@ class _CourseDataPageState extends State<CourseDataPage>
       MyProgressDialog.hideAllDialog();
       Model.instance.getOtherSetting().useMoodleWebApi = result;
     }
-    bool useMoodleWebApi = Model.instance.getOtherSetting().useMoodleWebApi;
+
     _tabController = TabController(vsync: this, length: 3);
     var filePage = TabPage(
-      R.current.file,
-      Icons.folder,
-      useMoodleWebApi
-          ? CourseDirectoryWebApiPage(
-              widget.courseInfo,
-            )
-          : CourseDirectoryPage(
-              widget.courseInfo,
-            ),
-    );
+        R.current.file,
+        Icons.folder,
+        CourseDirectoryPage(
+          widget.courseInfo,
+        ));
     var announcementPage = TabPage(
-      R.current.announcement,
-      Icons.message,
-      useMoodleWebApi
-          ? CourseAnnouncementWebApiPage(
-              widget.courseInfo,
-            )
-          : CourseAnnouncementPage(
-              widget.courseInfo,
-            ),
-    );
+        R.current.announcement,
+        Icons.message,
+        CourseAnnouncementPage(
+          widget.courseInfo,
+        ));
     tabPageList.add((widget.index == 0) ? filePage : announcementPage);
     tabPageList.add((widget.index == 0) ? announcementPage : filePage);
     tabPageList.add(TabPage(

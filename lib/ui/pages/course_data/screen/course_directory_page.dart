@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/ad/ad_manager.dart';
-import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/task/moodle/moodle_course_directory_task.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_course_directory_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
 
 class CourseDirectoryPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -13,13 +15,14 @@ class CourseDirectoryPage extends StatefulWidget {
   CourseDirectoryPage(this.courseInfo);
 
   @override
-  _CourseDirectoryPageState createState() => _CourseDirectoryPageState();
+  _CourseDirectoryPageState createState() =>
+      _CourseDirectoryPageState();
 }
 
 class _CourseDirectoryPageState extends State<CourseDirectoryPage>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
-  late List<MoodleCourseDirectoryInfo> directoryList;
+  late List<MoodleCoreCourseGetContents> directoryList;
 
   @override
   void initState() {
@@ -44,6 +47,12 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
     }
   }
 
+  Color getColor(int index) {
+    return (index % 2 == 1)
+        ? Theme.of(context).backgroundColor
+        : Theme.of(context).dividerColor;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
@@ -56,18 +65,12 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
     );
   }
 
-  Color getColor(int index) {
-    return (index % 2 == 1)
-        ? Theme.of(context).backgroundColor
-        : Theme.of(context).dividerColor;
-  }
-
   Widget buildTree() {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: directoryList.length,
       itemBuilder: (BuildContext context, int index) {
-        MoodleCourseDirectoryInfo ap = directoryList[index];
+        var ap = directoryList[index];
         return InkWell(
           child: Container(
             color: getColor(index),
@@ -82,13 +85,17 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
                   flex: 8,
                   child: Text(ap.name),
                 ),
-                if (ap.expandAble)
+                if (ap.modules.length != 0)
                   Icon(Icons.arrow_forward_ios_rounded, size: 16)
               ],
             ),
           ),
           onTap: () async {
-            RouteUtils.toCourseInfoPage(widget.courseInfo, ap);
+            if (ap.modules.length != 0) {
+              RouteUtils.toCourseInfoPage(widget.courseInfo, ap);
+            } else {
+              MyToast.show(R.current.nothingHere);
+            }
           },
         );
       },

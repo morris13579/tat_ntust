@@ -1,17 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/ui/pages/course_data/course_data_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_announcement_detail_page.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_announcement_detail_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_info_page.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_info_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_folder_page.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_folder_webapi_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/course_detail_page.dart';
 import 'package:flutter_app/ui/pages/file_viewer/file_viewer_page.dart';
 import 'package:flutter_app/ui/pages/log_console/log_console.dart';
@@ -73,31 +68,18 @@ class RouteUtils {
 
   static Future toCourseFolderPage(
       CourseInfoJson courseInfo, dynamic value) async {
-    if (Model.instance.getOtherSetting().useMoodleWebApi) {
-      return await Get.to(() => CourseFolderWebApiPage(courseInfo, value));
-    } else {
-      return await Get.to(() => CourseFolderPage(courseInfo, value));
-    }
+    return await Get.to(() => CourseFolderPage(courseInfo, value));
   }
 
   static Future toCourseInfoPage(
       CourseInfoJson courseInfo, dynamic value) async {
-    if (Model.instance.getOtherSetting().useMoodleWebApi) {
-      return await Get.to(() => CourseInfoWebApiPage(courseInfo, value));
-    } else {
-      return await Get.to(() => CourseInfoPage(courseInfo, value));
-    }
+    return await Get.to(() => CourseInfoPage(courseInfo, value));
   }
 
   static Future toAnnouncementDetailPage(
       CourseInfoJson courseInfo, dynamic value) async {
-    if (Model.instance.getOtherSetting().useMoodleWebApi) {
-      return await Get.to(
-          () => CourseAnnouncementDetailWebApiPage(courseInfo, value));
-    } else {
-      return await Get.to(
-          () => CourseAnnouncementDetailPage(courseInfo, value));
-    }
+    return await Get.to(
+        () => CourseAnnouncementDetailPage(courseInfo, value));
   }
 
   static Future toCourseDetailPage(

@@ -4,63 +4,15 @@ import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
-import 'package:flutter_app/src/model/moodle/moodle_info.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
 enum MoodleConnectorStatus { LoginSuccess, LoginFail, UnknownError }
-
-class MoodleUserInfo {
-  String studentId;
-  String name;
-
-  MoodleUserInfo({required this.studentId, required this.name});
-}
-
-class MoodleCourseDirectoryInfo {
-  String elementid;
-  String id;
-  String type;
-  String sesskey;
-  String instance;
-  String name;
-  String courseId;
-  bool expandAble;
-
-  MoodleCourseDirectoryInfo(
-      {required this.elementid,
-      required this.id,
-      required this.type,
-      required this.sesskey,
-      required this.instance,
-      required this.name,
-      required this.courseId,
-      this.expandAble: false});
-}
-
-class MoodleAnnouncementInfo {
-  String name;
-  String url;
-  String author;
-  String replies;
-  String time;
-
-  MoodleAnnouncementInfo(
-      {required this.name,
-      required this.author,
-      required this.replies,
-      required this.time,
-      required this.url});
-}
-
-class MoodleFileInfo {
-  String name;
-  String url;
-
-  MoodleFileInfo({required this.name, required this.url});
-}
 
 class MoodleScoreItem {
   String name;
@@ -88,7 +40,6 @@ class MoodleConnector {
   static const String _viewUrl = "$host/course/view.php";
   static const String _announcementView = "$host/mod/forum/view.php";
   static const String _scoreUrl = "$host/grade/report/user/index.php";
-  static String? id;
 
   static Future<MoodleConnectorStatus> login(
       String account, String password) async {
@@ -136,7 +87,7 @@ class MoodleConnector {
     }
   }
 
-  static Future<String> getCourseUrl(String courseId) async {
+  static Future<String?> getCourseUrl(String courseId) async {
     String result;
     Document tagNode;
     Element node;
@@ -162,26 +113,21 @@ class MoodleConnector {
           courseUrl = i.attributes["href"];
         }
       }
-      id = null;
-      if (courseUrl == null) {
-        throw Exception("courseUrl is null");
-      }
-      id = Uri.parse(courseUrl).queryParameters["id"];
-      return id!;
+      String id = Uri.parse(courseUrl!).queryParameters["id"]!;
+      return id;
     } catch (e) {
-      throw e;
+      return null;
     }
   }
 
-  static Future<List<MoodleCourseDirectoryInfo>?> getCourseDirectory(
-      String courseId) async {
+  static Future<List<MoodleCoreCourseGetContents>?> getCourseDirectory(
+      String id) async {
     String result;
     Document tagNode;
     List<Element> nodes;
     ConnectorParameter parameter;
-    List<MoodleCourseDirectoryInfo> value = [];
+    List<MoodleCoreCourseGetContents> value = [];
     try {
-      String id = await getCourseUrl(courseId);
       parameter = ConnectorParameter(_viewUrl);
       Map<String, String> data = {
         "id": id,
@@ -198,19 +144,11 @@ class MoodleConnector {
           var node = nodes[i];
           var title =
               node.getElementsByTagName("span")[0].getElementsByTagName("a")[0];
-          MoodleCourseDirectoryInfo info = MoodleCourseDirectoryInfo(
-            courseId: id,
+          MoodleCoreCourseGetContents info = MoodleCoreCourseGetContents(
+            id: int.parse(id),
             name: title.text,
-            elementid: "",
-            id: "",
-            type: "",
-            sesskey: "",
-            instance: "",
           );
           List<Element> items = node.getElementsByClassName("activity");
-          if (items.length > 0) {
-            info.expandAble = true;
-          }
           value.add(info);
         } catch (e) {}
       }
@@ -221,16 +159,16 @@ class MoodleConnector {
     }
   }
 
-  static Future<List<MoodleAnnouncementInfo>?> getCourseAnnouncement(
-      String courseId) async {
+  static Future<MoodleModForumGetForumDiscussionsPaginated?>
+      getCourseAnnouncement(String id) async {
     String result;
     Document tagNode;
     List<Element> nodes;
     Element node;
     ConnectorParameter parameter;
-    List<MoodleAnnouncementInfo> value = [];
+    MoodleModForumGetForumDiscussionsPaginated announcement =
+        MoodleModForumGetForumDiscussionsPaginated();
     try {
-      String id = await getCourseUrl(courseId);
       parameter = ConnectorParameter(_viewUrl);
       Map<String, String> data = {
         "id": id,
@@ -245,25 +183,7 @@ class MoodleConnector {
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
       nodes = tagNode.getElementsByClassName("forumheaderlist");
-      if (nodes.length == 0) {
-        return [];
-      }
-      node = nodes.first.getElementsByTagName("tbody").first;
-      for (var i in node.getElementsByTagName("tr")) {
-        nodes = i.getElementsByTagName("td");
-        value.add(MoodleAnnouncementInfo(
-          name: nodes[0].text,
-          replies: i.getElementsByClassName("replies").first.text,
-          author: i.getElementsByClassName("author").first.text,
-          url: nodes[0].getElementsByTagName("a").first.attributes["href"]!,
-          time: i
-              .getElementsByClassName("lastpost")
-              .first
-              .getElementsByTagName("a")[1]
-              .text,
-        ));
-      }
-      return value;
+      return announcement;
     } catch (e, stack) {
       Log.eWithStack(e, stack);
       return null;
@@ -288,96 +208,14 @@ class MoodleConnector {
     }
   }
 
-  static Future<MoodleInfoJson?> getCourseInfo(
-      MoodleCourseDirectoryInfo info) async {
-    String result;
-    ConnectorParameter parameter;
-    try {
-      parameter = ConnectorParameter(_viewUrl);
-      Map<String, String> data = {
-        "elementid": info.elementid,
-        "id": info.id,
-        "type": info.type,
-        "sesskey": info.sesskey,
-        "instance": info.instance,
-      };
-      parameter.data = data;
-      result = await Connector.getDataByPost(parameter);
-      Map<String, dynamic> jsonDecode = json.decode(result);
-      List<Map<String, dynamic>> cc = [];
-      if (jsonDecode['children'] != null) {
-        for (var i in (jsonDecode['children'] as List<dynamic>)) {
-          if (i != null && i is Map) {
-            cc.add(i as Map<String, dynamic>);
-          }
-        }
-      }
-      jsonDecode['children'] = cc;
-
-      MoodleInfoJson branch = MoodleInfoJson.fromJson(jsonDecode);
-      List<Children> c = [];
-      for (Children? i in branch.children) {
-        if (i != null) {
-          c.add(i);
-        }
-      }
-      try {
-        String url = "$host/course/view.php?id=${info.courseId}";
-        parameter = ConnectorParameter(url);
-        result = await Connector.getDataByGet(parameter);
-        var tagNode = parse(result);
-        int sectionN = 0;
-        while (true) {
-          Element node = tagNode
-              .getElementById("section-$sectionN")!
-              .getElementsByClassName("hidden sectionname")
-              .first;
-          if (node.text.contains(info.name)) {
-            break;
-          }
-          sectionN++;
-          if (sectionN >= 30) break;
-        }
-        List<Element> nodes = tagNode
-            .getElementById("section-$sectionN")!
-            .getElementsByClassName("activity");
-        for (int i = 0; i < nodes.length; i++) {
-          Element node = nodes[i];
-          if (node.className.contains("label")) {
-            c.insert(
-                i,
-                Children(
-                  name: node.innerHtml,
-                  icon: SubIcon(component: "label"),
-                ));
-          }
-          c[i].name = HtmlUtils.clean(c[i].name);
-          var contentAfterLink =
-              node.getElementsByClassName("contentafterlink");
-          if (contentAfterLink.length != 0) {
-            var n = contentAfterLink[0];
-            c[i].contentAfterLink = n.innerHtml;
-          }
-        }
-      } catch (e) {}
-      branch.children = c;
-      return branch;
-    } catch (e, stack) {
-      Log.eWithStack(e, stack);
-      return null;
-    }
-  }
-
-  static Future<List<MoodleUserInfo>?> getMember(String courseId) async {
+  static Future<List<MoodleCoreEnrolGetUsers>?> getMember(String id) async {
     String result;
     Document tagNode;
     Element node;
     List<Element> nodes;
     ConnectorParameter parameter;
-    List<MoodleUserInfo> userInfo = [];
+    List<MoodleCoreEnrolGetUsers> userInfo = [];
     try {
-      String id = await getCourseUrl(courseId);
-
       parameter = ConnectorParameter(_userUrl);
       Map<String, String> data = {
         "id": id,
@@ -395,16 +233,16 @@ class MoodleConnector {
       tagNode = parse(result);
       node = tagNode.getElementById("participants")!;
       nodes = node.getElementsByTagName("tr");
-      for (var i in nodes.getRange(0, nodes.length)) {
+      for (var i in nodes.getRange(1, nodes.length)) {
         if (i.attributes["class"] != "emptyrow") {
           String text = i.getElementsByTagName("a")[0].text;
           List<String> c = text.split("@");
           String studentId = c.first.replaceAll(" ", "");
-          String name = c.last.replaceAll(" ", "");
+          //String name = c.last.replaceAll(" ", "");
           if (studentId.contains("老師")) {
             continue;
           }
-          var u = MoodleUserInfo(studentId: studentId, name: name);
+          var u = MoodleCoreEnrolGetUsers(fullName: text);
           userInfo.add(u);
         } else {
           break;
@@ -417,14 +255,13 @@ class MoodleConnector {
     }
   }
 
-  static Future<List<MoodleScoreItem>?> getScore(String courseId) async {
+  static Future<List<MoodleScoreItem>?> getScore(String id) async {
     String result;
     Document tagNode;
     List<Element> nodes;
     ConnectorParameter parameter;
     try {
       parameter = ConnectorParameter(_scoreUrl);
-      String id = await getCourseUrl(courseId);
       parameter.data = {"id": id};
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
@@ -455,56 +292,6 @@ class MoodleConnector {
         ));
       }
       return value;
-    } catch (e, stack) {
-      Log.eWithStack(e, stack);
-      return null;
-    }
-  }
-
-  static Future<List<MoodleFileInfo>?> getFolder(String url) async {
-    String result;
-    Document tagNode;
-    Element node;
-    List<Element> nodes;
-    ConnectorParameter parameter;
-    List<MoodleFileInfo> fs = [];
-    try {
-      parameter = ConnectorParameter(url);
-      result = await Connector.getDataByGet(parameter);
-      tagNode = parse(result);
-      nodes = tagNode.getElementsByClassName("box generalbox foldertree");
-      nodes = nodes[0].getElementsByTagName("li");
-      for (var i in nodes.getRange(1, nodes.length)) {
-        MoodleFileInfo f = MoodleFileInfo(
-          url: i.getElementsByTagName("a")[0].attributes["href"]!,
-          name: i.text,
-        );
-        fs.add(f);
-      }
-      if (fs.length != 0) {
-        try {
-          node = tagNode.getElementsByClassName("singlebutton")[0];
-
-          node = node.getElementsByTagName("form")[0];
-          String url = node.attributes["action"]!;
-          nodes = node.getElementsByTagName("input");
-          Map<String, dynamic> data = {};
-          for (var i in nodes) {
-            if (i.attributes["type"] == "hidden") {
-              data[i.attributes["name"]!] = i.attributes["value"];
-            }
-          }
-          MoodleFileInfo f = MoodleFileInfo(
-            url: Uri.https(Uri.parse(url).host, Uri.parse(url).path, data)
-                .toString(),
-            name: R.current.downloadAll,
-          );
-          fs.add(f);
-        } catch (e, stack) {
-          Log.eWithStack(e, stack);
-        }
-      }
-      return fs;
     } catch (e, stack) {
       Log.eWithStack(e, stack);
       return null;

@@ -5,7 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/generated/l10n.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
-import 'package:flutter_app/src/task/moodle/moodle_member_task.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_member_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
@@ -53,7 +54,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     TaskFlow taskFlow = TaskFlow();
     var task = MoodleMemberTask(courseId);
     taskFlow.addTask(task);
-    late List<MoodleUserInfo> members;
+    late List<MoodleCoreEnrolGetUsers> members;
     if (await taskFlow.start()) {
       members = task.result;
     }
@@ -132,7 +133,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     );
   }
 
-  Widget _buildClassmateInfo(int index, MoodleUserInfo member) {
+  Widget _buildClassmateInfo(int index, MoodleCoreEnrolGetUsers member) {
     Color color;
     color = (index % 2 == 1)
         ? Theme.of(context).backgroundColor

@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/ad/ad_manager.dart';
-import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/task/moodle/moodle_course_announcement_task.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_course_message_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:intl/intl.dart';
 
 class CourseAnnouncementPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -13,13 +14,15 @@ class CourseAnnouncementPage extends StatefulWidget {
   CourseAnnouncementPage(this.courseInfo);
 
   @override
-  _CourseAnnouncementPageState createState() => _CourseAnnouncementPageState();
+  _CourseAnnouncementPageState createState() =>
+      _CourseAnnouncementPageState();
 }
 
-class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
+class _CourseAnnouncementPageState
+    extends State<CourseAnnouncementPage>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
-  late List<MoodleAnnouncementInfo> announcementList;
+  late List<Discussions> discussions;
 
   @override
   void initState() {
@@ -33,11 +36,11 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
       isLoading = true;
     });
     TaskFlow taskFlow = TaskFlow();
-    var task = MoodleCourseAnnouncementTask(courseId);
+    var task = MoodleCourseMessageTask(courseId);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
       AdManager.showDownloadAD();
-      announcementList = task.result;
+      discussions = task.result.discussions;
       setState(() {
         isLoading = false;
       });
@@ -65,9 +68,14 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
   Widget buildTree() {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: announcementList.length,
+      itemCount: discussions.length,
       itemBuilder: (BuildContext context, int index) {
-        MoodleAnnouncementInfo ap = announcementList[index];
+        var ap = discussions[index];
+        final DateFormat formatter = DateFormat.yMd().add_jm();
+
+        final String formatted = formatter
+            .format(DateTime.fromMillisecondsSinceEpoch(ap.modified * 1000));
+
         return InkWell(
           child: Container(
             color: getColor(index),
@@ -87,7 +95,7 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
                           Expanded(child: Text(ap.name)),
                           Expanded(
                             child: Text(
-                              ap.author,
+                              ap.userfullname,
                               textAlign: TextAlign.end,
                             ),
                           ),
@@ -97,7 +105,7 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
                         children: [
                           Expanded(
                             child: Text(
-                              ap.time,
+                              formatted,
                               textAlign: TextAlign.end,
                             ),
                           ),

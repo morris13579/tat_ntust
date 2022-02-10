@@ -1,13 +1,15 @@
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/src/task/dialog_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 
-import '../dialog_task.dart';
-
 class MoodleTask<T> extends DialogTask<T> {
   static bool _isLogin = false;
+
+  bool useMoodleWebApi = Model.instance.getOtherSetting().useMoodleWebApi;
 
   MoodleTask(name) : super(name);
 
@@ -17,8 +19,24 @@ class MoodleTask<T> extends DialogTask<T> {
 
   @override
   Future<TaskStatus> execute() async {
+    String taskName = (useMoodleWebApi) ? "MoodleWebApiTask " : "MoodleTask ";
+    name = taskName + name;
     if (_isLogin) return TaskStatus.Success;
-    name = "MoodleTask " + name;
+    if (useMoodleWebApi) {
+      String account = Model.instance.getAccount();
+      String password = Model.instance.getPassword();
+      if (account.isEmpty || password.isEmpty) {
+        return TaskStatus.GiveUp;
+      }
+      super.onStart(R.current.loginMoodleWebApi);
+      var value = await MoodleWebApiConnector.login(account, password);
+      super.onEnd();
+      if (value == MoodleWebApiConnectorStatus.LoginSuccess) {
+        _isLogin = true;
+      } else {
+        return await onError(R.current.loginMoodleWebApiError);
+      }
+    }
     String account = Model.instance.getAccount();
     String password = Model.instance.getPassword();
     if (account.isEmpty || password.isEmpty) {

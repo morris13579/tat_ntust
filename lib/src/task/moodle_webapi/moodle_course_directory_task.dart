@@ -1,16 +1,16 @@
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 
 import '../task.dart';
-import 'moodle_webapi_task.dart';
+import 'moodle_support_task.dart';
 
-class MoodleWebApiCourseDirectoryTask
-    extends MoodleWebApiTask<List<MoodleCoreCourseGetContents>> {
-  final String id;
+class MoodleCourseDirectoryTask
+    extends MoodleSupportTask<List<MoodleCoreCourseGetContents>> {
+  final courseId;
 
-  MoodleWebApiCourseDirectoryTask(this.id)
-      : super("MoodleWebApiCourseDirectoryTask");
+  MoodleCourseDirectoryTask(this.courseId) : super("MoodleCourseDirectoryTask", courseId);
 
   @override
   Future<TaskStatus> execute() async {
@@ -18,7 +18,10 @@ class MoodleWebApiCourseDirectoryTask
     if (status == TaskStatus.Success) {
       List<MoodleCoreCourseGetContents>? value;
       super.onStart(R.current.getMoodleCourseDirectory);
-      value = await MoodleWebApiConnector.getCourseDirectory(id);
+      if (useMoodleWebApi)
+        value = await MoodleWebApiConnector.getCourseDirectory(findId);
+      else
+        value = await MoodleConnector.getCourseDirectory(findId);
       super.onEnd();
       if (value != null) {
         result = value;

@@ -1,15 +1,16 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
-
 import '../task.dart';
+import 'moodle_support_task.dart';
 import 'moodle_task.dart';
 
-class MoodleScoreTask extends MoodleTask<List<MoodleScoreItem>> {
-  final String id;
+class MoodleScoreTask extends MoodleSupportTask<List<MoodleScoreItem>> {
+  final courseId;
 
-  MoodleScoreTask(this.id) : super("MoodleScoreTask");
+  MoodleScoreTask(this.courseId) : super("MoodleScoreTask", courseId);
 
   @override
   Future<TaskStatus> execute() async {
@@ -17,19 +18,11 @@ class MoodleScoreTask extends MoodleTask<List<MoodleScoreItem>> {
     if (status == TaskStatus.Success) {
       List<MoodleScoreItem>? value;
       super.onStart(R.current.getMoodleScore);
-      value = await MoodleConnector.getScore(id);
+      if (useMoodleWebApi)
+        value = await MoodleWebApiConnector.getScore(findId);
+      else
+        value = await MoodleConnector.getScore(findId);
       super.onEnd();
-      if (MoodleConnector.id == null) {
-        ErrorDialogParameter parameter = ErrorDialogParameter(
-          title: R.current.warning,
-          dialogType: DialogType.INFO,
-          desc: R.current.unSupportThisClass,
-          okResult: false,
-          btnOkText: R.current.sure,
-          offCancelBtn: true,
-        );
-        return await super.onErrorParameter(parameter);
-      }
       if (value != null && value.length != 0) {
         result = value;
         return TaskStatus.Success;

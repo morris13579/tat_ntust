@@ -2,10 +2,10 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/task/course/course_system_task.dart';
-import 'package:flutter_app/src/task/moodle/moodle_task.dart';
 import 'package:flutter_app/src/task/ntust/ntust_task.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 
+import 'moodle_webapi/moodle_task.dart';
 import 'task.dart';
 
 typedef OnSuccessCallBack = Function(Task);
