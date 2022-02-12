@@ -93,6 +93,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
       case "url":
         openWebView(ap, openWithExternalWebView: true);
         break;
+      case "resource":
       default:
         String dirName = widget.courseInfo.main.course.name;
         FileDownload.download(

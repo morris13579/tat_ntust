@@ -94,6 +94,8 @@ class Discussions extends Object {
   @JsonKey(name: 'message')
   String message;
 
+  bool isNone;
+
   @JsonKey(name: 'messageformat')
   int messageformat;
 
@@ -162,6 +164,7 @@ class Discussions extends Object {
     this.numreplies = "",
     this.numunread = 0,
     this.pinned = false,
+    this.isNone = false,
   });
 
   factory Discussions.fromJson(Map<String, dynamic> srcJson) =>

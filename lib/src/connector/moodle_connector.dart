@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter_app/debug/log/Log.dart';
-import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
-import 'package:flutter_app/src/util/html_utils.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
@@ -137,11 +133,14 @@ class MoodleConnector {
       result = await Connector.getDataByGet(parameter);
 
       tagNode = parse(result);
-      nodes = tagNode.getElementsByClassName("course-content");
-      nodes = nodes[0].getElementsByTagName("li");
+      nodes = tagNode
+          .getElementsByClassName("course-content")[0]
+          .getElementsByClassName("weeks");
+      nodes = nodes[0].children;
       for (int i = 0; i < nodes.length; i++) {
         try {
           var node = nodes[i];
+          print(node.id);
           var title =
               node.getElementsByTagName("span")[0].getElementsByTagName("a")[0];
           MoodleCoreCourseGetContents info = MoodleCoreCourseGetContents(
@@ -149,8 +148,71 @@ class MoodleConnector {
             name: title.text,
           );
           List<Element> items = node.getElementsByClassName("activity");
+          for (var item in items) {
+            try {
+              var module = Modules();
+              String type = item.className;
+
+              module.url =
+                  item.getElementsByTagName("a")[0].attributes['href']!;
+              var k = item.getElementsByClassName("instancename")[0];
+              module.name = k.text;
+              //do something
+              try {
+                var hide = k.getElementsByClassName("accesshide")[0].text;
+                var index = module.name.indexOf(hide);
+                module.name = module.name.substring(0, index);
+              } catch (e) {}
+
+              if (type.contains("modtype_forum")) {
+                module.modname = "forum";
+              } else if (type.contains("modtype_resource")) {
+                module.modname = "resource";
+                var content = Contents(fileurl: module.url);
+                module.contents.add(content);
+              } else if (type.contains("modtype_assign")) {
+                module.modname = "assign";
+              } else if (type.contains("modtype_folder")) {
+                module.modname = "folder";
+              } else if (type.contains("modtype_label")) {
+                module.modname = "label";
+                module.description = item
+                    .getElementsByClassName("contentwithoutlink")[0]
+                    .innerHtml;
+              } else if (type.contains("modtype_url")) {
+                module.modname = "url";
+                module.url =
+                    item.getElementsByTagName("a")[0].attributes['href']!;
+                var k = item.getElementsByClassName("instancename")[0];
+                module.name = k.text;
+                //do something
+                try {
+                  var hide = k.getElementsByClassName("accesshide")[0].text;
+                  var index = module.name.indexOf(hide);
+                  module.name = module.name.substring(0, index);
+                } catch (e) {}
+              } else {
+                //??
+                module.modname = "forum";
+                module.url =
+                    item.getElementsByTagName("a")[0].attributes['href']!;
+                module.name =
+                    item.getElementsByClassName("instancename")[0].text;
+              }
+              try {
+                module.description =
+                    item.getElementsByTagName("contentafterlink")[0].innerHtml;
+              } catch (e) {}
+              info.modules.add(module);
+            } catch (e, stack) {
+              Log.eWithStack(e, stack);
+            }
+          }
+          print(items);
           value.add(info);
-        } catch (e) {}
+        } catch (e) {
+          print(e);
+        }
       }
       return value;
     } catch (e, stack) {
@@ -182,7 +244,30 @@ class MoodleConnector {
       parameter = ConnectorParameter(url);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
-      nodes = tagNode.getElementsByClassName("forumheaderlist");
+      nodes = tagNode.getElementsByTagName("table");
+      var discussions = nodes[0].getElementsByClassName("discussion");
+      for (var i in discussions) {
+        try {
+          var discussion = Discussions();
+          discussion.name = i.children[1]
+              .getElementsByTagName("a")[0]
+              .attributes["aria-label"]!;
+          discussion.userpictureurl =
+              i.children[1].getElementsByTagName("a")[0].attributes["href"]!;
+          discussion.userfullname = i.children[2]
+              .getElementsByClassName("author-info")[0]
+              .children[0]
+              .text;
+          discussion.modified = int.parse(i.children[2]
+              .getElementsByClassName("author-info")[0]
+              .getElementsByTagName("time")[0]
+              .attributes["data-timestamp"]!);
+          discussion.isNone = true;
+          announcement.discussions.add(discussion);
+        } catch (e, stack) {
+          Log.eWithStack(e, stack);
+        }
+      }
       return announcement;
     } catch (e, stack) {
       Log.eWithStack(e, stack);
@@ -199,8 +284,8 @@ class MoodleConnector {
       parameter = ConnectorParameter(url);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
-      nodes = tagNode.getElementsByClassName(
-          "forumpost clearfix lastpost firstpost starter");
+      nodes = tagNode.getElementsByClassName("post-content-container");
+      //nodes = tagNode.getElementsByClassName("body-content-container");
       return nodes.first.innerHtml;
     } catch (e, stack) {
       Log.eWithStack(e, stack);

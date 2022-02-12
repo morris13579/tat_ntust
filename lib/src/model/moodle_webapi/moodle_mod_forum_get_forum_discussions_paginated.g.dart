@@ -53,6 +53,7 @@ Discussions _$DiscussionsFromJson(Map<String, dynamic> json) => Discussions(
       numreplies: json['numreplies'] as String? ?? "",
       numunread: json['numunread'] as int? ?? 0,
       pinned: json['pinned'] as bool? ?? false,
+      isNone: json['isNone'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$DiscussionsToJson(Discussions instance) =>
@@ -72,6 +73,7 @@ Map<String, dynamic> _$DiscussionsToJson(Discussions instance) =>
       'mailed': instance.mailed,
       'subject': instance.subject,
       'message': instance.message,
+      'isNone': instance.isNone,
       'messageformat': instance.messageformat,
       'messagetrust': instance.messagetrust,
       'attachment': instance.attachment,

@@ -5,6 +5,8 @@ import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_course_message_detail_task.dart';
+import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -28,7 +30,27 @@ class _CourseAnnouncementDetailPageState
   @override
   void initState() {
     super.initState();
-    isLoading = false;
+    initDetail();
+  }
+
+  void initDetail() async {
+    if (widget.discussions.isNone) {
+      setState(() {
+        isLoading = true;
+      });
+      TaskFlow taskFlow = TaskFlow();
+      var task =
+          MoodleCourseMessageDetailTask(widget.discussions.userpictureurl);
+      taskFlow.addTask(task);
+      if (await taskFlow.start()) {
+        widget.discussions.message = task.result;
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      isLoading = false;
+    }
   }
 
   onLinkTap(url, renderContext, attributes, element) async {
@@ -61,8 +83,12 @@ class _CourseAnnouncementDetailPageState
           : Column(
               children: [
                 Container(
-                    padding: EdgeInsets.only(right: 20, left: 20, top: 20),
-                    child: SelectableHtml(data: html, onLinkTap: onLinkTap)),
+                  padding: EdgeInsets.only(right: 20, left: 20, top: 20),
+                  child: SelectableHtml(
+                    data: html,
+                    onLinkTap: onLinkTap,
+                  ),
+                ),
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: discussions.attachments.length,
