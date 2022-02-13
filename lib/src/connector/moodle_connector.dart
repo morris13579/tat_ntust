@@ -140,7 +140,6 @@ class MoodleConnector {
       for (int i = 0; i < nodes.length; i++) {
         try {
           var node = nodes[i];
-          print(node.id);
           var title =
               node.getElementsByTagName("span")[0].getElementsByTagName("a")[0];
           MoodleCoreCourseGetContents info = MoodleCoreCourseGetContents(
@@ -208,11 +207,8 @@ class MoodleConnector {
               Log.eWithStack(e, stack);
             }
           }
-          print(items);
           value.add(info);
-        } catch (e) {
-          print(e);
-        }
+        } catch (e) {}
       }
       return value;
     } catch (e, stack) {
