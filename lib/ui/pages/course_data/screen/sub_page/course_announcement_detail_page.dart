@@ -8,7 +8,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_d
 import 'package:flutter_app/src/task/moodle_webapi/moodle_course_message_detail_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:html_unescape/html_unescape.dart';
 
 class CourseAnnouncementDetailPage extends StatefulWidget {
@@ -53,13 +53,14 @@ class _CourseAnnouncementDetailPageState
     }
   }
 
-  onLinkTap(url, renderContext, attributes, element) async {
+  Future<bool> onLinkTap(url) async {
     if (Uri.parse(url).path.contains("pluginfile.php")) {
       String dirName = widget.courseInfo.main.course.name;
-      FileDownload.download(context, url, dirName, name: element.text);
+      FileDownload.download(context, url, dirName);
     } else {
       RouteUtils.toWebViewPage(widget.discussions.name, url);
     }
+    return true;
   }
 
   Color getColor(int index) {
@@ -84,9 +85,10 @@ class _CourseAnnouncementDetailPageState
               children: [
                 Container(
                   padding: EdgeInsets.only(right: 20, left: 20, top: 20),
-                  child: SelectableHtml(
-                    data: html,
-                    onLinkTap: onLinkTap,
+                  child: HtmlWidget(
+                    html,
+                    isSelectable: true,
+                    onTapUrl: onLinkTap,
                   ),
                 ),
                 ListView.builder(

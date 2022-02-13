@@ -127,7 +127,7 @@ class Discussions extends Object {
   String usermodifiedpictureurl;
 
   @JsonKey(name: 'numreplies')
-  String numreplies;
+  int numreplies;
 
   @JsonKey(name: 'numunread')
   int numunread;
@@ -161,7 +161,7 @@ class Discussions extends Object {
     this.usermodifiedfullname = "",
     this.userpictureurl = "",
     this.usermodifiedpictureurl = "",
-    this.numreplies = "",
+    this.numreplies = 0,
     this.numunread = 0,
     this.pinned = false,
     this.isNone = false,

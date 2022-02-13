@@ -5,7 +5,7 @@ description: NTUST Life TAT, convenient, concise, fast, powerful, enrich your NT
 # flutter clean && flutter build ios --split-debug-info=build/app/outputs/symbols --obfuscate && flutter build appbundle --split-debug-info=build/app/outputs/symbols --obfuscate --shrink
 # follow the google play new policy in 2021, do not build apk but aab.
 # CHECK THE BUILD CODE BEFORE DISTRIBUTION!!
-version: 1.2.6+46
+version: 1.2.6+47
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -71,7 +71,8 @@ dependencies:
   package_info: ^2.0.2
   #檢測app版本用於檢查更新
   #----------html viewer----------#
-  flutter_html: ^2.2.1
+  #flutter_html: ^2.2.1
+  flutter_widget_from_html: ^0.8.5
   #----------animation----------#
   flutter_staggered_animations: ^1.0.0
   #listView or gridView動畫

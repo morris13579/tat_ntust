@@ -245,27 +245,29 @@ class MoodleConnector {
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
       nodes = tagNode.getElementsByTagName("table");
-      var discussions = nodes[0].getElementsByClassName("discussion");
-      for (var i in discussions) {
-        try {
-          var discussion = Discussions();
-          discussion.name = i.children[1]
-              .getElementsByTagName("a")[0]
-              .attributes["aria-label"]!;
-          discussion.userpictureurl =
-              i.children[1].getElementsByTagName("a")[0].attributes["href"]!;
-          discussion.userfullname = i.children[2]
-              .getElementsByClassName("author-info")[0]
-              .children[0]
-              .text;
-          discussion.modified = int.parse(i.children[2]
-              .getElementsByClassName("author-info")[0]
-              .getElementsByTagName("time")[0]
-              .attributes["data-timestamp"]!);
-          discussion.isNone = true;
-          announcement.discussions.add(discussion);
-        } catch (e, stack) {
-          Log.eWithStack(e, stack);
+      if (nodes.length != 0) {
+        var discussions = nodes[0].getElementsByClassName("discussion");
+        for (var i in discussions) {
+          try {
+            var discussion = Discussions();
+            discussion.name = i.children[1]
+                .getElementsByTagName("a")[0]
+                .attributes["aria-label"]!;
+            discussion.userpictureurl =
+                i.children[1].getElementsByTagName("a")[0].attributes["href"]!;
+            discussion.userfullname = i.children[2]
+                .getElementsByClassName("author-info")[0]
+                .children[0]
+                .text;
+            discussion.modified = int.parse(i.children[2]
+                .getElementsByClassName("author-info")[0]
+                .getElementsByTagName("time")[0]
+                .attributes["data-timestamp"]!);
+            discussion.isNone = true;
+            announcement.discussions.add(discussion);
+          } catch (e, stack) {
+            Log.eWithStack(e, stack);
+          }
         }
       }
       return announcement;

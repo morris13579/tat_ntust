@@ -15,8 +15,7 @@ class CourseDirectoryPage extends StatefulWidget {
   CourseDirectoryPage(this.courseInfo);
 
   @override
-  _CourseDirectoryPageState createState() =>
-      _CourseDirectoryPageState();
+  _CourseDirectoryPageState createState() => _CourseDirectoryPageState();
 }
 
 class _CourseDirectoryPageState extends State<CourseDirectoryPage>

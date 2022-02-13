@@ -4,7 +4,6 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/generated/l10n.dart';
-import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_member_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';

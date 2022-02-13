@@ -1,5 +1,4 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
@@ -10,7 +9,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_conte
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class CourseInfoPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -114,7 +113,10 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
       case "label":
         return Container(
             padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-            child: SelectableHtml(data: ap.description));
+            child: HtmlWidget(
+              ap.description,
+              isSelectable: true,
+            ));
       default:
         if (ap.description.isNotEmpty) {
           return ExpansionTileCard(
@@ -127,8 +129,12 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
             ),
             children: [
               Container(
-                  padding: EdgeInsets.only(left: 20),
-                  child: SelectableHtml(data: ap.description)),
+                padding: EdgeInsets.only(left: 20),
+                child: HtmlWidget(
+                  ap.description,
+                  isSelectable: true,
+                ),
+              ),
               Container(
                 height: 50,
                 child: Row(

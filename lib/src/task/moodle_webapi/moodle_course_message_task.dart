@@ -1,9 +1,7 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
-import 'package:flutter_app/ui/other/error_dialog.dart';
 
 import '../task.dart';
 import 'moodle_support_task.dart';

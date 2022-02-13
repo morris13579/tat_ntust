@@ -50,7 +50,7 @@ Discussions _$DiscussionsFromJson(Map<String, dynamic> json) => Discussions(
       usermodifiedfullname: json['usermodifiedfullname'] as String? ?? "",
       userpictureurl: json['userpictureurl'] as String? ?? "",
       usermodifiedpictureurl: json['usermodifiedpictureurl'] as String? ?? "",
-      numreplies: json['numreplies'] as String? ?? "",
+      numreplies: json['numreplies'] as int? ?? 0,
       numunread: json['numunread'] as int? ?? 0,
       pinned: json['pinned'] as bool? ?? false,
       isNone: json['isNone'] as bool? ?? false,

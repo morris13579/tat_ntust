@@ -10,7 +10,8 @@ class MoodleCourseDirectoryTask
     extends MoodleSupportTask<List<MoodleCoreCourseGetContents>> {
   final courseId;
 
-  MoodleCourseDirectoryTask(this.courseId) : super("MoodleCourseDirectoryTask", courseId);
+  MoodleCourseDirectoryTask(this.courseId)
+      : super("MoodleCourseDirectoryTask", courseId);
 
   @override
   Future<TaskStatus> execute() async {

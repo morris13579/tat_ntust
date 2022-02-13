@@ -14,12 +14,10 @@ class CourseAnnouncementPage extends StatefulWidget {
   CourseAnnouncementPage(this.courseInfo);
 
   @override
-  _CourseAnnouncementPageState createState() =>
-      _CourseAnnouncementPageState();
+  _CourseAnnouncementPageState createState() => _CourseAnnouncementPageState();
 }
 
-class _CourseAnnouncementPageState
-    extends State<CourseAnnouncementPage>
+class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
   late List<Discussions> discussions;

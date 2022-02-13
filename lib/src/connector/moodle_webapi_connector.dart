@@ -121,7 +121,7 @@ class MoodleWebApiConnector {
       for (var i in v) {
         if (i.name.contains("一般")) {
           for (var j in i.modules) {
-            if (j.name.contains("公佈欄")) {
+            if (j.name.contains("公告")) {
               forumId = j.instance.toString();
               break;
             }
@@ -130,6 +130,9 @@ class MoodleWebApiConnector {
         if (forumId != null) {
           break;
         }
+      }
+      if (forumId == null) {
+        throw Exception("forumId is null");
       }
 
       parameter = ConnectorParameter(_webAPIUrl);

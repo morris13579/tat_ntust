@@ -1,8 +1,8 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
+
 import '../task.dart';
 import 'moodle_support_task.dart';
 
