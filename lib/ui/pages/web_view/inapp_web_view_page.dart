@@ -1,43 +1,39 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
+import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class WebViewPage extends StatefulWidget {
-  late final String url;
+class InAppWebViewPage extends StatefulWidget {
+  final Uri url;
   final String title;
   final bool openWithExternalWebView;
   final Function(Uri)? onWebViewDownload;
 
-  WebViewPage(
+  InAppWebViewPage(
       {required this.title,
-      required Uri url,
+      required this.url,
       this.openWithExternalWebView = false,
-      this.onWebViewDownload}) {
-    this.url = url.toString();
-  }
+      this.onWebViewDownload});
 
   @override
-  _WebViewPageState createState() => _WebViewPageState();
+  _InAppWebViewPageState createState() => _InAppWebViewPageState();
 }
 
-class _WebViewPageState extends State<WebViewPage> {
-  final cookieManager = CookieManager();
+class _InAppWebViewPageState extends State<InAppWebViewPage> {
+  final cookieManager = CookieManager.instance();
   final cookieJar = DioConnector.instance.cookiesManager;
-  WebViewController? webView;
-  String url = "";
-  String? lastLoadUri;
+  InAppWebViewController? webView;
+  Uri url = Uri();
   double progress = 0;
   int onLoadStopTime = -1;
+  Uri? lastLoadUri;
 
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
     BackButtonInterceptor.add(myInterceptor);
   }
 
@@ -57,15 +53,24 @@ class _WebViewPageState extends State<WebViewPage> {
   }
 
   Future<bool> setCookies() async {
-    var uri = Uri.parse(widget.url);
-    final cookies = await cookieJar.loadForRequest(uri);
-    await cookieManager.clearCookies();
+    final cookies = await cookieJar.loadForRequest(widget.url);
+    await cookieManager.deleteCookies(url: widget.url);
+    var existCookies = await cookieManager.getCookies(url: widget.url);
+    final cookiesName = existCookies.map((e) => e.name).toList();
     for (var cookie in cookies) {
-      await cookieManager.setCookie(WebViewCookie(
+      if (!cookiesName.contains(cookie.name)) {
+        cookiesName.add(cookie.name);
+        await cookieManager.setCookie(
+          url: widget.url,
           name: cookie.name,
           value: cookie.value,
-          domain: cookie.domain!,
-          path: cookie.path!));
+          domain: cookie.domain,
+          path: cookie.path!,
+          maxAge: cookie.maxAge,
+          isSecure: cookie.secure,
+          isHttpOnly: cookie.httpOnly,
+        );
+      }
     }
     return true;
   }
@@ -136,14 +141,22 @@ class _WebViewPageState extends State<WebViewPage> {
                     ),
                     Expanded(
                       child: Container(
-                        child: WebView(
-                          javascriptMode: JavascriptMode.unrestricted,
-                          initialUrl: widget.url.toString(),
+                        child: InAppWebView(
+                          initialUrlRequest: URLRequest(url: widget.url),
+                          initialOptions: InAppWebViewGroupOptions(
+                            android: AndroidInAppWebViewOptions(
+                              useHybridComposition: true, //android 12 keyboard
+                            ),
+                            crossPlatform: InAppWebViewOptions(
+                              useOnDownloadStart: true,
+                            ),
+                          ),
                           onWebViewCreated:
-                              (WebViewController webViewController) {
-                            webView = webViewController;
+                              (InAppWebViewController controller) {
+                            webView = controller;
                           },
-                          onPageFinished: (String url) {
+                          onLoadStart:
+                              (InAppWebViewController controller, Uri? url) {
                             setState(() {
                               if (lastLoadUri != url) {
                                 onLoadStopTime++;
@@ -152,12 +165,32 @@ class _WebViewPageState extends State<WebViewPage> {
                               this.url = url!;
                             });
                           },
-                          onProgress: (int progress) {
+                          onLoadStop: (InAppWebViewController controller,
+                              Uri? url) async {
+                            setState(
+                              () {
+                                this.url = url!;
+                              },
+                            );
+                          },
+                          onProgressChanged: (InAppWebViewController controller,
+                              int progress) {
                             setState(
                               () {
                                 this.progress = progress / 100;
                               },
                             );
+                          },
+                          onDownloadStart:
+                              (InAppWebViewController controller, Uri url) {
+                            Log.d("WebView download ${url.toString()}");
+                            if (widget.onWebViewDownload != null) {
+                              widget.onWebViewDownload!(url);
+                            } else {
+                              String dirName = "WebView";
+                              FileDownload.download(
+                                  context, url.toString(), dirName);
+                            }
                           },
                         ),
                       ),

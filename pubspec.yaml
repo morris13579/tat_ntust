@@ -44,7 +44,6 @@ dependencies:
   #----------internet----------#
   dio: ^4.0.4
   #網路get post API
-  #dio_cookie_manager: ^2.0.0
   dio_cookie_manager: ^2.0.0
   #用於產生cookie_jar與dio接口
   cookie_jar: ^3.0.1
@@ -56,6 +55,7 @@ dependencies:
   #剪貼簿
   #----------WebView----------#
   flutter_inappwebview: ^5.3.2
+  webview_flutter: ^3.0.0
   #---------icon----------#
   eva_icons_flutter: ^3.0.2
   #https://akveo.github.io/eva-icons/#/

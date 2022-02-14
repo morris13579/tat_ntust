@@ -18,7 +18,7 @@ import 'package:flutter_app/ui/pages/other/page/privacy_policy_page.dart';
 import 'package:flutter_app/ui/pages/other/page/setting_page.dart';
 import 'package:flutter_app/ui/pages/other/page/store_edit_page.dart';
 import 'package:flutter_app/ui/pages/subsystem/sub_system_page.dart';
-import 'package:flutter_app/ui/pages/web_view/web_view_page.dart';
+import 'package:flutter_app/ui/pages/web_view/inapp_web_view_page.dart';
 import 'package:flutter_app/ui/screen/login_screen.dart';
 import 'package:get/get.dart';
 
@@ -122,7 +122,7 @@ class RouteUtils {
       {bool openWithExternalWebView = true,
       Function(Uri)? onWebViewDownload}) async {
     return await Get.to(
-      () => WebViewPage(
+      () => InAppWebViewPage(
         title: title,
         url: Uri.parse(url),
         openWithExternalWebView: openWithExternalWebView,
