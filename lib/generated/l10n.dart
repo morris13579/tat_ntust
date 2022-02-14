@@ -640,6 +640,16 @@ class S {
     );
   }
 
+  /// `check moodle support...`
+  String get checkMoodleSupport {
+    return Intl.message(
+      'check moodle support...',
+      name: 'checkMoodleSupport',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `test moodle api...`
   String get testMoodleApi {
     return Intl.message(

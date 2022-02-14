@@ -6,6 +6,7 @@ import 'package:flutter_app/src/config/app_themes.dart';
 import 'package:flutter_app/src/file/file_store.dart';
 import 'package:flutter_app/src/providers/app_provider.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_task.dart';
 import 'package:flutter_app/src/util/document_utils.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
@@ -180,6 +181,7 @@ class _SettingPageState extends State<SettingPage> {
       ),
       value: Model.instance.getOtherSetting().useMoodleWebApi,
       onChanged: (value) {
+        MoodleTask.isLogin = false;
         setState(() {
           Model.instance.getOtherSetting().useMoodleWebApi = value;
           Model.instance.saveOtherSetting();

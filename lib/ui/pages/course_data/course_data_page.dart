@@ -37,7 +37,10 @@ class _CourseDataPageState extends State<CourseDataPage>
   }
 
   void testMoodleWebApi() async {
-    if (Model.instance.getOtherSetting().useMoodleWebApi) {
+    const moodleCheckKey = "moodle_api_check";
+    if (Model.instance.getOtherSetting().useMoodleWebApi &&
+        await Model.instance.getFirstUse(moodleCheckKey)) {
+      Model.instance.setAlreadyUse(moodleCheckKey);
       MyProgressDialog.progressDialog(R.current.testMoodleApi);
       var result = await MoodleWebApiConnector.testMoodleWebApi();
       MyProgressDialog.hideAllDialog();

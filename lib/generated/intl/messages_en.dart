@@ -83,6 +83,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "changePassword":
             MessageLookupByLibrary.simpleMessage("Change the password"),
         "checkIdentity": MessageLookupByLibrary.simpleMessage("Check identity"),
+        "checkMoodleSupport":
+            MessageLookupByLibrary.simpleMessage("check moodle support..."),
         "checkVersion": MessageLookupByLibrary.simpleMessage("Check version"),
         "checkingVersion":
             MessageLookupByLibrary.simpleMessage("Checking version..."),

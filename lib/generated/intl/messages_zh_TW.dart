@@ -79,6 +79,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "cannotWrite": MessageLookupByLibrary.simpleMessage("無法寫入此存儲設備！"),
         "changePassword": MessageLookupByLibrary.simpleMessage("更改密碼"),
         "checkIdentity": MessageLookupByLibrary.simpleMessage("確認身分"),
+        "checkMoodleSupport":
+            MessageLookupByLibrary.simpleMessage("檢查課程是否支持..."),
         "checkVersion": MessageLookupByLibrary.simpleMessage("檢查新版本"),
         "checkingVersion": MessageLookupByLibrary.simpleMessage("檢查中..."),
         "choosePeople": MessageLookupByLibrary.simpleMessage("選課總人數(本校/系統學校)"),

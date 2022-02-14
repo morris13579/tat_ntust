@@ -16,7 +16,7 @@ class MoodleSupportTask<T> extends MoodleTask<T> {
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
-      super.onStart(R.current.getMoodleCourseDirectory);
+      super.onStart(R.current.checkMoodleSupport);
       try {
         if (useMoodleWebApi)
           findId = (await MoodleWebApiConnector.getCourseUrl(_courseId))!;
@@ -24,6 +24,7 @@ class MoodleSupportTask<T> extends MoodleTask<T> {
           findId = (await MoodleConnector.getCourseUrl(_courseId))!;
         super.onEnd();
       } catch (e) {
+        super.onEnd();
         ErrorDialogParameter parameter = ErrorDialogParameter(
           title: R.current.warning,
           dialogType: DialogType.INFO,
