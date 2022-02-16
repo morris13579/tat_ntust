@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
@@ -26,7 +25,7 @@ class _CourseAnnouncementDetailPageState
     extends State<CourseAnnouncementDetailPage> {
   bool isLoading = true;
   late String html;
-
+  late Discussions discussion;
   @override
   void initState() {
     super.initState();
@@ -39,11 +38,10 @@ class _CourseAnnouncementDetailPageState
         isLoading = true;
       });
       TaskFlow taskFlow = TaskFlow();
-      var task =
-          MoodleCourseMessageDetailTask(widget.discussions.userpictureurl);
+      var task = MoodleCourseMessageDetailTask(widget.discussions);
       taskFlow.addTask(task);
       if (await taskFlow.start()) {
-        widget.discussions.message = task.result;
+        discussion = task.result;
       }
       setState(() {
         isLoading = false;
@@ -58,7 +56,7 @@ class _CourseAnnouncementDetailPageState
       String dirName = widget.courseInfo.main.course.name;
       FileDownload.download(context, url, dirName);
     } else {
-      RouteUtils.toWebViewPage(widget.discussions.name, url);
+      RouteUtils.toWebViewPage(discussion.name, url);
     }
     return true;
   }

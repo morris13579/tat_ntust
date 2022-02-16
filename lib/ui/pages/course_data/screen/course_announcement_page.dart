@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/ad/ad_manager.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';

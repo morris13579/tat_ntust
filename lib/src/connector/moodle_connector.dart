@@ -34,7 +34,6 @@ class MoodleConnector {
   static const String _loginUrl = "$host/login/index.php";
   static const String _userUrl = "$host/user/index.php";
   static const String _viewUrl = "$host/course/view.php";
-  static const String _announcementView = "$host/mod/forum/view.php";
   static const String _scoreUrl = "$host/grade/report/user/index.php";
 
   static Future<MoodleConnectorStatus> login(
@@ -222,7 +221,6 @@ class MoodleConnector {
     String result;
     Document tagNode;
     List<Element> nodes;
-    Element node;
     ConnectorParameter parameter;
     MoodleModForumGetForumDiscussionsPaginated announcement =
         MoodleModForumGetForumDiscussionsPaginated();
@@ -273,7 +271,8 @@ class MoodleConnector {
     }
   }
 
-  static Future<String?> getCourseAnnouncementDetail(String url) async {
+  static Future<Discussions?> getCourseAnnouncementDetail(
+      String url, Discussions discussion) async {
     String result;
     Document tagNode;
     List<Element> nodes;
@@ -283,8 +282,11 @@ class MoodleConnector {
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
       nodes = tagNode.getElementsByClassName("post-content-container");
+      tagNode.getElementById("partialcollapse");
       //nodes = tagNode.getElementsByClassName("body-content-container");
-      return nodes.first.innerHtml;
+      discussion.message = nodes.first.innerHtml;
+      discussion.isNone = false;
+      return discussion;
     } catch (e, stack) {
       Log.eWithStack(e, stack);
       return null;

@@ -149,7 +149,7 @@ class _WebViewPageState extends State<WebViewPage> {
                                 onLoadStopTime++;
                               }
                               lastLoadUri = url;
-                              this.url = url!;
+                              this.url = url;
                             });
                           },
                           onProgress: (int progress) {
