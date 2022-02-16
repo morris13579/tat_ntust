@@ -44,4 +44,14 @@ class MoodleSupportTask<T> extends MoodleTask<T> {
     }
     return status;
   }
+
+  @override
+  Future<TaskStatus> onError(String message) {
+    return super.onError(message);
+  }
+
+  @override
+  Future<TaskStatus> onErrorParameter(ErrorDialogParameter parameter) {
+    return super.onErrorParameter(parameter);
+  }
 }

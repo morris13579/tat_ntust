@@ -64,7 +64,7 @@ TableData _$TableDataFromJson(Map<String, dynamic> json) => TableData(
           : Feedback.fromJson(json['feedback'] as Map<String, dynamic>),
       contributiontocoursetotal: json['contributiontocoursetotal'] == null
           ? null
-          : Contributiontocoursetotal.fromJson(
+          : ContributionToCourseTotal.fromJson(
               json['contributiontocoursetotal'] as Map<String, dynamic>),
     );
 
@@ -166,16 +166,16 @@ Map<String, dynamic> _$FeedbackToJson(Feedback instance) => <String, dynamic>{
       'headers': instance.headers,
     };
 
-Contributiontocoursetotal _$ContributiontocoursetotalFromJson(
+ContributionToCourseTotal _$ContributiontocoursetotalFromJson(
         Map<String, dynamic> json) =>
-    Contributiontocoursetotal(
+    ContributionToCourseTotal(
       classs: json['class'] as String? ?? "",
       content: json['content'] as String? ?? "",
       headers: json['headers'] as String? ?? "",
     );
 
 Map<String, dynamic> _$ContributiontocoursetotalToJson(
-        Contributiontocoursetotal instance) =>
+        ContributionToCourseTotal instance) =>
     <String, dynamic>{
       'class': instance.classs,
       'content': instance.content,

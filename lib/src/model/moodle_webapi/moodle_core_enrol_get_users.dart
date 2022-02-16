@@ -52,6 +52,8 @@ class MoodleCoreEnrolGetUsers {
 
   factory MoodleCoreEnrolGetUsers.fromJson(Map<String, dynamic> srcJson) =>
       _$MoodleCoreEnrolGetUsersFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$MoodleCoreEnrolGetUsersToJson(this);
 }
 
 @JsonSerializable()
@@ -77,4 +79,6 @@ class Roles {
 
   factory Roles.fromJson(Map<String, dynamic> srcJson) =>
       _$RolesFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$RolesToJson(this);
 }

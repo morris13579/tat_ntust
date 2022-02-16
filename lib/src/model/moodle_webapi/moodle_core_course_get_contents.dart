@@ -47,6 +47,8 @@ class MoodleCoreCourseGetContents {
 
   factory MoodleCoreCourseGetContents.fromJson(Map<String, dynamic> srcJson) =>
       _$MoodleCoreCourseGetContentsFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$MoodleCoreCourseGetContentsToJson(this);
 }
 
 @JsonSerializable()
@@ -102,6 +104,8 @@ class Modules extends Object {
 
   factory Modules.fromJson(Map<String, dynamic> srcJson) =>
       _$ModulesFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$ModulesToJson(this);
 }
 
 /// type : "file"
@@ -166,4 +170,6 @@ class Contents extends Object {
 
   factory Contents.fromJson(Map<String, dynamic> srcJson) =>
       _$ContentsFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$ContentsToJson(this);
 }

@@ -17,6 +17,9 @@ class MoodleModForumGetForumDiscussionsPaginated {
   factory MoodleModForumGetForumDiscussionsPaginated.fromJson(
           Map<String, dynamic> srcJson) =>
       _$MoodleModForumGetForumDiscussionsPaginatedFromJson(srcJson);
+
+  Map<String, dynamic> toJson() =>
+      _$MoodleModForumGetForumDiscussionsPaginatedToJson(this);
 }
 
 /// id : 242038
@@ -169,6 +172,8 @@ class Discussions extends Object {
 
   factory Discussions.fromJson(Map<String, dynamic> srcJson) =>
       _$DiscussionsFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$DiscussionsToJson(this);
 }
 
 /// filename : "110_1論文研討的規定.pptx"
@@ -194,4 +199,6 @@ class Attachments extends Object {
 
   factory Attachments.fromJson(Map<String, dynamic> srcJson) =>
       _$AttachmentsFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$AttachmentsToJson(this);
 }

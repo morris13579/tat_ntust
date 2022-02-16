@@ -11,6 +11,8 @@ class APTreeJson {
 
   factory APTreeJson.fromJson(Map<String, dynamic> srcJson) =>
       _$APTreeJsonFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$APTreeJsonToJson(this);
 }
 
 @JsonSerializable()
@@ -26,4 +28,6 @@ class APListJson {
 
   factory APListJson.fromJson(Map<String, dynamic> srcJson) =>
       _$APListJsonFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$APListJsonToJson(this);
 }

@@ -97,4 +97,6 @@ class CourseSearchJson {
 
   factory CourseSearchJson.fromJson(Map<String, dynamic> srcJson) =>
       _$CourseSearchJsonFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$CourseSearchJsonToJson(this);
 }

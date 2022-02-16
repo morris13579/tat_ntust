@@ -35,6 +35,8 @@ class RemoteConfigVersionInfo {
 
   factory RemoteConfigVersionInfo.fromJson(Map<String, dynamic> srcJson) =>
       _$RemoteConfigVersionInfoFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$RemoteConfigVersionInfoToJson(this);
 }
 
 @JsonSerializable()
@@ -49,4 +51,6 @@ class AndroidIosVersionInfo {
 
   factory AndroidIosVersionInfo.fromJson(Map<String, dynamic> srcJson) =>
       _$AndroidIosVersionInfoFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$AndroidIosVersionInfoToJson(this);
 }

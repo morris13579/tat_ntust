@@ -21,6 +21,8 @@ class MoodleGradeReportUserGetGradesTable {
   factory MoodleGradeReportUserGetGradesTable.fromJson(
           Map<String, dynamic> srcJson) =>
       _$MoodleGradeReportUserGetGradesTableFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$MoodleGradeReportUserGetGradesTableToJson(this);
 }
 
 @JsonSerializable()
@@ -52,6 +54,8 @@ class Tables {
 
   factory Tables.fromJson(Map<String, dynamic> srcJson) =>
       _$TablesFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$TablesToJson(this);
 }
 
 @JsonSerializable()
@@ -78,7 +82,7 @@ class TableData {
   late Feedback feedback;
 
   @JsonKey(name: 'contributiontocoursetotal')
-  late Contributiontocoursetotal contributiontocoursetotal;
+  late ContributionToCourseTotal contributiontocoursetotal;
 
   TableData(
       {ItemName? itemName,
@@ -88,7 +92,7 @@ class TableData {
       Range? range,
       Percentage? percentage,
       Feedback? feedback,
-      Contributiontocoursetotal? contributiontocoursetotal}) {
+      ContributionToCourseTotal? contributiontocoursetotal}) {
     this.itemName = itemName ?? ItemName();
     this.leader = leader ?? Leader();
     this.weight = weight ?? Weight();
@@ -97,11 +101,13 @@ class TableData {
     this.percentage = percentage ?? Percentage();
     this.feedback = feedback ?? Feedback();
     this.contributiontocoursetotal =
-        contributiontocoursetotal ?? Contributiontocoursetotal();
+        contributiontocoursetotal ?? ContributionToCourseTotal();
   }
 
   factory TableData.fromJson(Map<String, dynamic> srcJson) =>
       _$TableDataFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$TableDataToJson(this);
 }
 
 @JsonSerializable()
@@ -131,6 +137,8 @@ class ItemName {
 
   factory ItemName.fromJson(Map<String, dynamic> srcJson) =>
       _$ItemNameFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$ItemNameToJson(this);
 }
 
 @JsonSerializable()
@@ -145,6 +153,8 @@ class Leader {
 
   factory Leader.fromJson(Map<String, dynamic> srcJson) =>
       _$LeaderFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$LeaderToJson(this);
 }
 
 @JsonSerializable()
@@ -263,7 +273,7 @@ class Feedback extends Object {
 }
 
 @JsonSerializable()
-class Contributiontocoursetotal extends Object {
+class ContributionToCourseTotal extends Object {
   @JsonKey(name: 'class')
   String classs;
 
@@ -273,13 +283,13 @@ class Contributiontocoursetotal extends Object {
   @JsonKey(name: 'headers')
   String headers;
 
-  Contributiontocoursetotal({
+  ContributionToCourseTotal({
     this.classs = "",
     this.content = "",
     this.headers = "",
   });
 
-  factory Contributiontocoursetotal.fromJson(Map<String, dynamic> srcJson) =>
+  factory ContributionToCourseTotal.fromJson(Map<String, dynamic> srcJson) =>
       _$ContributiontocoursetotalFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$ContributiontocoursetotalToJson(this);

@@ -128,6 +128,8 @@ class CourseExtraInfoJson extends Object {
 
   factory CourseExtraInfoJson.fromJson(Map<String, dynamic> srcJson) =>
       _$CourseExtraInfoJsonFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$CourseExtraInfoJsonToJson(this);
 }
 
 @JsonSerializable()

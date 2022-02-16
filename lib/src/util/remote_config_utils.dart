@@ -4,14 +4,14 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_app/src/model/remote_config/remote_config_version_info.dart';
 
 class RemoteConfigUtils {
-  static late RemoteConfig _remoteConfig;
+  static late FirebaseRemoteConfig _remoteConfig;
 
   static String versionConfigKey = "version_config";
   static String removeADCodeKey = "remove_ad_key";
   static String enableADCodeKey = "ad_enable";
 
   static Future<void> init() async {
-    _remoteConfig = RemoteConfig.instance;
+    _remoteConfig = FirebaseRemoteConfig.instance;
     _remoteConfig.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: Duration(hours: 1),

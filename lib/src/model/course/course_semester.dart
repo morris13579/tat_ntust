@@ -37,4 +37,6 @@ class CourseSemesterJson extends Object {
 
   factory CourseSemesterJson.fromJson(Map<String, dynamic> srcJson) =>
       _$CourseSemesterJsonFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$CourseSemesterJsonToJson(this);
 }
