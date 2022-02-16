@@ -9,6 +9,7 @@ import 'package:flutter_app/ui/other/error_dialog.dart';
 class MoodleSupportTask<T> extends MoodleTask<T> {
   String _courseId;
   late String findId;
+  static Map<String, String> recordSupport = {};
 
   MoodleSupportTask(name, this._courseId) : super("MoodleSupportTask " + name);
 
@@ -17,12 +18,17 @@ class MoodleSupportTask<T> extends MoodleTask<T> {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.Success) {
       super.onStart(R.current.checkMoodleSupport);
+      if (recordSupport.keys.contains(_courseId)) {
+        findId = recordSupport[_courseId]!;
+        return status;
+      }
       try {
         if (useMoodleWebApi)
           findId = (await MoodleWebApiConnector.getCourseUrl(_courseId))!;
         else
           findId = (await MoodleConnector.getCourseUrl(_courseId))!;
         super.onEnd();
+        recordSupport[_courseId] = findId;
       } catch (e) {
         super.onEnd();
         ErrorDialogParameter parameter = ErrorDialogParameter(
