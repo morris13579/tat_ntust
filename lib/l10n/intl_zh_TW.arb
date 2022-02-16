@@ -59,6 +59,8 @@
   "getMoodleScoreError": "取得課程成績錯誤",
   "getScore": "取得成績中...",
   "getScoreError": "取得成績錯誤",
+  "getMoodleCourseFolderDetail": "取得資料夾內容...",
+  "getMoodleCourseFolderDetailError": "取得資料夾內容錯誤",
   "checkMoodleSupport": "檢查課程是否支持...",
   "testMoodleApi": "測試moodle api...",
   "downloadAll": "全部打包下載",

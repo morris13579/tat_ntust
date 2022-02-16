@@ -81,7 +81,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
         openWebView(ap);
         break;
       case "folder":
-        if (ap.contents.length != 0) {
+        if (ap.contents.length != 0 || ap.folderIsNone) {
           RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
         } else {
           MyToast.show(R.current.nothingHere);

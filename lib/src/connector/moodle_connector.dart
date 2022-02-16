@@ -115,6 +115,54 @@ class MoodleConnector {
     }
   }
 
+  static Future<Modules> getFolder(Modules modules) async {
+    String result;
+    Document tagNode;
+    ConnectorParameter parameter;
+    List<Element> nodes;
+    Element node;
+    try {
+      parameter = ConnectorParameter(modules.url);
+      result = await Connector.getDataByGet(parameter);
+      tagNode = parse(result);
+      node = tagNode
+          .getElementById("page-content")!
+          .getElementsByClassName("card-body")[0];
+      nodes = node.getElementsByClassName("foldertree");
+      nodes = nodes[0].getElementsByClassName("fp-filename-icon");
+      for (var node in nodes) {
+        try {
+          var contents = Contents();
+          contents.filename =
+              node.getElementsByClassName("fp-filename")[0].text;
+          contents.fileurl =
+              node.getElementsByTagName("a")[0].attributes["href"]!;
+          modules.contents.add(contents);
+        } catch (e) {}
+      }
+      try {
+        var contents = Contents();
+        nodes = node
+            .getElementsByClassName("singlebutton")[0]
+            .getElementsByTagName("form");
+        String url = nodes[0].attributes["action"]!;
+        contents.filename = nodes[0].getElementsByTagName("button")[0].text;
+        nodes = nodes[0].getElementsByTagName("input");
+        Map<String, String> param = {};
+        for (var node in nodes) {
+          param[node.attributes["name"]!] = node.attributes["value"]!;
+        }
+        contents.fileurl = Connector.uriAddQuery(url, param);
+        modules.contents.add(contents);
+      } catch (e, stack) {
+        Log.eWithStack(e, stack);
+      }
+    } catch (e, stack) {
+      Log.eWithStack(e, stack);
+    }
+    return modules;
+  }
+
   static Future<List<MoodleCoreCourseGetContents>?> getCourseDirectory(
       String id) async {
     String result;
@@ -172,6 +220,7 @@ class MoodleConnector {
                 module.modname = "assign";
               } else if (type.contains("modtype_folder")) {
                 module.modname = "folder";
+                module.folderIsNone = true;
               } else if (type.contains("modtype_label")) {
                 module.modname = "label";
                 module.description = item

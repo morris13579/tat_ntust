@@ -640,6 +640,26 @@ class S {
     );
   }
 
+  /// `get moodle course folder detail...`
+  String get getMoodleCourseFolderDetail {
+    return Intl.message(
+      'get moodle course folder detail...',
+      name: 'getMoodleCourseFolderDetail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `get moodle course folder error`
+  String get getMoodleCourseFolderDetailError {
+    return Intl.message(
+      'get moodle course folder error',
+      name: 'getMoodleCourseFolderDetailError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `check moodle support...`
   String get checkMoodleSupport {
     return Intl.message(
