@@ -1,9 +1,9 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/task/cache_task.dart';
 import 'package:flutter_app/src/task/course/course_system_task.dart';
 import 'package:flutter_app/src/task/ntust/ntust_task.dart';
-import 'package:flutter_app/src/task/score/cache_task.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 
 import 'moodle_webapi/moodle_task.dart';
@@ -77,6 +77,7 @@ class TaskFlow {
           _queue = [];
           success = false;
           if (await task.hasCache) {
+            MyToast.show(R.current.loadingCache);
             success = true;
           }
           break;

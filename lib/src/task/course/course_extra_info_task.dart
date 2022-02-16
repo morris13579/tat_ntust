@@ -2,7 +2,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/course_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
-import 'package:flutter_app/src/task/score/cache_task.dart';
+import 'package:flutter_app/src/task/cache_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 
 class CourseExtraInfoTask extends CacheTask<CourseExtraInfoJson> {

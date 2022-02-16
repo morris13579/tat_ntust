@@ -2,7 +2,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/store/model.dart';
-import 'package:flutter_app/src/task/score/cache_task.dart';
+import 'package:flutter_app/src/task/cache_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 

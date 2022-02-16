@@ -3,7 +3,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/ntust_connector.dart';
 import 'package:flutter_app/src/connector/ntust_login_page.dart';
 import 'package:flutter_app/src/store/model.dart';
-import 'package:flutter_app/src/task/score/cache_task.dart';
+import 'package:flutter_app/src/task/cache_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';

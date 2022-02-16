@@ -36,7 +36,6 @@ class CacheTask<T> extends DialogTask<T> {
   }
 
   dynamic getObject(dynamic v) {
-    print(T.toString());
     try {
       switch (T.toString()) {
         case "List<MoodleCoreCourseGetContents>":
