@@ -24,7 +24,7 @@ dependencies:
   logger: ^1.1.0
   #顯示Log
   sprintf: ^6.0.0
-  flutter_local_notifications: ^9.3.1
+  flutter_local_notifications: ^9.3.2
   #通知欄  需修改android原始碼
   rxdart: ^0.27.3
   #通知欄有使用到
@@ -36,7 +36,7 @@ dependencies:
   #驗證身分指紋
   version: ^2.0.0
   #版本比較
-  file_picker: ^4.3.3
+  file_picker: ^4.4.0
   #選擇android資料夾
   #----------store data----------#
   shared_preferences: ^2.0.13
@@ -80,7 +80,7 @@ dependencies:
   flutter_downloader: ^1.7.2
   #下載app更新
   open_file: ^3.2.1
-  permission_handler: ^8.3.0
+  permission_handler: ^9.0.1
   mime_type: ^1.0.0
   github: ^9.0.0
   #----------Widget----------#
@@ -105,7 +105,7 @@ dependencies:
   flutter_markdown: ^0.6.9
   numberpicker: ^2.1.1
   #選擇學期
-  alice_lightweight: ^3.0.1
+  alice_lightweight: ^3.0.2
   pretty_json: ^2.0.0
   icalendar_parser: ^1.0.1
   charset_converter: ^2.0.0
@@ -127,7 +127,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.9.2
   #flutter pub run flutter_launcher_icons:main -f pubspec.yaml
   #利用以下的flutter_icons設定icon位置
-  flutter_native_splash: ^2.0.2
+  flutter_native_splash: ^2.0.4
   #flutter pub run flutter_native_splash:create
   #---------json----------#
   build_runner: ^2.1.7
