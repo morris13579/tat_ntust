@@ -2,8 +2,8 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
+import 'package:flutter_app/src/task/task.dart';
 
-import '../task.dart';
 import 'moodle_support_task.dart';
 
 class MoodleCourseDirectoryTask
@@ -11,7 +11,9 @@ class MoodleCourseDirectoryTask
   final courseId;
 
   MoodleCourseDirectoryTask(this.courseId)
-      : super("MoodleCourseDirectoryTask", courseId);
+      : super("MoodleCourseDirectoryTask", courseId) {
+    key = "cache_moodle_directory_$courseId";
+  }
 
   @override
   Future<TaskStatus> execute() async {

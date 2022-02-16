@@ -1,8 +1,8 @@
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
+import 'package:flutter_app/src/task/task.dart';
 
-import '../task.dart';
 import 'moodle_task.dart';
 
 class MoodleCourseMessageDetailTask extends MoodleTask<Discussions> {

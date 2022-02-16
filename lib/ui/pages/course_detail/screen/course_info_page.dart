@@ -59,65 +59,65 @@ class _CourseInfoPageState extends State<CourseInfoPage>
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
       courseExtraInfo = task.result;
-    }
 
-    listItem
-        .add(_buildCourseInfo(R.current.semester, courseExtraInfo.semester));
-    listItem
-        .add(_buildCourseInfo(R.current.courseId, courseExtraInfo.courseNo));
-    listItem.add(
-        _buildCourseInfo(R.current.courseName, courseExtraInfo.courseName));
-    listItem.add(
-        _buildCourseInfo(R.current.instructor, courseExtraInfo.courseTeacher));
-    listItem.add(_buildCourseInfo(
-        "${R.current.courseTimes}/${R.current.practicalTimes}",
-        sprintf("%s/%s",
-            [courseExtraInfo.courseTimes, courseExtraInfo.practicalTimes])));
-    listItem.add(_buildCourseInfo(
-        R.current.requireOption,
-        sprintf("%s/%s",
-            [courseExtraInfo.requireOption, courseExtraInfo.allYear])));
-
-    listItem.add(_buildCourseInfo(
-        R.current.choosePeople,
-        sprintf("%s ( %s / %s )", [
-          courseExtraInfo.allStudent,
-          courseExtraInfo.chooseStudent,
-          courseExtraInfo.threeStudent
-        ])));
-    try {
+      listItem
+          .add(_buildCourseInfo(R.current.semester, courseExtraInfo.semester));
+      listItem
+          .add(_buildCourseInfo(R.current.courseId, courseExtraInfo.courseNo));
+      listItem.add(
+          _buildCourseInfo(R.current.courseName, courseExtraInfo.courseName));
       listItem.add(_buildCourseInfo(
-          R.current.chooseUpBoundary,
-          sprintf(R.current.choosePeopleString, [
-            courseExtraInfo.restrict1,
-            courseExtraInfo.restrict2,
-            int.parse(courseExtraInfo.nTNURestrict) +
-                int.parse(courseExtraInfo.nTURestrict)
-          ])));
-    } catch (e) {}
+          R.current.instructor, courseExtraInfo.courseTeacher));
+      listItem.add(_buildCourseInfo(
+          "${R.current.courseTimes}/${R.current.practicalTimes}",
+          sprintf("%s/%s",
+              [courseExtraInfo.courseTimes, courseExtraInfo.practicalTimes])));
+      listItem.add(_buildCourseInfo(
+          R.current.requireOption,
+          sprintf("%s/%s",
+              [courseExtraInfo.requireOption, courseExtraInfo.allYear])));
 
-    listItem.add(
-        _buildCourseInfo(R.current.classRoomNo, courseExtraInfo.classRoomNo));
-    listItem.add(
-        _buildCourseInfo(R.current.coreAbility, courseExtraInfo.coreAbility));
-    listItem
-        .add(_buildCourseInfo(R.current.courseURL, courseExtraInfo.courseURL));
-    listItem.add(
-        _buildCourseInfo(R.current.courseObject, courseExtraInfo.courseObject));
-    listItem.add(_buildCourseInfo(
-        R.current.courseContent, courseExtraInfo.courseContent));
-    listItem.add(_buildCourseInfo(
-        R.current.courseTextbook, courseExtraInfo.courseTextbook));
-    listItem.add(_buildCourseInfo(
-        R.current.courseRefbook, courseExtraInfo.courseRefbook));
-    listItem.add(
-        _buildCourseInfo(R.current.courseNote, courseExtraInfo.courseNote));
-    listItem.add(_buildCourseInfo(
-        R.current.courseGrading, courseExtraInfo.courseGrading));
-    listItem.add(
-        _buildCourseInfo(R.current.courseRemark, courseExtraInfo.courseRemark));
-    isLoading = false;
-    setState(() {});
+      listItem.add(_buildCourseInfo(
+          R.current.choosePeople,
+          sprintf("%s ( %s / %s )", [
+            courseExtraInfo.allStudent,
+            courseExtraInfo.chooseStudent,
+            courseExtraInfo.threeStudent
+          ])));
+      try {
+        listItem.add(_buildCourseInfo(
+            R.current.chooseUpBoundary,
+            sprintf(R.current.choosePeopleString, [
+              courseExtraInfo.restrict1,
+              courseExtraInfo.restrict2,
+              int.parse(courseExtraInfo.nTNURestrict) +
+                  int.parse(courseExtraInfo.nTURestrict)
+            ])));
+      } catch (e) {}
+
+      listItem.add(
+          _buildCourseInfo(R.current.classRoomNo, courseExtraInfo.classRoomNo));
+      listItem.add(
+          _buildCourseInfo(R.current.coreAbility, courseExtraInfo.coreAbility));
+      listItem.add(
+          _buildCourseInfo(R.current.courseURL, courseExtraInfo.courseURL));
+      listItem.add(_buildCourseInfo(
+          R.current.courseObject, courseExtraInfo.courseObject));
+      listItem.add(_buildCourseInfo(
+          R.current.courseContent, courseExtraInfo.courseContent));
+      listItem.add(_buildCourseInfo(
+          R.current.courseTextbook, courseExtraInfo.courseTextbook));
+      listItem.add(_buildCourseInfo(
+          R.current.courseRefbook, courseExtraInfo.courseRefbook));
+      listItem.add(
+          _buildCourseInfo(R.current.courseNote, courseExtraInfo.courseNote));
+      listItem.add(_buildCourseInfo(
+          R.current.courseGrading, courseExtraInfo.courseGrading));
+      listItem.add(_buildCourseInfo(
+          R.current.courseRemark, courseExtraInfo.courseRemark));
+      isLoading = false;
+      setState(() {});
+    }
   }
 
   @override

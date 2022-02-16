@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
-
-import '../generated/l10n.dart';
+import 'package:flutter_app/generated/l10n.dart';
 
 class R {
   static late BuildContext _context;

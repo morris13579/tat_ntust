@@ -41,9 +41,8 @@ Discussions _$DiscussionsFromJson(Map<String, dynamic> json) => Discussions(
       messagetrust: json['messagetrust'] as int? ?? 0,
       attachment: json['attachment'] as String? ?? "",
       attachments: (json['attachments'] as List<dynamic>?)
-              ?.map((e) => Attachments.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
+          ?.map((e) => Attachments.fromJson(e as Map<String, dynamic>))
+          .toList(),
       totalscore: json['totalscore'] as int? ?? 0,
       mailnow: json['mailnow'] as int? ?? 0,
       userfullname: json['userfullname'] as String? ?? "",

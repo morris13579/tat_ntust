@@ -13,6 +13,7 @@
   "loading": "載入中...",
   "noAppToOpen": "沒有支持的應用程式可以開啟",
   "pleaseConnectToNetwork": "請確認網路連接狀態",
+  "loadingCache": "取得最新資料失敗，載入最近一次成功的資料",
   "___________________loginUi___________________": "註解",
   "login": "登入",
   "loginSave": "帳號密碼已儲存",

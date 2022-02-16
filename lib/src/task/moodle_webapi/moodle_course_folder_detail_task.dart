@@ -1,8 +1,8 @@
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
+import 'package:flutter_app/src/task/task.dart';
 
-import '../task.dart';
 import 'moodle_task.dart';
 
 class MoodleCourseFolderDetailTask extends MoodleTask<Modules> {

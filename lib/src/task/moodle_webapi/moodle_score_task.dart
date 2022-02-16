@@ -1,14 +1,17 @@
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_score.dart';
+import 'package:flutter_app/src/task/task.dart';
 
-import '../task.dart';
 import 'moodle_support_task.dart';
 
 class MoodleScoreTask extends MoodleSupportTask<List<MoodleScoreItem>> {
   final courseId;
 
-  MoodleScoreTask(this.courseId) : super("MoodleScoreTask", courseId);
+  MoodleScoreTask(this.courseId) : super("MoodleScoreTask", courseId) {
+    key = "cache_moodle_score_$courseId";
+  }
 
   @override
   Future<TaskStatus> execute() async {

@@ -166,7 +166,7 @@ Map<String, dynamic> _$FeedbackToJson(Feedback instance) => <String, dynamic>{
       'headers': instance.headers,
     };
 
-ContributionToCourseTotal _$ContributiontocoursetotalFromJson(
+ContributionToCourseTotal _$ContributionToCourseTotalFromJson(
         Map<String, dynamic> json) =>
     ContributionToCourseTotal(
       classs: json['class'] as String? ?? "",
@@ -174,7 +174,7 @@ ContributionToCourseTotal _$ContributiontocoursetotalFromJson(
       headers: json['headers'] as String? ?? "",
     );
 
-Map<String, dynamic> _$ContributiontocoursetotalToJson(
+Map<String, dynamic> _$ContributionToCourseTotalToJson(
         ContributionToCourseTotal instance) =>
     <String, dynamic>{
       'class': instance.classs,

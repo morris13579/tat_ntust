@@ -13,6 +13,7 @@
   "loading": "Loading...",
   "noAppToOpen": "noAppToOpen",
   "pleaseConnectToNetwork": "Please connect to network",
+  "loadingCache": "load cache",
   "___________________loginUi___________________": "註解",
   "login": "Login",
   "loginSave": "Account password has been saved",

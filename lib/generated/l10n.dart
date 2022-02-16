@@ -180,6 +180,16 @@ class S {
     );
   }
 
+  /// `load cache`
+  String get loadingCache {
+    return Intl.message(
+      'load cache',
+      name: 'loadingCache',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `註解`
   String get ___________________loginUi___________________ {
     return Intl.message(

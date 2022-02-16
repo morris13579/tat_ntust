@@ -4,30 +4,12 @@ import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_score.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
 enum MoodleConnectorStatus { LoginSuccess, LoginFail, UnknownError }
-
-class MoodleScoreItem {
-  String name;
-  String weight; //計算後權量
-  String score; //成績
-  String fullRange; //全距
-  String percentage; //百分比
-  String feedback; //回饋
-  String contribute; //貢獻到課程總分
-  MoodleScoreItem({
-    required this.name,
-    required this.weight,
-    required this.score,
-    required this.fullRange,
-    required this.percentage,
-    required this.feedback,
-    required this.contribute,
-  });
-}
 
 class MoodleConnector {
   static const String host = "https://moodle2.ntust.edu.tw";

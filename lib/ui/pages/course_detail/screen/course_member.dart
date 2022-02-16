@@ -55,13 +55,13 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     late List<MoodleCoreEnrolGetUsers> members;
     if (await taskFlow.start()) {
       members = task.result;
+      listItem.add(_buildClassmateNumber(0, members.length));
+      for (int i = 1; i < members.length; i++) {
+        listItem.add(_buildClassmateInfo(i, members[i]));
+      }
+      isLoading = false;
+      setState(() {});
     }
-    listItem.add(_buildClassmateNumber(0, members.length));
-    for (int i = 1; i < members.length; i++) {
-      listItem.add(_buildClassmateInfo(i, members[i]));
-    }
-    isLoading = false;
-    setState(() {});
   }
 
   @override

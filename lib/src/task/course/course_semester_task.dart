@@ -6,10 +6,10 @@ import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/store/Model.dart';
 import 'package:flutter_app/src/task/score/score_system_task.dart';
+import 'package:flutter_app/src/task/task.dart';
 import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../task.dart';
 
 class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
   final id;

@@ -195,6 +195,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Use English interface"),
         "loadFavorite": MessageLookupByLibrary.simpleMessage("Load favorite"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
+        "loadingCache": MessageLookupByLibrary.simpleMessage("load cache"),
         "location": MessageLookupByLibrary.simpleMessage("Location"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginCourse":

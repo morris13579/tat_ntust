@@ -14,9 +14,9 @@ class MoodleSupportTask<T> extends MoodleTask<T> {
   late String findId;
   static Map<String, String> _cache = {};
   static bool _firstLoadCache = true;
-  final String _prefKey = "moodle_support_cache";
+  final String _prefKey = "cache_moodle_support";
 
-  MoodleSupportTask(name, this._courseId) : super("MoodleSupportTask " + name);
+  MoodleSupportTask(name, this._courseId) : super(name);
 
   @override
   Future<TaskStatus> execute() async {

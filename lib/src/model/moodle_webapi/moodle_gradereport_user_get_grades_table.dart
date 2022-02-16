@@ -291,7 +291,7 @@ class ContributionToCourseTotal extends Object {
   });
 
   factory ContributionToCourseTotal.fromJson(Map<String, dynamic> srcJson) =>
-      _$ContributiontocoursetotalFromJson(srcJson);
+      _$ContributionToCourseTotalFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$ContributiontocoursetotalToJson(this);
+  Map<String, dynamic> toJson() => _$ContributionToCourseTotalToJson(this);
 }

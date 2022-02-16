@@ -7,10 +7,9 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_conte
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_gradereport_user_get_grades_table.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_score.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
 import 'package:html/parser.dart';
-
-import 'moodle_connector.dart';
 
 enum MoodleWebApiConnectorStatus { LoginSuccess, LoginFail, UnknownError }
 

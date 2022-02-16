@@ -26,7 +26,16 @@ class _StoreEditPageState extends State<StoreEditPage> {
 
   Future<List<String>> initPref() async {
     pref = await SharedPreferences.getInstance();
-    return pref!.getKeys().toList();
+    List<String> filter = [];
+    List<String> cache = [];
+    for (var i in pref!.getKeys().toList()) {
+      if (!i.contains("cache_"))
+        filter.add(i);
+      else
+        cache.add(i);
+    }
+    filter.addAll(cache);
+    return filter;
   }
 
   @override

@@ -4,12 +4,11 @@ import 'package:flutter_app/debug/log/Log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/connector/ntust_connector.dart';
-import 'package:flutter_app/src/task/dialog_task.dart';
+import 'package:flutter_app/src/task/score/cache_task.dart';
+import 'package:flutter_app/src/task/task.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../task.dart';
-
-class NTUSTCalendarTask extends DialogTask<String> {
+class NTUSTCalendarTask extends CacheTask<String> {
   bool forceUpdate;
 
   NTUSTCalendarTask({this.forceUpdate: false}) : super("NTUSTCalendarTask");
