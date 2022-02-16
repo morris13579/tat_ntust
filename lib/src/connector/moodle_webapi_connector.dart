@@ -215,11 +215,20 @@ class MoodleWebApiConnector {
       result = await Connector.getJsonByPost(parameter);
       var grade = MoodleGradeReportUserGetGradesTable.fromJson(
           result as Map<String, dynamic>);
-      for (var i = 1; i < grade.tables[0].tableData.length; i++) {
+      for (var i = grade.tables[0].tableData.length - 1; i >= 1; i--) {
         var g = grade.tables[0].tableData[i];
         var tagNode = parse(g.itemName.content);
+        var name;
+        if (tagNode
+            .getElementsByClassName("gradeitemheader")[0]
+            .attributes
+            .containsKey("href")) {
+          name = tagNode.getElementsByTagName("a")[0].text;
+        } else {
+          name = tagNode.getElementsByTagName("span")[0].attributes["title"]!;
+        }
         value.add(MoodleScoreItem(
-          name: tagNode.getElementsByTagName("span")[0].attributes["title"]!,
+          name: name,
           weight: HtmlUtils.clean(g.weight.content),
           score: HtmlUtils.clean(g.grade.content),
           fullRange: HtmlUtils.clean(g.range.content),
