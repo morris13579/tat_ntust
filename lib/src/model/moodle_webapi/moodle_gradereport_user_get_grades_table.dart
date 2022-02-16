@@ -22,7 +22,8 @@ class MoodleGradeReportUserGetGradesTable {
           Map<String, dynamic> srcJson) =>
       _$MoodleGradeReportUserGetGradesTableFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$MoodleGradeReportUserGetGradesTableToJson(this);
+  Map<String, dynamic> toJson() =>
+      _$MoodleGradeReportUserGetGradesTableToJson(this);
 }
 
 @JsonSerializable()

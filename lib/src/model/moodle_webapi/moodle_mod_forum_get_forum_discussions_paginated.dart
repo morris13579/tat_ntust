@@ -109,7 +109,7 @@ class Discussions extends Object {
   String attachment;
 
   @JsonKey(name: 'attachments')
-  List<Attachments> attachments;
+  late List<Attachments> attachments;
 
   @JsonKey(name: 'totalscore')
   int totalscore;
@@ -157,7 +157,7 @@ class Discussions extends Object {
     this.messageformat = 0,
     this.messagetrust = 0,
     this.attachment = "",
-    this.attachments = const [],
+    List<Attachments>? attachments,
     this.totalscore = 0,
     this.mailnow = 0,
     this.userfullname = "",
@@ -168,7 +168,9 @@ class Discussions extends Object {
     this.numunread = 0,
     this.pinned = false,
     this.isNone = false,
-  });
+  }) {
+    this.attachments = attachments ?? [];
+  }
 
   factory Discussions.fromJson(Map<String, dynamic> srcJson) =>
       _$DiscussionsFromJson(srcJson);

@@ -26,6 +26,7 @@ class _CourseAnnouncementDetailPageState
   bool isLoading = true;
   late String html;
   late Discussions discussion;
+
   @override
   void initState() {
     super.initState();
@@ -88,6 +89,9 @@ class _CourseAnnouncementDetailPageState
                     isSelectable: true,
                     onTapUrl: onLinkTap,
                   ),
+                ),
+                Container(
+                  height: 20,
                 ),
                 ListView.builder(
                   shrinkWrap: true,

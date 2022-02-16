@@ -282,10 +282,23 @@ class MoodleConnector {
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
       nodes = tagNode.getElementsByClassName("post-content-container");
-      tagNode.getElementById("partialcollapse");
-      //nodes = tagNode.getElementsByClassName("body-content-container");
       discussion.message = nodes.first.innerHtml;
       discussion.isNone = false;
+      try {
+        var node =
+            tagNode.getElementById("partialcollapse")!.children[0].children[1];
+        if (node.className == "") {
+          nodes = node.getElementsByTagName("a");
+          for (var node in nodes) {
+            var attachment = Attachments();
+            attachment.filename = node.text.replaceAll(" ", "");
+            attachment.fileurl = node.attributes["href"]!;
+            discussion.attachments.add(attachment);
+          }
+        }
+      } catch (e, stack) {
+        Log.eWithStack(e, stack);
+      }
       return discussion;
     } catch (e, stack) {
       Log.eWithStack(e, stack);
