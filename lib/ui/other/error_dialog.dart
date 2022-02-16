@@ -86,7 +86,6 @@ class ErrorDialog {
     dialog.isDissmisedBySystem = true;
     await dialog.show();
     bool result;
-    print(dismissType);
     switch (dismissType) {
       case DismissType.BTN_OK:
         result = parameter.okResult;

@@ -52,9 +52,13 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
     return false;
   }
 
+  bool firstLoad = true;
+
   Future<bool> setCookies() async {
+    if (!firstLoad) return true;
+    firstLoad = false;
     final cookies = await cookieJar.loadForRequest(widget.url);
-    await cookieManager.deleteCookies(url: widget.url);
+    await cookieManager.deleteAllCookies();
     var existCookies = await cookieManager.getCookies(url: widget.url);
     final cookiesName = existCookies.map((e) => e.name).toList();
     for (var cookie in cookies) {
