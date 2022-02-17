@@ -32,7 +32,7 @@ dependencies:
   device_info: ^2.0.3
   html_unescape: ^2.0.0
   #處理HTML特殊字
-  local_auth: ^1.1.10
+  local_auth: ^1.1.11
   #驗證身分指紋
   version: ^2.0.0
   #版本比較
@@ -80,7 +80,7 @@ dependencies:
   flutter_downloader: ^1.7.2
   #下載app更新
   open_file: ^3.2.1
-  permission_handler: ^9.0.1
+  permission_handler: ^9.1.0
   mime_type: ^1.0.0
   github: ^9.0.0
   #----------Widget----------#
@@ -105,7 +105,7 @@ dependencies:
   flutter_markdown: ^0.6.9
   numberpicker: ^2.1.1
   #選擇學期
-  alice_lightweight: ^3.0.1
+  alice_lightweight: ^3.0.3
   pretty_json: ^2.0.0
   icalendar_parser: ^1.0.1
   charset_converter: ^2.0.0
