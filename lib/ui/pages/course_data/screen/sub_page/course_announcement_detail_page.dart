@@ -48,6 +48,7 @@ class _CourseAnnouncementDetailPageState
         isLoading = false;
       });
     } else {
+      discussion = widget.discussions;
       isLoading = false;
     }
   }

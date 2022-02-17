@@ -4,7 +4,6 @@ import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/task/score/score_system_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 
-
 class ScoreTask extends ScoreSystemTask<ScoreRankJson> {
   ScoreTask() : super("ScoreTask");
 

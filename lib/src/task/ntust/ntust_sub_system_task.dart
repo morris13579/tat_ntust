@@ -4,7 +4,6 @@ import 'package:flutter_app/src/model/ntust/ap_tree_json.dart';
 import 'package:flutter_app/src/task/ntust/ntust_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 
-
 class NTUSTSubSystemTask extends NTUSTTask<APTreeJson> {
   NTUSTSubSystemTask() : super("NTUSTSubSystemTask");
 

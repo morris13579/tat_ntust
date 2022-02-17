@@ -10,7 +10,6 @@ import 'package:flutter_app/src/task/task.dart';
 import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-
 class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
   final id;
 

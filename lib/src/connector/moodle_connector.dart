@@ -202,7 +202,11 @@ class MoodleConnector {
                 module.modname = "assign";
               } else if (type.contains("modtype_folder")) {
                 module.modname = "folder";
-                module.folderIsNone = true;
+                try {
+                  await getFolder(module);
+                } catch (e) {
+                  module.folderIsNone = true;
+                }
               } else if (type.contains("modtype_label")) {
                 module.modname = "label";
                 module.description = item
@@ -288,7 +292,12 @@ class MoodleConnector {
                 .getElementsByClassName("author-info")[0]
                 .getElementsByTagName("time")[0]
                 .attributes["data-timestamp"]!);
-            discussion.isNone = true;
+            try {
+              await getCourseAnnouncementDetail(
+                  discussion.userpictureurl, discussion);
+            } catch (e) {
+              discussion.isNone = true;
+            }
             announcement.discussions.add(discussion);
           } catch (e, stack) {
             Log.eWithStack(e, stack);
