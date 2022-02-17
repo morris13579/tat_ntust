@@ -12,7 +12,7 @@ class MoodleCourseDirectoryTask
 
   MoodleCourseDirectoryTask(this.courseId)
       : super("MoodleCourseDirectoryTask", courseId) {
-    key = "cache_moodle_directory_$courseId";
+    initCache("cache_moodle_directory", courseId);
   }
 
   @override

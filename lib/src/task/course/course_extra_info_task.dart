@@ -10,7 +10,7 @@ class CourseExtraInfoTask extends CacheTask<CourseExtraInfoJson> {
   final SemesterJson semester;
 
   CourseExtraInfoTask(this.id, this.semester) : super("CourseExtraInfoTask") {
-    key = "cache_course_extra_$id";
+    initCache("cache_course_extra", id);
   }
 
   @override

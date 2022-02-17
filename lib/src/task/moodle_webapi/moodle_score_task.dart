@@ -10,7 +10,7 @@ class MoodleScoreTask extends MoodleSupportTask<List<MoodleScoreItem>> {
   final courseId;
 
   MoodleScoreTask(this.courseId) : super("MoodleScoreTask", courseId) {
-    key = "cache_moodle_score_$courseId";
+    initCache("cache_moodle_score", courseId);
   }
 
   @override

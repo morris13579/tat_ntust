@@ -11,7 +11,7 @@ class MoodleMemberTask
   final courseId;
 
   MoodleMemberTask(this.courseId) : super("MoodleMemberTask", courseId) {
-    key = "cache_moodle_member_$courseId";
+    initCache("cache_moodle_member", courseId);
   }
 
   @override

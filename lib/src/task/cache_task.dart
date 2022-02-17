@@ -11,8 +11,24 @@ import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheTask<T> extends DialogTask<T> {
-  String? key; //if not null will enable the cache
+  List<String> _keyInfo = []; //if not null will enable the cache
   CacheTask(String name) : super(name);
+
+  void initCache(String name, String id) {
+    _keyInfo = [name, id];
+  }
+
+  bool get cacheEnable {
+    return _keyInfo.length != 0;
+  }
+
+  String get _key {
+    return _keyInfo[0];
+  }
+
+  String get _id {
+    return _keyInfo[1];
+  }
 
   @override
   Future<TaskStatus> execute() async {
@@ -21,11 +37,11 @@ class CacheTask<T> extends DialogTask<T> {
   }
 
   Future<bool> get hasCache async {
-    if (key != null) {
+    if (cacheEnable) {
       var pref = await SharedPreferences.getInstance();
-      String? value = pref.getString(key!);
+      String? value = pref.getString(_key);
       if (value != null) {
-        var obj = getObject(jsonDecode(value));
+        var obj = getObject(jsonDecode(value)[_id]);
         if (obj != null) {
           result = obj;
           return true;
@@ -62,10 +78,14 @@ class CacheTask<T> extends DialogTask<T> {
   }
 
   set result(T v) {
-    if (key != null && v != null) {
-      SharedPreferences.getInstance()
-          .then((value) => value.setString(key!, jsonEncode(v)));
+    if (cacheEnable && v != null) {
+      SharedPreferences.getInstance().then((value) {
+        var obj = jsonDecode(value.getString(_key) ?? "{}");
+        obj[_id] = v;
+        value.setString(_key, jsonEncode(obj));
+      });
     }
+
     super.result = v;
   }
 

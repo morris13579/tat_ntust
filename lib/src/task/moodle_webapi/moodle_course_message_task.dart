@@ -12,7 +12,7 @@ class MoodleCourseMessageTask
 
   MoodleCourseMessageTask(this.courseId)
       : super("MoodleCourseMessageTask", courseId) {
-    key = "cache_moodle_message_$courseId";
+    initCache("cache_moodle_message", courseId);
   }
 
   @override
