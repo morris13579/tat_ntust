@@ -9,6 +9,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/debug/log/log.dart';
@@ -41,12 +42,15 @@ class FileDownload {
       {String name = "", String? referer, withOpen = true}) async {
     String path = await FileStore.getDownloadDir(context, dirName); //取得下載路徑
     referer = referer ?? url;
-
+    String savePath = path + "/" + name;
+    String realFileName = "";
     //顯示下載通知窗
-    var downloadReq = await DioConnector.instance.dio.head(url);
-    Map<String, List<String>> headers = downloadReq.headers.map;
-    String realFileName = getFileNameByHeader(headers) ?? name;
-    String savePath = path + "/" + realFileName;
+    try {
+      var downloadReq = await DioConnector.instance.dio.head(url);
+      Map<String, List<String>> headers = downloadReq.headers.map;
+      realFileName = getFileNameByHeader(headers) ?? name;
+      savePath = path + "/" + realFileName;
+    } catch (e) {}
     try {
       Log.d("try open $savePath");
       OpenResult result = await OpenFile.open(savePath);
@@ -57,6 +61,10 @@ class FileDownload {
         return;
       }
     } catch (e) {}
+    if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      MyToast.show(R.current.pleaseConnectToNetwork);
+      return;
+    }
     await AnalyticsUtils.logDownloadFileEvent();
     MyToast.show(R.current.downloadWillStart);
     Log.d("file download \n url: $url \n referer: $referer");
