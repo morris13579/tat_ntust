@@ -7,6 +7,7 @@ import 'package:flutter_app/src/task/cache_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:get/get.dart';
 
 class NTUSTTask<T> extends CacheTask<T> {
@@ -30,12 +31,21 @@ class NTUSTTask<T> extends CacheTask<T> {
     Map<String, dynamic>? value;
     NTUSTLoginStatus status;
     String? message;
-    value = await Get.to(
-      () => LoginNTUSTPage(
-        username: account,
-        password: password,
-      ),
-    );
+    super.onStart(R.current.loginNTUST);
+    value = await NTUSTConnector.login(account, password);
+    super.onEnd();
+
+    if (value["status"] == NTUSTLoginStatus.fail) {
+      if (value["message"] != null) {
+        MyToast.show(value["message"]);
+      }
+      value = await Get.to(
+        () => LoginNTUSTPage(
+          username: account,
+          password: password,
+        ),
+      );
+    }
     if (value == null) {
       status = NTUSTLoginStatus.fail;
     } else {
