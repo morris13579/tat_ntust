@@ -19,7 +19,7 @@ class CacheTask<T> extends DialogTask<T> {
   }
 
   bool get cacheEnable {
-    return _keyInfo.length != 0;
+    return _keyInfo.isNotEmpty;
   }
 
   String get _key {
@@ -33,7 +33,7 @@ class CacheTask<T> extends DialogTask<T> {
   @override
   Future<TaskStatus> execute() async {
     super.execute();
-    return TaskStatus.Success;
+    return TaskStatus.success;
   }
 
   Future<bool> get hasCache async {
@@ -77,6 +77,7 @@ class CacheTask<T> extends DialogTask<T> {
     }
   }
 
+  @override
   set result(T v) {
     if (cacheEnable && v != null) {
       SharedPreferences.getInstance().then((value) {

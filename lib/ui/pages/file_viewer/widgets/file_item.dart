@@ -12,17 +12,17 @@ class FileItem extends StatelessWidget {
   final FileSystemEntity? file;
   final PopupMenuItemSelected? popTap;
 
-  FileItem({
+  const FileItem({
     required this.file,
-    this.popTap,
-  });
+    this.popTap,Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () => OpenFile.open(file!.path),
-      contentPadding: EdgeInsets.all(0),
-      leading: Container(
+      contentPadding: const EdgeInsets.all(0),
+      leading: SizedBox(
         height: 40,
         width: 40,
         child: Center(
@@ -32,8 +32,8 @@ class FileItem extends StatelessWidget {
         ),
       ),
       title: Text(
-        "${basename(file!.path)}",
-        style: TextStyle(
+        basename(file!.path),
+        style: const TextStyle(
           fontSize: 14,
         ),
         maxLines: 2,

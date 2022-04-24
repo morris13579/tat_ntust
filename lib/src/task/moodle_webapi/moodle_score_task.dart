@@ -7,7 +7,7 @@ import 'package:flutter_app/src/task/task.dart';
 import 'moodle_support_task.dart';
 
 class MoodleScoreTask extends MoodleSupportTask<List<MoodleScoreItem>> {
-  final courseId;
+  final String courseId;
 
   MoodleScoreTask(this.courseId) : super("MoodleScoreTask", courseId) {
     initCache("cache_moodle_score", courseId);
@@ -16,17 +16,18 @@ class MoodleScoreTask extends MoodleSupportTask<List<MoodleScoreItem>> {
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       List<MoodleScoreItem>? value;
       super.onStart(R.current.getMoodleScore);
-      if (useMoodleWebApi)
+      if (useMoodleWebApi) {
         value = await MoodleWebApiConnector.getScore(findId);
-      else
+      } else {
         value = await MoodleConnector.getScore(findId);
+      }
       super.onEnd();
-      if (value != null && value.length != 0) {
+      if (value != null && value.isNotEmpty) {
         result = value;
-        return TaskStatus.Success;
+        return TaskStatus.success;
       } else {
         return await super.onError(R.current.getMoodleScoreError);
       }

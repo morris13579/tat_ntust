@@ -8,6 +8,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
+  const PrivacyPolicyPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,11 +26,11 @@ class PrivacyPolicyPage extends StatelessWidget {
               data: snapshot.data!,
             );
           } else if (snapshot.hasError) {
-            return Center(
+            return const Center(
               child: Icon(Icons.error),
             );
           }
-          return Center(
+          return const Center(
             child: SpinKitDoubleBounce(
               color: AppColors.mainColor,
             ),

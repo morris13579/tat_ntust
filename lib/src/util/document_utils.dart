@@ -10,7 +10,7 @@ import 'package:flutter_app/src/file/file_store.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 
 class DocumentUtils {
-  static const platform = MethodChannel(AppConfig.method_channel_save_name);
+  static const platform = MethodChannel(AppConfig.methodChannelSaveName);
 
   static Future<String?>? _getPath() =>
       platform.invokeMethod<String>("get_path");

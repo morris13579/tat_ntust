@@ -11,7 +11,11 @@ class CourseFolderPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
   final Modules modules;
 
-  CourseFolderPage(this.courseInfo, this.modules);
+  const CourseFolderPage(
+    this.courseInfo,
+    this.modules, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseFolderPageState createState() => _CourseFolderPageState();
@@ -54,7 +58,7 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
         title: Text(widget.modules.name),
       ),
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : buildTree(),
@@ -79,7 +83,7 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
             height: 50,
             child: Row(
               children: [
-                Expanded(
+                const Expanded(
                   flex: 1,
                   child: Icon(Icons.file_copy),
                 ),

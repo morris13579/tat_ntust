@@ -6,7 +6,8 @@ class CustomProgressDialog extends StatelessWidget {
     this.insetAnimationDuration = const Duration(milliseconds: 100),
     this.insetAnimationCurve = Curves.decelerate,
     this.shape,
-  });
+    Key? key,
+  }) : super(key: key);
 
   /// The widget below this widget in the tree.
   ///

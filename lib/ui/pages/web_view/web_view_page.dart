@@ -13,11 +13,13 @@ class WebViewPage extends StatefulWidget {
   final bool openWithExternalWebView;
   final Function(Uri)? onWebViewDownload;
 
-  WebViewPage(
-      {required this.title,
-      required Uri url,
-      this.openWithExternalWebView = false,
-      this.onWebViewDownload}) {
+  WebViewPage({
+    required this.title,
+    required Uri url,
+    this.openWithExternalWebView = false,
+    this.onWebViewDownload,
+    Key? key,
+  }) : super(key: key) {
     this.url = url.toString();
   }
 
@@ -76,7 +78,7 @@ class _WebViewPageState extends State<WebViewPage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
-          Container(
+          SizedBox(
             width: 50,
             child: InkWell(
               onTap: () async {
@@ -84,10 +86,10 @@ class _WebViewPageState extends State<WebViewPage> {
                   await webView!.goBack();
                 }
               },
-              child: Icon(Icons.arrow_back, color: Colors.white),
+              child: const Icon(Icons.arrow_back, color: Colors.white),
             ),
           ),
-          Container(
+          SizedBox(
             width: 50,
             child: InkWell(
               onTap: () async {
@@ -95,10 +97,10 @@ class _WebViewPageState extends State<WebViewPage> {
                   await webView!.goForward();
                 }
               },
-              child: Icon(Icons.arrow_forward, color: Colors.white),
+              child: const Icon(Icons.arrow_forward, color: Colors.white),
             ),
           ),
-          Container(
+          SizedBox(
             width: 50,
             child: InkWell(
               onTap: () async {
@@ -106,17 +108,17 @@ class _WebViewPageState extends State<WebViewPage> {
                   await webView!.reload();
                 }
               },
-              child: Icon(Icons.refresh, color: Colors.white),
+              child: const Icon(Icons.refresh, color: Colors.white),
             ),
           ),
           if (widget.openWithExternalWebView)
-            Container(
+            SizedBox(
               width: 50,
               child: InkWell(
                 onTap: () async {
-                  OpenUtils.launchURL(this.url.toString());
+                  OpenUtils.launchURL(url.toString());
                 },
-                child: Icon(Icons.open_in_new, color: Colors.white),
+                child: const Icon(Icons.open_in_new, color: Colors.white),
               ),
             ),
         ],
@@ -126,48 +128,43 @@ class _WebViewPageState extends State<WebViewPage> {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasData) {
             return SafeArea(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: progress < 1.0
-                          ? LinearProgressIndicator(value: progress)
-                          : Container(),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: progress < 1.0
+                        ? LinearProgressIndicator(value: progress)
+                        : Container(),
+                  ),
+                  Expanded(
+                    child: WebView(
+                      javascriptMode: JavascriptMode.unrestricted,
+                      initialUrl: widget.url.toString(),
+                      onWebViewCreated: (WebViewController webViewController) {
+                        webView = webViewController;
+                      },
+                      onPageFinished: (String url) {
+                        setState(() {
+                          if (lastLoadUri != url) {
+                            onLoadStopTime++;
+                          }
+                          lastLoadUri = url;
+                          this.url = url;
+                        });
+                      },
+                      onProgress: (int progress) {
+                        setState(
+                          () {
+                            this.progress = progress / 100;
+                          },
+                        );
+                      },
                     ),
-                    Expanded(
-                      child: Container(
-                        child: WebView(
-                          javascriptMode: JavascriptMode.unrestricted,
-                          initialUrl: widget.url.toString(),
-                          onWebViewCreated:
-                              (WebViewController webViewController) {
-                            webView = webViewController;
-                          },
-                          onPageFinished: (String url) {
-                            setState(() {
-                              if (lastLoadUri != url) {
-                                onLoadStopTime++;
-                              }
-                              lastLoadUri = url;
-                              this.url = url;
-                            });
-                          },
-                          onProgress: (int progress) {
-                            setState(
-                              () {
-                                this.progress = progress / 100;
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }

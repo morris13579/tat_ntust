@@ -8,7 +8,7 @@ import 'moodle_support_task.dart';
 
 class MoodleCourseDirectoryTask
     extends MoodleSupportTask<List<MoodleCoreCourseGetContents>> {
-  final courseId;
+  final String courseId;
 
   MoodleCourseDirectoryTask(this.courseId)
       : super("MoodleCourseDirectoryTask", courseId) {
@@ -18,17 +18,18 @@ class MoodleCourseDirectoryTask
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       List<MoodleCoreCourseGetContents>? value;
       super.onStart(R.current.getMoodleCourseDirectory);
-      if (useMoodleWebApi)
+      if (useMoodleWebApi) {
         value = await MoodleWebApiConnector.getCourseDirectory(findId);
-      else
+      } else {
         value = await MoodleConnector.getCourseDirectory(findId);
+      }
       super.onEnd();
       if (value != null) {
         result = value;
-        return TaskStatus.Success;
+        return TaskStatus.success;
       } else {
         return await super.onError(R.current.getMoodleCourseDirectoryError);
       }

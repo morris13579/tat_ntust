@@ -5,10 +5,11 @@ class DirPopup extends StatelessWidget {
   final String path;
   final PopupMenuItemSelected? popTap;
 
-  DirPopup({
+  const DirPopup({
     required this.path,
     required this.popTap,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class DirPopup extends StatelessWidget {
         color: Theme.of(context).textTheme.headline6!.color,
       ),
       color: Theme.of(context).scaffoldBackgroundColor,
-      offset: Offset(0, 30),
+      offset: const Offset(0, 30),
     );
   }
 }

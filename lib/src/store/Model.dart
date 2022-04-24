@@ -1,10 +1,3 @@
-//  model.dart
-//  北科課程助手
-//  用於儲存資料與得取資料
-//  Created by morris13579 on 2020/02/12.
-//  Copyright © 2020 morris13579 All rights reserved.
-//
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
@@ -34,9 +27,9 @@ class Model {
   List<SemesterJson> _courseSemesterList = [];
   ScoreRankJson _score = ScoreRankJson();
   SettingJson _setting = SettingJson();
-  Map<String, bool> _firstRun = Map();
+  final Map<String, bool> _firstRun = {};
   static String appCheckUpdate = "AppCheckUpdate";
-  DefaultCacheManager cacheManager = new DefaultCacheManager();
+  DefaultCacheManager cacheManager = DefaultCacheManager();
 
   bool get autoCheckAppUpdate {
     return _setting.other.autoCheckAppUpdate;

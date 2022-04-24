@@ -8,7 +8,10 @@ import 'package:path/path.dart';
 class FileIcon extends StatelessWidget {
   final FileSystemEntity? file;
 
-  FileIcon({required this.file});
+  const FileIcon({
+    required this.file,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,24 +20,24 @@ class FileIcon extends StatelessWidget {
     String? mimeType = mime(basename(file!.path).toLowerCase());
     String type = mimeType == null ? "" : mimeType.split("/")[0];
     if (_extension == ".apk") {
-      return Icon(
+      return const Icon(
         Icons.android,
         color: Colors.green,
       );
     } else if (_extension == ".crdownload") {
-      return Icon(
+      return const Icon(
         Icons.file_download,
         color: Colors.lightBlue,
       );
     } else if (_extension == ".zip" || _extension.contains("tar")) {
-      return Icon(
+      return const Icon(
         FontAwesome5.file_archive,
         color: Colors.deepOrangeAccent,
       );
     } else if (_extension == ".epub" ||
         _extension == ".pdf" ||
         _extension == ".mobi") {
-      return Icon(
+      return const Icon(
         FontAwesome5.file_alt,
         color: Colors.orangeAccent,
       );
@@ -42,14 +45,14 @@ class FileIcon extends StatelessWidget {
       switch (type) {
         case "audio":
           {
-            return Icon(
+            return const Icon(
               FontAwesome5.file_audio,
               color: Colors.blue,
             );
           }
         case "text":
           {
-            return Icon(
+            return const Icon(
               FontAwesome5.file_alt,
               color: Colors.orangeAccent,
             );

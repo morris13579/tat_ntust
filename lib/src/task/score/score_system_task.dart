@@ -9,9 +9,9 @@ class ScoreSystemTask<T> extends NTUSTTask<T> {
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (isLogin) return TaskStatus.Success;
+    if (isLogin) return TaskStatus.success;
     name = "ScoreSystemTask " + name;
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       isLogin = true;
     }
     return status;

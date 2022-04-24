@@ -21,17 +21,17 @@ class MoodleTask<T> extends CacheTask<T> {
   Future<TaskStatus> execute() async {
     String taskName = (useMoodleWebApi) ? "MoodleWebApiTask " : "MoodleTask ";
     name = taskName + name;
-    if (_isLogin) return TaskStatus.Success;
+    if (_isLogin) return TaskStatus.success;
     if (useMoodleWebApi) {
       String account = Model.instance.getAccount();
       String password = Model.instance.getPassword();
       if (account.isEmpty || password.isEmpty) {
-        return TaskStatus.GiveUp;
+        return TaskStatus.giveUp;
       }
       super.onStart(R.current.loginMoodleWebApi);
       var value = await MoodleWebApiConnector.login(account, password);
       super.onEnd();
-      if (value == MoodleWebApiConnectorStatus.LoginSuccess) {
+      if (value == MoodleWebApiConnectorStatus.loginSuccess) {
         _isLogin = true;
       } else {
         return await onError(R.current.loginMoodleWebApiError);
@@ -40,14 +40,14 @@ class MoodleTask<T> extends CacheTask<T> {
     String account = Model.instance.getAccount();
     String password = Model.instance.getPassword();
     if (account.isEmpty || password.isEmpty) {
-      return TaskStatus.GiveUp;
+      return TaskStatus.giveUp;
     }
     super.onStart(R.current.loginMoodle);
     var value = await MoodleConnector.login(account, password);
     super.onEnd();
-    if (value == MoodleConnectorStatus.LoginSuccess) {
+    if (value == MoodleConnectorStatus.loginSuccess) {
       _isLogin = true;
-      return TaskStatus.Success;
+      return TaskStatus.success;
     } else {
       return await onError(R.current.loginMoodleError);
     }

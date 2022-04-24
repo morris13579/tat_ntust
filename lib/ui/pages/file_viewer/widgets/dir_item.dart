@@ -10,18 +10,19 @@ class DirectoryItem extends StatelessWidget {
   final GestureTapCallback tap;
   final PopupMenuItemSelected? popTap;
 
-  DirectoryItem({
+  const DirectoryItem({
     required this.file,
     required this.tap,
     required this.popTap,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: tap,
-      contentPadding: EdgeInsets.all(0),
-      leading: Container(
+      contentPadding: const EdgeInsets.all(0),
+      leading: SizedBox(
         height: 40,
         width: 40,
         child: Center(
@@ -32,8 +33,8 @@ class DirectoryItem extends StatelessWidget {
         ),
       ),
       title: Text(
-        "${basename(file.path)}",
-        style: TextStyle(
+        basename(file.path),
+        style: const TextStyle(
           fontSize: 14,
         ),
         maxLines: 2,

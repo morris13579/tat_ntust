@@ -21,6 +21,8 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _MainScreenState();
 }
@@ -67,11 +69,11 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     }
     setState(() {
       _pageList = [];
-      _pageList.add(CourseTablePage());
+      _pageList.add(const CourseTablePage());
       _pageList
           .add(SubSystemPage(title: R.current.informationSystem, arg: null));
-      _pageList.add(CalendarPage());
-      _pageList.add(ScoreViewerPage());
+      _pageList.add(const CalendarPage());
+      _pageList.add(const ScoreViewerPage());
       _pageList.add(OtherPage(_pageController));
     });
   }
@@ -115,7 +117,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     } else {
       _closeAppCount++;
       MyToast.show(R.current.closeOnce);
-      Future.delayed(Duration(seconds: 2)).then((_) {
+      Future.delayed(const Duration(seconds: 2)).then((_) {
         _closeAppCount = 0;
       });
     }
@@ -127,7 +129,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       controller: _pageController,
       onPageChanged: _onPageChanged,
       children: _pageList,
-      physics: NeverScrollableScrollPhysics(), // 禁止滑動
+      physics: const NeverScrollableScrollPhysics(), // 禁止滑動
     );
   }
 
@@ -138,30 +140,30 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       onTap: _onTap,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(
+          icon: const Icon(
             EvaIcons.clockOutline,
           ),
           label: R.current.titleCourse,
         ),
         BottomNavigationBarItem(
-          icon: Icon(
+          icon: const Icon(
             EvaIcons.infoOutline,
           ),
           label: R.current.informationSystem,
         ),
         BottomNavigationBarItem(
-          icon: Icon(
+          icon: const Icon(
             EvaIcons.calendarOutline,
           ),
           label: R.current.calendar,
         ),
         BottomNavigationBarItem(
-            icon: Icon(
+            icon: const Icon(
               EvaIcons.bookOpenOutline,
             ),
             label: R.current.titleScore),
         BottomNavigationBarItem(
-            icon: Icon(
+            icon: const Icon(
               EvaIcons.menu,
             ),
             label: R.current.titleOther),

@@ -1,4 +1,4 @@
-import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
-enum MoodleConnectorStatus { LoginSuccess, LoginFail, UnknownError }
+enum MoodleConnectorStatus { loginSuccess, loginFail, unknownError }
 
 class MoodleConnector {
   static const String host = "https://moodle2.ntust.edu.tw";
@@ -33,7 +33,7 @@ class MoodleConnector {
 
       if (result.contains(account.toUpperCase())) {
         //代表已經登入了
-        return MoodleConnectorStatus.LoginSuccess;
+        return MoodleConnectorStatus.loginSuccess;
       }
 
       nodes = tagNode.getElementsByTagName("input");
@@ -56,11 +56,11 @@ class MoodleConnector {
       parameter = ConnectorParameter(host);
       result = await Connector.getDataByGet(parameter);
       return (result.contains("登出"))
-          ? MoodleConnectorStatus.LoginSuccess
-          : MoodleConnectorStatus.LoginFail;
+          ? MoodleConnectorStatus.loginSuccess
+          : MoodleConnectorStatus.loginFail;
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
-      return MoodleConnectorStatus.LoginFail;
+      return MoodleConnectorStatus.loginFail;
     }
   }
 
@@ -120,7 +120,9 @@ class MoodleConnector {
           contents.fileurl =
               node.getElementsByTagName("a")[0].attributes["href"]!;
           modules.contents.add(contents);
-        } catch (e) {}
+        } catch (e) {
+          Log.d(e);
+        }
       }
       try {
         var contents = Contents();
@@ -190,7 +192,9 @@ class MoodleConnector {
                 var hide = k.getElementsByClassName("accesshide")[0].text;
                 var index = module.name.indexOf(hide);
                 module.name = module.name.substring(0, index);
-              } catch (e) {}
+              } catch (e) {
+                Log.d(e);
+              }
 
               if (type.contains("modtype_forum")) {
                 module.modname = "forum";
@@ -223,7 +227,9 @@ class MoodleConnector {
                   var hide = k.getElementsByClassName("accesshide")[0].text;
                   var index = module.name.indexOf(hide);
                   module.name = module.name.substring(0, index);
-                } catch (e) {}
+                } catch (e) {
+                  Log.d(e);
+                }
               } else {
                 //??
                 module.modname = "forum";
@@ -235,14 +241,18 @@ class MoodleConnector {
               try {
                 module.description =
                     item.getElementsByTagName("contentafterlink")[0].innerHtml;
-              } catch (e) {}
+              } catch (e) {
+                Log.d(e);
+              }
               info.modules.add(module);
             } catch (e, stack) {
               Log.eWithStack(e, stack);
             }
           }
           value.add(info);
-        } catch (e) {}
+        } catch (e) {
+          Log.d(e);
+        }
       }
       return value;
     } catch (e, stack) {
@@ -274,7 +284,7 @@ class MoodleConnector {
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
       nodes = tagNode.getElementsByTagName("table");
-      if (nodes.length != 0) {
+      if (nodes.isNotEmpty) {
         var discussions = nodes[0].getElementsByClassName("discussion");
         for (var i in discussions) {
           try {

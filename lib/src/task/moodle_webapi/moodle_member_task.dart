@@ -8,7 +8,7 @@ import 'moodle_support_task.dart';
 
 class MoodleMemberTask
     extends MoodleSupportTask<List<MoodleCoreEnrolGetUsers>> {
-  final courseId;
+  final String courseId;
 
   MoodleMemberTask(this.courseId) : super("MoodleMemberTask", courseId) {
     initCache("cache_moodle_member", courseId);
@@ -17,17 +17,18 @@ class MoodleMemberTask
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       List<MoodleCoreEnrolGetUsers>? value;
       super.onStart(R.current.getMoodleMembers);
-      if (useMoodleWebApi)
+      if (useMoodleWebApi) {
         value = await MoodleWebApiConnector.getMember(findId);
-      else
+      } else {
         value = await MoodleConnector.getMember(findId);
+      }
       super.onEnd();
-      if (value != null && value.length != 0) {
+      if (value != null && value.isNotEmpty) {
         result = value;
-        return TaskStatus.Success;
+        return TaskStatus.success;
       } else {
         return await super.onError(R.current.getMoodleMembersError);
       }

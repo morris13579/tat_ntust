@@ -31,14 +31,16 @@ import 'course_table_control.dart';
 import 'over_repaint_boundary.dart';
 
 class CourseTablePage extends StatefulWidget {
+  const CourseTablePage({Key? key}) : super(key: key);
+
   @override
   _CourseTablePageState createState() => _CourseTablePageState();
 }
 
 class _CourseTablePageState extends State<CourseTablePage> {
   final TextEditingController _studentIdControl = TextEditingController();
-  final FocusNode _studentFocus = new FocusNode();
-  GlobalKey _key = GlobalKey();
+  final FocusNode _studentFocus = FocusNode();
+  final GlobalKey _key = GlobalKey();
   bool isLoading = true;
   CourseTableJson? courseTableData;
   static double dayHeight = 25;
@@ -54,11 +56,11 @@ class _CourseTablePageState extends State<CourseTablePage> {
     super.initState();
     _studentIdControl.text = " ";
     UserDataJson userData = Model.instance.getUserData();
-    Future.delayed(Duration(milliseconds: 200)).then((_) {
+    Future.delayed(const Duration(milliseconds: 200)).then((_) {
       if (userData.account.isEmpty || userData.password.isEmpty) {
         RouteUtils.toLoginScreen().then((value) {
           if (value != null && value) {
-            Future.delayed(Duration(milliseconds: 200)).then((_) {
+            Future.delayed(const Duration(milliseconds: 200)).then((_) {
               _loadSetting();
             });
           }
@@ -104,8 +106,8 @@ class _CourseTablePageState extends State<CourseTablePage> {
   }
 
   void _getCourseTable(
-      {SemesterJson? semesterSetting, bool refresh: false}) async {
-    await Future.delayed(Duration(microseconds: 100)); //等待頁面刷新
+      {SemesterJson? semesterSetting, bool refresh = false}) async {
+    await Future.delayed(const Duration(microseconds: 100)); //等待頁面刷新
     String studentId = Model.instance.getAccount();
     //await Model.instance.clearSemesterJsonList();
     SemesterJson? semesterJson;
@@ -176,7 +178,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
   void _showSemesterList() async {
     //顯示選擇學期
     _unFocusStudentInput();
-    if (Model.instance.getSemesterList().length == 0) {
+    if (Model.instance.getSemesterList().isEmpty) {
       TaskFlow taskFlow = TaskFlow();
       var task = CourseSemesterTask(_studentIdControl.text);
       taskFlow.addTask(task);
@@ -188,7 +190,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     //Model.instance.saveSemesterJsonList();
     Get.dialog(
         AlertDialog(
-          content: Container(
+          content: SizedBox(
             width: double.minPositive,
             child: ListView.builder(
               itemCount: semesterList.length,
@@ -233,7 +235,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
         title: Text(R.current.titleCourse),
         actions: [
           Padding(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               right: 20,
             ),
             child: InkWell(
@@ -243,7 +245,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
                   refresh: true,
                 );
               },
-              child: Icon(EvaIcons.refreshOutline),
+              child: const Icon(EvaIcons.refreshOutline),
             ),
           ),
           PopupMenuButton<int>(
@@ -286,12 +288,12 @@ class _CourseTablePageState extends State<CourseTablePage> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
-                    scrollPadding: EdgeInsets.all(0),
+                    scrollPadding: const EdgeInsets.all(0),
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
                       // 關閉框線
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: const EdgeInsets.all(10),
                       hintText: R.current.pleaseEnterStudentId,
                     ),
                     onEditingComplete: () {
@@ -308,19 +310,17 @@ class _CourseTablePageState extends State<CourseTablePage> {
                   ),
                 ),
                 TextButton(
-                  child: Container(
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          semesterString,
-                          textAlign: TextAlign.center,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                        ),
-                        Icon(Icons.arrow_drop_down),
-                      ],
-                    ),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        semesterString,
+                        textAlign: TextAlign.center,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(5),
+                      ),
+                      const Icon(Icons.arrow_drop_down),
+                    ],
                   ),
                   onPressed: () {
                     _showSemesterList();
@@ -339,7 +339,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
 
   void _loadFavorite() async {
     List<CourseTableJson> value = Model.instance.getCourseTableList();
-    if (value.length == 0) {
+    if (value.isEmpty) {
       MyToast.show(R.current.noAnyFavorite);
       return;
     }
@@ -348,23 +348,21 @@ class _CourseTablePageState extends State<CourseTablePage> {
         builder:
             (BuildContext context, void Function(void Function()) setState) {
           return AlertDialog(
-            content: Container(
+            content: SizedBox(
               width: double.minPositive,
               child: ListView.builder(
                 itemCount: value.length,
                 shrinkWrap: true, //使清單最小化
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
+                  return SizedBox(
                     height: 50,
                     child: TextButton(
-                      child: Container(
-                        child: Text(sprintf("%s %s %s-%s", [
-                          value[index].studentId,
-                          value[index].studentName,
-                          value[index].courseSemester.year,
-                          value[index].courseSemester.semester
-                        ])),
-                      ),
+                      child: Text(sprintf("%s %s %s-%s", [
+                        value[index].studentId,
+                        value[index].studentName,
+                        value[index].courseSemester.year,
+                        value[index].courseSemester.semester
+                      ])),
                       onPressed: () {
                         Model.instance.getCourseSetting().info =
                             value[index]; //儲存課表
@@ -382,7 +380,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
                         var result = await ErrorDialog(parameter).show();
                         if (result) {
                           Model.instance.removeCourseTable(value[index]);
-                          value.remove(index);
+                          value.removeAt(index);
                           await Model.instance.saveCourseTableList();
                           setState(() {});
                         }
@@ -415,9 +413,9 @@ class _CourseTablePageState extends State<CourseTablePage> {
                       children: <Widget>[
                         Expanded(
                           //makes the red row full width
-                          child: Container(
+                          child: SizedBox(
                             height: courseHeight * showCourseTableNum,
-                            child: Center(
+                            child: const Center(
                               child: CircularProgressIndicator(),
                             ),
                           ),
@@ -503,15 +501,15 @@ class _CourseTablePageState extends State<CourseTablePage> {
           child: (courseInfo.isEmpty)
               ? Container()
               : Container(
-                  padding: EdgeInsets.all(1),
+                  padding: const EdgeInsets.all(1),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(0),
+                      padding: const EdgeInsets.all(0),
                       primary: color,
                     ),
                     child: AutoSizeText(
                       courseInfo.main.course.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 14,
                       ),
@@ -549,28 +547,25 @@ class _CourseTablePageState extends State<CourseTablePage> {
     });
     Get.dialog(
       AlertDialog(
-        contentPadding: EdgeInsets.fromLTRB(24.0, 20.0, 10.0, 10.0),
+        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 10.0, 10.0),
         title: Text(course.name),
-        content: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              GestureDetector(
-                child:
-                    Text(sprintf("%s : %s", [R.current.courseId, course.id])),
-                onLongPress: () async {
-                  course.id = await _showEditDialog(course.id);
-                  Model.instance.saveOtherSetting();
-                  setState(() {});
-                },
-              ),
-              Text(sprintf("%s : %s",
-                  [R.current.time, courseTableControl.getTimeString(section)])),
-              Text(sprintf("%s : %s", [R.current.location, classroomName])),
-              Text(sprintf("%s : %s", [R.current.instructor, teacherName])),
-            ],
-          ),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            GestureDetector(
+              child: Text(sprintf("%s : %s", [R.current.courseId, course.id])),
+              onLongPress: () async {
+                course.id = await _showEditDialog(course.id);
+                Model.instance.saveOtherSetting();
+                setState(() {});
+              },
+            ),
+            Text(sprintf("%s : %s",
+                [R.current.time, courseTableControl.getTimeString(section)])),
+            Text(sprintf("%s : %s", [R.current.location, classroomName])),
+            Text(sprintf("%s : %s", [R.current.instructor, teacherName])),
+          ],
         ),
         actions: <Widget>[
           TextButton(
@@ -580,7 +575,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
             onLongPress: () {
               _showCourseData(courseInfo, 1);
             },
-            child: new Text(R.current.courseData),
+            child: Text(R.current.courseData),
           ),
           TextButton(
             onPressed: () {
@@ -589,7 +584,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
             onLongPress: () {
               _showCourseDetail(courseInfo, 1);
             },
-            child: new Text(R.current.details),
+            child: Text(R.current.details),
           ),
         ],
       ),
@@ -603,11 +598,11 @@ class _CourseTablePageState extends State<CourseTablePage> {
     String? v = await Get.dialog<String>(
       AlertDialog(
         contentPadding: const EdgeInsets.all(16.0),
-        title: Text('Edit'),
+        title: const Text('Edit'),
         content: Row(
           children: <Widget>[
             Expanded(
-              child: new TextField(
+              child: TextField(
                 controller: controller,
                 autofocus: true,
                 decoration: InputDecoration(hintText: value),
@@ -670,14 +665,13 @@ class _CourseTablePageState extends State<CourseTablePage> {
       isLoading = true;
     });
     courseTableControl.set(courseTable); //設定課表顯示狀態
-    await Future.delayed(Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 50));
     setState(() {
       isLoading = false;
     });
   }
 
-  static const platform =
-      const MethodChannel(AppConfig.method_channel_widget_name);
+  static const platform = MethodChannel(AppConfig.methodChannelWidgetName);
 
   Future screenshot() async {
     double originHeight = courseHeight;
@@ -689,7 +683,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     setState(() {
       courseHeight = height / courseTableControl.getSectionIntList.length;
     });
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     setState(() {
       isLoading = true;
     });
@@ -704,7 +698,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     });
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
-    File imgFile = new File('$path/course_widget.png');
+    File imgFile = File('$path/course_widget.png');
     await imgFile.writeAsBytes(pngBytes);
     final bool result = await platform.invokeMethod('update_weight');
     Log.d("complete $result");

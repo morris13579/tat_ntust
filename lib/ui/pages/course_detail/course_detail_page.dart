@@ -17,7 +17,12 @@ class CourseDetailPage extends StatefulWidget {
   final SemesterJson semester;
   final int index;
 
-  CourseDetailPage(this.courseInfo, this.semester, this.index);
+  const CourseDetailPage(
+    this.courseInfo,
+    this.semester,
+    this.index, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseDetailPageState createState() => _CourseDetailPageState();
@@ -27,7 +32,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
     with SingleTickerProviderStateMixin {
   late TabPageList tabPageList;
   late TabController _tabController;
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   int _currentIndex = 0;
 
   @override
@@ -90,8 +95,8 @@ class _CourseDetailPageState extends State<CourseDetailPage>
           ),
           title: Text(course.name),
           bottom: TabBar(
-            indicatorPadding: EdgeInsets.all(0),
-            labelPadding: EdgeInsets.all(0),
+            indicatorPadding: const EdgeInsets.all(0),
+            labelPadding: const EdgeInsets.all(0),
             isScrollable: true,
             controller: _tabController,
             tabs: tabPageList.getTabList(context),

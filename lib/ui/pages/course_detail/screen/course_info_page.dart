@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
@@ -15,7 +16,11 @@ class CourseInfoPage extends StatefulWidget {
   final String courseId;
   final SemesterJson semester;
 
-  CourseInfoPage(this.courseId, this.semester);
+  const CourseInfoPage(
+    this.courseId,
+    this.semester, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseInfoPageState createState() => _CourseInfoPageState();
@@ -93,7 +98,9 @@ class _CourseInfoPageState extends State<CourseInfoPage>
               int.parse(courseExtraInfo.nTNURestrict) +
                   int.parse(courseExtraInfo.nTURestrict)
             ])));
-      } catch (e) {}
+      } catch (e) {
+        Log.d(e.toString());
+      }
 
       listItem.add(
           _buildCourseInfo(R.current.classRoomNo, courseExtraInfo.classRoomNo));
@@ -124,11 +131,11 @@ class _CourseInfoPageState extends State<CourseInfoPage>
   Widget build(BuildContext context) {
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
     return Container(
-      padding: EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
           (isLoading)
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Expanded(
@@ -153,7 +160,7 @@ class _CourseInfoPageState extends State<CourseInfoPage>
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque, //讓透明部分有反應
                   child: Container(
-                      padding: EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
                       child: listItem[index]),
                   onTap: () {},
                 ),
@@ -170,7 +177,7 @@ class _CourseInfoPageState extends State<CourseInfoPage>
       return null;
     }
     return Container(
-      padding: EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 5),
       child: Card(
         child: ListTile(
           title: Text(text),

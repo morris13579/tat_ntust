@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/course_connector.dart';
 import 'package:flutter_app/src/connector/score_connector.dart';
@@ -11,14 +12,14 @@ import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
-  final id;
+  final String id;
 
   CourseSemesterTask(this.id) : super("CourseSemesterTask");
 
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       List<SemesterJson>? value;
       super.onStart(R.current.getCourseSemester);
       value = await CourseConnector.getCourseSemester();
@@ -30,15 +31,17 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
         for (var i in v.info) {
           if (!value.contains(i.semester)) value.add(i.semester);
         }
-      } catch (e) {}
+      } catch (e) {
+        Log.d(e);
+      }
       super.onEnd();
       if (value != null) {
         result = value;
-        return TaskStatus.Success;
+        return TaskStatus.success;
       } else {
         result = [];
         result.add((await selectSemesterDialog())!);
-        return TaskStatus.Success;
+        return TaskStatus.success;
         //return await super.onError(R.current.getCourseSemesterError);
       }
     }
@@ -46,7 +49,7 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
   }
 
   static Future<SemesterJson?> selectSemesterDialog(
-      {allowSelectNull: false}) async {
+      {allowSelectNull = false}) async {
     DateTime dateTime = DateTime.now();
     int year = dateTime.year - 1911;
     int semester = (dateTime.month <= 8 && dateTime.month >= 1) ? 2 : 1;
@@ -60,31 +63,29 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
         builder: (BuildContext context, StateSetter setState) {
           return AlertDialog(
             title: Text(R.current.selectSemester),
-            content: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: NumberPicker(
-                            value: year,
-                            minValue: 100,
-                            maxValue: 120,
-                            onChanged: (value) => setState(() => year = value)),
-                      ),
-                      Expanded(
-                        child: NumberPicker(
-                            value: semester,
-                            minValue: 1,
-                            maxValue: 3,
-                            onChanged: (value) =>
-                                setState(() => semester = value)),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: NumberPicker(
+                          value: year,
+                          minValue: 100,
+                          maxValue: 120,
+                          onChanged: (value) => setState(() => year = value)),
+                    ),
+                    Expanded(
+                      child: NumberPicker(
+                          value: semester,
+                          minValue: 1,
+                          maxValue: 3,
+                          onChanged: (value) =>
+                              setState(() => semester = value)),
+                    ),
+                  ],
+                )
+              ],
             ),
             actions: [
               TextButton(

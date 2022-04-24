@@ -10,7 +10,10 @@ import 'package:intl/intl.dart';
 class CourseAnnouncementPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
 
-  CourseAnnouncementPage(this.courseInfo);
+  const CourseAnnouncementPage(
+    this.courseInfo, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseAnnouncementPageState createState() => _CourseAnnouncementPageState();
@@ -55,7 +58,7 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
     return Scaffold(
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : buildTree(),
@@ -76,10 +79,10 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
         return InkWell(
           child: Container(
             color: getColor(index),
-            padding: EdgeInsets.only(top: 10, bottom: 10),
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
             child: Row(
               children: [
-                Expanded(
+                const Expanded(
                   flex: 1,
                   child: Icon(Icons.message_outlined),
                 ),

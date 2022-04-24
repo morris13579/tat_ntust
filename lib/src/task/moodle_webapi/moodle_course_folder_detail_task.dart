@@ -14,18 +14,15 @@ class MoodleCourseFolderDetailTask extends MoodleTask<Modules> {
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (status == TaskStatus.Success) {
-      var value;
+    if (status == TaskStatus.success) {
+      Modules value;
       super.onStart(R.current.getMoodleCourseFolderDetail);
       value = await MoodleConnector.getFolder(modules);
       modules.folderIsNone = false;
       super.onEnd();
-      if (value != null) {
-        result = modules;
-        return TaskStatus.Success;
-      } else {
-        return await super.onError(R.current.getMoodleCourseFolderDetailError);
-      }
+      result = value;
+      return TaskStatus.success;
+      //return await super.onError(R.current.getMoodleCourseFolderDetailError);
     }
     return status;
   }

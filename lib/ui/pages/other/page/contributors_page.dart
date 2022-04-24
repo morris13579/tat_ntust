@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
 import 'package:flutter_app/src/config/app_link.dart';
+import 'package:flutter_app/src/util/open_utils.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:github/github.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ContributorsPage extends StatelessWidget {
   final github = GitHub();
   final repositorySlug =
       RepositorySlug(AppLink.githubOwner, AppLink.githubName);
+
+  ContributorsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +26,10 @@ class ContributorsPage extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: Text(
                   R.current.projectLink,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -37,15 +39,15 @@ class ContributorsPage extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Container(
+                child: SizedBox(
                   height: 50,
                   child: InkWell(
                     onTap: () {
-                      final url = AppLink.gitHub;
-                      launch(url);
+                      const url = AppLink.gitHub;
+                      OpenUtils.launchURL(url);
                     },
                     child: Container(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -53,12 +55,13 @@ class ContributorsPage extends StatelessWidget {
                             children: [
                               Text(
                                 R.current.github,
-                                style: TextStyle(fontWeight: FontWeight.w600),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600),
                               )
                             ],
                           ),
                           Row(
-                            children: [Text(AppLink.gitHub)],
+                            children: const [Text(AppLink.gitHub)],
                           ),
                         ],
                       ),
@@ -71,10 +74,10 @@ class ContributorsPage extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: Text(
                   R.current.Contributors,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -95,14 +98,15 @@ class ContributorsPage extends StatelessWidget {
                     Contributor contributor = contributorList[index];
                     return InkWell(
                       onTap: () {
-                        launch(contributor.htmlUrl!);
+                        OpenUtils.launchURL(contributor.htmlUrl!);
                       },
                       child: WidgetAnimator(
                         Container(
-                          padding: EdgeInsets.only(top: 5, bottom: 5, left: 10),
+                          padding: const EdgeInsets.only(
+                              top: 5, bottom: 5, left: 10),
                           child: Row(
                             children: [
-                              Container(
+                              SizedBox(
                                 height: 50,
                                 width: 50,
                                 child: CachedNetworkImage(
@@ -114,7 +118,7 @@ class ContributorsPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.only(left: 10),
                               ),
                               Text(contributor.login!)
@@ -126,11 +130,11 @@ class ContributorsPage extends StatelessWidget {
                   },
                 );
               } else if (snapshot.hasError) {
-                return Center(
+                return const Center(
                   child: Icon(Icons.error),
                 );
               }
-              return Center(
+              return const Center(
                 child: SpinKitDoubleBounce(
                   color: AppColors.mainColor,
                 ),

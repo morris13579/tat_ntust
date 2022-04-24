@@ -62,14 +62,14 @@ class CourseTableControl {
 
   void set(CourseTableJson value) {
     courseTable = value;
-    isHideSaturday = !courseTable!.isDayInCourseTable(Day.Saturday);
-    isHideSunday = !courseTable!.isDayInCourseTable(Day.Sunday);
-    isHideUnKnown = !courseTable!.isDayInCourseTable(Day.UnKnown);
-    isHideN = !courseTable!.isSectionNumberInCourseTable(SectionNumber.T_N);
-    isHideA = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.T_A));
-    isHideB = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.T_B));
-    isHideC = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.T_C));
-    isHideD = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.T_D));
+    isHideSaturday = !courseTable!.isDayInCourseTable(Day.saturday);
+    isHideSunday = !courseTable!.isDayInCourseTable(Day.sunday);
+    isHideUnKnown = !courseTable!.isDayInCourseTable(Day.unKnown);
+    isHideN = !courseTable!.isSectionNumberInCourseTable(SectionNumber.t_N);
+    isHideA = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.t_A));
+    isHideB = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.t_B));
+    isHideC = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.t_C));
+    isHideD = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.t_D));
     isHideA &= (isHideB & isHideC & isHideD);
     isHideB &= (isHideC & isHideD);
     isHideC &= isHideD;
@@ -107,7 +107,7 @@ class CourseTableControl {
   }
 
   void _initColorList() {
-    colorMap = Map();
+    colorMap = {};
     List<String> courseInfoList = courseTable!.getCourseIdList();
     int colorCount = courseInfoList.length;
     //colorCount = (colorCount == 0) ? 1 : colorCount;

@@ -6,32 +6,32 @@ import 'package:sprintf/sprintf.dart';
 part 'course_table_json.g.dart';
 
 enum Day {
-  Monday,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
-  Sunday,
-  UnKnown
+  monday,
+  tuesday,
+  wednesday,
+  thursday,
+  friday,
+  saturday,
+  sunday,
+  unKnown
 }
 
 enum SectionNumber {
-  T_1,
-  T_2,
-  T_3,
-  T_4,
-  T_N,
-  T_5,
-  T_6,
-  T_7,
-  T_8,
-  T_9,
-  T_A,
-  T_B,
-  T_C,
-  T_D,
-  T_UnKnown
+  t_1,
+  t_2,
+  t_3,
+  t_4,
+  t_N,
+  t_5,
+  t_6,
+  t_7,
+  t_8,
+  t_9,
+  t_A,
+  t_B,
+  t_C,
+  t_D,
+  t_UnKnown
 }
 
 @JsonSerializable()
@@ -48,9 +48,9 @@ class CourseTableJson {
       this.studentName = ""}) {
     this.courseSemester = courseSemester ?? SemesterJson();
     if (courseInfoMap == null) {
-      this.courseInfoMap = Map();
+      this.courseInfoMap = {};
       for (Day value in Day.values) {
-        this.courseInfoMap[value] = Map();
+        this.courseInfoMap[value] = {};
       }
     } else {
       this.courseInfoMap = courseInfoMap;
@@ -112,6 +112,7 @@ class CourseTableJson {
 
   Map<String, dynamic> toJson() => _$CourseTableJsonToJson(this);
 
+  @override
   String toString() {
     String courseInfoString = "";
     for (Day day in Day.values) {
@@ -121,9 +122,9 @@ class CourseTableJson {
       }
     }
     return sprintf(
-        "studentId :%s \n " +
-            "---------courseSemester-------- \n%s \n" +
-            "---------courseInfo--------     \n%s \n",
+        "studentId :%s \n "
+        "---------courseSemester-------- \n%s \n"
+        "---------courseInfo--------     \n%s \n",
         [studentId, courseSemester.toString(), courseInfoString]);
   }
 
@@ -137,7 +138,7 @@ class CourseTableJson {
 
   void setCourseDetailByTime(
       Day day, SectionNumber sectionNumber, CourseInfoJson courseInfo) {
-    if (day == Day.UnKnown) {
+    if (day == Day.unKnown) {
       for (SectionNumber value in SectionNumber.values) {
         if (courseInfo.main.course.id.isEmpty) {
           continue;
@@ -199,7 +200,7 @@ class CourseTableJson {
     }
     if (!add) {
       //代表課程沒有時間
-      setCourseDetailByTime(Day.UnKnown, SectionNumber.T_UnKnown, courseInfo);
+      setCourseDetailByTime(Day.unKnown, SectionNumber.t_UnKnown, courseInfo);
     }
     return true;
   }

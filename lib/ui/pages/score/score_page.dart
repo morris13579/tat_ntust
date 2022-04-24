@@ -10,6 +10,8 @@ import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class ScoreViewerPage extends StatefulWidget {
+  const ScoreViewerPage({Key? key}) : super(key: key);
+
   @override
   _ScoreViewerPageState createState() => _ScoreViewerPageState();
 }
@@ -19,7 +21,7 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
   TabController? _tabController;
   bool isLoading = true;
   List<SemesterScoreJson> semesterScoreList = [];
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   int _currentTabIndex = 0;
   List<Widget> tabLabelList = [];
   List<Widget> tabChildList = [];
@@ -33,7 +35,7 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
   void loadScore() async {
     await Model.instance.loadScore();
     semesterScoreList = Model.instance.getScore().info;
-    if (semesterScoreList.length == 0) {
+    if (semesterScoreList.isEmpty) {
       _addScoreRankTask();
     } else {
       _buildTabBar();
@@ -87,7 +89,7 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
         appBar: AppBar(
           title: Text(R.current.searchScore),
           actions: [
-            if (semesterScoreList.length > 0)
+            if (semesterScoreList.isNotEmpty)
               PopupMenuButton<int>(
                 onSelected: (result) {
                   setState(() {
@@ -108,7 +110,7 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
             unselectedLabelColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.label,
 //      labelPadding: EdgeInsets.symmetric(horizontal: 8),
-            indicator: BoxDecoration(
+            indicator: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
@@ -127,7 +129,7 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
           child: Column(
             children: <Widget>[
               if (!isLoading)
-                (tabChildList.length > 0)
+                (tabChildList.isNotEmpty)
                     ? tabChildList[_currentTabIndex]
                     : Container(),
             ],
@@ -161,7 +163,7 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
 
   Widget _buildTabLabel(String title) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 12,
         right: 12,
       ),
@@ -173,7 +175,7 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
 
   Widget _buildSemesterScores(List<ScoreItemJson> courseScore) {
     return Container(
-      padding: EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(24.0),
       child: AnimationLimiter(
         child: Column(
           children: AnimationConfiguration.toStaggeredList(
@@ -204,7 +206,7 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
       builder: (BuildContext context, void Function(void Function()) setState) {
         return Column(
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 25,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -212,15 +214,15 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
                   Expanded(
                     child: AutoSizeText(
                       score.name,
-                      style: TextStyle(fontSize: 16.0),
+                      style: const TextStyle(fontSize: 16.0),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 40,
                     child: GestureDetector(
                       child: Text(
                         score.score,
-                        style: TextStyle(fontSize: 16.0),
+                        style: const TextStyle(fontSize: 16.0),
                         textAlign: TextAlign.end,
                       ),
                       onTap: () {
@@ -231,7 +233,7 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8.0,
             ),
           ],
@@ -242,10 +244,10 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
 
   Widget _buildTitle(String text) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ),

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -32,7 +32,7 @@ class AdManager {
   static Future<void> _createInterstitialAd() async {
     await InterstitialAd.load(
         adUnitId: interstitialAdUnitId,
-        request: AdRequest(),
+        request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
             _interstitialAd = ad;
@@ -44,7 +44,7 @@ class AdManager {
         ));
   }
 
-  static final String _adPrefKey = "ad_key";
+  static const String _adPrefKey = "ad_key";
 
   static Future<void> setADEnable(String value) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -54,7 +54,7 @@ class AdManager {
   static Future<bool> getADEnable() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var validCode = await RemoteConfigUtils.getRemoveADKey();
-    var key;
+    String key;
     try {
       key = pref.getString(_adPrefKey) ?? "";
     } catch (e) {
@@ -109,7 +109,7 @@ class AdManager {
     } else if (Platform.isIOS) {
       return iosAppID;
     } else {
-      throw new UnsupportedError("Unsupported platform");
+      throw UnsupportedError("Unsupported platform");
     }
   }
 
@@ -119,7 +119,7 @@ class AdManager {
     } else if (Platform.isIOS) {
       return iosInterstitialAdUnitId;
     } else {
-      throw new UnsupportedError("Unsupported platform");
+      throw UnsupportedError("Unsupported platform");
     }
   }
 }

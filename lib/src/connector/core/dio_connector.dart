@@ -4,9 +4,9 @@ import 'package:alice_lightweight/alice.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/interceptors/request_interceptor.dart';
-import 'package:get/get.dart' as getUtils;
+import 'package:get/get.dart' as get_utils;
 import 'package:path_provider/path_provider.dart';
 
 import 'connector_parameter.dart';
@@ -15,7 +15,7 @@ typedef SavePathCallback = String Function(Headers responseHeaders);
 
 class DioConnector {
   static bool isInit = false;
-  static Map<String, String> _headers = {
+  static final Map<String, String> _headers = {
     HttpHeaders.userAgentHeader: presetUserAgent,
     "Upgrade-Insecure-Requests": "1",
   };
@@ -24,7 +24,7 @@ class DioConnector {
     darkTheme: true,
   );
 
-  static final BaseOptions dioOptions = new BaseOptions(
+  static final BaseOptions dioOptions = BaseOptions(
       connectTimeout: 5000,
       receiveTimeout: 10000,
       sendTimeout: 5000,
@@ -52,7 +52,7 @@ class DioConnector {
       String appDocPath = appDocDir.path;
       _cookieJar =
           PersistCookieJar(storage: FileStorage(appDocPath + "/.cookies/"));
-      alice.setNavigatorKey(getUtils.Get.key);
+      alice.setNavigatorKey(get_utils.Get.key);
       dio.interceptors.add(CookieManager(_cookieJar));
       dio.interceptors.add(RequestInterceptors());
       dio.interceptors.add(alice.getDioInterceptor());
@@ -75,7 +75,7 @@ class DioConnector {
         throw connectorError;
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -88,7 +88,7 @@ class DioConnector {
         throw connectorError;
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -106,7 +106,7 @@ class DioConnector {
         throw connectorError;
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -120,7 +120,7 @@ class DioConnector {
       response = await dio.get(url, queryParameters: data);
       return response;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -133,7 +133,7 @@ class DioConnector {
       response = await dio.post(url, data: parameter.data);
       return response;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

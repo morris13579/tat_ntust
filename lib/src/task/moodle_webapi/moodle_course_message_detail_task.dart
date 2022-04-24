@@ -14,15 +14,15 @@ class MoodleCourseMessageDetailTask extends MoodleTask<Discussions> {
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (status == TaskStatus.Success) {
-      var value;
+    if (status == TaskStatus.success) {
+      Discussions? value;
       super.onStart(R.current.getMoodleCourseAnnouncement);
       value = await MoodleConnector.getCourseAnnouncementDetail(
           discussion.userpictureurl, discussion);
       super.onEnd();
       if (value != null) {
         result = discussion;
-        return TaskStatus.Success;
+        return TaskStatus.success;
       } else {
         return await super.onError(R.current.getMoodleCourseAnnouncementError);
       }

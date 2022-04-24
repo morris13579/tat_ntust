@@ -18,7 +18,7 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     CourseMainInfo? value;
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       super.onStart(R.current.getCourse);
       if (semester.urlPath.isNotEmpty) {
         value = await CourseConnector.getCourseMainInfoList(studentId, semester,
@@ -46,7 +46,7 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
           if (!add) {
             //代表課程沒有時間
             courseTable.setCourseDetailByTime(
-                Day.UnKnown, SectionNumber.T_UnKnown, courseInfo);
+                Day.unKnown, SectionNumber.t_UnKnown, courseInfo);
           }
         }
         if (studentId == Model.instance.getAccount()) {
@@ -55,7 +55,7 @@ class CourseTableTask extends CourseSystemTask<CourseTableJson> {
           await Model.instance.saveCourseTableList();
         }
         result = courseTable;
-        return TaskStatus.Success;
+        return TaskStatus.success;
       } else {
         return await super.onError(R.current.getCourseError);
       }

@@ -6,7 +6,7 @@ import 'package:flutter_app/src/task/cache_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 
 class CourseExtraInfoTask extends CacheTask<CourseExtraInfoJson> {
-  final id;
+  final String id;
   final SemesterJson semester;
 
   CourseExtraInfoTask(this.id, this.semester) : super("CourseExtraInfoTask") {
@@ -21,7 +21,7 @@ class CourseExtraInfoTask extends CacheTask<CourseExtraInfoJson> {
     super.onEnd();
     if (value != null) {
       result = value;
-      return TaskStatus.Success;
+      return TaskStatus.success;
     } else {
       return await super.onError(R.current.getCourseDetailError);
     }

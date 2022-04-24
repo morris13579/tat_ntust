@@ -12,7 +12,10 @@ import 'package:get/get.dart';
 class CourseMemberPage extends StatefulWidget {
   final String courseId;
 
-  CourseMemberPage(this.courseId);
+  const CourseMemberPage(
+    this.courseId, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseMemberPageState createState() => _CourseMemberPageState();
@@ -68,11 +71,11 @@ class _CourseMemberPageState extends State<CourseMemberPage>
   Widget build(BuildContext context) {
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
     return Container(
-      padding: EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
           (isLoading)
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Expanded(
@@ -97,7 +100,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque, //讓透明部分有反應
                   child: Container(
-                      padding: EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
                       child: listItem[index]),
                   onTap: () {},
                 ),
@@ -115,7 +118,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
         ? Theme.of(context).backgroundColor
         : Theme.of(context).dividerColor;
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       color: color,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -137,7 +140,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
         ? Theme.of(context).backgroundColor
         : Theme.of(context).dividerColor;
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       color: color,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

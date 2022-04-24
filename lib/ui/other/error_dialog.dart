@@ -18,8 +18,8 @@ class ErrorDialogParameter {
   late String? btnCancelText;
   late DialogType? dialogType;
   late AnimType? animType;
-  late Function? btnOkOnPress;
-  late Function? btnCancelOnPress;
+  late dynamic Function()? btnOkOnPress;
+  late dynamic Function()? btnCancelOnPress;
   bool offOkBtn;
   bool offCancelBtn;
   bool okResult;
@@ -35,10 +35,10 @@ class ErrorDialogParameter {
       this.dialogType,
       this.btnCancelOnPress,
       this.btnOkOnPress,
-      this.okResult: true,
-      this.cancelResult: false,
-      this.offOkBtn: false,
-      this.offCancelBtn: false}) {
+      this.okResult = true,
+      this.cancelResult = false,
+      this.offOkBtn = false,
+      this.offCancelBtn = false}) {
     title = title ?? R.current.alertError;
     btnOkText = btnOkText ?? R.current.restart;
     btnCancelText = btnCancelText ?? R.current.cancel;
@@ -83,7 +83,6 @@ class ErrorDialog {
         onDissmissCallback: (DismissType type) {
           dismissType = type;
         });
-    dialog.isDissmisedBySystem = true;
     await dialog.show();
     bool result;
     switch (dismissType) {

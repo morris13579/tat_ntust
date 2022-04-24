@@ -10,9 +10,11 @@ import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/password/check_password_dialog.dart';
 import 'package:get/get.dart';
 
-enum onListViewPress { AppUpdate, Contribution, PrivacyPolicy, Version, Dev }
+enum onListViewPress { appUpdate, contribution, privacyPolicy, version, dev }
 
 class AboutPage extends StatefulWidget {
+  const AboutPage({Key? key}) : super(key: key);
+
   @override
   _AboutPageState createState() => _AboutPageState();
 }
@@ -35,25 +37,25 @@ class _AboutPageState extends State<AboutPage> {
         "icon": EvaIcons.refreshOutline,
         "title": R.current.checkVersion,
         "color": Colors.orange,
-        "onPress": onListViewPress.AppUpdate
+        "onPress": onListViewPress.appUpdate
       },
       {
         "icon": EvaIcons.awardOutline,
         "title": R.current.Contribution,
         "color": Colors.lightGreen,
-        "onPress": onListViewPress.Contribution
+        "onPress": onListViewPress.contribution
       },
       {
         "icon": EvaIcons.shieldOffOutline,
         "color": Colors.blueGrey,
         "title": R.current.PrivacyPolicy,
-        "onPress": onListViewPress.PrivacyPolicy
+        "onPress": onListViewPress.privacyPolicy
       },
       {
         "icon": EvaIcons.infoOutline,
         "color": Colors.blue,
         "title": R.current.versionInfo,
-        "onPress": onListViewPress.Version
+        "onPress": onListViewPress.version
       }
     ]);
     _addDevListItem();
@@ -66,7 +68,7 @@ class _AboutPageState extends State<AboutPage> {
           "icon": EvaIcons.options,
           "color": Colors.amberAccent,
           "title": R.current.developerMode,
-          "onPress": onListViewPress.Dev
+          "onPress": onListViewPress.dev
         });
       });
     }
@@ -76,36 +78,36 @@ class _AboutPageState extends State<AboutPage> {
 
   void _onListViewPress(onListViewPress value) async {
     switch (value) {
-      case onListViewPress.AppUpdate:
+      case onListViewPress.appUpdate:
         MyToast.show(R.current.checkingVersion);
         bool result = await APPVersion.check();
         if (!result) {
           MyToast.show(R.current.isNewVersion);
         }
         break;
-      case onListViewPress.Contribution:
+      case onListViewPress.contribution:
         RouteUtils.toContributorsPage();
         break;
-      case onListViewPress.Version:
+      case onListViewPress.version:
         String mainVersion = await AppUpdate.getAppVersion();
         if (pressTime == 0) {
           MyToast.show(mainVersion);
         }
         pressTime++;
-        Future.delayed(Duration(seconds: 2)).then((_) {
+        Future.delayed(const Duration(seconds: 2)).then((_) {
           pressTime = 0;
         });
         if (pressTime > 3) {
-          if (!inDevMode && await Get.dialog(CheckPasswordDialog())) {
+          if (!inDevMode && await Get.dialog(const CheckPasswordDialog())) {
             inDevMode = true;
             _addDevListItem();
           }
         }
         break;
-      case onListViewPress.PrivacyPolicy:
+      case onListViewPress.privacyPolicy:
         RouteUtils.toPrivacyPolicyPage();
         break;
-      case onListViewPress.Dev:
+      case onListViewPress.dev:
         RouteUtils.toDevPage();
         break;
       default:
@@ -147,7 +149,7 @@ class _AboutPageState extends State<AboutPage> {
     return Container(
       //color: Colors.yellow,
       padding:
-          EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
+          const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -155,12 +157,12 @@ class _AboutPageState extends State<AboutPage> {
             data['icon'],
             color: data['color'],
           ),
-          SizedBox(
+          const SizedBox(
             width: 20.0,
           ),
           Text(
             data['title'],
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
         ],
       ),

@@ -5,11 +5,10 @@ import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:get/get.dart';
-import 'package:local_auth/error_codes.dart' as errorCode;
 import 'package:local_auth/local_auth.dart';
 
 class CheckPasswordDialog extends StatefulWidget {
-  CheckPasswordDialog();
+  const CheckPasswordDialog({Key? key}) : super(key: key);
 
   @override
   _CheckPasswordDialogState createState() => _CheckPasswordDialogState();
@@ -20,7 +19,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool passwordShow = false;
-  final FocusNode _originPasswordFocus = new FocusNode();
+  final FocusNode _originPasswordFocus = FocusNode();
   String _originPasswordErrorMessage = "";
 
   @override
@@ -33,26 +32,12 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
     LocalAuthentication localAuthentication = LocalAuthentication();
     try {
       bool didAuthenticate = await localAuthentication.authenticate(
-          localizedReason: R.current.checkIdentity, useErrorDialogs: false);
+          localizedReason: R.current.checkIdentity);
       if (didAuthenticate) {
         Get.back<bool>(result: true);
       }
     } on PlatformException catch (e) {
       Log.d(e.code);
-      switch (e.code) {
-        case errorCode.passcodeNotSet:
-          break;
-        case errorCode.lockedOut:
-          break;
-        case errorCode.notAvailable:
-          break;
-        case errorCode.notEnrolled: //NotEnrolled
-          break;
-        case errorCode.otherOperatingSystem:
-          break;
-        case errorCode.permanentlyLockedOut:
-          break;
-      }
     }
   }
 
@@ -65,7 +50,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
           textAlign: TextAlign.center,
         ),
       ),
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
       content: Form(
         key: _formKey,
@@ -89,7 +74,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                       validator: (value) => _validatorOriginPassword(value!),
                       decoration: InputDecoration(
                         hintText: R.current.originPassword,
-                        errorStyle: TextStyle(
+                        errorStyle: const TextStyle(
                           height: 0,
                           fontSize: 0,
                         ),
@@ -98,8 +83,8 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                   ),
                   IconButton(
                     icon: (!passwordShow)
-                        ? Icon(EvaIcons.eyeOffOutline)
-                        : Icon(EvaIcons.eyeOutline),
+                        ? const Icon(EvaIcons.eyeOffOutline)
+                        : const Icon(EvaIcons.eyeOutline),
                     onPressed: () {
                       setState(() {
                         passwordShow = !passwordShow;
@@ -109,7 +94,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 4,
             ),
             if (_originPasswordErrorMessage.isNotEmpty)
@@ -119,7 +104,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                     child: Text(
                       _originPasswordErrorMessage,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         color: Colors.red,
                       ),
@@ -127,7 +112,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                   ),
                 ],
               ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
           ],

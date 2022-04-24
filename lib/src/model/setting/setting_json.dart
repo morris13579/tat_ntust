@@ -21,8 +21,8 @@ class SettingJson {
   @override
   String toString() {
     return sprintf(
-        "---------course--------        \n%s \n" +
-            "---------other--------         \n%s \n",
+        "---------course--------        \n%s \n"
+        "---------other--------         \n%s \n",
         [
           course.toString(),
           other.toString(),

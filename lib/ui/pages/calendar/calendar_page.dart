@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/task/ntust/ntust_calendar_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
@@ -18,13 +19,15 @@ final kFirstDay = DateTime(kNow.year, kNow.month - 12, kNow.day);
 final kLastDay = DateTime(kNow.year, kNow.month + 12, kNow.day);
 
 class CalendarPage extends StatefulWidget {
+  const CalendarPage({Key? key}) : super(key: key);
+
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
   late List _selectedEvents;
-  Map<DateTime, List<String>> _events = Map();
+  Map<DateTime, List<String>> _events = {};
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
@@ -40,7 +43,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _addEvent();
   }
 
-  void _addEvent({bool forceUpdate: false}) async {
+  void _addEvent({bool forceUpdate = false}) async {
     _events = {};
     TaskFlow taskFlow = TaskFlow();
     NTUSTCalendarTask task = NTUSTCalendarTask(forceUpdate: forceUpdate);
@@ -60,7 +63,9 @@ class _CalendarPageState extends State<CalendarPage> {
             try {
               int.parse(i[0]);
               i = i.substring(2, i.length);
-            } catch (e) {}
+            } catch (e) {
+              Log.d(e.toString());
+            }
             if (_events.containsKey(time)) {
               _events[time]!.add(i);
             } else {
@@ -70,7 +75,7 @@ class _CalendarPageState extends State<CalendarPage> {
         }
       }
       var _today = DateTime.now().toUtc();
-      _today = _today.add(Duration(hours: 8)); //to TW time
+      _today = _today.add(const Duration(hours: 8)); //to TW time
       setState(() {
         _selectedDay = _today;
       });
@@ -125,7 +130,7 @@ class _CalendarPageState extends State<CalendarPage> {
             onPressed: () {
               _addEvent(forceUpdate: true);
             },
-            icon: Icon(Icons.update_outlined),
+            icon: const Icon(Icons.update_outlined),
             tooltip: R.current.update,
           )
         ],
@@ -136,7 +141,7 @@ class _CalendarPageState extends State<CalendarPage> {
             locale: (LanguageUtils.getLangIndex() == LangEnum.zh)
                 ? "zh_CN"
                 : "en_US",
-            availableCalendarFormats: {
+            availableCalendarFormats: const {
               CalendarFormat.month: 'Month',
             },
             daysOfWeekHeight: 24,
@@ -150,7 +155,7 @@ class _CalendarPageState extends State<CalendarPage> {
             rangeSelectionMode: _rangeSelectionMode,
             eventLoader: _getEventsForDay,
             startingDayOfWeek: StartingDayOfWeek.monday,
-            daysOfWeekStyle: DaysOfWeekStyle(
+            daysOfWeekStyle: const DaysOfWeekStyle(
               weekdayStyle: TextStyle(
                 color: Color(0xFF4F4F4F),
               ),
@@ -161,7 +166,7 @@ class _CalendarPageState extends State<CalendarPage> {
             calendarStyle: CalendarStyle(
               // Use `CalendarStyle` to customize the UI
               outsideDaysVisible: false,
-              weekendTextStyle: TextStyle(
+              weekendTextStyle: const TextStyle(
                 color: Colors.deepOrange,
               ),
               markerDecoration: BoxDecoration(

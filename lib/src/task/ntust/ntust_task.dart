@@ -20,12 +20,12 @@ class NTUSTTask<T> extends CacheTask<T> {
 
   @override
   Future<TaskStatus> execute() async {
-    if (_isLogin) return TaskStatus.Success;
+    if (_isLogin) return TaskStatus.success;
     name = "NTUSTTask " + name;
     String account = Model.instance.getAccount();
     String password = Model.instance.getPassword();
     if (account.isEmpty || password.isEmpty) {
-      return TaskStatus.GiveUp;
+      return TaskStatus.giveUp;
     }
     Map<String, dynamic>? value;
     NTUSTLoginStatus status;
@@ -37,14 +37,14 @@ class NTUSTTask<T> extends CacheTask<T> {
       ),
     );
     if (value == null) {
-      status = NTUSTLoginStatus.Fail;
+      status = NTUSTLoginStatus.fail;
     } else {
       status = value["status"];
       message = value["message"];
     }
-    if (status == NTUSTLoginStatus.Success) {
+    if (status == NTUSTLoginStatus.success) {
       _isLogin = true;
-      return TaskStatus.Success;
+      return TaskStatus.success;
     } else {
       return await _onError(status, message: message);
     }
@@ -55,7 +55,7 @@ class NTUSTTask<T> extends CacheTask<T> {
       desc: "",
     );
     switch (value) {
-      case NTUSTLoginStatus.Fail:
+      case NTUSTLoginStatus.fail:
         parameter.dialogType = DialogType.ERROR;
         parameter.desc = message ?? R.current.unknownError;
         if (message != null) {

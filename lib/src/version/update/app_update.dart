@@ -48,7 +48,7 @@ class AppUpdate {
             children: <Widget>[
               if (value.isFocusUpdate) ...[
                 Text(R.current.isFocusUpdate),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 )
               ],
@@ -77,7 +77,7 @@ class AppUpdate {
     );
     if (value.isFocusUpdate) {
       MyToast.show(R.current.appWillClose);
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       SystemNavigator.pop();
       exit(0);
     }

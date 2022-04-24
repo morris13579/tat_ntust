@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/connector/ntust_connector.dart';
@@ -14,7 +15,11 @@ class LoginNTUSTPage extends StatefulWidget {
   final String username;
   final String password;
 
-  LoginNTUSTPage({required this.username, required this.password});
+  const LoginNTUSTPage({
+    required this.username,
+    required this.password,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _LoginNTUSTPageState createState() => _LoginNTUSTPageState();
@@ -67,8 +72,8 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                           'document.getElementsByName("Password")[0].value = "${widget.password}";');
                   await webView.evaluateJavascript(
                       source: 'document.getElementById("btnLogIn").click();');
-                  Future.delayed(Duration(seconds: 5)).then((value) {
-                    if (this.mounted) {
+                  Future.delayed(const Duration(seconds: 5)).then((value) {
+                    if (mounted) {
                       setState(() {
                         showDialog = false;
                       });
@@ -78,14 +83,16 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                 } else {
                   try {
                     await cookieJar.deleteAll();
-                  } catch (e) {}
+                  } catch (e) {
+                    Log.d(e);
+                  }
                   String? result = await webView.getHtml();
                   var tagNode = parse(result);
                   var nodes = tagNode
                       .getElementsByClassName("validation-summary-errors");
                   if (nodes.length == 1) {
                     Get.back(result: {
-                      "status": NTUSTLoginStatus.Fail,
+                      "status": NTUSTLoginStatus.fail,
                       "message": nodes[0].text.replaceAll("\n", "")
                     });
                   } else {
@@ -106,9 +113,9 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                     if (add) {
                       await cookieJar.saveFromResponse(
                           ntustLoginUri, ioCookies);
-                      Get.back(result: {"status": NTUSTLoginStatus.Success});
+                      Get.back(result: {"status": NTUSTLoginStatus.success});
                     } else {
-                      Get.back(result: {"status": NTUSTLoginStatus.Fail});
+                      Get.back(result: {"status": NTUSTLoginStatus.fail});
                     }
                   }
                 }

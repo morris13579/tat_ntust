@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MoodleSupportTask<T> extends MoodleTask<T> {
-  String _courseId;
+  final String _courseId;
   late String findId;
   static Map<String, String> _cache = {};
   static bool _firstLoadCache = true;
@@ -25,17 +26,18 @@ class MoodleSupportTask<T> extends MoodleTask<T> {
       await _loadCache();
     }
     TaskStatus status = await super.execute();
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       super.onStart(R.current.checkMoodleSupport);
       if (_cache.keys.contains(_courseId)) {
         findId = _cache[_courseId]!;
         return status;
       }
       try {
-        if (useMoodleWebApi)
+        if (useMoodleWebApi) {
           findId = (await MoodleWebApiConnector.getCourseUrl(_courseId))!;
-        else
+        } else {
           findId = (await MoodleConnector.getCourseUrl(_courseId))!;
+        }
         super.onEnd();
         _cache[_courseId] = findId;
         await _saveCache();
@@ -59,7 +61,9 @@ class MoodleSupportTask<T> extends MoodleTask<T> {
     try {
       var pref = await SharedPreferences.getInstance();
       pref.setString(_prefKey, jsonEncode(_cache));
-    } catch (e) {}
+    } catch (e) {
+      Log.d(e.toString());
+    }
   }
 
   Future<void> _loadCache() async {
@@ -67,14 +71,18 @@ class MoodleSupportTask<T> extends MoodleTask<T> {
       var pref = await SharedPreferences.getInstance();
       _cache =
           jsonDecode(pref.getString(_prefKey) ?? "{}").cast<String, String>();
-    } catch (e) {}
+    } catch (e) {
+      Log.d(e.toString());
+    }
   }
 
   Future<void> _removeCache() async {
     try {
       _cache.remove(_courseId);
       _saveCache();
-    } catch (e) {}
+    } catch (e) {
+      Log.d(e.toString());
+    }
   }
 
   @override

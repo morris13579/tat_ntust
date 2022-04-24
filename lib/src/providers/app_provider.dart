@@ -49,7 +49,7 @@ class AppProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     ThemeData t;
     String? r =
-        prefs.getString("theme") == null ? "dark" : prefs.getString("theme");
+        prefs.getString("theme") ?? "dark";
 
     if (r == "light") {
       t = AppThemes.lightTheme;

@@ -42,14 +42,14 @@ class TaskFlow {
   }
 
   static Future<bool> checkConnectivity() async {
-    var connectivityResult = await (new Connectivity().checkConnectivity());
+    var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       return false;
     }
     return true;
   }
 
-  Future<bool> start({bool checkNetwork: true}) async {
+  Future<bool> start({bool checkNetwork = true}) async {
     if (checkNetwork && !await checkConnectivity()) {
       if (_queue.length == 1) {
         if (await _queue.first.hasCache) {
@@ -61,18 +61,18 @@ class TaskFlow {
       return false;
     }
     bool success = true;
-    while (_queue.length > 0) {
+    while (_queue.isNotEmpty) {
       CacheTask task = _queue.first;
       TaskStatus status = await task.execute();
       switch (status) {
-        case TaskStatus.Success:
+        case TaskStatus.success:
           _queue.removeAt(0);
           _completeTask.add(task);
           if (callback != null) {
             callback!(task);
           }
           break;
-        case TaskStatus.GiveUp:
+        case TaskStatus.giveUp:
           _failTask.addAll(_queue);
           _queue = [];
           success = false;
@@ -81,7 +81,7 @@ class TaskFlow {
             success = true;
           }
           break;
-        case TaskStatus.Restart:
+        case TaskStatus.restart:
           break;
       }
     }

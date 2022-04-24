@@ -29,7 +29,7 @@ class HtmlUtils {
    */
   static String clean(String html) {
     String result;
-    var unescape = new HtmlUnescape();
+    var unescape = HtmlUnescape();
     result = unescape.convert(html);
     return result;
   }

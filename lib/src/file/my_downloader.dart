@@ -5,7 +5,7 @@ import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 class MyDownloader {
-  static final Map<String, Function> _callBackMap = Map();
+  static final Map<String, Function> _callBackMap = {};
   static bool isInit = false;
   static final ReceivePort _port = ReceivePort();
 

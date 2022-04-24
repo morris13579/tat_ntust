@@ -121,7 +121,7 @@ class Notifications {
         maxProgress: maxProgress,
         progress: nowProgress,
         playSound: false);
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,

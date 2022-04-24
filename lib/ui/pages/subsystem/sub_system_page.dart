@@ -5,10 +5,14 @@ import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 
 class SubSystemPage extends StatefulWidget {
-  final title;
-  final arg;
+  final String title;
+  final String? arg;
 
-  SubSystemPage({this.title, this.arg});
+  const SubSystemPage({
+    required this.title,
+    required this.arg,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SubSystemPageState createState() => _SubSystemPageState();
@@ -46,7 +50,7 @@ class _SubSystemPageState extends State<SubSystemPage> {
         title: Text(widget.title),
       ),
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : buildTree(),
@@ -60,7 +64,7 @@ class _SubSystemPageState extends State<SubSystemPage> {
       itemBuilder: (BuildContext context, int index) {
         APListJson ap = apTree!.apList[index];
         return InkWell(
-          child: Container(
+          child: SizedBox(
             height: 50,
             child: Row(
               children: [

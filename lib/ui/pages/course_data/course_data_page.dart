@@ -15,7 +15,11 @@ class CourseDataPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
   final int index;
 
-  CourseDataPage(this.courseInfo, this.index);
+  const CourseDataPage(
+    this.courseInfo,
+    this.index, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseDataPageState createState() => _CourseDataPageState();
@@ -25,7 +29,7 @@ class _CourseDataPageState extends State<CourseDataPage>
     with SingleTickerProviderStateMixin {
   late TabPageList tabPageList;
   TabController? _tabController;
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   int _currentIndex = 0;
 
   @override
@@ -93,8 +97,8 @@ class _CourseDataPageState extends State<CourseDataPage>
           ),
           title: Text(course.name),
           bottom: TabBar(
-            indicatorPadding: EdgeInsets.all(0),
-            labelPadding: EdgeInsets.all(0),
+            indicatorPadding: const EdgeInsets.all(0),
+            labelPadding: const EdgeInsets.all(0),
             isScrollable: true,
             controller: _tabController,
             tabs: tabPageList.getTabList(context),

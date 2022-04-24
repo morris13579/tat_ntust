@@ -14,7 +14,11 @@ class CourseAnnouncementDetailPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
   final Discussions discussions;
 
-  CourseAnnouncementDetailPage(this.courseInfo, this.discussions);
+  const CourseAnnouncementDetailPage(
+    this.courseInfo,
+    this.discussions, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseAnnouncementDetailPageState createState() =>
@@ -78,13 +82,13 @@ class _CourseAnnouncementDetailPageState
         title: Text(HtmlUnescape().convert(discussions.name)),
       ),
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(right: 20, left: 20, top: 20),
+                  padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
                   child: HtmlWidget(
                     html,
                     isSelectable: true,
@@ -105,7 +109,7 @@ class _CourseAnnouncementDetailPageState
                         height: 50,
                         child: Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               flex: 1,
                               child: Icon(Icons.file_copy),
                             ),

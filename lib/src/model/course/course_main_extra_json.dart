@@ -8,9 +8,9 @@ part 'course_main_extra_json.g.dart';
 
 List<CourseExtraInfoJson> getEntityList(List<dynamic> list) {
   List<CourseExtraInfoJson> result = [];
-  list.forEach((item) {
+  for (var item in list) {
     result.add(CourseExtraInfoJson.fromJson(item));
-  });
+  }
   return result;
 }
 
@@ -211,18 +211,18 @@ class CourseMainInfoJson {
 
   bool get isEmpty {
     return course.isEmpty &&
-        teacher.length == 0 &&
-        classroom.length == 0 &&
-        openClass.length == 0;
+        teacher.isEmpty &&
+        classroom.isEmpty &&
+        openClass.isEmpty;
   }
 
   @override
   String toString() {
     return sprintf(
-        "---------course--------         \n%s \n" +
-            "---------teacherList--------    \n%s \n" +
-            "---------classroomList--------  \n%s \n" +
-            "---------openClassList--------  \n%s \n",
+        "---------course--------         \n%s \n"
+        "---------teacherList--------    \n%s \n"
+        "---------classroomList--------  \n%s \n"
+        "---------openClassList--------  \n%s \n",
         [
           course.toString(),
           teacher.toString(),

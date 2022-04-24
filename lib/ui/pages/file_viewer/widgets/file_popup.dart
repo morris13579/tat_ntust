@@ -5,10 +5,11 @@ class FilePopup extends StatelessWidget {
   final String path;
   final PopupMenuItemSelected? popTap;
 
-  FilePopup({
+  const FilePopup({
     required this.path,
     required this.popTap,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class FilePopup extends StatelessWidget {
         color: Theme.of(context).textTheme.headline6!.color,
       ),
       color: Theme.of(context).scaffoldBackgroundColor,
-      offset: Offset(0, 30),
+      offset: const Offset(0, 30),
     );
   }
 }

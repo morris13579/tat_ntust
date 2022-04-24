@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AnsiParser {
-  static const TEXT = 0, BRACKET = 1, CODE = 2;
+  static const stateText = 0, stateBracket = 1, stateCode = 2;
 
   final bool dark;
 
@@ -13,7 +13,7 @@ class AnsiParser {
 
   void parse(String s) {
     spans = [];
-    var state = TEXT;
+    var state = stateText;
     StringBuffer? buffer;
     var text = StringBuffer();
     var code = 0;
@@ -23,9 +23,9 @@ class AnsiParser {
       var c = s[i];
 
       switch (state) {
-        case TEXT:
+        case stateText:
           if (c == '\u001b') {
-            state = BRACKET;
+            state = stateBracket;
             buffer = StringBuffer(c);
             code = 0;
             codes = [];
@@ -34,17 +34,17 @@ class AnsiParser {
           }
           break;
 
-        case BRACKET:
+        case stateBracket:
           buffer!.write(c);
           if (c == '[') {
-            state = CODE;
+            state = stateCode;
           } else {
-            state = TEXT;
+            state = stateText;
             text.write(buffer);
           }
           break;
 
-        case CODE:
+        case stateCode:
           buffer!.write(c);
           var codeUnit = c.codeUnitAt(0);
           if (codeUnit >= 48 && codeUnit <= 57) {
@@ -59,7 +59,7 @@ class AnsiParser {
               spans!.add(createSpan(text.toString()));
               text.clear();
             }
-            state = TEXT;
+            state = stateText;
             if (c == 'm') {
               codes!.add(code);
               handleCodes(codes);

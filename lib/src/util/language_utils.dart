@@ -58,7 +58,9 @@ class LanguageUtils {
           return locale;
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      Log.d(e.toString());
+    }
     return getSupportLocale[0];
   }
 

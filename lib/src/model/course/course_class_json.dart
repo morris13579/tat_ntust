@@ -39,12 +39,12 @@ class CourseMainJson {
   @override
   String toString() {
     return sprintf(
-        "name    :%s \n" +
-            "id      :%s \n" +
-            "href    :%s \n" +
-            "credits :%s \n" +
-            "hours   :%s \n" +
-            "note    :%s \n",
+        "name    :%s \n"
+        "id      :%s \n"
+        "href    :%s \n"
+        "credits :%s \n"
+        "hours   :%s \n"
+        "note    :%s \n",
         [name, id, href, credits, hours, note]);
   }
 
@@ -85,12 +85,12 @@ class CourseExtraJson {
   @override
   String toString() {
     return sprintf(
-        "id             :%s \n" +
-            "name           :%s \n" +
-            "category       :%s \n" +
-            "selectNumber   :%s \n" +
-            "withdrawNumber :%s \n" +
-            "openClass :%s \n",
+        "id             :%s \n"
+        "name           :%s \n"
+        "category       :%s \n"
+        "selectNumber   :%s \n"
+        "withdrawNumber :%s \n"
+        "openClass :%s \n",
         [id, name, category, selectNumber, withdrawNumber, openClass]);
   }
 
@@ -113,7 +113,7 @@ class ClassJson {
 
   @override
   String toString() {
-    return sprintf("name : %s \n" + "href : %s \n", [name, href]);
+    return sprintf("name : %s \n" "href : %s \n", [name, href]);
   }
 
   factory ClassJson.fromJson(Map<String, dynamic> json) =>
@@ -136,7 +136,7 @@ class ClassroomJson {
 
   @override
   String toString() {
-    return sprintf("name    : %s \n" + "href    : %s \n" + "mainUse : %s \n",
+    return sprintf("name    : %s \n" "href    : %s \n" "mainUse : %s \n",
         [name, href, mainUse.toString()]);
   }
 
@@ -159,7 +159,7 @@ class TeacherJson {
 
   @override
   String toString() {
-    return sprintf("name : %s \n" + "href : %s \n", [name, href]);
+    return sprintf("name : %s \n" "href : %s \n", [name, href]);
   }
 
   factory TeacherJson.fromJson(Map<String, dynamic> json) =>
@@ -197,20 +197,23 @@ class SemesterJson {
 
   @override
   String toString() {
-    return sprintf("year     : %s \n" + "semester : %s \n", [year, semester]);
+    return sprintf("year     : %s \n" "semester : %s \n", [year, semester]);
   }
 
   @override
-  bool operator ==(dynamic o) {
+  bool operator ==(dynamic other) {
     try {
-      return (int.parse(o.semester) == int.parse(semester) &&
-          int.parse(o.year) == int.parse(year) &&
-          o is SemesterJson);
+      return (int.parse(other.semester) == int.parse(semester) &&
+          int.parse(other.year) == int.parse(year) &&
+          other is SemesterJson);
     } catch (e) {
-      return o.semester == semester && o.year == year && o is SemesterJson;
+      return other.semester == semester &&
+          other.year == year &&
+          other is SemesterJson;
     }
   }
 
+  @override
   int get hashCode => hash2(semester.hashCode, year.hashCode);
 }
 
@@ -242,12 +245,12 @@ class ClassmateJson {
   @override
   String toString() {
     return sprintf(
-        "className           : %s \n" +
-            "studentEnglishName  : %s \n" +
-            "studentName         : %s \n" +
-            "studentId           : %s \n" +
-            "href                : %s \n" +
-            "isSelect            : %s \n",
+        "className           : %s \n"
+        "studentEnglishName  : %s \n"
+        "studentName         : %s \n"
+        "studentId           : %s \n"
+        "href                : %s \n"
+        "isSelect            : %s \n",
         [
           className,
           studentEnglishName,

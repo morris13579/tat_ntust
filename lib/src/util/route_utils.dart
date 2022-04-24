@@ -28,7 +28,7 @@ class RouteUtils {
 
   static Future toLoginScreen() async {
     return await Get.to(
-      () => LoginScreen(),
+      () => const LoginScreen(),
       transition: transition,
     );
   }
@@ -46,7 +46,7 @@ class RouteUtils {
 
   static Future toDevPage() async {
     return await Get.to(
-      () => DevPage(),
+      () => const DevPage(),
       transition: transition,
     );
   }
@@ -92,7 +92,7 @@ class RouteUtils {
 
   static Future toPrivacyPolicyPage() async {
     return await Get.to(
-      () => PrivacyPolicyPage(),
+      () => const PrivacyPolicyPage(),
       transition: transition,
     );
   }
@@ -106,7 +106,7 @@ class RouteUtils {
 
   static Future toAboutPage() async {
     return await Get.to(
-      () => AboutPage(),
+      () => const AboutPage(),
       transition: transition,
     );
   }
@@ -141,7 +141,7 @@ class RouteUtils {
 
   static Future toStoreEditPage() async {
     return await Get.to(
-      () => StoreEditPage(),
+      () => const StoreEditPage(),
       transition: transition,
     );
   }

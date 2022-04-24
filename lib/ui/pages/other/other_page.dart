@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_link.dart';
 import 'package:flutter_app/src/file/file_store.dart';
@@ -15,19 +16,22 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 
 enum onListViewPress {
-  Setting,
-  FileViewer,
-  Logout,
-  Report,
-  About,
-  Login,
-  ChangePassword
+  setting,
+  fileViewer,
+  logout,
+  report,
+  about,
+  login,
+  changePassword
 }
 
 class OtherPage extends StatefulWidget {
   final PageController pageController;
 
-  OtherPage(this.pageController);
+  const OtherPage(
+    this.pageController, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _OtherPageState createState() => _OtherPageState();
@@ -39,46 +43,46 @@ class _OtherPageState extends State<OtherPage> {
       "icon": EvaIcons.settings2Outline,
       "color": Colors.orange,
       "title": R.current.setting,
-      "onPress": onListViewPress.Setting
+      "onPress": onListViewPress.setting
     },
     {
       "icon": EvaIcons.downloadOutline,
       "color": Colors.yellow[700],
       "title": R.current.fileViewer,
-      "onPress": onListViewPress.FileViewer
+      "onPress": onListViewPress.fileViewer
     },
     if (Model.instance.getPassword().isNotEmpty)
       {
         "icon": EvaIcons.syncOutline,
         "color": Colors.lightGreen,
         "title": R.current.changePassword,
-        "onPress": onListViewPress.ChangePassword
+        "onPress": onListViewPress.changePassword
       },
     if (Model.instance.getPassword().isNotEmpty)
       {
         "icon": EvaIcons.undoOutline,
         "color": Colors.teal[400],
         "title": R.current.logout,
-        "onPress": onListViewPress.Logout
+        "onPress": onListViewPress.logout
       },
     if (Model.instance.getPassword().isEmpty)
       {
         "icon": EvaIcons.logIn,
         "color": Colors.teal[400],
         "title": R.current.login,
-        "onPress": onListViewPress.Login
+        "onPress": onListViewPress.login
       },
     {
       "icon": EvaIcons.messageSquareOutline,
       "color": Colors.cyan,
       "title": R.current.feedback,
-      "onPress": onListViewPress.Report
+      "onPress": onListViewPress.report
     },
     {
       "icon": EvaIcons.infoOutline,
       "color": Colors.lightBlue,
       "title": R.current.about,
-      "onPress": onListViewPress.About
+      "onPress": onListViewPress.about
     }
   ];
 
@@ -89,7 +93,7 @@ class _OtherPageState extends State<OtherPage> {
 
   void _onListViewPress(onListViewPress value) async {
     switch (value) {
-      case onListViewPress.Logout:
+      case onListViewPress.logout:
         ErrorDialogParameter parameter = ErrorDialogParameter(
             context: context,
             desc: R.current.logoutWarning,
@@ -105,31 +109,33 @@ class _OtherPageState extends State<OtherPage> {
             });
         ErrorDialog(parameter).show();
         break;
-      case onListViewPress.Login:
+      case onListViewPress.login:
         RouteUtils.toLoginScreen().then((value) {
           if (value) widget.pageController.jumpToPage(0);
         });
         break;
-      case onListViewPress.FileViewer:
+      case onListViewPress.fileViewer:
         FileStore.findLocalPath(context).then((filePath) {
           RouteUtils.toFileViewerPage(R.current.fileViewer, filePath);
         });
         break;
-      case onListViewPress.About:
+      case onListViewPress.about:
         RouteUtils.toAboutPage();
         break;
-      case onListViewPress.Setting:
+      case onListViewPress.setting:
         RouteUtils.toSettingPage(widget.pageController);
         break;
-      case onListViewPress.Report:
+      case onListViewPress.report:
         String link = AppLink.feedbackBaseUrl;
         try {
           String mainVersion = await AppUpdate.getAppVersion();
           link = AppLink.feedback(mainVersion, LogConsole.getLog());
-        } catch (e) {}
+        } catch (e) {
+          Log.d(e);
+        }
         RouteUtils.toWebViewPage(R.current.feedback, link);
         break;
-      case onListViewPress.ChangePassword:
+      case onListViewPress.changePassword:
         MyToast.show(R.current.noFunction);
         break;
       default:
@@ -145,17 +151,17 @@ class _OtherPageState extends State<OtherPage> {
         title: Text(R.current.titleOther),
       ),
       body: Column(children: <Widget>[
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         if (Model.instance.getAccount().isNotEmpty)
           Container(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
                 top: 24.0, left: 24.0, right: 24.0, bottom: 24.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   width: 16.0,
                 ),
                 Column(
@@ -166,7 +172,7 @@ class _OtherPageState extends State<OtherPage> {
                       (Model.instance.getAccount().isEmpty)
                           ? R.current.pleaseLogin
                           : Model.instance.getAccount(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -176,24 +182,22 @@ class _OtherPageState extends State<OtherPage> {
               ],
             ),
           ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
-        Container(
-          child: Expanded(
-            child: AnimationLimiter(
-              child: ListView.builder(
-                itemCount: optionList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return AnimationConfiguration.staggeredList(
-                    position: index,
-                    duration: const Duration(milliseconds: 375),
-                    child: ScaleAnimation(
-                      child: _buildSetting(optionList[index]),
-                    ),
-                  );
-                },
-              ),
+        Expanded(
+          child: AnimationLimiter(
+            child: ListView.builder(
+              itemCount: optionList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: ScaleAnimation(
+                    child: _buildSetting(optionList[index]),
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -207,8 +211,8 @@ class _OtherPageState extends State<OtherPage> {
         _onListViewPress(data['onPress']);
       },
       child: Container(
-        padding:
-            EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0, bottom: 24.0),
+        padding: const EdgeInsets.only(
+            top: 24.0, left: 24.0, right: 24.0, bottom: 24.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -216,13 +220,13 @@ class _OtherPageState extends State<OtherPage> {
               data['icon'],
               color: data['color'],
             ),
-            SizedBox(
+            const SizedBox(
               width: 20.0,
             ),
             Expanded(
               child: Text(
                 data['title'],
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
             )
           ],

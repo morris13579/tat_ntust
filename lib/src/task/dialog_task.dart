@@ -11,7 +11,7 @@ class DialogTask<T> extends Task<T> {
 
   @override
   Future<TaskStatus> execute() async {
-    return TaskStatus.Success;
+    return TaskStatus.success;
   }
 
   void onStart(String message) {
@@ -36,17 +36,17 @@ class DialogTask<T> extends Task<T> {
   Future<TaskStatus> onErrorParameter(ErrorDialogParameter parameter) async {
     //可自定義處理Error
     try {
-      var connectivityResult = await (new Connectivity().checkConnectivity());
+      var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
         parameter = ErrorDialogParameter(
           desc: R.current.networkError,
         );
       }
       return (await ErrorDialog(parameter).show())
-          ? TaskStatus.Restart
-          : TaskStatus.GiveUp;
+          ? TaskStatus.restart
+          : TaskStatus.giveUp;
     } catch (e) {
-      return TaskStatus.GiveUp;
+      return TaskStatus.giveUp;
     }
   }
 }

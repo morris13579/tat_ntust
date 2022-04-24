@@ -8,7 +8,7 @@ import 'moodle_support_task.dart';
 
 class MoodleCourseMessageTask
     extends MoodleSupportTask<MoodleModForumGetForumDiscussionsPaginated> {
-  final courseId;
+  final String courseId;
 
   MoodleCourseMessageTask(this.courseId)
       : super("MoodleCourseMessageTask", courseId) {
@@ -18,17 +18,18 @@ class MoodleCourseMessageTask
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       MoodleModForumGetForumDiscussionsPaginated? value;
       super.onStart(R.current.getMoodleCourseAnnouncement);
-      if (useMoodleWebApi)
+      if (useMoodleWebApi) {
         value = await MoodleWebApiConnector.getCourseAnnouncement(findId);
-      else
+      } else {
         value = await MoodleConnector.getCourseAnnouncement(findId);
+      }
       super.onEnd();
       if (value != null) {
         result = value;
-        return TaskStatus.Success;
+        return TaskStatus.success;
       } else {
         return await super.onError(R.current.getMoodleCourseAnnouncementError);
       }

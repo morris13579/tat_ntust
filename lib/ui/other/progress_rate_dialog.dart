@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sprintf/sprintf.dart';
 
 bool _isShowing = false;
 BuildContext? _context, _dismissingContext;
@@ -54,7 +53,7 @@ class ProgressRateDialog {
   Future<bool> show() async {
     if (!_isShowing) {
       try {
-        _dialog = new _Body();
+        _dialog = _Body();
         showDialog<dynamic>(
           context: _context!,
           barrierDismissible: false,
@@ -66,7 +65,7 @@ class ProgressRateDialog {
         );
         // Delaying the function for 200 milliseconds
         // [Default transitionDuration of DialogRoute]
-        await Future.delayed(Duration(milliseconds: 200));
+        await Future.delayed(const Duration(milliseconds: 200));
         _isShowing = true;
         return true;
       } catch (_) {
@@ -80,7 +79,7 @@ class ProgressRateDialog {
 
 // ignore: must_be_immutable
 class _Body extends StatefulWidget {
-  _BodyState _dialog = _BodyState();
+  final _BodyState _dialog = _BodyState();
 
   update() {
     _dialog.update();
@@ -109,8 +108,8 @@ class _BodyState extends State<_Body> {
       child: Material(
         color: Colors.transparent,
         child: Container(
-          margin: EdgeInsets.all(20.0),
-          padding: EdgeInsets.all(15.0),
+          margin: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(15.0),
           height: 100.0,
           decoration: ShapeDecoration(
               color: Colors.black87,
@@ -126,7 +125,7 @@ class _BodyState extends State<_Body> {
                   child: Text(
                     _dialogMessage,
                     textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                    style: const TextStyle(color: Colors.white, fontSize: 16.0),
                   ),
                 ),
               ),
@@ -134,7 +133,7 @@ class _BodyState extends State<_Body> {
                 flex: 1,
                 child: LinearProgressIndicator(
                   backgroundColor: Colors.grey[200],
-                  valueColor: AlwaysStoppedAnimation(Colors.blue),
+                  valueColor: const AlwaysStoppedAnimation(Colors.blue),
                   value: _progress,
                 ),
               ),
@@ -144,14 +143,14 @@ class _BodyState extends State<_Body> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Expanded(
-                      child: Text(sprintf("%d%", [(_progress * 100).toInt()]),
+                      child: Text("${(_progress * 100).toInt()}",
                           textAlign: TextAlign.left,
-                          style: TextStyle(color: Colors.white)),
+                          style: const TextStyle(color: Colors.white)),
                     ),
                     Expanded(
                       child: Text(_progressString,
                           textAlign: TextAlign.right,
-                          style: TextStyle(color: Colors.white)),
+                          style: const TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

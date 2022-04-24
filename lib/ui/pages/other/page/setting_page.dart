@@ -17,7 +17,10 @@ import 'package:provider/provider.dart';
 class SettingPage extends StatefulWidget {
   final PageController pageController;
 
-  SettingPage(this.pageController);
+  const SettingPage(
+    this.pageController, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SettingPageState createState() => _SettingPageState();
@@ -62,7 +65,7 @@ class _SettingPageState extends State<SettingPage> {
           Widget widget;
           widget = listViewData[index];
           return Container(
-            padding: EdgeInsets.only(top: 5, left: 20, right: 20),
+            padding: const EdgeInsets.only(top: 5, left: 20, right: 20),
             child: WidgetAnimator(widget),
           );
         },
@@ -77,12 +80,13 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  final TextStyle textTitle = TextStyle(fontSize: 24);
-  final TextStyle textBody = TextStyle(fontSize: 16, color: Color(0xFF808080));
+  final TextStyle textTitle = const TextStyle(fontSize: 24);
+  final TextStyle textBody =
+      const TextStyle(fontSize: 16, color: Color(0xFF808080));
 
   Widget _buildLanguageSetting() {
     return SwitchListTile.adaptive(
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -112,17 +116,17 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _buildDarkModeSetting() {
     return SwitchListTile.adaptive(
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       title: Row(
         children: <Widget>[
           Text(
             R.current.darkMode,
             style: textTitle,
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(left: 10),
           ),
-          Icon(
+          const Icon(
             FontAwesome5.moon,
           ),
         ],
@@ -144,7 +148,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _buildOpenExternalVideoSetting() {
     return SwitchListTile.adaptive(
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -170,7 +174,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _buildMoodleWebAPISetting() {
     return SwitchListTile.adaptive(
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       title: Row(
         children: <Widget>[
           Text(
@@ -196,7 +200,7 @@ class _SettingPageState extends State<SettingPage> {
     } else {
       return InkWell(
         child: Container(
-          padding: EdgeInsets.only(top: 10, bottom: 10),
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

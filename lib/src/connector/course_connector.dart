@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
@@ -13,7 +13,7 @@ import 'package:html/parser.dart';
 
 import 'core/connector_parameter.dart';
 
-enum CourseConnectorStatus { LoginSuccess, LoginFail, UnknownError }
+enum CourseConnectorStatus { loginSuccess, loginFail, unknownError }
 
 class CourseMainInfo {
   List<CourseMainInfoJson> json;
@@ -40,12 +40,12 @@ class CourseConnector {
       parameter = ConnectorParameter(_loginUrl);
       result = await Connector.getRedirects(parameter);
       if (result.contains("DoLoginCB")) {
-        return CourseConnectorStatus.LoginFail;
+        return CourseConnectorStatus.loginFail;
       }
-      return CourseConnectorStatus.LoginSuccess;
+      return CourseConnectorStatus.loginSuccess;
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
-      return CourseConnectorStatus.LoginFail;
+      return CourseConnectorStatus.loginFail;
     }
   }
 
@@ -112,13 +112,13 @@ class CourseConnector {
       Element node, tableNode;
       List<Element> nodes, tableNodes;
       List<Day> dayEnum = [
-        Day.Monday,
-        Day.Tuesday,
-        Day.Wednesday,
-        Day.Thursday,
-        Day.Friday,
-        Day.Saturday,
-        Day.Sunday,
+        Day.monday,
+        Day.tuesday,
+        Day.wednesday,
+        Day.thursday,
+        Day.friday,
+        Day.saturday,
+        Day.sunday,
       ];
 
       List<String> timeEnum = [
@@ -216,13 +216,13 @@ class CourseConnector {
         await Model.instance.getScore().getCourseIdBySemester(semester);
     try {
       List<Day> dayEnum = [
-        Day.Monday,
-        Day.Tuesday,
-        Day.Wednesday,
-        Day.Thursday,
-        Day.Friday,
-        Day.Saturday,
-        Day.Sunday,
+        Day.monday,
+        Day.tuesday,
+        Day.wednesday,
+        Day.thursday,
+        Day.friday,
+        Day.saturday,
+        Day.sunday,
       ];
 
       List<String> timeEnum = [

@@ -9,7 +9,7 @@ import 'package:pretty_json/pretty_json.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StoreEditPage extends StatefulWidget {
-  StoreEditPage();
+  const StoreEditPage({Key? key}) : super(key: key);
 
   @override
   _StoreEditPageState createState() => _StoreEditPageState();
@@ -29,10 +29,11 @@ class _StoreEditPageState extends State<StoreEditPage> {
     List<String> filter = [];
     List<String> cache = [];
     for (var i in pref!.getKeys().toList()) {
-      if (!i.contains("cache_"))
+      if (!i.contains("cache_")) {
         filter.add(i);
-      else
+      } else {
         cache.add(i);
+      }
     }
     filter.addAll(cache);
     return filter;
@@ -48,13 +49,13 @@ class _StoreEditPageState extends State<StoreEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Page"),
+        title: const Text("Edit Page"),
       ),
       body: FutureBuilder<List<String>>(
         future: initPref(),
         builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
@@ -71,9 +72,9 @@ class _StoreEditPageState extends State<StoreEditPage> {
                   value = pref!.get(key).toString();
                 }
                 return Container(
-                  padding: EdgeInsets.only(top: 5, left: 20, right: 20),
+                  padding: const EdgeInsets.only(top: 5, left: 20, right: 20),
                   child: WidgetAnimator(
-                    Container(
+                    SizedBox(
                       height: 50,
                       child: Row(
                         children: [
@@ -81,7 +82,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                             child: Text(key),
                           ),
                           IconButton(
-                              icon: Icon(Icons.edit_outlined),
+                              icon: const Icon(Icons.edit_outlined),
                               onPressed: () {
                                 Get.dialog(CustomInputDialog(
                                   title: key,
@@ -101,7 +102,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                                 ));
                               }),
                           IconButton(
-                            icon: Icon(Icons.delete_outline),
+                            icon: const Icon(Icons.delete_outline),
                             onPressed: () {
                               keyList.removeAt(index);
                               pref!.remove(key);

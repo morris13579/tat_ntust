@@ -11,7 +11,10 @@ import 'package:flutter_app/ui/other/my_toast.dart';
 class CourseDirectoryPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
 
-  CourseDirectoryPage(this.courseInfo);
+  const CourseDirectoryPage(
+    this.courseInfo, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseDirectoryPageState createState() => _CourseDirectoryPageState();
@@ -56,7 +59,7 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
     return Scaffold(
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : buildTree(),
@@ -75,7 +78,7 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
             height: 50,
             child: Row(
               children: [
-                Expanded(
+                const Expanded(
                   flex: 1,
                   child: Icon(Icons.folder_outlined),
                 ),
@@ -83,13 +86,13 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
                   flex: 8,
                   child: Text(ap.name),
                 ),
-                if (ap.modules.length != 0)
-                  Icon(Icons.arrow_forward_ios_rounded, size: 16)
+                if (ap.modules.isNotEmpty)
+                  const Icon(Icons.arrow_forward_ios_rounded, size: 16)
               ],
             ),
           ),
           onTap: () async {
-            if (ap.modules.length != 0) {
+            if (ap.modules.isNotEmpty) {
               RouteUtils.toCourseInfoPage(widget.courseInfo, ap);
             } else {
               MyToast.show(R.current.nothingHere);

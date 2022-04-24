@@ -10,9 +10,11 @@ import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:get/get.dart';
 
-enum onListViewPress { CloudMessageToken, DioLog, AppLog, StoreEdit, ADRemove }
+enum onListViewPress { cloudMessageToken, dioLog, appLog, storeEdit, adRemove }
 
 class DevPage extends StatefulWidget {
+  const DevPage({Key? key}) : super(key: key);
+
   @override
   _DevPageState createState() => _DevPageState();
 }
@@ -23,31 +25,31 @@ class _DevPageState extends State<DevPage> {
       "icon": Icons.vpn_key_outlined,
       "title": "Cloud Messaging Token",
       "color": Colors.green,
-      "onPress": onListViewPress.CloudMessageToken
+      "onPress": onListViewPress.cloudMessageToken
     },
     {
       "icon": Icons.info_outline,
       "title": "Dio Log",
       "color": Colors.blue,
-      "onPress": onListViewPress.DioLog
+      "onPress": onListViewPress.dioLog
     },
     {
       "icon": Icons.info_outline,
       "title": "App Log",
       "color": Colors.yellow,
-      "onPress": onListViewPress.AppLog
+      "onPress": onListViewPress.appLog
     },
     {
       "icon": Icons.edit_outlined,
       "title": "Store Edit",
       "color": Colors.green,
-      "onPress": onListViewPress.StoreEdit
+      "onPress": onListViewPress.storeEdit
     },
     {
       "icon": Icons.code_outlined,
       "title": "AD Remover",
       "color": Colors.red,
-      "onPress": onListViewPress.ADRemove
+      "onPress": onListViewPress.adRemove
     },
   ];
 
@@ -60,7 +62,7 @@ class _DevPageState extends State<DevPage> {
   Future<void> removeADItem() async {
     if (!await AdManager.getADEnable()) {
       int index = listViewData
-          .indexWhere((e) => e["onPress"] == onListViewPress.ADRemove);
+          .indexWhere((e) => e["onPress"] == onListViewPress.adRemove);
       if (index >= 0) {
         setState(() {
           listViewData.removeAt(index);
@@ -73,21 +75,21 @@ class _DevPageState extends State<DevPage> {
 
   void _onListViewPress(onListViewPress value) async {
     switch (value) {
-      case onListViewPress.CloudMessageToken:
+      case onListViewPress.cloudMessageToken:
         String? token = await CloudMessagingUtils.getToken();
         MyToast.show(token! + " copy");
         FlutterClipboard.copy(token);
         break;
-      case onListViewPress.DioLog:
+      case onListViewPress.dioLog:
         RouteUtils.toAliceInspectorPage();
         break;
-      case onListViewPress.AppLog:
+      case onListViewPress.appLog:
         RouteUtils.toLogConsolePage();
         break;
-      case onListViewPress.StoreEdit:
+      case onListViewPress.storeEdit:
         RouteUtils.toStoreEditPage();
         break;
-      case onListViewPress.ADRemove:
+      case onListViewPress.adRemove:
         await Get.dialog(CustomInputDialog(
           title: "Input Valid Code",
           initText: "",
@@ -144,7 +146,7 @@ class _DevPageState extends State<DevPage> {
     return Container(
       //color: Colors.yellow,
       padding:
-          EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
+          const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -152,12 +154,12 @@ class _DevPageState extends State<DevPage> {
             data['icon'],
             color: data['color'],
           ),
-          SizedBox(
+          const SizedBox(
             width: 20.0,
           ),
           Text(
             data['title'],
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
         ],
       ),

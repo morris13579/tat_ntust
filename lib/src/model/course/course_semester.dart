@@ -4,9 +4,9 @@ part 'course_semester.g.dart';
 
 List<CourseSemesterJson> getCourseSemesterList(List<dynamic> list) {
   List<CourseSemesterJson> result = [];
-  list.forEach((item) {
+  for (var item in list) {
     result.add(CourseSemesterJson.fromJson(item));
-  });
+  }
   return result;
 }
 

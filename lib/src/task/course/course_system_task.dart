@@ -11,14 +11,14 @@ class CourseSystemTask<T> extends NTUSTTask<T> {
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (isLogin) return TaskStatus.Success;
+    if (isLogin) return TaskStatus.success;
     name = "CourseSystemTask " + name;
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       isLogin = true;
       super.onStart(R.current.loginCourse);
       CourseConnectorStatus value = await CourseConnector.login();
       super.onEnd();
-      if (value != CourseConnectorStatus.LoginSuccess) {
+      if (value != CourseConnectorStatus.loginSuccess) {
         return await onError(R.current.loginCourseError);
       }
     }

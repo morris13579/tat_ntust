@@ -4,9 +4,9 @@ part 'course_search_json.g.dart';
 
 List<CourseSearchJson> getCourseSearchJsonList(List<dynamic> list) {
   List<CourseSearchJson> result = [];
-  list.forEach((item) {
+  for (var item in list) {
     result.add(CourseSearchJson.fromJson(item));
-  });
+  }
   return result;
 }
 
@@ -73,26 +73,26 @@ class CourseSearchJson {
   String contents;
 
   CourseSearchJson({
-    this.semester: "",
-    this.courseNo: "",
-    this.courseName: "",
-    this.courseTeacher: "",
-    this.dimension: "",
-    this.creditPoint: "",
-    this.requireOption: "",
-    this.allYear: "",
-    this.chooseStudent: 0,
-    this.restrict1: "",
-    this.restrict2: "",
-    this.threeStudent: 0,
-    this.allStudent: 0,
-    this.nTURestrict: "",
-    this.nTNURestrict: "",
-    this.courseTimes: "",
-    this.practicalTimes: "",
-    this.classRoomNo: "",
-    this.node: "",
-    this.contents: "",
+    this.semester = "",
+    this.courseNo = "",
+    this.courseName = "",
+    this.courseTeacher = "",
+    this.dimension = "",
+    this.creditPoint = "",
+    this.requireOption = "",
+    this.allYear = "",
+    this.chooseStudent = 0,
+    this.restrict1 = "",
+    this.restrict2 = "",
+    this.threeStudent = 0,
+    this.allStudent = 0,
+    this.nTURestrict = "",
+    this.nTNURestrict = "",
+    this.courseTimes = "",
+    this.practicalTimes = "",
+    this.classRoomNo = "",
+    this.node = "",
+    this.contents = "",
   });
 
   factory CourseSearchJson.fromJson(Map<String, dynamic> srcJson) =>

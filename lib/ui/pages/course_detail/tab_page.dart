@@ -7,7 +7,7 @@ class TabPage {
   late Widget tabPage;
 
   TabPage(String title, IconData icons, Widget initPage,
-      {useNavigatorKey: false}) {
+      {useNavigatorKey= false}) {
     navigatorKey = GlobalKey();
     tab = Column(
       children: <Widget>[
@@ -50,9 +50,9 @@ class TabPageList {
 
   List<Widget> getTabList(BuildContext context) {
     List<Widget> pages = [];
-    double width = MediaQuery.of(context).size.width / this.length;
+    double width = MediaQuery.of(context).size.width / length;
     for (TabPage tabPage in tabPageList) {
-      Widget tabNew = Container(
+      Widget tabNew = SizedBox(
         width: width,
         child: tabPage.tab,
       );

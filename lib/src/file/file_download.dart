@@ -50,7 +50,9 @@ class FileDownload {
       Map<String, List<String>> headers = downloadReq.headers.map;
       realFileName = getFileNameByHeader(headers) ?? name;
       savePath = path + "/" + realFileName;
-    } catch (e) {}
+    } catch (e) {
+      Log.d(e);
+    }
     try {
       Log.d("try open $savePath");
       OpenResult result = await OpenFile.open(savePath);
@@ -60,7 +62,9 @@ class FileDownload {
         MyToast.show(S.current.noAppToOpen);
         return;
       }
-    } catch (e) {}
+    } catch (e) {
+      Log.d(e);
+    }
     if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
       MyToast.show(R.current.pleaseConnectToNetwork);
       return;

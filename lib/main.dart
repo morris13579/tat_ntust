@@ -20,7 +20,7 @@ import 'package:provider/provider.dart';
 import 'debug/log/log.dart';
 import 'generated/l10n.dart';
 
-Future<Null> main() async {
+Future<void> main() async {
   // Pass all uncaught errors from the framework to Crashlytics.
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -39,7 +39,7 @@ Future<Null> main() async {
           ChangeNotifierProvider(create: (_) => AppProvider()),
           ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ],
-        child: MyApp(),
+        child: const MyApp(),
       ),
     );
   }, (dynamic exception, StackTrace stack, {dynamic context}) {
@@ -49,6 +49,8 @@ Future<Null> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(builder:
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
         title: AppConfig.appName,
         theme: appProvider.theme,
         darkTheme: AppThemes.darkTheme,
-        localizationsDelegates: [
+        localizationsDelegates: const [
           S.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
@@ -70,7 +72,7 @@ class MyApp extends StatelessWidget {
           AnalyticsUtils.observer
         ],
         supportedLocales: S.delegate.supportedLocales,
-        home: MainScreen(),
+        home: const MainScreen(),
         logWriterCallback: (String text, {bool? isError}) {
           Log.d(text);
         },

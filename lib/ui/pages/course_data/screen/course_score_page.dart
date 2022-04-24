@@ -9,7 +9,10 @@ import 'package:flutter_app/src/task/task_flow.dart';
 class CourseScorePage extends StatefulWidget {
   final CourseInfoJson courseInfo;
 
-  CourseScorePage(this.courseInfo);
+  const CourseScorePage(
+    this.courseInfo, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseScorePageState createState() => _CourseScorePageState();
@@ -54,7 +57,7 @@ class _CourseScorePageState extends State<CourseScorePage>
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
     return Scaffold(
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
@@ -65,7 +68,7 @@ class _CourseScorePageState extends State<CourseScorePage>
 
   Widget buildTree() {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
       child: Table(
         columnWidths: const <int, TableColumnWidth>{
           //指定索引及固定列宽
@@ -85,25 +88,26 @@ class _CourseScorePageState extends State<CourseScorePage>
               Text(R.current.feedback),
               Text(R.current.contribute),
             ],
-          )
-        ]..addAll(scoreList
-            .map(
-              (e) => TableRow(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(e.name),
-                  ),
-                  Text(e.weight),
-                  Text(e.score),
-                  Text(e.fullRange),
-                  Text(e.percentage),
-                  Text(e.feedback),
-                  Text(e.contribute),
-                ],
-              ),
-            )
-            .toList()),
+          ),
+          ...scoreList
+              .map(
+                (e) => TableRow(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                      child: Text(e.name),
+                    ),
+                    Text(e.weight),
+                    Text(e.score),
+                    Text(e.fullRange),
+                    Text(e.percentage),
+                    Text(e.feedback),
+                    Text(e.contribute),
+                  ],
+                ),
+              )
+              .toList()
+        ],
       ),
     );
   }

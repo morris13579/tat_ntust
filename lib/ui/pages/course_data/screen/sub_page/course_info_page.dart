@@ -15,7 +15,11 @@ class CourseInfoPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
   final MoodleCoreCourseGetContents contents;
 
-  CourseInfoPage(this.courseInfo, this.contents);
+  const CourseInfoPage(
+    this.courseInfo,
+    this.contents, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CourseInfoPageState createState() => _CourseInfoPageState();
@@ -36,7 +40,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
         title: Text(widget.contents.name),
       ),
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : buildTree(),
@@ -81,7 +85,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
         openWebView(ap);
         break;
       case "folder":
-        if (ap.contents.length != 0 || ap.folderIsNone) {
+        if (ap.contents.isNotEmpty || ap.folderIsNone) {
           RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
         } else {
           MyToast.show(R.current.nothingHere);
@@ -106,13 +110,13 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
     }
   }
 
-  final titleTextStyle = TextStyle(fontSize: 14);
+  final titleTextStyle = const TextStyle(fontSize: 14);
 
   Widget buildItem(Modules ap, int index) {
     switch (ap.modname) {
       case "label":
         return Container(
-            padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+            padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
             child: HtmlWidget(
               ap.description,
               isSelectable: true,
@@ -129,19 +133,19 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
             ),
             children: [
               Container(
-                padding: EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 20),
                 child: HtmlWidget(
                   ap.description,
                   isSelectable: true,
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 50,
                 child: Row(
                   children: [
                     Expanded(
                       child: InkWell(
-                        child: Icon(Icons.download_outlined),
+                        child: const Icon(Icons.download_outlined),
                         onTap: () {
                           handleTap(ap);
                         },
@@ -155,7 +159,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
         }
         return Container(
           height: 50,
-          padding: EdgeInsets.only(left: 20),
+          padding: const EdgeInsets.only(left: 20),
           child: Row(
             children: [
               Text(

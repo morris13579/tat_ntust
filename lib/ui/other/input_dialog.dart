@@ -5,22 +5,23 @@ import 'package:get/get.dart';
 typedef OnCallBack = Function(String);
 
 class CustomInputDialog extends StatelessWidget {
-  final title;
-  final initText;
+  final String title;
+  final String initText;
   final TextEditingController controller = TextEditingController();
   final OnCallBack onOk;
   final OnCallBack onCancel;
-  final maxLine;
-  final hint;
+  final int maxLine;
+  final String hint;
 
   CustomInputDialog({
+    Key? key,
     required this.title,
     required this.initText,
     required this.onOk,
     required this.onCancel,
     this.maxLine = 1,
     this.hint = "",
-  }) {
+  }) : super(key: key) {
     controller.text = initText;
   }
 

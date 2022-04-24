@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_score.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
 import 'package:html/parser.dart';
 
-enum MoodleWebApiConnectorStatus { LoginSuccess, LoginFail, UnknownError }
+enum MoodleWebApiConnectorStatus { loginSuccess, loginFail, unknownError }
 
 class MoodleWebApiConnector {
   static const String host = "https://moodle2.ntust.edu.tw";
@@ -34,12 +34,12 @@ class MoodleWebApiConnector {
       result = await Connector.getJsonByPost(parameter);
       if (result.containsKey("token")) {
         wsToken = result["token"];
-        return MoodleWebApiConnectorStatus.LoginSuccess;
+        return MoodleWebApiConnectorStatus.loginSuccess;
       }
-      return MoodleWebApiConnectorStatus.LoginFail;
+      return MoodleWebApiConnectorStatus.loginFail;
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
-      return MoodleWebApiConnectorStatus.LoginFail;
+      return MoodleWebApiConnectorStatus.loginFail;
     }
   }
 
@@ -218,7 +218,7 @@ class MoodleWebApiConnector {
       for (var i = grade.tables[0].tableData.length - 1; i >= 1; i--) {
         var g = grade.tables[0].tableData[i];
         var tagNode = parse(g.itemName.content);
-        var name;
+        String name;
         if (tagNode
             .getElementsByClassName("gradeitemheader")[0]
             .attributes

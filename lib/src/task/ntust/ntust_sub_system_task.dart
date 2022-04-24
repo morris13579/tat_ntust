@@ -10,11 +10,11 @@ class NTUSTSubSystemTask extends NTUSTTask<APTreeJson> {
   @override
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
-    if (status == TaskStatus.Success) {
+    if (status == TaskStatus.success) {
       var value = await NTUSTConnector.getSubSystem();
       if (value != null) {
         result = value;
-        return TaskStatus.Success;
+        return TaskStatus.success;
       } else {
         return await super.onError(R.current.error);
       }

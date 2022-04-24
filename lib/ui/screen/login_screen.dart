@@ -7,16 +7,18 @@ import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _accountControl = new TextEditingController();
-  final TextEditingController _passwordControl = new TextEditingController();
+  final TextEditingController _accountControl = TextEditingController();
+  final TextEditingController _passwordControl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final FocusNode _passwordFocus = new FocusNode();
-  final FocusNode _accountFocus = new FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _accountFocus = FocusNode();
   bool passwordShow = false;
   String _accountErrorMessage = '';
   String _passwordErrorMessage = '';
@@ -70,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             _buildTopDecoration(),
             Padding(
-              padding: EdgeInsets.all(32),
+              padding: const EdgeInsets.all(32),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -78,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     Material(
                       elevation: 2,
-                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderRadius: const BorderRadius.all(Radius.circular(32)),
                       child: TextFormField(
                         controller: _accountControl,
                         cursorColor: Colors.blue[800],
@@ -91,11 +93,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (value) => _validatorAccount(value!),
                         decoration: InputDecoration(
                           hintText: R.current.account,
-                          errorStyle: TextStyle(
+                          errorStyle: const TextStyle(
                             height: 0,
                             fontSize: 0,
                           ),
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.account_circle,
                             color: Colors.grey,
                           ),
@@ -103,26 +105,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     if (_accountErrorMessage.isNotEmpty)
                       Padding(
-                        padding: EdgeInsets.only(left: 16),
+                        padding: const EdgeInsets.only(left: 16),
                         child: Text(
                           _accountErrorMessage,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
                             color: Colors.red,
                           ),
                         ),
                       ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Material(
                       elevation: 2,
-                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderRadius: const BorderRadius.all(Radius.circular(32)),
                       child: Row(
                         children: [
                           Expanded(
@@ -137,16 +139,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               validator: (value) => _validatorPassword(value!),
                               decoration: InputDecoration(
                                 hintText: R.current.password,
-                                errorStyle: TextStyle(
+                                errorStyle: const TextStyle(
                                   height: 0,
                                   fontSize: 0,
                                 ),
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.lock,
                                   color: Colors.grey,
                                 ),
                                 border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 25,
                                   vertical: 13,
                                 ),
@@ -155,8 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           IconButton(
                             icon: (!passwordShow)
-                                ? Icon(EvaIcons.eyeOffOutline)
-                                : Icon(EvaIcons.eyeOutline),
+                                ? const Icon(EvaIcons.eyeOffOutline)
+                                : const Icon(EvaIcons.eyeOutline),
                             onPressed: () {
                               setState(() {
                                 passwordShow = !passwordShow;
@@ -166,21 +168,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     if (_passwordErrorMessage.isNotEmpty)
                       Padding(
-                        padding: EdgeInsets.only(left: 16),
+                        padding: const EdgeInsets.only(left: 16),
                         child: Text(
                           _passwordErrorMessage,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
                             color: Colors.red,
                           ),
                         ),
                       ),
-                    SizedBox(
+                    const SizedBox(
                       height: 25,
                     ),
                     Align(
@@ -193,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Text(
                             R.current.login,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                             ),
                           ),
@@ -201,9 +203,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextButton.styleFrom(
                           backgroundColor: AppColors.mainColor,
                           shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(32.0),
+                            borderRadius: BorderRadius.circular(32.0),
                           ),
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 16),
                         ),
                         onPressed: () => _loginPress(context),
@@ -227,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Container(
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.4,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Colors.blue,
@@ -243,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(),
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.4,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Color(0x442196f3),
@@ -259,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(),
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.4,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [Color(0x222196f3), Color(0x2203a9f4)]),
             ),
@@ -268,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Container(
           height: MediaQuery.of(context).size.height * 0.36,
           alignment: Alignment.center,
-          child: Icon(
+          child: const Icon(
             Icons.account_circle,
             color: Colors.white,
             size: 120,

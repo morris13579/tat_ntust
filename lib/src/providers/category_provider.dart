@@ -31,11 +31,11 @@ class CategoryProvider extends ChangeNotifier {
     downloads.clear();
     downloadTabs.add("All");
     List<Directory> storages = await FileUtils.getStorageList();
-    storages.forEach((dir) {
+    for (var dir in storages) {
       if (Directory(dir.path + "Download").existsSync()) {
         List<FileSystemEntity> files =
             Directory(dir.path + "Download").listSync();
-        files.forEach((file) {
+        for (var file in files) {
           if (FileSystemEntity.isFileSync(file.path)) {
             downloads.add(file);
             downloadTabs
@@ -43,9 +43,9 @@ class CategoryProvider extends ChangeNotifier {
             downloadTabs = downloadTabs.toSet().toList();
             notifyListeners();
           }
-        });
+        }
       }
-    });
+    }
     setLoading(false);
   }
 
@@ -56,16 +56,16 @@ class CategoryProvider extends ChangeNotifier {
     imageTabs.add("All");
     List<FileSystemEntity> files =
         await FileUtils.getAllFiles(showHidden: showHidden);
-    files.forEach((file) {
-      String? mimeType = mime(file.path) == null ? "" : mime(file.path);
-      if (mimeType!.split("/")[0] == type) {
+    for (var file in files) {
+      String? mimeType = mime(file.path) ?? "";
+      if (mimeType.split("/")[0] == type) {
         images.add(file);
         imageTabs
-            .add("${file.path.split("/")[file.path.split("/").length - 2]}");
+            .add(file.path.split("/")[file.path.split("/").length - 2]);
         imageTabs = imageTabs.toSet().toList();
       }
       notifyListeners();
-    });
+    }
     setLoading(false);
   }
 
@@ -76,7 +76,7 @@ class CategoryProvider extends ChangeNotifier {
     audioTabs.add("All");
     List<FileSystemEntity> files =
         await FileUtils.getAllFiles(showHidden: showHidden);
-    files.forEach((file) {
+    for (var file in files) {
       String? mimeType = mime(file.path);
       if (type == "text" && extension(file.path) == ".pdf") {
         audio.add(file);
@@ -85,12 +85,12 @@ class CategoryProvider extends ChangeNotifier {
         if (mimeType.split("/")[0] == type) {
           audio.add(file);
           audioTabs
-              .add("${file.path.split("/")[file.path.split("/").length - 2]}");
+              .add(file.path.split("/")[file.path.split("/").length - 2]);
           audioTabs = audioTabs.toSet().toList();
         }
         notifyListeners();
       }
-    });
+    }
     setLoading(false);
   }
 
@@ -108,7 +108,7 @@ class CategoryProvider extends ChangeNotifier {
 
   getHidden() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? h = prefs.getBool("hidden") == null ? false : prefs.getBool("hidden");
+    bool? h = prefs.getBool("hidden") ?? false;
     setHidden(h);
   }
 
@@ -121,7 +121,7 @@ class CategoryProvider extends ChangeNotifier {
 
   getSort() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int? h = prefs.getInt("sort") == null ? 0 : prefs.getInt("sort");
+    int? h = prefs.getInt("sort") ?? 0;
     setSort(h);
   }
 }

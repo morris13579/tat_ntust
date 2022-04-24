@@ -8,14 +8,14 @@ class AppThemes {
     brightness: Brightness.light,
     backgroundColor: AppColors.lightBG,
     primaryColor: AppColors.mainColor,
-    textSelectionTheme: TextSelectionThemeData(
+    textSelectionTheme: const TextSelectionThemeData(
       cursorColor: AppColors.lightAccent,
     ),
-    appBarTheme: AppBarTheme(color: AppColors.mainColor),
+    appBarTheme: const AppBarTheme(color: AppColors.mainColor),
     toggleableActiveColor: Colors.blue,
-    dividerColor: Color(0xFFF8F8F8),
+    dividerColor: const Color(0xFFF8F8F8),
     scaffoldBackgroundColor: AppColors.lightBG,
-    cupertinoOverrideTheme: CupertinoThemeData(
+    cupertinoOverrideTheme: const CupertinoThemeData(
       primaryColor: AppColors.mainColor,
     ),
     textButtonTheme: TextButtonThemeData(
@@ -41,16 +41,16 @@ class AppThemes {
     backgroundColor: AppColors.darkBG,
     primaryColor: AppColors.darkPrimary,
     scaffoldBackgroundColor: AppColors.darkBG,
-    textSelectionTheme: TextSelectionThemeData(
+    textSelectionTheme: const TextSelectionThemeData(
       cursorColor: AppColors.darkAccent,
     ),
-    appBarTheme: AppBarTheme(color: AppColors.darkAccent),
+    appBarTheme: const AppBarTheme(color: AppColors.darkAccent),
     toggleableActiveColor: Colors.blueAccent,
-    dividerColor: Color(0xFF2F2F2F),
-    cupertinoOverrideTheme: CupertinoThemeData(
+    dividerColor: const Color(0xFF2F2F2F),
+    cupertinoOverrideTheme: const CupertinoThemeData(
       primaryColor: AppColors.darkAccent,
     ),
-    buttonTheme: ButtonThemeData(buttonColor: AppColors.darkAccent),
+    buttonTheme: const ButtonThemeData(buttonColor: AppColors.darkAccent),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         primary: Colors.white,

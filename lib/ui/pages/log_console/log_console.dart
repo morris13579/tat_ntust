@@ -24,8 +24,8 @@ class MyConsoleOutput extends LogOutput {
 class LogConsole extends StatefulWidget {
   final bool dark;
 
-  LogConsole({this.dark = false})
-      : assert(_initialized, "Please call LogConsole.init() first.");
+  LogConsole({Key? key, this.dark = false})
+      : assert(_initialized, "Please call LogConsole.init() first."), super(key: key);
 
   static void init({int bufferSize = 50}) {
     if (_initialized) return;
@@ -76,11 +76,11 @@ class RenderedEvent {
 }
 
 class _LogConsoleState extends State<LogConsole> {
-  ListQueue<RenderedEvent> _renderedBuffer = ListQueue();
+  final ListQueue<RenderedEvent> _renderedBuffer = ListQueue();
   List<RenderedEvent> _filteredBuffer = [];
 
-  var _scrollController = ScrollController();
-  var _filterController = TextEditingController();
+  final _scrollController = ScrollController();
+  final _filterController = TextEditingController();
 
   Level _filterLevel = Level.verbose;
   double _logFontSize = 14;
@@ -148,20 +148,20 @@ class _LogConsoleState extends State<LogConsole> {
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () => Get.back(),
           ),
-          title: Text("Log Console"),
+          title: const Text("Log Console"),
           actions: [
             IconButton(
-              icon: Icon(Icons.clear),
+              icon: const Icon(Icons.clear),
               onPressed: () {
                 _outputEventBuffer.clear();
                 didChangeDependencies();
               },
             ),
             IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               onPressed: () {
                 setState(() {
                   _logFontSize++;
@@ -169,7 +169,7 @@ class _LogConsoleState extends State<LogConsole> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.remove),
+              icon: const Icon(Icons.remove),
               onPressed: () {
                 setState(() {
                   _logFontSize--;
@@ -191,9 +191,9 @@ class _LogConsoleState extends State<LogConsole> {
         ),
         floatingActionButton: AnimatedOpacity(
           opacity: _followBottom ? 0 : 1,
-          duration: Duration(milliseconds: 150),
+          duration: const Duration(milliseconds: 150),
           child: Padding(
-            padding: EdgeInsets.only(bottom: 60),
+            padding: const EdgeInsets.only(bottom: 60),
             child: FloatingActionButton(
               mini: true,
               clipBehavior: Clip.antiAlias,
@@ -242,19 +242,19 @@ class _LogConsoleState extends State<LogConsole> {
         children: <Widget>[
           Expanded(
             child: TextField(
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
               controller: _filterController,
               onChanged: (s) => _refreshFilter(),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Filter log output",
                 border: OutlineInputBorder(),
               ),
             ),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           DropdownButton<Level>(
             value: _filterLevel,
-            items: [
+            items: const [
               DropdownMenuItem(
                 child: Text("Verbose"),
                 value: Level.verbose,
@@ -304,7 +304,7 @@ class _LogConsoleState extends State<LogConsole> {
     var scrollPosition = _scrollController.position;
     await _scrollController.animateTo(
       scrollPosition.maxScrollExtent,
-      duration: new Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
       curve: Curves.easeOut,
     );
 
@@ -333,7 +333,11 @@ class LogBar extends StatelessWidget {
   final bool dark;
   final Widget child;
 
-  LogBar({required this.dark, required this.child});
+  const LogBar({
+    required this.dark,
+    required this.child,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -352,7 +356,7 @@ class LogBar extends StatelessWidget {
         child: Material(
           color: dark ? Colors.blueGrey.shade900 : Colors.white,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(15, 8, 15, 8),
+            padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
             child: child,
           ),
         ),

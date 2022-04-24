@@ -1,4 +1,4 @@
-import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
@@ -53,7 +53,9 @@ class ScoreConnector {
           );
           info.addRankBySemester(semester, rank);
         }
-      } catch (e) {}
+      } catch (e) {
+        Log.d(e);
+      }
 
       //成績
       items =

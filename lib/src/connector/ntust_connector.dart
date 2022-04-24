@@ -15,7 +15,7 @@ import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
-enum NTUSTLoginStatus { Success, Fail }
+enum NTUSTLoginStatus { success, fail }
 
 class NTUSTConnector {
   static const String host = "https://i.ntust.edu.tw";

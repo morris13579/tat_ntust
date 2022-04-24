@@ -50,27 +50,27 @@ class MyProgressDialog {
     final int number = Random().nextInt(kits.length);
     return CustomProgressDialog(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             color: Colors.black,
-            borderRadius: const BorderRadius.all(Radius.circular(5))),
+            borderRadius: BorderRadius.all(Radius.circular(5))),
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 60,
               width: 100,
               child: kits[number],
             ),
             message == null
-                ? Padding(
+                ? const Padding(
                     padding: EdgeInsets.all(0),
                   )
                 : Padding(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 10),
                     child: Text(
                       message,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                   ),

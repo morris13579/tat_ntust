@@ -1,6 +1,6 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
@@ -12,11 +12,13 @@ class InAppWebViewPage extends StatefulWidget {
   final bool openWithExternalWebView;
   final Function(Uri)? onWebViewDownload;
 
-  InAppWebViewPage(
-      {required this.title,
-      required this.url,
-      this.openWithExternalWebView = false,
-      this.onWebViewDownload});
+  const InAppWebViewPage({
+    required this.title,
+    required this.url,
+    this.openWithExternalWebView = false,
+    this.onWebViewDownload,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _InAppWebViewPageState createState() => _InAppWebViewPageState();
@@ -85,7 +87,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
-          Container(
+          SizedBox(
             width: 50,
             child: InkWell(
               onTap: () async {
@@ -93,10 +95,10 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                   await webView!.goBack();
                 }
               },
-              child: Icon(Icons.arrow_back, color: Colors.white),
+              child: const Icon(Icons.arrow_back, color: Colors.white),
             ),
           ),
-          Container(
+          SizedBox(
             width: 50,
             child: InkWell(
               onTap: () async {
@@ -104,10 +106,10 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                   await webView!.goForward();
                 }
               },
-              child: Icon(Icons.arrow_forward, color: Colors.white),
+              child: const Icon(Icons.arrow_forward, color: Colors.white),
             ),
           ),
-          Container(
+          SizedBox(
             width: 50,
             child: InkWell(
               onTap: () async {
@@ -115,17 +117,17 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                   await webView!.reload();
                 }
               },
-              child: Icon(Icons.refresh, color: Colors.white),
+              child: const Icon(Icons.refresh, color: Colors.white),
             ),
           ),
           if (widget.openWithExternalWebView)
-            Container(
+            SizedBox(
               width: 50,
               child: InkWell(
                 onTap: () async {
-                  OpenUtils.launchURL(this.url.toString());
+                  OpenUtils.launchURL(url.toString());
                 },
-                child: Icon(Icons.open_in_new, color: Colors.white),
+                child: const Icon(Icons.open_in_new, color: Colors.white),
               ),
             ),
         ],
@@ -135,76 +137,74 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasData) {
             return SafeArea(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: progress < 1.0
-                          ? LinearProgressIndicator(value: progress)
-                          : Container(),
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: InAppWebView(
-                          initialUrlRequest: URLRequest(url: widget.url),
-                          initialOptions: InAppWebViewGroupOptions(
-                            android: AndroidInAppWebViewOptions(
-                              useHybridComposition: true, //android 12 keyboard
-                            ),
-                            crossPlatform: InAppWebViewOptions(
-                              useOnDownloadStart: true,
-                            ),
-                          ),
-                          onWebViewCreated:
-                              (InAppWebViewController controller) {
-                            webView = controller;
-                          },
-                          onLoadStart:
-                              (InAppWebViewController controller, Uri? url) {
-                            setState(() {
-                              if (lastLoadUri != url) {
-                                onLoadStopTime++;
-                              }
-                              lastLoadUri = url;
-                              this.url = url!;
-                            });
-                          },
-                          onLoadStop: (InAppWebViewController controller,
-                              Uri? url) async {
-                            setState(
-                              () {
-                                this.url = url!;
-                              },
-                            );
-                          },
-                          onProgressChanged: (InAppWebViewController controller,
-                              int progress) {
-                            setState(
-                              () {
-                                this.progress = progress / 100;
-                              },
-                            );
-                          },
-                          onDownloadStart:
-                              (InAppWebViewController controller, Uri url) {
-                            Log.d("WebView download ${url.toString()}");
-                            if (widget.onWebViewDownload != null) {
-                              widget.onWebViewDownload!(url);
-                            } else {
-                              String dirName = "WebView";
-                              FileDownload.download(
-                                  context, url.toString(), dirName);
-                            }
-                          },
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: progress < 1.0
+                        ? LinearProgressIndicator(value: progress)
+                        : Container(),
+                  ),
+                  Expanded(
+                    child: InAppWebView(
+                      initialUrlRequest: URLRequest(url: widget.url),
+                      initialOptions: InAppWebViewGroupOptions(
+                        android: AndroidInAppWebViewOptions(
+                          useHybridComposition: true, //android 12 keyboard
+                        ),
+                        crossPlatform: InAppWebViewOptions(
+                          useOnDownloadStart: true,
                         ),
                       ),
+                      onWebViewCreated:
+                          (InAppWebViewController controller) {
+                        webView = controller;
+                      },
+                      onLoadStart:
+                          (InAppWebViewController controller, Uri? url) {
+                        setState(() {
+                          if (lastLoadUri != url) {
+                            onLoadStopTime++;
+                          }
+                          lastLoadUri = url;
+                          this.url = url!;
+                        });
+                      },
+                      onLoadStop: (InAppWebViewController controller,
+                          Uri? url) async {
+                        setState(
+                          () {
+                            this.url = url!;
+                          },
+                        );
+                      },
+                      onProgressChanged: (InAppWebViewController controller,
+                          int progress) {
+                        setState(
+                          () {
+                            this.progress = progress / 100;
+                          },
+                        );
+                      },
+                      onDownloadStartRequest:
+                          (InAppWebViewController controller,
+                              DownloadStartRequest downloadStartRequest) {
+                        var url = downloadStartRequest.url;
+                        Log.d("WebView download ${url.toString()}");
+                        if (widget.onWebViewDownload != null) {
+                          widget.onWebViewDownload!(url);
+                        } else {
+                          String dirName = "WebView";
+                          FileDownload.download(
+                              context, url.toString(), dirName);
+                        }
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }

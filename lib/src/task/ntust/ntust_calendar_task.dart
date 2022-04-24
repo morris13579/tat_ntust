@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter_app/debug/log/Log.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/connector/ntust_connector.dart';
@@ -11,7 +11,7 @@ import 'package:path_provider/path_provider.dart';
 class NTUSTCalendarTask extends CacheTask<String> {
   bool forceUpdate;
 
-  NTUSTCalendarTask({this.forceUpdate: false}) : super("NTUSTCalendarTask");
+  NTUSTCalendarTask({this.forceUpdate = false}) : super("NTUSTCalendarTask");
 
   @override
   Future<TaskStatus> execute() async {
@@ -32,6 +32,6 @@ class NTUSTCalendarTask extends CacheTask<String> {
       }
       super.onEnd();
     }
-    return TaskStatus.Success;
+    return TaskStatus.success;
   }
 }
