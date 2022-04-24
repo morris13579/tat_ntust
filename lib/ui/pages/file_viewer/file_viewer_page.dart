@@ -188,7 +188,8 @@ class _FileViewerPageState extends State<FileViewerPage>
                               height: 40,
                               child: Center(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
                                   child: Text(
                                     "${splinted[splinted.length - 1]}",
                                     style: TextStyle(

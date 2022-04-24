@@ -145,8 +145,8 @@ class _DevPageState extends State<DevPage> {
   Container _buildAbout(Map data) {
     return Container(
       //color: Colors.yellow,
-      padding:
-          const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
+      padding: const EdgeInsets.only(
+          top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

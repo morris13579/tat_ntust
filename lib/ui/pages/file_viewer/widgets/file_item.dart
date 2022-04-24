@@ -14,7 +14,8 @@ class FileItem extends StatelessWidget {
 
   const FileItem({
     required this.file,
-    this.popTap,Key? key,
+    this.popTap,
+    Key? key,
   }) : super(key: key);
 
   @override

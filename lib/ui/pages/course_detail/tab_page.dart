@@ -7,7 +7,7 @@ class TabPage {
   late Widget tabPage;
 
   TabPage(String title, IconData icons, Widget initPage,
-      {useNavigatorKey= false}) {
+      {useNavigatorKey = false}) {
     navigatorKey = GlobalKey();
     tab = Column(
       children: <Widget>[

@@ -155,8 +155,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                           useOnDownloadStart: true,
                         ),
                       ),
-                      onWebViewCreated:
-                          (InAppWebViewController controller) {
+                      onWebViewCreated: (InAppWebViewController controller) {
                         webView = controller;
                       },
                       onLoadStart:
@@ -169,16 +168,16 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                           this.url = url!;
                         });
                       },
-                      onLoadStop: (InAppWebViewController controller,
-                          Uri? url) async {
+                      onLoadStop:
+                          (InAppWebViewController controller, Uri? url) async {
                         setState(
                           () {
                             this.url = url!;
                           },
                         );
                       },
-                      onProgressChanged: (InAppWebViewController controller,
-                          int progress) {
+                      onProgressChanged:
+                          (InAppWebViewController controller, int progress) {
                         setState(
                           () {
                             this.progress = progress / 100;

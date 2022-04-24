@@ -137,10 +137,9 @@ class FileUtils {
     switch (sort) {
       case 0:
         if (list.toString().contains("Directory")) {
-          list
-            .sort((f1, f2) => basename(f1.path)
-                .toLowerCase()
-                .compareTo(basename(f2.path).toLowerCase()));
+          list.sort((f1, f2) => basename(f1.path)
+              .toLowerCase()
+              .compareTo(basename(f2.path).toLowerCase()));
           return list
             ..sort((f1, f2) => f1
                 .toString()

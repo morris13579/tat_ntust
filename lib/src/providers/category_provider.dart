@@ -60,8 +60,7 @@ class CategoryProvider extends ChangeNotifier {
       String? mimeType = mime(file.path) ?? "";
       if (mimeType.split("/")[0] == type) {
         images.add(file);
-        imageTabs
-            .add(file.path.split("/")[file.path.split("/").length - 2]);
+        imageTabs.add(file.path.split("/")[file.path.split("/").length - 2]);
         imageTabs = imageTabs.toSet().toList();
       }
       notifyListeners();
@@ -84,8 +83,7 @@ class CategoryProvider extends ChangeNotifier {
       if (mimeType != null) {
         if (mimeType.split("/")[0] == type) {
           audio.add(file);
-          audioTabs
-              .add(file.path.split("/")[file.path.split("/").length - 2]);
+          audioTabs.add(file.path.split("/")[file.path.split("/").length - 2]);
           audioTabs = audioTabs.toSet().toList();
         }
         notifyListeners();

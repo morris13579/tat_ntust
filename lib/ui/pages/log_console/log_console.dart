@@ -25,7 +25,8 @@ class LogConsole extends StatefulWidget {
   final bool dark;
 
   LogConsole({Key? key, this.dark = false})
-      : assert(_initialized, "Please call LogConsole.init() first."), super(key: key);
+      : assert(_initialized, "Please call LogConsole.init() first."),
+        super(key: key);
 
   static void init({int bufferSize = 50}) {
     if (_initialized) return;
