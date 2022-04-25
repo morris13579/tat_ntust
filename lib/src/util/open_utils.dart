@@ -55,7 +55,10 @@ class OpenUtils {
   static Future<bool> launchURL(String url) async {
     Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
       return true;
     } else {
       return false;
