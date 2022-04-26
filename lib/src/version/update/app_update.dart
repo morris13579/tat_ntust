@@ -18,8 +18,8 @@ class AppUpdate {
     try {
       RemoteConfigVersionInfo config =
           await RemoteConfigUtils.getVersionConfig();
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      Version currentVersion = Version.parse(packageInfo.version);
+      String appInfo = await AppUpdate.getAppVersion();
+      Version currentVersion = Version.parse(appInfo);
       Version latestVersion = Version.parse(config.version);
       bool needUpdate = latestVersion > currentVersion;
       if (needUpdate) {
@@ -39,14 +39,14 @@ class AppUpdate {
 
   static void _showUpdateDialog(RemoteConfigVersionInfo value) async {
     String title = sprintf("%s %s", [R.current.findNewVersion, value.version]);
-
-    Get.dialog<bool>(
+    bool isFocusUpdate = await value.isFocusUpdate;
+    await Get.dialog<bool>(
       AlertDialog(
         title: Text(title),
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
-              if (value.isFocusUpdate) ...[
+              if (isFocusUpdate) ...[
                 Text(R.current.isFocusUpdate),
                 const Padding(
                   padding: EdgeInsets.only(bottom: 10),
@@ -75,7 +75,7 @@ class AppUpdate {
       ),
       barrierDismissible: false, // user must tap button!
     );
-    if (value.isFocusUpdate) {
+    if (isFocusUpdate) {
       MyToast.show(R.current.appWillClose);
       await Future.delayed(const Duration(seconds: 1));
       SystemNavigator.pop();

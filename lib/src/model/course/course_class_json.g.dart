@@ -34,14 +34,14 @@ Map<String, dynamic> _$CourseMainJsonToJson(CourseMainJson instance) =>
     };
 
 const _$DayEnumMap = {
-  Day.monday: 'Monday',
-  Day.tuesday: 'Tuesday',
-  Day.wednesday: 'Wednesday',
-  Day.thursday: 'Thursday',
-  Day.friday: 'Friday',
-  Day.saturday: 'Saturday',
-  Day.sunday: 'Sunday',
-  Day.unKnown: 'UnKnown',
+  Day.monday: 'monday',
+  Day.tuesday: 'tuesday',
+  Day.wednesday: 'wednesday',
+  Day.thursday: 'thursday',
+  Day.friday: 'friday',
+  Day.saturday: 'saturday',
+  Day.sunday: 'sunday',
+  Day.unKnown: 'unKnown',
 };
 
 CourseExtraJson _$CourseExtraJsonFromJson(Map<String, dynamic> json) =>

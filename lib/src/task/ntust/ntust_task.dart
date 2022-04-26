@@ -46,6 +46,7 @@ class NTUSTTask<T> extends CacheTask<T> {
         ),
       );
     }
+
     if (value == null) {
       status = NTUSTLoginStatus.fail;
     } else {
@@ -70,6 +71,7 @@ class NTUSTTask<T> extends CacheTask<T> {
         parameter.desc = message ?? R.current.unknownError;
         if (message != null) {
           parameter.btnOkText = R.current.setting;
+          parameter.okResult = false;
           parameter.btnOkOnPress = () {
             RouteUtils.toLoginScreen()
                 .then((value) => Get.back<bool>(result: true));

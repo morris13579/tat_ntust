@@ -6,7 +6,7 @@ import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course/course_search_json.dart';
 import 'package:flutter_app/src/model/course/course_semester.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/store/Model.dart';
+import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';

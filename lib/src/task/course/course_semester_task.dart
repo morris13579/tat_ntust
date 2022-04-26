@@ -5,7 +5,7 @@ import 'package:flutter_app/src/connector/course_connector.dart';
 import 'package:flutter_app/src/connector/score_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
-import 'package:flutter_app/src/store/Model.dart';
+import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/score/score_system_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 import 'package:get/get.dart';

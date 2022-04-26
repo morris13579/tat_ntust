@@ -17,7 +17,7 @@ class APPVersion {
 
   static Future<bool> check() async {
     RemoteConfigVersionInfo config = await RemoteConfigUtils.getVersionConfig();
-    if (!config.isFocusUpdate) {
+    if (!(await config.isFocusUpdate)) {
       if (!Model.instance.autoCheckAppUpdate ||
           !await Model.instance.getFirstUse(Model.appCheckUpdate) ||
           Model.instance.getAccount().isEmpty) return false; //跳過檢查

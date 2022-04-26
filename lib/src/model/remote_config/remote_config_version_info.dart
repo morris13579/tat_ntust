@@ -1,16 +1,21 @@
 import 'dart:io';
 
+import 'package:flutter_app/src/version/update/app_update.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:version/version.dart';
 
 part 'remote_config_version_info.g.dart';
 
 @JsonSerializable()
 class RemoteConfigVersionInfo {
   @JsonKey(name: "is_focus_update")
-  bool isFocusUpdate;
+  bool focusUpdate;
 
   @JsonKey(name: "last_version")
   AndroidIosVersionInfo last;
+
+  @JsonKey(name: "focus_update_version")
+  AndroidIosVersionInfo focusUpdateVersion;
 
   @JsonKey(name: "last_version_detail")
   String lastVersionDetail;
@@ -26,11 +31,25 @@ class RemoteConfigVersionInfo {
     return (Platform.isIOS) ? last.ios : last.android;
   }
 
+  String get focusVersion {
+    return (Platform.isIOS)
+        ? focusUpdateVersion.ios
+        : focusUpdateVersion.android;
+  }
+
+  Future<bool> get isFocusUpdate async {
+    String appInfo = await AppUpdate.getAppVersion();
+    return focusUpdate
+        ? Version.parse(focusVersion) >= Version.parse(appInfo)
+        : false;
+  }
+
   RemoteConfigVersionInfo({
     required this.last,
     required this.lastVersionDetail,
-    required this.isFocusUpdate,
+    required this.focusUpdate,
     required this.link,
+    required this.focusUpdateVersion,
   });
 
   factory RemoteConfigVersionInfo.fromJson(Map<String, dynamic> srcJson) =>
