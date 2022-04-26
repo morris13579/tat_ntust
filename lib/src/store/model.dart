@@ -332,6 +332,12 @@ class Model {
     DioConnector.instance.deleteCookies();
     await cacheManager.emptyCache(); //clears all data in cache.
     await getInstance();
+    var pref = await SharedPreferences.getInstance();
+    for (var i in pref.getKeys()) {
+      if (i.contains("cache")) {
+        pref.remove(i);
+      }
+    }
   }
 
   Future<void> _save(String key, dynamic saveObj) async {
