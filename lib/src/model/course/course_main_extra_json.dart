@@ -152,7 +152,7 @@ class CourseMainInfoJson {
   String getOpenClassName() {
     String name = "";
     for (ClassJson value in openClass) {
-      name += value.name + ' ';
+      name += '${value.name} ';
     }
     return name;
   }
@@ -160,7 +160,7 @@ class CourseMainInfoJson {
   String getTeacherName() {
     String name = "";
     for (TeacherJson value in teacher) {
-      name += value.name + ' ';
+      name += '${value.name} ';
     }
     return name;
   }
@@ -168,7 +168,7 @@ class CourseMainInfoJson {
   String getClassroomName() {
     String name = "";
     for (ClassroomJson value in classroom) {
-      name += value.name + ' ';
+      name += '${value.name} ';
     }
     return name;
   }

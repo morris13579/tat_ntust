@@ -38,8 +38,8 @@ class DocumentUtils {
         return null;
       } else {
         try {
-          await Directory(directory + "/TATFileAccessTest").create();
-          await Directory(directory + "/TATFileAccessTest").delete();
+          await Directory("$directory/TATFileAccessTest").create();
+          await Directory("$directory/TATFileAccessTest").delete();
           await FileStore.setFilePath(directory);
           return directory;
         } catch (e) {

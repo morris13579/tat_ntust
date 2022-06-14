@@ -21,8 +21,7 @@ class CourseAnnouncementDetailPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CourseAnnouncementDetailPageState createState() =>
-      _CourseAnnouncementDetailPageState();
+  State<StatefulWidget> createState() => _CourseAnnouncementDetailPageState();
 }
 
 class _CourseAnnouncementDetailPageState

@@ -22,7 +22,7 @@ class CourseDataPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CourseDataPageState createState() => _CourseDataPageState();
+  State<StatefulWidget> createState() => _CourseDataPageState();
 }
 
 class _CourseDataPageState extends State<CourseDataPage>

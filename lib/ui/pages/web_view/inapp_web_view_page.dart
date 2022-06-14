@@ -21,7 +21,7 @@ class InAppWebViewPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _InAppWebViewPageState createState() => _InAppWebViewPageState();
+  State<StatefulWidget> createState() => _InAppWebViewPageState();
 }
 
 class _InAppWebViewPageState extends State<InAppWebViewPage> {

@@ -17,7 +17,7 @@ class CourseDirectoryPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CourseDirectoryPageState createState() => _CourseDirectoryPageState();
+  State<StatefulWidget> createState() => _CourseDirectoryPageState();
 }
 
 class _CourseDirectoryPageState extends State<CourseDirectoryPage>

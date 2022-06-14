@@ -34,7 +34,7 @@ class CourseTablePage extends StatefulWidget {
   const CourseTablePage({Key? key}) : super(key: key);
 
   @override
-  _CourseTablePageState createState() => _CourseTablePageState();
+  State<StatefulWidget> createState() => _CourseTablePageState();
 }
 
 class _CourseTablePageState extends State<CourseTablePage> {
@@ -164,7 +164,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
   Widget _buildSemesterItem(SemesterJson semester) {
     String semesterString = semester.year;
     if (semester.semester.isNotEmpty) {
-      semesterString += ("-" + semester.semester);
+      semesterString += ("-${semester.semester}");
     }
     return TextButton(
       child: Text(semesterString),
@@ -228,7 +228,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     SemesterJson semesterSetting =
         courseTableData?.courseSemester ?? SemesterJson();
     String semesterString =
-        semesterSetting.year + "-" + semesterSetting.semester;
+        "${semesterSetting.year}-${semesterSetting.semester}";
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(

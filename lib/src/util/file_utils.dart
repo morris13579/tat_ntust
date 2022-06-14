@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:intl/intl.dart';
 import 'package:mime_type/mime_type.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 class FileUtils {
@@ -70,7 +70,7 @@ class FileUtils {
     for (Directory dir in storage) {
       List fs = await getAllFilesInPath(dir.path, showHidden: showHidden);
       for (FileSystemEntity fs in fs) {
-        if (basename(fs.path).toLowerCase().contains(query.toLowerCase())) {
+        if (p.basename(fs.path).toLowerCase().contains(query.toLowerCase())) {
           files.add(fs);
         }
       }
@@ -87,7 +87,7 @@ class FileUtils {
     for (FileSystemEntity file in l) {
       if (FileSystemEntity.isFileSync(file.path)) {
         if (!showHidden!) {
-          if (!basename(file.path).startsWith(".")) {
+          if (!p.basename(file.path).startsWith(".")) {
             files.add(file);
           }
         } else {
@@ -97,7 +97,7 @@ class FileUtils {
         if (!file.path.contains("/storage/emulated/0/Android")) {
 //          print(file.path);
           if (!showHidden!) {
-            if (!basename(file.path).startsWith(".")) {
+            if (!p.basename(file.path).startsWith(".")) {
               files.addAll(
                   await getAllFilesInPath(file.path, showHidden: showHidden));
             }
@@ -137,9 +137,10 @@ class FileUtils {
     switch (sort) {
       case 0:
         if (list.toString().contains("Directory")) {
-          list.sort((f1, f2) => basename(f1.path)
+          list.sort((f1, f2) => p
+              .basename(f1.path)
               .toLowerCase()
-              .compareTo(basename(f2.path).toLowerCase()));
+              .compareTo(p.basename(f2.path).toLowerCase()));
           return list
             ..sort((f1, f2) => f1
                 .toString()
@@ -148,15 +149,17 @@ class FileUtils {
                 .compareTo(f2.toString().split(":")[0].toLowerCase()));
         } else {
           return list
-            ..sort((f1, f2) => basename(f1.path)
+            ..sort((f1, f2) => p
+                .basename(f1.path)
                 .toLowerCase()
-                .compareTo(basename(f2.path).toLowerCase()));
+                .compareTo(p.basename(f2.path).toLowerCase()));
         }
 
       case 1:
-        list.sort((f1, f2) => basename(f1.path)
+        list.sort((f1, f2) => p
+            .basename(f1.path)
             .toLowerCase()
-            .compareTo(basename(f2.path).toLowerCase()));
+            .compareTo(p.basename(f2.path).toLowerCase()));
         if (list.toString().contains("Directory")) {
           list.sort((f1, f2) => f1
               .toString()

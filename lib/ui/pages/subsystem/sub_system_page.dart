@@ -15,7 +15,7 @@ class SubSystemPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SubSystemPageState createState() => _SubSystemPageState();
+  State<StatefulWidget> createState() => _SubSystemPageState();
 }
 
 class _SubSystemPageState extends State<SubSystemPage> {

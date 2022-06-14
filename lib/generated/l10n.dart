@@ -190,16 +190,6 @@ class S {
     );
   }
 
-  /// `註解`
-  String get ___________________loginUi___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________loginUi___________________',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Login`
   String get login {
     return Intl.message(
@@ -335,16 +325,6 @@ class S {
     return Intl.message(
       'isFocusUpdate',
       name: 'isFocusUpdate',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `註解`
-  String get ___________________task___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________task___________________',
       desc: '',
       args: [],
     );
@@ -700,16 +680,6 @@ class S {
     );
   }
 
-  /// `註解`
-  String get ___________________CourseTableUi___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________CourseTableUi___________________',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `MON`
   String get Monday {
     return Intl.message(
@@ -1030,16 +1000,6 @@ class S {
     );
   }
 
-  /// `註解`
-  String get ___________________CourseInfoUi___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________CourseInfoUi___________________',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Course`
   String get course {
     return Intl.message(
@@ -1250,16 +1210,6 @@ class S {
     );
   }
 
-  /// `註解`
-  String get ___________________FileViewerPage___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________FileViewerPage___________________',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Sort by`
   String get sortBy {
     return Intl.message(
@@ -1350,16 +1300,6 @@ class S {
     );
   }
 
-  /// `註解`
-  String get ___________________NotificationPage___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________NotificationPage___________________',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Notification`
   String get titleNotification {
     return Intl.message(
@@ -1420,16 +1360,6 @@ class S {
     );
   }
 
-  /// `註解`
-  String get ___________________PasswordUi___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________PasswordUi___________________',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Check identity`
   String get checkIdentity {
     return Intl.message(
@@ -1455,16 +1385,6 @@ class S {
     return Intl.message(
       'Different from the original password',
       name: 'passwordNotSame',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `註解`
-  String get ___________________SettingUi___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________SettingUi___________________',
       desc: '',
       args: [],
     );
@@ -1555,16 +1475,6 @@ class S {
     return Intl.message(
       'Use Moodle WebAPI',
       name: 'moodleSetting',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `註解`
-  String get ___________________OtherUi___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________OtherUi___________________',
       desc: '',
       args: [],
     );
@@ -1700,31 +1610,11 @@ class S {
     );
   }
 
-  /// `註解`
-  String get ___________________FileStore___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________FileStore___________________',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Permission denied`
   String get noPermission {
     return Intl.message(
       'Permission denied',
       name: 'noPermission',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `註解`
-  String get ___________________AboutPage___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________AboutPage___________________',
       desc: '',
       args: [],
     );
@@ -1820,16 +1710,6 @@ class S {
     );
   }
 
-  /// `註解`
-  String get ___________________ContributorsPage___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________ContributorsPage___________________',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Project link`
   String get projectLink {
     return Intl.message(
@@ -1860,16 +1740,6 @@ class S {
     );
   }
 
-  /// `註解`
-  String get ___________________ScoreUI___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________ScoreUI___________________',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Score`
   String get titleScore {
     return Intl.message(
@@ -1885,16 +1755,6 @@ class S {
     return Intl.message(
       'Search score',
       name: 'searchScore',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `註解`
-  String get ___________________CourseDataUi___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________CourseDataUi___________________',
       desc: '',
       args: [],
     );
@@ -1985,16 +1845,6 @@ class S {
     return Intl.message(
       'contribute',
       name: 'contribute',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `註解`
-  String get ___________________ScoreUi___________________ {
-    return Intl.message(
-      '註解',
-      name: '___________________ScoreUi___________________',
       desc: '',
       args: [],
     );

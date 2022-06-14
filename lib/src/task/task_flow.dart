@@ -87,12 +87,12 @@ class TaskFlow {
     }
     String log = "success";
     for (Task task in _completeTask) {
-      log += '\n--' + task.name;
+      log += '\n--${task.name}';
     }
     if (!success) {
       log += "\nfail";
       for (Task task in _failTask) {
-        log += '\n--' + task.name;
+        log += '\n--${task.name}';
       }
     }
     _completeTask = [];

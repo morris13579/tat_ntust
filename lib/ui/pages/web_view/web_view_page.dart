@@ -24,7 +24,7 @@ class WebViewPage extends StatefulWidget {
   }
 
   @override
-  _WebViewPageState createState() => _WebViewPageState();
+  State<StatefulWidget> createState() => _WebViewPageState();
 }
 
 class _WebViewPageState extends State<WebViewPage> {

@@ -22,7 +22,7 @@ class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key}) : super(key: key);
 
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  State<StatefulWidget> createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
@@ -74,10 +74,10 @@ class _CalendarPageState extends State<CalendarPage> {
           }
         }
       }
-      var _today = DateTime.now().toUtc();
-      _today = _today.add(const Duration(hours: 8)); //to TW time
+      var today = DateTime.now().toUtc();
+      today = today.add(const Duration(hours: 8)); //to TW time
       setState(() {
-        _selectedDay = _today;
+        _selectedDay = today;
       });
       _selectEvent();
     }

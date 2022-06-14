@@ -10,7 +10,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<StatefulWidget> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -188,6 +188,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     Align(
                       alignment: Alignment.center,
                       child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: AppColors.mainColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 16),
+                        ),
+                        onPressed: () => _loginPress(context),
                         child: Padding(
                           padding: EdgeInsets.only(
                             left: MediaQuery.of(context).size.width * 0.1,
@@ -200,15 +209,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: AppColors.mainColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32.0),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 16),
-                        ),
-                        onPressed: () => _loginPress(context),
                       ),
                     ),
                   ],
@@ -242,7 +242,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ClipPath(
           clipper: WaveClipper2(),
           child: Container(
-            child: Column(),
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.4,
             decoration: const BoxDecoration(
@@ -253,18 +252,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
+            child: Column(),
           ),
         ),
         ClipPath(
           clipper: WaveClipper3(),
           child: Container(
-            child: Column(),
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.4,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [Color(0x222196f3), Color(0x2203a9f4)]),
             ),
+            child: Column(),
           ),
         ),
         Container(

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 
 import 'dir_popup.dart';
 
@@ -33,7 +33,7 @@ class DirectoryItem extends StatelessWidget {
         ),
       ),
       title: Text(
-        basename(file.path),
+        p.basename(file.path),
         style: const TextStyle(
           fontSize: 14,
         ),

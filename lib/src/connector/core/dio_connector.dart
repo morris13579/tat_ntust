@@ -51,7 +51,7 @@ class DioConnector {
       Directory appDocDir = await getApplicationSupportDirectory();
       String appDocPath = appDocDir.path;
       _cookieJar =
-          PersistCookieJar(storage: FileStorage(appDocPath + "/.cookies/"));
+          PersistCookieJar(storage: FileStorage("$appDocPath/.cookies/"));
       alice.setNavigatorKey(get_utils.Get.key);
       dio.interceptors.add(CookieManager(_cookieJar));
       dio.interceptors.add(RequestInterceptors());

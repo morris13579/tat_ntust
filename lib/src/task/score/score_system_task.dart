@@ -10,7 +10,7 @@ class ScoreSystemTask<T> extends NTUSTTask<T> {
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (isLogin) return TaskStatus.success;
-    name = "ScoreSystemTask " + name;
+    name = "ScoreSystemTask $name";
     if (status == TaskStatus.success) {
       isLogin = true;
     }

@@ -12,7 +12,7 @@ class StoreEditPage extends StatefulWidget {
   const StoreEditPage({Key? key}) : super(key: key);
 
   @override
-  _StoreEditPageState createState() => _StoreEditPageState();
+  State<StatefulWidget> createState() => _StoreEditPageState();
 }
 
 class _StoreEditPageState extends State<StoreEditPage> {

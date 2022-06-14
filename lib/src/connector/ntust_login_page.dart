@@ -22,7 +22,7 @@ class LoginNTUSTPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _LoginNTUSTPageState createState() => _LoginNTUSTPageState();
+  State<StatefulWidget> createState() => _LoginNTUSTPageState();
 }
 
 class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
@@ -44,7 +44,7 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(R.current.login + "..."),
+        title: Text("${R.current.login}..."),
       ),
       body: SafeArea(
         child: Stack(

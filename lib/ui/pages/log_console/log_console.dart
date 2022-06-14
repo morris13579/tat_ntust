@@ -64,7 +64,7 @@ class LogConsole extends StatefulWidget {
   }
 
   @override
-  _LogConsoleState createState() => _LogConsoleState();
+  State<StatefulWidget> createState() => _LogConsoleState();
 }
 
 class RenderedEvent {
@@ -198,11 +198,11 @@ class _LogConsoleState extends State<LogConsole> {
             child: FloatingActionButton(
               mini: true,
               clipBehavior: Clip.antiAlias,
+              onPressed: _scrollToBottom,
               child: Icon(
                 Icons.arrow_downward,
                 color: widget.dark ? Colors.white : Colors.lightBlue[900],
               ),
-              onPressed: _scrollToBottom,
             ),
           ),
         ),
@@ -257,32 +257,32 @@ class _LogConsoleState extends State<LogConsole> {
             value: _filterLevel,
             items: const [
               DropdownMenuItem(
-                child: Text("Verbose"),
                 value: Level.verbose,
+                child: Text("Verbose"),
               ),
               DropdownMenuItem(
-                child: Text("Debug"),
                 value: Level.debug,
+                child: Text("Debug"),
               ),
               DropdownMenuItem(
-                child: Text("Info"),
                 value: Level.info,
+                child: Text("Info"),
               ),
               DropdownMenuItem(
-                child: Text("Warning"),
                 value: Level.warning,
+                child: Text("Warning"),
               ),
               DropdownMenuItem(
-                child: Text("Error"),
                 value: Level.error,
+                child: Text("Error"),
               ),
               DropdownMenuItem(
-                child: Text("WTF"),
                 value: Level.wtf,
+                child: Text("WTF"),
               ),
               DropdownMenuItem(
-                child: Text("Nothing"),
                 value: Level.nothing,
+                child: Text("Nothing"),
               )
             ],
             onChanged: (value) {

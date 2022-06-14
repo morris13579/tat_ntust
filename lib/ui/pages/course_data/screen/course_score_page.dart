@@ -15,7 +15,7 @@ class CourseScorePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CourseScorePageState createState() => _CourseScorePageState();
+  State<StatefulWidget> createState() => _CourseScorePageState();
 }
 
 class _CourseScorePageState extends State<CourseScorePage>

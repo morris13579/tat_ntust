@@ -22,7 +22,7 @@ class NTUSTTask<T> extends CacheTask<T> {
   @override
   Future<TaskStatus> execute() async {
     if (_isLogin) return TaskStatus.success;
-    name = "NTUSTTask " + name;
+    name = "NTUSTTask $name";
     String account = Model.instance.getAccount();
     String password = Model.instance.getPassword();
     if (account.isEmpty || password.isEmpty) {

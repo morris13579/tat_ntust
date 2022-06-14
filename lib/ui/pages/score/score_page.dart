@@ -13,7 +13,7 @@ class ScoreViewerPage extends StatefulWidget {
   const ScoreViewerPage({Key? key}) : super(key: key);
 
   @override
-  _ScoreViewerPageState createState() => _ScoreViewerPageState();
+  State<StatefulWidget> createState() => _ScoreViewerPageState();
 }
 
 class _ScoreViewerPageState extends State<ScoreViewerPage>

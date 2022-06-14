@@ -7,7 +7,7 @@ import 'package:flutter_app/src/providers/category_provider.dart';
 import 'package:flutter_app/src/util/file_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart' as path_lib;
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
 import 'widgets/custom_alert.dart';
@@ -27,7 +27,7 @@ class FileViewerPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _FileViewerPageState createState() => _FileViewerPageState();
+  State<StatefulWidget> createState() => _FileViewerPageState();
 }
 
 class _FileViewerPageState extends State<FileViewerPage>
@@ -55,7 +55,7 @@ class _FileViewerPageState extends State<FileViewerPage>
     });
     for (FileSystemEntity file in l) {
       if (!showHidden) {
-        if (!path_lib.basename(file.path).startsWith(".")) {
+        if (!p.basename(file.path).startsWith(".")) {
           setState(() {
             files.add(file);
           });
@@ -83,13 +83,13 @@ class _FileViewerPageState extends State<FileViewerPage>
     path = widget.path;
     getFiles();
     paths.add(widget.path);
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -311,8 +311,8 @@ class _FileViewerPageState extends State<FileViewerPage>
               ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => addDialog(context, path),
-          child: const Icon(Icons.add),
           tooltip: "Add Folder",
+          child: const Icon(Icons.add),
         ),
       ),
     );
@@ -381,8 +381,8 @@ class _FileViewerPageState extends State<FileViewerPage>
                       ),
                       onPressed: () async {
                         if (name.text.isNotEmpty) {
-                          if (!Directory(path + "/${name.text}").existsSync()) {
-                            await Directory(path + "/${name.text}")
+                          if (!Directory("$path/${name.text}").existsSync()) {
+                            await Directory("$path/${name.text}")
                                 .create()
                                 .catchError((e) {
                               Log.e(e.toString());
@@ -393,7 +393,7 @@ class _FileViewerPageState extends State<FileViewerPage>
                           } else {
                             MyToast.show(R.current.folderNameAlreadyExists);
                           }
-                          Navigator.pop(context);
+                          Get.back();
                           getFiles();
                         }
                       },
@@ -413,7 +413,7 @@ class _FileViewerPageState extends State<FileViewerPage>
   renameDialog(BuildContext context, String path, String type) {
     final TextEditingController name = TextEditingController();
     setState(() {
-      name.text = path_lib.basename(path);
+      name.text = p.basename(path);
     });
     Get.dialog(
       CustomAlert(
@@ -477,14 +477,13 @@ class _FileViewerPageState extends State<FileViewerPage>
                       onPressed: () async {
                         if (name.text.isNotEmpty) {
                           if (type == "file") {
-                            if (!File(path.replaceAll(
-                                        path_lib.basename(path), "") +
+                            if (!File(path.replaceAll(p.basename(path), "") +
                                     name.text)
                                 .existsSync()) {
                               await File(path)
-                                  .rename(path.replaceAll(
-                                          path_lib.basename(path), "") +
-                                      name.text)
+                                  .rename(
+                                      path.replaceAll(p.basename(path), "") +
+                                          name.text)
                                   .catchError((e) {
                                 Log.e(e.toString());
                                 if (e
@@ -497,16 +496,16 @@ class _FileViewerPageState extends State<FileViewerPage>
                               MyToast.show(R.current.fileNameAlreadyExists);
                             }
                           } else {
-                            if (Directory(path.replaceAll(
-                                        path_lib.basename(path), "") +
-                                    name.text)
+                            if (Directory(
+                                    path.replaceAll(p.basename(path), "") +
+                                        name.text)
                                 .existsSync()) {
                               MyToast.show(R.current.fileNameAlreadyExists);
                             } else {
                               await Directory(path)
-                                  .rename(path.replaceAll(
-                                          path_lib.basename(path), "") +
-                                      name.text)
+                                  .rename(
+                                      path.replaceAll(p.basename(path), "") +
+                                          name.text)
                                   .catchError((e) {
                                 Log.e(e.toString());
                                 if (e
@@ -517,7 +516,7 @@ class _FileViewerPageState extends State<FileViewerPage>
                               });
                             }
                           }
-                          Navigator.pop(context);
+                          Get.back();
                           getFiles();
                         }
                       },

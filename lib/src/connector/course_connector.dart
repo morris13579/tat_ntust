@@ -182,7 +182,7 @@ class CourseConnector {
             var ts = tableNodes[k].getElementsByTagName("td");
             ts = ts.getRange(2, ts.length).toList();
             if (ts[j].text.contains(courseMain.name)) {
-              courseMain.time[day] = courseMain.time[day]! + timeString + " ";
+              courseMain.time[day] = "${courseMain.time[day]!}$timeString ";
               ClassroomJson classroom = ClassroomJson(
                   name: clearString(ts[j].innerHtml.split("<br>")[1]),
                   href: '');
@@ -290,7 +290,7 @@ class CourseConnector {
           }
           Day day = dayEnum[dayIndex];
           courseMain.time[day] =
-              courseMain.time[day]! + timeEnum[timeIndex] + " ";
+              "${courseMain.time[day]!}${timeEnum[timeIndex]} ";
         }
         TeacherJson teacher = TeacherJson(name: info.courseTeacher, href: "");
         ClassroomJson classroom =

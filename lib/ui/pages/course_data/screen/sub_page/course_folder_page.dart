@@ -18,7 +18,7 @@ class CourseFolderPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CourseFolderPageState createState() => _CourseFolderPageState();
+  State<StatefulWidget> createState() => _CourseFolderPageState();
 }
 
 class _CourseFolderPageState extends State<CourseFolderPage> {

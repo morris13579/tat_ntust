@@ -20,7 +20,7 @@ class Animator extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AnimatorState createState() => _AnimatorState();
+  State<StatefulWidget> createState() => _AnimatorState();
 }
 
 class _AnimatorState extends State<Animator>

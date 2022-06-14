@@ -117,8 +117,8 @@ class CourseTableJson {
     String courseInfoString = "";
     for (Day day in Day.values) {
       for (SectionNumber number in SectionNumber.values) {
-        courseInfoString += day.toString() + "  " + number.toString() + "\n";
-        courseInfoString += courseInfoMap[day]![number].toString() + "\n";
+        courseInfoString += "$day  $number\n";
+        courseInfoString += "${courseInfoMap[day]![number]}\n";
       }
     }
     return sprintf(

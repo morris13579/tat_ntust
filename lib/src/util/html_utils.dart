@@ -41,8 +41,7 @@ class HtmlUtils {
     for (RegExpMatch match in matchList) {
       String url = match.group(0)!;
       if (!url.contains("\"")) {
-        html = html.replaceAll(
-            url, r'<a href="' + url + '" target="_blank">' + url + '</a>');
+        html = html.replaceAll(url, '<a href="$url" target="_blank">$url</a>');
       }
     }
     return html;

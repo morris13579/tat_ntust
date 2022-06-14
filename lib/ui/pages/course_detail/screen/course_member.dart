@@ -18,7 +18,7 @@ class CourseMemberPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CourseMemberPageState createState() => _CourseMemberPageState();
+  State<StatefulWidget> createState() => _CourseMemberPageState();
 }
 
 class _CourseMemberPageState extends State<CourseMemberPage>

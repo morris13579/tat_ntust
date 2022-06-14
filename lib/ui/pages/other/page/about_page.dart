@@ -10,13 +10,13 @@ import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/password/check_password_dialog.dart';
 import 'package:get/get.dart';
 
-enum onListViewPress { appUpdate, contribution, privacyPolicy, version, dev }
+enum OnListViewPress { appUpdate, contribution, privacyPolicy, version, dev }
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
 
   @override
-  _AboutPageState createState() => _AboutPageState();
+  State<StatefulWidget> createState() => _AboutPageState();
 }
 
 class _AboutPageState extends State<AboutPage> {
@@ -37,25 +37,25 @@ class _AboutPageState extends State<AboutPage> {
         "icon": EvaIcons.refreshOutline,
         "title": R.current.checkVersion,
         "color": Colors.orange,
-        "onPress": onListViewPress.appUpdate
+        "onPress": OnListViewPress.appUpdate
       },
       {
         "icon": EvaIcons.awardOutline,
         "title": R.current.Contribution,
         "color": Colors.lightGreen,
-        "onPress": onListViewPress.contribution
+        "onPress": OnListViewPress.contribution
       },
       {
         "icon": EvaIcons.shieldOffOutline,
         "color": Colors.blueGrey,
         "title": R.current.PrivacyPolicy,
-        "onPress": onListViewPress.privacyPolicy
+        "onPress": OnListViewPress.privacyPolicy
       },
       {
         "icon": EvaIcons.infoOutline,
         "color": Colors.blue,
         "title": R.current.versionInfo,
-        "onPress": onListViewPress.version
+        "onPress": OnListViewPress.version
       }
     ]);
     _addDevListItem();
@@ -68,7 +68,7 @@ class _AboutPageState extends State<AboutPage> {
           "icon": EvaIcons.options,
           "color": Colors.amberAccent,
           "title": R.current.developerMode,
-          "onPress": onListViewPress.dev
+          "onPress": OnListViewPress.dev
         });
       });
     }
@@ -76,19 +76,19 @@ class _AboutPageState extends State<AboutPage> {
 
   int pressTime = 0;
 
-  void _onListViewPress(onListViewPress value) async {
+  void _onListViewPress(OnListViewPress value) async {
     switch (value) {
-      case onListViewPress.appUpdate:
+      case OnListViewPress.appUpdate:
         MyToast.show(R.current.checkingVersion);
         bool result = await APPVersion.check();
         if (!result) {
           MyToast.show(R.current.isNewVersion);
         }
         break;
-      case onListViewPress.contribution:
+      case OnListViewPress.contribution:
         RouteUtils.toContributorsPage();
         break;
-      case onListViewPress.version:
+      case OnListViewPress.version:
         String mainVersion = await AppUpdate.getAppVersion();
         if (pressTime == 0) {
           MyToast.show(mainVersion);
@@ -104,10 +104,10 @@ class _AboutPageState extends State<AboutPage> {
           }
         }
         break;
-      case onListViewPress.privacyPolicy:
+      case OnListViewPress.privacyPolicy:
         RouteUtils.toPrivacyPolicyPage();
         break;
-      case onListViewPress.dev:
+      case OnListViewPress.dev:
         RouteUtils.toDevPage();
         break;
       default:

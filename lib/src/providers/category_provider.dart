@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/src/util/file_utils.dart';
 import 'package:mime_type/mime_type.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryProvider extends ChangeNotifier {
@@ -32,9 +32,9 @@ class CategoryProvider extends ChangeNotifier {
     downloadTabs.add("All");
     List<Directory> storages = await FileUtils.getStorageList();
     for (var dir in storages) {
-      if (Directory(dir.path + "Download").existsSync()) {
+      if (Directory("${dir.path}Download").existsSync()) {
         List<FileSystemEntity> files =
-            Directory(dir.path + "Download").listSync();
+            Directory("${dir.path}Download").listSync();
         for (var file in files) {
           if (FileSystemEntity.isFileSync(file.path)) {
             downloads.add(file);
@@ -77,7 +77,7 @@ class CategoryProvider extends ChangeNotifier {
         await FileUtils.getAllFiles(showHidden: showHidden);
     for (var file in files) {
       String? mimeType = mime(file.path);
-      if (type == "text" && extension(file.path) == ".pdf") {
+      if (type == "text" && p.extension(file.path) == ".pdf") {
         audio.add(file);
       }
       if (mimeType != null) {

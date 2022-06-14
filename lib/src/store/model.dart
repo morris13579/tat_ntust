@@ -300,7 +300,7 @@ class Model {
   List<String> getSemesterListString() {
     List<String> stringList = [];
     for (SemesterJson value in _courseSemesterList) {
-      stringList.add(value.year + "-" + value.semester);
+      stringList.add("${value.year}-${value.semester}");
     }
     return stringList;
   }

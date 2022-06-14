@@ -11,7 +11,7 @@ class CheckPasswordDialog extends StatefulWidget {
   const CheckPasswordDialog({Key? key}) : super(key: key);
 
   @override
-  _CheckPasswordDialogState createState() => _CheckPasswordDialogState();
+  State<StatefulWidget> createState() => _CheckPasswordDialogState();
 }
 
 class _CheckPasswordDialogState extends State<CheckPasswordDialog> {

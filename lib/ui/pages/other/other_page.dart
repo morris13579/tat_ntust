@@ -15,7 +15,7 @@ import 'package:flutter_app/ui/pages/log_console/log_console.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 
-enum onListViewPress {
+enum OnListViewPress {
   setting,
   fileViewer,
   logout,
@@ -34,7 +34,7 @@ class OtherPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _OtherPageState createState() => _OtherPageState();
+  State<StatefulWidget> createState() => _OtherPageState();
 }
 
 class _OtherPageState extends State<OtherPage> {
@@ -43,46 +43,46 @@ class _OtherPageState extends State<OtherPage> {
       "icon": EvaIcons.settings2Outline,
       "color": Colors.orange,
       "title": R.current.setting,
-      "onPress": onListViewPress.setting
+      "onPress": OnListViewPress.setting
     },
     {
       "icon": EvaIcons.downloadOutline,
       "color": Colors.yellow[700],
       "title": R.current.fileViewer,
-      "onPress": onListViewPress.fileViewer
+      "onPress": OnListViewPress.fileViewer
     },
     if (Model.instance.getPassword().isNotEmpty)
       {
         "icon": EvaIcons.syncOutline,
         "color": Colors.lightGreen,
         "title": R.current.changePassword,
-        "onPress": onListViewPress.changePassword
+        "onPress": OnListViewPress.changePassword
       },
     if (Model.instance.getPassword().isNotEmpty)
       {
         "icon": EvaIcons.undoOutline,
         "color": Colors.teal[400],
         "title": R.current.logout,
-        "onPress": onListViewPress.logout
+        "onPress": OnListViewPress.logout
       },
     if (Model.instance.getPassword().isEmpty)
       {
         "icon": EvaIcons.logIn,
         "color": Colors.teal[400],
         "title": R.current.login,
-        "onPress": onListViewPress.login
+        "onPress": OnListViewPress.login
       },
     {
       "icon": EvaIcons.messageSquareOutline,
       "color": Colors.cyan,
       "title": R.current.feedback,
-      "onPress": onListViewPress.report
+      "onPress": OnListViewPress.report
     },
     {
       "icon": EvaIcons.infoOutline,
       "color": Colors.lightBlue,
       "title": R.current.about,
-      "onPress": onListViewPress.about
+      "onPress": OnListViewPress.about
     }
   ];
 
@@ -91,9 +91,9 @@ class _OtherPageState extends State<OtherPage> {
     super.initState();
   }
 
-  void _onListViewPress(onListViewPress value) async {
+  void _onListViewPress(OnListViewPress value) async {
     switch (value) {
-      case onListViewPress.logout:
+      case OnListViewPress.logout:
         ErrorDialogParameter parameter = ErrorDialogParameter(
             context: context,
             desc: R.current.logoutWarning,
@@ -109,23 +109,23 @@ class _OtherPageState extends State<OtherPage> {
             });
         ErrorDialog(parameter).show();
         break;
-      case onListViewPress.login:
+      case OnListViewPress.login:
         RouteUtils.toLoginScreen().then((value) {
           if (value) widget.pageController.jumpToPage(0);
         });
         break;
-      case onListViewPress.fileViewer:
+      case OnListViewPress.fileViewer:
         FileStore.findLocalPath(context).then((filePath) {
           RouteUtils.toFileViewerPage(R.current.fileViewer, filePath);
         });
         break;
-      case onListViewPress.about:
+      case OnListViewPress.about:
         RouteUtils.toAboutPage();
         break;
-      case onListViewPress.setting:
+      case OnListViewPress.setting:
         RouteUtils.toSettingPage(widget.pageController);
         break;
-      case onListViewPress.report:
+      case OnListViewPress.report:
         String link = AppLink.feedbackBaseUrl;
         try {
           String mainVersion = await AppUpdate.getAppVersion();
@@ -135,7 +135,7 @@ class _OtherPageState extends State<OtherPage> {
         }
         RouteUtils.toWebViewPage(R.current.feedback, link);
         break;
-      case onListViewPress.changePassword:
+      case OnListViewPress.changePassword:
         MyToast.show(R.current.noFunction);
         break;
       default:

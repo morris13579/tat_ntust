@@ -42,14 +42,14 @@ class FileDownload {
       {String name = "", String? referer, withOpen = true}) async {
     String path = await FileStore.getDownloadDir(context, dirName); //取得下載路徑
     referer = referer ?? url;
-    String savePath = path + "/" + name;
+    String savePath = "$path/$name";
     String realFileName = "";
     //顯示下載通知窗
     try {
       var downloadReq = await DioConnector.instance.dio.head(url);
       Map<String, List<String>> headers = downloadReq.headers.map;
       realFileName = getFileNameByHeader(headers) ?? name;
-      savePath = path + "/" + realFileName;
+      savePath = "$path/$realFileName";
     } catch (e) {
       Log.d(e);
     }
@@ -109,7 +109,7 @@ class FileDownload {
         await Notifications.instance.cancelNotification(value.id);
         value.body = R.current.downloadComplete;
         value.id = Notifications.instance.notificationId; //取得新的id
-        String filePath = path + '/' + realFileName;
+        String filePath = '$path/$realFileName';
         int id = value.id;
         value.payload = json.encode({
           "type": "download_complete",

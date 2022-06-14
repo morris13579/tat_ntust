@@ -128,8 +128,8 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     return PageView(
       controller: _pageController,
       onPageChanged: _onPageChanged,
-      children: _pageList,
-      physics: const NeverScrollableScrollPhysics(), // 禁止滑動
+      physics: const NeverScrollableScrollPhysics(),
+      children: _pageList, // 禁止滑動
     );
   }
 

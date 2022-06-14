@@ -76,7 +76,7 @@ class Connector {
         if (location.contains("http")) {
           parameter = ConnectorParameter(location);
         } else {
-          parameter = ConnectorParameter("https://" + uri.host + location);
+          parameter = ConnectorParameter("https://${uri.host}$location");
         }
         Log.d("redirects: ${parameter.url}");
       }

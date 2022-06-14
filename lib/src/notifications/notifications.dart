@@ -205,7 +205,7 @@ class ReceivedNotification {
     String newTitle = "";
     value ??= "";
     if (value.length >= _titleLong) {
-      newTitle = value.substring(0, _titleLong) + "...";
+      newTitle = "${value.substring(0, _titleLong)}...";
     }
     _showTitle = (value.length <= _titleLong) ? value : newTitle;
   }

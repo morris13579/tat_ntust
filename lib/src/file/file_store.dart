@@ -33,8 +33,8 @@ class FileStore {
 
   static Future<String> getDownloadDir(
       BuildContext context, String name) async {
-    var _localPath = (await findLocalPath(context)) + '/$name';
-    final savedDir = Directory(_localPath);
+    var localPath = '${await findLocalPath(context)}/$name';
+    final savedDir = Directory(localPath);
     bool hasExisted = await savedDir.exists();
     if (!hasExisted) {
       savedDir.create();

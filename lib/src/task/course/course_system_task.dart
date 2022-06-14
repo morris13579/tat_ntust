@@ -12,7 +12,7 @@ class CourseSystemTask<T> extends NTUSTTask<T> {
   Future<TaskStatus> execute() async {
     TaskStatus status = await super.execute();
     if (isLogin) return TaskStatus.success;
-    name = "CourseSystemTask " + name;
+    name = "CourseSystemTask $name";
     if (status == TaskStatus.success) {
       isLogin = true;
       super.onStart(R.current.loginCourse);

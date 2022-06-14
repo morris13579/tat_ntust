@@ -23,7 +23,7 @@ class SettingPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SettingPageState createState() => _SettingPageState();
+  State<StatefulWidget> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
