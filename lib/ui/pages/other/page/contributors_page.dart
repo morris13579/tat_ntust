@@ -26,7 +26,7 @@ class ContributorsPage extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   R.current.projectLink,
                   style: const TextStyle(
@@ -74,7 +74,7 @@ class ContributorsPage extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   R.current.Contributors,
                   style: const TextStyle(
