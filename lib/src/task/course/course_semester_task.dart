@@ -102,6 +102,7 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
           );
         },
       ),
+      barrierDismissible: false,
     );
     if (!allowSelectNull) {
       select ??= before;
