@@ -380,7 +380,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
                         var result = await ErrorDialog(parameter).show();
                         if (result) {
                           Model.instance.removeCourseTable(value[index]);
-                          value.removeAt(index);
+                          //value.removeAt(index);
                           await Model.instance.saveCourseTableList();
                           setState(() {});
                         }
