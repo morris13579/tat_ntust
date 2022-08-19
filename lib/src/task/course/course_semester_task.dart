@@ -52,8 +52,8 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
       {allowSelectNull = false}) async {
     DateTime dateTime = DateTime.now();
     int year = dateTime.year - 1911;
-    int semester = (dateTime.month <= 8 && dateTime.month >= 1) ? 2 : 1;
-    if (dateTime.month <= 8) {
+    int semester = (dateTime.month <= 7 && dateTime.month >= 1) ? 2 : 1;
+    if (dateTime.month <= 7) {
       year--;
     }
     SemesterJson before =
