@@ -281,6 +281,9 @@ class CourseConnector {
         }
         var dayString = ["M", "T", "W", "R", "F", "S", "U"];
         for (var t in info.node.split(",")) {
+          if(t.isEmpty){
+            continue;
+          }
           int dayIndex = dayString.indexOf(t.substring(0, 1));
           int timeIndex;
           try {
