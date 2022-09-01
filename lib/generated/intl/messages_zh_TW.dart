@@ -139,6 +139,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "isFocusUpdate": MessageLookupByLibrary.simpleMessage("此版本為強制更新"),
         "isNewVersion": MessageLookupByLibrary.simpleMessage("已經是最新版本了"),
         "languageSwitch": MessageLookupByLibrary.simpleMessage("使用英文介面"),
+        "loadDataFail": MessageLookupByLibrary.simpleMessage("載入資料錯誤，將清除資料"),
         "loadFavorite": MessageLookupByLibrary.simpleMessage("載入常用課表"),
         "loading": MessageLookupByLibrary.simpleMessage("載入中..."),
         "loadingCache":

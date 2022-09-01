@@ -1,6 +1,7 @@
 {
   "@@locale": "zh_TW",
   "app_name": "TAT",
+  "loadDataFail": "載入資料錯誤，將清除資料",
   "save": "儲存",
   "error": "錯誤",
   "success": "成功",

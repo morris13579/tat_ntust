@@ -60,6 +60,16 @@ class S {
     );
   }
 
+  /// `Load data fail,Will clear all data`
+  String get loadDataFail {
+    return Intl.message(
+      'Load data fail,Will clear all data',
+      name: 'loadDataFail',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Save`
   String get save {
     return Intl.message(
