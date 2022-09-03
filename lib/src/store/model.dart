@@ -316,21 +316,47 @@ class Model {
   }
 
   Future<void> getInstance() async {
+    bool catchError = false;
     try {
       await DioConnector.instance.init();
       await loadUserData();
+    } catch (e) {
+      catchError = true;
+      await clearUserData();
+    }
+    try {
       await loadCourseTableList();
+      //DioConnector.instance.deleteCookies();
+    } catch (e) {
+      catchError = true;
+      await clearCourseTableList();
+    }
+    try {
       await loadSetting();
+      //DioConnector.instance.deleteCookies();
+    } catch (e) {
+      catchError = true;
+      await clearSetting();
+    }
+    try {
       await loadSemesterJsonList();
+      //DioConnector.instance.deleteCookies();
+    } catch (e) {
+      catchError = true;
+      await clearSemesterJsonList();
+    }
+    try {
       await loadScore();
       //DioConnector.instance.deleteCookies();
     } catch (e) {
+      await clearScore();
+    }
+    if (catchError) {
       ErrorDialogParameter parameter =
           ErrorDialogParameter(desc: R.current.loadDataFail);
       parameter.btnCancelOnPress = null;
       parameter.btnOkText = R.current.sure;
       await ErrorDialog(parameter).show();
-      await logout();
     }
   }
 
