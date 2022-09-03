@@ -60,10 +60,10 @@ class S {
     );
   }
 
-  /// `Load data fail,Will clear all data`
+  /// `Loading data error, some wrong data will be cleared`
   String get loadDataFail {
     return Intl.message(
-      'Load data fail,Will clear all data',
+      'Loading data error, some wrong data will be cleared',
       name: 'loadDataFail',
       desc: '',
       args: [],

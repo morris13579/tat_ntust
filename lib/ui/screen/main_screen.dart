@@ -12,6 +12,7 @@ import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/src/version/app_version.dart';
+import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/calendar/calendar_page.dart';
 import 'package:flutter_app/ui/pages/course_table/course_table_page.dart';
@@ -56,7 +57,8 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
 
   void appInit() async {
     R.set(context);
-    await Model.instance.getInstance(); //一定要先getInstance()不然無法取得資料
+    bool catchError =
+        await Model.instance.getInstance(); //一定要先getInstance()不然無法取得資料
     try {
       await RemoteConfigUtils.init();
       await initLanguage();
@@ -81,6 +83,14 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       _pageList.add(const ScoreViewerPage());
       _pageList.add(OtherPage(_pageController));
     });
+    if (catchError) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      ErrorDialogParameter parameter =
+          ErrorDialogParameter(desc: R.current.loadDataFail);
+      parameter.btnCancelOnPress = null;
+      parameter.btnOkText = R.current.sure;
+      await ErrorDialog(parameter).show();
+    }
   }
 
   void initFlutterDownloader() async {

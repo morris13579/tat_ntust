@@ -165,7 +165,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "languageSwitch":
             MessageLookupByLibrary.simpleMessage("Use English interface"),
         "loadDataFail": MessageLookupByLibrary.simpleMessage(
-            "Load data fail,Will clear all data"),
+            "Loading data error, some wrong data will be cleared"),
         "loadFavorite": MessageLookupByLibrary.simpleMessage("Load favorite"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
         "loadingCache": MessageLookupByLibrary.simpleMessage("load cache"),

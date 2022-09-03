@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
   "app_name": "TAT",
-  "loadDataFail": "Load data fail,Will clear all data",
+  "loadDataFail": "Loading data error, some wrong data will be cleared",
   "agree": "Agree",
   "save": "Save",
   "error": "Error",

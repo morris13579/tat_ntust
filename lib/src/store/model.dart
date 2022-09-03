@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/model/setting/setting_json.dart';
 import 'package:flutter_app/src/model/userdata/user_data_json.dart';
-import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -327,7 +325,7 @@ class Model {
     await _writeString("version", version); //寫入目前版本
   }
 
-  Future<void> getInstance() async {
+  Future<bool> getInstance() async {
     bool catchError = false;
     try {
       await DioConnector.instance.init();
@@ -357,15 +355,10 @@ class Model {
     try {
       await loadScore();
     } catch (e) {
+      catchError = true;
       await clearScore();
     }
-    if (catchError) {
-      ErrorDialogParameter parameter =
-          ErrorDialogParameter(desc: R.current.loadDataFail);
-      parameter.btnCancelOnPress = null;
-      parameter.btnOkText = R.current.sure;
-      await ErrorDialog(parameter).show();
-    }
+    return catchError;
   }
 
   Future<void> logout() async {
