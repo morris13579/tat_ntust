@@ -2,6 +2,7 @@
   "@@locale": "en",
   "app_name": "TAT",
   "loadDataFail": "Load data fail,Will clear all data",
+  "agree": "Agree",
   "save": "Save",
   "error": "Error",
   "success": "success",

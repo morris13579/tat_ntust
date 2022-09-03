@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "account": MessageLookupByLibrary.simpleMessage("帳號"),
         "accountNull": MessageLookupByLibrary.simpleMessage("請輸入帳號"),
         "accountPasswordError": MessageLookupByLibrary.simpleMessage("帳號密碼錯誤"),
+        "agree": MessageLookupByLibrary.simpleMessage("同意"),
         "alertError": MessageLookupByLibrary.simpleMessage("發生錯誤"),
         "announcement": MessageLookupByLibrary.simpleMessage("公告"),
         "appWillClose": MessageLookupByLibrary.simpleMessage("即將關閉應用程式"),

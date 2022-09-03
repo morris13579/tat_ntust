@@ -10,6 +10,7 @@ import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
+import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/src/version/app_version.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/calendar/calendar_page.dart';
@@ -60,6 +61,10 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       await RemoteConfigUtils.init();
       await initLanguage();
       await APPVersion.initAndCheck();
+      if (!(await Model.instance.getAgreeContributor())) {
+        RouteUtils.toAgreePrivacyPolicyScreen();
+        return;
+      }
       AdManager.init();
       Log.init();
       initFlutterDownloader();

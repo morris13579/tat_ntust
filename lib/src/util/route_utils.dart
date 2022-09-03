@@ -12,26 +12,21 @@ import 'package:flutter_app/ui/pages/course_detail/course_detail_page.dart';
 import 'package:flutter_app/ui/pages/file_viewer/file_viewer_page.dart';
 import 'package:flutter_app/ui/pages/log_console/log_console.dart';
 import 'package:flutter_app/ui/pages/other/page/about_page.dart';
+import 'package:flutter_app/ui/pages/other/page/agree_privacy_policy_screen.dart';
 import 'package:flutter_app/ui/pages/other/page/contributors_page.dart';
 import 'package:flutter_app/ui/pages/other/page/dev_page.dart';
-import 'package:flutter_app/ui/pages/other/page/privacy_policy_page.dart';
 import 'package:flutter_app/ui/pages/other/page/setting_page.dart';
 import 'package:flutter_app/ui/pages/other/page/store_edit_page.dart';
 import 'package:flutter_app/ui/pages/subsystem/sub_system_page.dart';
 import 'package:flutter_app/ui/pages/web_view/inapp_web_view_page.dart';
+import 'package:flutter_app/ui/screen/agree_privacy_policy_screen.dart';
 import 'package:flutter_app/ui/screen/login_screen.dart';
+import 'package:flutter_app/ui/screen/main_screen.dart';
 import 'package:get/get.dart';
 
 class RouteUtils {
   static Transition transition =
       (Platform.isAndroid) ? Transition.downToUp : Transition.cupertino;
-
-  static Future toLoginScreen() async {
-    return await Get.to(
-      () => const LoginScreen(),
-      transition: transition,
-    );
-  }
 
   static Future toSubSystemPage(String title, String arg) async {
     return Get.to(
@@ -142,6 +137,28 @@ class RouteUtils {
   static Future toStoreEditPage() async {
     return await Get.to(
       () => const StoreEditPage(),
+      transition: transition,
+    );
+  }
+
+  static Future toAgreePrivacyPolicyScreen() async {
+    return await Get.offAll(
+      () => const AgreePrivacyPolicyScreen(),
+      transition: transition,
+    );
+  }
+
+  static Future toLoginScreen() async {
+    bool value = await Get.to(
+      () => const LoginScreen(),
+      transition: transition,
+    );
+    return value;
+  }
+
+  static Future toMainScreen() async {
+    return await Get.offAll(
+      () => const MainScreen(),
       transition: transition,
     );
   }

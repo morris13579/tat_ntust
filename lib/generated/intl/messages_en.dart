@@ -39,6 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter your account"),
         "accountPasswordError":
             MessageLookupByLibrary.simpleMessage("Account password error"),
+        "agree": MessageLookupByLibrary.simpleMessage("Agree"),
         "alertError": MessageLookupByLibrary.simpleMessage("An error occurred"),
         "announcement": MessageLookupByLibrary.simpleMessage("Announcements"),
         "appWillClose": MessageLookupByLibrary.simpleMessage("APP will close"),

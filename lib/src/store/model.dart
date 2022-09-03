@@ -24,17 +24,29 @@ class Model {
   //----------Object----------//
   static String scoreCreditJsonKey = "score_credit";
   static String settingJsonKey = "setting";
+
+  static String agreeContributorKey = "agree_privacy_policy";
   UserDataJson _userData = UserDataJson();
   List<CourseTableJson> _courseTableList = [];
   List<SemesterJson> _courseSemesterList = [];
   ScoreRankJson _score = ScoreRankJson();
   SettingJson _setting = SettingJson();
   final Map<String, bool> _firstRun = {};
-  static String appCheckUpdate = "AppCheckUpdate";
+  static String appCheckUpdate = "app_check_update";
   DefaultCacheManager cacheManager = DefaultCacheManager();
 
   bool get autoCheckAppUpdate {
     return _setting.other.autoCheckAppUpdate;
+  }
+
+  Future<bool> getAgreeContributor() async {
+    var pref = await SharedPreferences.getInstance();
+    return pref.getBool(agreeContributorKey) ?? false;
+  }
+
+  Future<void> setAgreeContributor(bool value) async {
+    var pref = await SharedPreferences.getInstance();
+    pref.setBool(agreeContributorKey, value);
   }
 
   //timeOut seconds
@@ -326,28 +338,24 @@ class Model {
     }
     try {
       await loadCourseTableList();
-      //DioConnector.instance.deleteCookies();
     } catch (e) {
       catchError = true;
       await clearCourseTableList();
     }
     try {
       await loadSetting();
-      //DioConnector.instance.deleteCookies();
     } catch (e) {
       catchError = true;
       await clearSetting();
     }
     try {
       await loadSemesterJsonList();
-      //DioConnector.instance.deleteCookies();
     } catch (e) {
       catchError = true;
       await clearSemesterJsonList();
     }
     try {
       await loadScore();
-      //DioConnector.instance.deleteCookies();
     } catch (e) {
       await clearScore();
     }
