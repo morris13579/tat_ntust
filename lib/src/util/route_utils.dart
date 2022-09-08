@@ -64,17 +64,26 @@ class RouteUtils {
 
   static Future toCourseFolderPage(
       CourseInfoJson courseInfo, dynamic value) async {
-    return await Get.to(() => CourseFolderPage(courseInfo, value));
+    return await Get.to(
+      () => CourseFolderPage(courseInfo, value),
+      transition: transition,
+    );
   }
 
   static Future toCourseInfoPage(
       CourseInfoJson courseInfo, dynamic value) async {
-    return await Get.to(() => CourseInfoPage(courseInfo, value));
+    return await Get.to(
+      () => CourseInfoPage(courseInfo, value),
+      transition: transition,
+    );
   }
 
   static Future toAnnouncementDetailPage(
       CourseInfoJson courseInfo, dynamic value) async {
-    return await Get.to(() => CourseAnnouncementDetailPage(courseInfo, value));
+    return await Get.to(
+      () => CourseAnnouncementDetailPage(courseInfo, value),
+      transition: transition,
+    );
   }
 
   static Future toCourseDetailPage(
