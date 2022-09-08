@@ -81,16 +81,16 @@ class ErrorDialog {
         autoDismiss: false,
         btnCancelOnPress: parameter.btnCancelOnPress,
         btnOkOnPress: parameter.btnOkOnPress,
-        onDissmissCallback: (DismissType type) {
+        onDismissCallback: (DismissType type) {
           dismissType = type;
         });
     await dialog.show();
     bool result;
     switch (dismissType) {
-      case DismissType.BTN_OK:
+      case DismissType.btnOk:
         result = parameter.okResult;
         break;
-      case DismissType.BTN_CANCEL:
+      case DismissType.btnCancel:
         result = parameter.cancelResult;
         break;
       default:
