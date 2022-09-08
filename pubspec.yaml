@@ -8,6 +8,7 @@ description: NTUST Life TAT, convenient, concise, fast, powerful, enrich your NT
 version: 1.3.13+66
 
 environment:
+  flutter: ">=3.3.0 <4.0.0"
   sdk: ">=2.16.2 <3.0.0"
 
 dependencies:
@@ -24,7 +25,7 @@ dependencies:
   logger: ^1.1.0
   #顯示Log
   sprintf: ^6.0.2
-  flutter_local_notifications: ^9.9.0
+  flutter_local_notifications: ^9.9.1
   #通知欄  需修改android原始碼
   rxdart: ^0.27.5
   #通知欄有使用到
@@ -87,16 +88,16 @@ dependencies:
   get: ^4.6.5
   bot_toast: ^4.0.3
   #提供ListView可下拉式更新並且可動態加載
-  cached_network_image: ^3.2.1
+  cached_network_image: ^3.2.2
   #用url顯示圖片
   auto_size_text: ^3.0.0
   #課表顯示有用到
-  table_calendar: ^3.0.6
+  table_calendar: ^3.0.7
   #顯示行事曆
   expansion_tile_card: ^2.0.0
   fluttertoast: ^8.0.9
   #Toast
-  awesome_dialog: ^2.2.1
+  awesome_dialog: ^3.0.0
   #顯示Error時用到
   flutter_slidable: ^2.0.0
   #email使用可左右滑抽屜
@@ -127,7 +128,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.10.0
   #flutter pub run flutter_launcher_icons:main -f pubspec.yaml
   #利用以下的flutter_icons設定icon位置
-  flutter_native_splash: ^2.2.7
+  flutter_native_splash: ^2.2.9
   #flutter pub run flutter_native_splash:create
   #---------json----------#
   build_runner: ^2.2.0
