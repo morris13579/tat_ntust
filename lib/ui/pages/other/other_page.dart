@@ -119,6 +119,11 @@ class _OtherPageState extends State<OtherPage> {
           RouteUtils.toFileViewerPage(R.current.fileViewer, filePath);
         });
         break;
+      case OnListViewPress.changePassword:
+        String changePasswordUrl =
+            "https://stuinfosys.ntust.edu.tw/NTUSTSSOServ/SSO/ChangePWD";
+        RouteUtils.toWebViewPage(R.current.changePassword, changePasswordUrl);
+        break;
       case OnListViewPress.about:
         RouteUtils.toAboutPage();
         break;
