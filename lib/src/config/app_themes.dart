@@ -20,14 +20,14 @@ class AppThemes {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        primary: Colors.black,
+        foregroundColor: Colors.black,
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        primary: Colors.black12,
-        onPrimary: Colors.black,
+        backgroundColor: Colors.black12,
+        foregroundColor: Colors.black,
       ),
     ),
   ).copyWith(
@@ -53,14 +53,14 @@ class AppThemes {
     buttonTheme: const ButtonThemeData(buttonColor: AppColors.darkAccent),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        primary: Colors.white,
+        foregroundColor: Colors.white,
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        primary: Colors.white12,
-        onPrimary: Colors.white,
+        backgroundColor: Colors.white12,
+        foregroundColor: Colors.white,
       ),
     ),
   ).copyWith(

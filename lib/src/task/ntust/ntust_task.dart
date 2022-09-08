@@ -67,7 +67,7 @@ class NTUSTTask<T> extends CacheTask<T> {
     );
     switch (value) {
       case NTUSTLoginStatus.fail:
-        parameter.dialogType = DialogType.ERROR;
+        parameter.dialogType = DialogType.error;
         parameter.desc = message ?? R.current.unknownError;
         if (message != null) {
           parameter.btnOkText = R.current.setting;

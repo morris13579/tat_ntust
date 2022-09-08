@@ -45,7 +45,7 @@ class MoodleSupportTask<T> extends MoodleTask<T> {
         super.onEnd();
         ErrorDialogParameter parameter = ErrorDialogParameter(
           title: R.current.warning,
-          dialogType: DialogType.INFO,
+          dialogType: DialogType.info,
           desc: R.current.unSupportThisClass,
           okResult: false,
           btnOkText: R.current.sure,

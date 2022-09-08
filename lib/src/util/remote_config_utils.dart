@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/announcement/announcement_json.dart';
 import 'package:flutter_app/src/model/remote_config/remote_config_version_info.dart';
 import 'package:flutter_app/ui/pages/announcement/announcement_page.dart';

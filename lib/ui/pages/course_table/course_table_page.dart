@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -19,7 +18,6 @@ import 'package:flutter_app/src/task/cache_task.dart';
 import 'package:flutter_app/src/task/course/course_search_task.dart';
 import 'package:flutter_app/src/task/course/course_semester_task.dart';
 import 'package:flutter_app/src/task/course/course_table_task.dart';
-import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
@@ -380,7 +378,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
                             desc: "",
                             btnOkText: R.current.sure,
                             title: R.current.delete,
-                            dialogType: DialogType.WARNING);
+                            dialogType: DialogType.warning);
                         var result = await ErrorDialog(parameter).show();
                         if (result) {
                           Model.instance.removeCourseTable(value[index]);
@@ -509,7 +507,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(0),
-                      primary: color,
+                      backgroundColor: color,
                     ),
                     child: AutoSizeText(
                       courseInfo.main.course.name,

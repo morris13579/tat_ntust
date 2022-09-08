@@ -97,7 +97,7 @@ class _OtherPageState extends State<OtherPage> {
         ErrorDialogParameter parameter = ErrorDialogParameter(
             context: context,
             desc: R.current.logoutWarning,
-            dialogType: DialogType.WARNING,
+            dialogType: DialogType.warning,
             title: R.current.warning,
             btnOkText: R.current.sure,
             btnOkOnPress: () {
