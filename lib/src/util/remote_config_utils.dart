@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_app/src/model/remote_config/remote_config_version_info.dart';
 
 class RemoteConfigUtils {
@@ -12,20 +13,21 @@ class RemoteConfigUtils {
 
   static Future<void> init() async {
     _remoteConfig = FirebaseRemoteConfig.instance;
-    _remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        fetchTimeout: const Duration(hours: 1),
-        minimumFetchInterval: const Duration(hours: 1),
-      ),
-    );
-    /*
-    _remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        fetchTimeout: Duration.zero,
-        minimumFetchInterval: Duration.zero,
-      ),
-    );
-     */
+    if (kDebugMode) {
+      _remoteConfig.setConfigSettings(
+        RemoteConfigSettings(
+          fetchTimeout: Duration.zero,
+          minimumFetchInterval: Duration.zero,
+        ),
+      );
+    } else {
+      _remoteConfig.setConfigSettings(
+        RemoteConfigSettings(
+          fetchTimeout: const Duration(hours: 1),
+          minimumFetchInterval: const Duration(hours: 1),
+        ),
+      );
+    }
   }
 
   static Future<RemoteConfigVersionInfo> getVersionConfig() async {
