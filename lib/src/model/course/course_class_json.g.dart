@@ -30,7 +30,7 @@ Map<String, dynamic> _$CourseMainJsonToJson(CourseMainJson instance) =>
       'credits': instance.credits,
       'hours': instance.hours,
       'category': instance.category,
-      'time': instance.time.map((k, e) => MapEntry(_$DayEnumMap[k], e)),
+      'time': instance.time.map((k, e) => MapEntry(_$DayEnumMap[k]!, e)),
     };
 
 const _$DayEnumMap = {

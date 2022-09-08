@@ -80,6 +80,16 @@ class S {
     );
   }
 
+  /// `Wait`
+  String get wait {
+    return Intl.message(
+      'Wait',
+      name: 'wait',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Save`
   String get save {
     return Intl.message(

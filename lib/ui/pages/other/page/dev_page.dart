@@ -10,7 +10,14 @@ import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:get/get.dart';
 
-enum OnListViewPress { cloudMessageToken, dioLog, appLog, storeEdit, adRemove }
+enum OnListViewPress {
+  cloudMessageToken,
+  dioLog,
+  appLog,
+  storeEdit,
+  adRemove,
+  announcement
+}
 
 class DevPage extends StatefulWidget {
   const DevPage({Key? key}) : super(key: key);
@@ -50,6 +57,12 @@ class _DevPageState extends State<DevPage> {
       "title": "AD Remover",
       "color": Colors.red,
       "onPress": OnListViewPress.adRemove
+    },
+    {
+      "icon": Icons.announcement,
+      "title": "Announcement",
+      "color": Colors.deepPurple,
+      "onPress": OnListViewPress.announcement
     },
   ];
 
@@ -106,6 +119,9 @@ class _DevPageState extends State<DevPage> {
           onCancel: (String value) {},
         ));
         removeADItem();
+        break;
+      case OnListViewPress.announcement:
+        RemoteConfigUtils.showAnnouncementDialog(test: true);
         break;
       default:
         MyToast.show(R.current.noFunction);

@@ -30,8 +30,8 @@ Map<String, dynamic> _$CourseTableJsonToJson(CourseTableJson instance) =>
       'studentId': instance.studentId,
       'studentName': instance.studentName,
       'courseInfoMap': instance.courseInfoMap.map((k, e) => MapEntry(
-          _$DayEnumMap[k],
-          e.map((k, e) => MapEntry(_$SectionNumberEnumMap[k], e)))),
+          _$DayEnumMap[k]!,
+          e.map((k, e) => MapEntry(_$SectionNumberEnumMap[k]!, e)))),
     };
 
 const _$SectionNumberEnumMap = {

@@ -91,6 +91,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       parameter.btnOkText = R.current.sure;
       await ErrorDialog(parameter).show();
     }
+    await RemoteConfigUtils.showAnnouncementDialog();
   }
 
   void initFlutterDownloader() async {

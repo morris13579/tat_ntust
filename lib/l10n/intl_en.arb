@@ -3,6 +3,7 @@
   "app_name": "TAT",
   "loadDataFail": "Loading data error, some wrong data will be cleared",
   "agree": "Agree",
+  "wait": "Wait",
   "save": "Save",
   "error": "Error",
   "success": "success",

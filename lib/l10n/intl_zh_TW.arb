@@ -3,6 +3,7 @@
   "app_name": "TAT",
   "loadDataFail": "載入資料錯誤，將清除部分錯誤資料",
   "agree": "同意",
+  "wait": "等待",
   "save": "儲存",
   "error": "錯誤",
   "success": "成功",

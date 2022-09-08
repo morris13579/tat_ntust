@@ -234,6 +234,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "unknownError": MessageLookupByLibrary.simpleMessage("發生未知錯誤"),
         "update": MessageLookupByLibrary.simpleMessage("更新"),
         "versionInfo": MessageLookupByLibrary.simpleMessage("版本資訊"),
+        "wait": MessageLookupByLibrary.simpleMessage("等待"),
         "warning": MessageLookupByLibrary.simpleMessage("警告"),
         "weight": MessageLookupByLibrary.simpleMessage("權量"),
         "willRestart": MessageLookupByLibrary.simpleMessage("將自動重啟並套用語言")

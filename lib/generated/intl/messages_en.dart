@@ -276,6 +276,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("An unknown error occurred"),
         "update": MessageLookupByLibrary.simpleMessage("Update"),
         "versionInfo": MessageLookupByLibrary.simpleMessage("Version info"),
+        "wait": MessageLookupByLibrary.simpleMessage("Wait"),
         "warning": MessageLookupByLibrary.simpleMessage("Warning"),
         "weight": MessageLookupByLibrary.simpleMessage("weight"),
         "willRestart":
