@@ -183,5 +183,10 @@
   "fullRange": "全距",
   "percentage": "百分比",
   "contribute": "貢獻到課程總分",
-  "resultsOfVariousSubjects": "各科成績"
+  "resultsOfVariousSubjects": "各科成績",
+  "importCourseWarning": "注意!導入後並不會真的加入選課，只是方便查看時間與地點",
+  "inputCourseName": "請輸入課號課程名稱",
+  "addCustomCourseError": "課程衝堂無法加入",
+  "searching": "搜尋中...",
+  "remove": "移除"
 }

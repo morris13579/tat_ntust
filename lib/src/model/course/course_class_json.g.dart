@@ -15,6 +15,7 @@ CourseMainJson _$CourseMainJsonFromJson(Map<String, dynamic> json) =>
       hours: json['hours'] as String? ?? "",
       note: json['note'] as String? ?? "",
       category: json['category'] as String? ?? "",
+      select: json['select'] as bool? ?? true,
       time: (json['time'] as Map<String, dynamic>?)?.map(
             (k, e) => MapEntry($enumDecode(_$DayEnumMap, k), e as String),
           ) ??
@@ -31,6 +32,7 @@ Map<String, dynamic> _$CourseMainJsonToJson(CourseMainJson instance) =>
       'hours': instance.hours,
       'category': instance.category,
       'time': instance.time.map((k, e) => MapEntry(_$DayEnumMap[k]!, e)),
+      'select': instance.select,
     };
 
 const _$DayEnumMap = {

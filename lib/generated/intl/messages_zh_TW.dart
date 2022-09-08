@@ -37,6 +37,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "account": MessageLookupByLibrary.simpleMessage("帳號"),
         "accountNull": MessageLookupByLibrary.simpleMessage("請輸入帳號"),
         "accountPasswordError": MessageLookupByLibrary.simpleMessage("帳號密碼錯誤"),
+        "addCustomCourseError":
+            MessageLookupByLibrary.simpleMessage("課程衝堂無法加入"),
         "agree": MessageLookupByLibrary.simpleMessage("同意"),
         "alertError": MessageLookupByLibrary.simpleMessage("發生錯誤"),
         "announcement": MessageLookupByLibrary.simpleMessage("公告"),
@@ -135,7 +137,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "getScoreError": MessageLookupByLibrary.simpleMessage("取得成績錯誤"),
         "github": MessageLookupByLibrary.simpleMessage("Github"),
         "importCourse": MessageLookupByLibrary.simpleMessage("導入其他課程"),
+        "importCourseWarning":
+            MessageLookupByLibrary.simpleMessage("注意!導入後並不會真的加入選課，只是方便查看時間與地點"),
         "informationSystem": MessageLookupByLibrary.simpleMessage("資訊系統"),
+        "inputCourseName": MessageLookupByLibrary.simpleMessage("請輸入課號課程名稱"),
         "instructor": MessageLookupByLibrary.simpleMessage("授課老師"),
         "isFocusUpdate": MessageLookupByLibrary.simpleMessage("此版本為強制更新"),
         "isNewVersion": MessageLookupByLibrary.simpleMessage("已經是最新版本了"),
@@ -194,6 +199,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "projectLink": MessageLookupByLibrary.simpleMessage("專案連結"),
         "rankItem": MessageLookupByLibrary.simpleMessage("評分項目"),
         "refresh": MessageLookupByLibrary.simpleMessage("重新整理"),
+        "remove": MessageLookupByLibrary.simpleMessage("移除"),
         "rename": MessageLookupByLibrary.simpleMessage("重新命名"),
         "renameItem": MessageLookupByLibrary.simpleMessage("重新命名"),
         "requireOption": MessageLookupByLibrary.simpleMessage("選必修"),
@@ -206,6 +212,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "search": MessageLookupByLibrary.simpleMessage("搜尋"),
         "searchCredit": MessageLookupByLibrary.simpleMessage("查詢學分"),
         "searchScore": MessageLookupByLibrary.simpleMessage("成績查詢"),
+        "searching": MessageLookupByLibrary.simpleMessage("搜尋中..."),
         "selectAble": MessageLookupByLibrary.simpleMessage("解鎖後文字可複製"),
         "selectDirectoryFail":
             MessageLookupByLibrary.simpleMessage("無法將此路徑設定為下載路徑"),

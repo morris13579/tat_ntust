@@ -16,6 +16,7 @@ class CourseMainJson {
   String hours; //時數
   String category; //類別 (必修...)
   Map<Day, String> time; //時間
+  bool select;
 
   CourseMainJson(
       {this.name = "",
@@ -25,6 +26,7 @@ class CourseMainJson {
       this.hours = "",
       this.note = "",
       this.category = "",
+      this.select = true,
       this.time = const {}});
 
   bool get isEmpty {

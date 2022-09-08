@@ -1889,6 +1889,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Note! After importing, it will not really join the course selection, just to facilitate viewing the time and place`
+  String get importCourseWarning {
+    return Intl.message(
+      'Note! After importing, it will not really join the course selection, just to facilitate viewing the time and place',
+      name: 'importCourseWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the course number course name`
+  String get inputCourseName {
+    return Intl.message(
+      'Please enter the course number course name',
+      name: 'inputCourseName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Can't join the class`
+  String get addCustomCourseError {
+    return Intl.message(
+      'Can\'t join the class',
+      name: 'addCustomCourseError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Searching...`
+  String get searching {
+    return Intl.message(
+      'Searching...',
+      name: 'searching',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove`
+  String get remove {
+    return Intl.message(
+      'Remove',
+      name: 'remove',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

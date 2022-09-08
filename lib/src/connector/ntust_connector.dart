@@ -136,12 +136,12 @@ class NTUSTConnector {
     }
   }
 
-  static Future<Map<String,String>?> getCalendarUrl() async {
+  static Future<Map<String, String>?> getCalendarUrl() async {
     String result;
     Document tagNode;
     Element node;
     List<Element> nodes;
-    Map<String,String> selects = {};
+    Map<String, String> selects = {};
     try {
       String host = "https://www.academic.ntust.edu.tw";
       String url = "$host/p/404-1048-78935.php?Lang=zh-tw";
@@ -150,9 +150,9 @@ class NTUSTConnector {
       tagNode = parse(result);
       nodes = tagNode.getElementsByClassName("meditor");
       node = nodes[1].getElementsByTagName("ul").last;
-      for(var i in node.getElementsByTagName("li")){
+      for (var i in node.getElementsByTagName("li")) {
         String url = i.getElementsByTagName("a").first.attributes["href"]!;
-        if(i.text.contains("google")){
+        if (i.text.contains("google")) {
           continue;
         }
         String key = i.text.split("(").first;

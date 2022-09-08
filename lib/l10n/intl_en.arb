@@ -183,5 +183,10 @@
   "fullRange": "fullRange",
   "percentage": "percentage",
   "contribute": "contribute",
-  "resultsOfVariousSubjects": "Score"
+  "resultsOfVariousSubjects": "Score",
+  "importCourseWarning": "Note! After importing, it will not really join the course selection, just to facilitate viewing the time and place",
+  "inputCourseName": "Please enter the course number course name",
+  "addCustomCourseError": "Can't join the class",
+  "searching": "Searching...",
+  "remove": "Remove"
 }

@@ -39,6 +39,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter your account"),
         "accountPasswordError":
             MessageLookupByLibrary.simpleMessage("Account password error"),
+        "addCustomCourseError":
+            MessageLookupByLibrary.simpleMessage("Can\'t join the class"),
         "agree": MessageLookupByLibrary.simpleMessage("Agree"),
         "alertError": MessageLookupByLibrary.simpleMessage("An error occurred"),
         "announcement": MessageLookupByLibrary.simpleMessage("Announcements"),
@@ -156,8 +158,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("get score error"),
         "github": MessageLookupByLibrary.simpleMessage("Github"),
         "importCourse": MessageLookupByLibrary.simpleMessage("Import course"),
+        "importCourseWarning": MessageLookupByLibrary.simpleMessage(
+            "Note! After importing, it will not really join the course selection, just to facilitate viewing the time and place"),
         "informationSystem":
             MessageLookupByLibrary.simpleMessage("Information System"),
+        "inputCourseName": MessageLookupByLibrary.simpleMessage(
+            "Please enter the course number course name"),
         "instructor": MessageLookupByLibrary.simpleMessage("Instructor"),
         "isFocusUpdate": MessageLookupByLibrary.simpleMessage("isFocusUpdate"),
         "isNewVersion":
@@ -230,6 +236,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "projectLink": MessageLookupByLibrary.simpleMessage("Project link"),
         "rankItem": MessageLookupByLibrary.simpleMessage("rank name"),
         "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
+        "remove": MessageLookupByLibrary.simpleMessage("Remove"),
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "renameItem": MessageLookupByLibrary.simpleMessage("Rename item"),
         "requireOption": MessageLookupByLibrary.simpleMessage("Require option"),
@@ -242,6 +249,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "searchCredit": MessageLookupByLibrary.simpleMessage("Search credit"),
         "searchScore": MessageLookupByLibrary.simpleMessage("Search score"),
+        "searching": MessageLookupByLibrary.simpleMessage("Searching..."),
         "selectAble": MessageLookupByLibrary.simpleMessage("text selectable"),
         "selectDirectoryFail": MessageLookupByLibrary.simpleMessage(
             "Cannot set this path as download path"),

@@ -15,8 +15,11 @@ import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/userdata/user_data_json.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/src/task/cache_task.dart';
+import 'package:flutter_app/src/task/course/course_search_task.dart';
 import 'package:flutter_app/src/task/course/course_semester_task.dart';
 import 'package:flutter_app/src/task/course/course_table_task.dart';
+import 'package:flutter_app/src/task/task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
@@ -214,6 +217,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
         _loadFavorite();
         break;
       case 2:
+        await _addCustomCourse();
         break;
       case 3:
         await screenshot();
@@ -568,15 +572,28 @@ class _CourseTablePageState extends State<CourseTablePage> {
           ],
         ),
         actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              _showCourseData(courseInfo, 0);
-            },
-            onLongPress: () {
-              _showCourseData(courseInfo, 1);
-            },
-            child: Text(R.current.courseData),
-          ),
+          (courseInfo.main.course.select)
+              ? TextButton(
+                  onPressed: () {
+                    _showCourseData(courseInfo, 0);
+                  },
+                  onLongPress: () {
+                    _showCourseData(courseInfo, 1);
+                  },
+                  child: Text(R.current.courseData),
+                )
+              : TextButton(
+                  onPressed: () {
+                    Get.back();
+                    courseTableData!
+                        .removeCourseByCourseId(courseInfo.main.course.id);
+                    Model.instance.getCourseSetting().info =
+                        courseTableData!; //儲存課表
+                    Model.instance.saveCourseSetting();
+                    _loadSetting();
+                  },
+                  child: Text(R.current.remove),
+                ),
           TextButton(
             onPressed: () {
               _showCourseDetail(courseInfo, 0);
@@ -585,7 +602,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
               _showCourseDetail(courseInfo, 1);
             },
             child: Text(R.current.details),
-          ),
+          )
         ],
       ),
       barrierDismissible: true,
@@ -707,5 +724,96 @@ class _CourseTablePageState extends State<CourseTablePage> {
     } else {
       MyToast.show(R.current.settingCompleteWithError);
     }
+  }
+
+  _addCustomCourse() {
+    final control = TextEditingController();
+    CacheTask? task;
+    bool taskDone = false;
+    Get.dialog(
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+        return AlertDialog(
+          title: Text(R.current.importCourse),
+          content: SingleChildScrollView(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(R.current.importCourseWarning),
+                  TextField(
+                    controller: control,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      labelText: R.current.inputCourseName,
+                    ),
+                    onEditingComplete: () async {
+                      FocusScope.of(context).unfocus();
+                      setState(() {
+                        taskDone = false;
+                      });
+                      final taskFlow = TaskFlow();
+                      task = CourseSearchTask(
+                          courseTableData!.courseSemester, control.text);
+                      taskFlow.addTask(task!);
+                      if (await taskFlow.start()) {
+                        setState(() {
+                          taskDone = true;
+                        });
+                      }
+                    },
+                  ),
+                  if (taskDone)
+                    Column(
+                      children: task?.result
+                          .map<Widget>(
+                            (info) => Container(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: AutoSizeText(
+                                      sprintf("%s\n%s\n%s\n%s\n%s\n%s\n%s", [
+                                        "${R.current.courseId}: ${info.course.id}",
+                                        "${R.current.courseName}: ${info.course.name}",
+                                        "${R.current.instructor}: ${info.getTeacherName()}",
+                                        "${R.current.startClass}: ${info.getOpenClassName()}",
+                                        "${R.current.classroom}: ${info.getClassroomName()}",
+                                        "${R.current.time}: ${info.getTime()}",
+                                        "${R.current.note}: ${info.course.note}",
+                                      ]),
+                                    ),
+                                  ),
+                                  IconButton(
+                                      icon: const Icon(Icons.add),
+                                      onPressed: () {
+                                        info.course.select = false;
+                                        if (!courseTableData!
+                                            .addCourseDetailByCourseInfo(
+                                                info)) {
+                                          MyToast.show(
+                                              R.current.addCustomCourseError);
+                                        }
+                                        Get.back();
+                                        Model.instance.getCourseSetting().info =
+                                            courseTableData!; //儲存課表
+                                        Model.instance.saveCourseSetting();
+                                        _loadSetting();
+                                      })
+                                ],
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }),
+    );
   }
 }
