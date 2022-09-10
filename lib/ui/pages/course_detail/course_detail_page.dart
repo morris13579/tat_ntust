@@ -53,6 +53,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
       Icons.people,
       CourseMemberPage(
         widget.courseInfo.main.course.id,
+        widget.semester,
       ),
     );
 

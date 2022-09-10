@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/generated/l10n.dart';
+import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_member_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
@@ -11,9 +12,11 @@ import 'package:get/get.dart';
 
 class CourseMemberPage extends StatefulWidget {
   final String courseId;
+  final SemesterJson semester;
 
   const CourseMemberPage(
-    this.courseId, {
+    this.courseId,
+    this.semester, {
     Key? key,
   }) : super(key: key);
 
@@ -53,7 +56,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
   void _addTask() async {
     String courseId = widget.courseId;
     TaskFlow taskFlow = TaskFlow();
-    var task = MoodleMemberTask(courseId);
+    var task = MoodleMemberTask(courseId, widget.semester);
     taskFlow.addTask(task);
     late List<MoodleCoreEnrolGetUsers> members;
     if (await taskFlow.start()) {
