@@ -114,7 +114,7 @@ dependencies:
   charset_converter: ^2.1.0
 
   # Firebase
-  firebase_core: ^1.21.1
+  firebase_core: ^1.22.0
   firebase_analytics: ^9.3.4
   firebase_crashlytics: ^2.8.10
   firebase_remote_config: ^2.0.17
