@@ -77,8 +77,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     setState(() {
       _pageList = [];
       _pageList.add(const CourseTablePage());
-      _pageList
-          .add(SubSystemPage(title: R.current.informationSystem, arg: null));
+      _pageList.add(const SubSystemPage());
       _pageList.add(const CalendarPage());
       _pageList.add(const ScoreViewerPage());
       _pageList.add(OtherPage(_pageController));

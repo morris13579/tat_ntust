@@ -28,14 +28,9 @@ class RouteUtils {
   static Transition transition =
       (Platform.isAndroid) ? Transition.downToUp : Transition.cupertino;
 
-  static Future toSubSystemPage(String title, String arg) async {
-    return Get.to(
-        () => SubSystemPage(
-              title: title,
-              arg: arg,
-            ),
-        transition: transition,
-        preventDuplicates: false //必免重覆頁面時不載入
+  static Future toSubSystemPage() async {
+    return Get.to(() => const SubSystemPage(),
+        transition: transition, preventDuplicates: false //必免重覆頁面時不載入
         );
   }
 
@@ -157,7 +152,8 @@ class RouteUtils {
     );
   }
 
-  static Future toLoginScreen() async {  //return will auto jump to main screen
+  static Future toLoginScreen() async {
+    //return will auto jump to main screen
     bool? value = await Get.to(
       () => const LoginScreen(),
       transition: transition,

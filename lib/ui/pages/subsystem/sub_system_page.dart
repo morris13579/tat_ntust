@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/ntust/ap_tree_json.dart';
 import 'package:flutter_app/src/task/ntust/ntust_sub_system_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 
 class SubSystemPage extends StatefulWidget {
-  final String title;
-  final String? arg;
-
   const SubSystemPage({
-    required this.title,
-    required this.arg,
     Key? key,
   }) : super(key: key);
 
@@ -47,7 +43,7 @@ class _SubSystemPageState extends State<SubSystemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(R.current.informationSystem),
       ),
       body: isLoading
           ? const Center(
