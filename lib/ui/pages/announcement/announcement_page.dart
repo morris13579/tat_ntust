@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/announcement/announcement_json.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
@@ -32,7 +31,7 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
   @override
   void initState() {
     controller = SwiperController();
-    count = widget.countDown + 1;
+    count = widget.countDown;
     Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         count--;
