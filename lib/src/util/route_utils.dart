@@ -157,12 +157,12 @@ class RouteUtils {
     );
   }
 
-  static Future toLoginScreen() async {
-    bool value = await Get.to(
+  static Future toLoginScreen() async {  //return will auto jump to main screen
+    bool? value = await Get.to(
       () => const LoginScreen(),
       transition: transition,
     );
-    return value;
+    return value ?? false;
   }
 
   static Future toMainScreen() async {

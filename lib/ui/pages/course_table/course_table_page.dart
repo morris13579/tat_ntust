@@ -59,13 +59,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     UserDataJson userData = Model.instance.getUserData();
     Future.delayed(const Duration(milliseconds: 200)).then((_) {
       if (userData.account.isEmpty || userData.password.isEmpty) {
-        RouteUtils.toLoginScreen().then((value) {
-          if (value != null && value) {
-            Future.delayed(const Duration(milliseconds: 200)).then((_) {
-              _loadSetting();
-            });
-          }
-        }); //尚未登入
+        RouteUtils.toLoginScreen();
       } else {
         _loadSetting();
       }

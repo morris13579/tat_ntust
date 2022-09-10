@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
-import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -37,7 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
       Model.instance.setPassword(_passwordControl.text.toString());
       await Model.instance.saveUserData();
       MyToast.show(R.current.loginSave);
-      Get.back<bool>(result: true);
+      //Get.back<bool>(result: true);
+      RouteUtils.toMainScreen();
     }
   }
 

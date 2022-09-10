@@ -70,11 +70,12 @@ class NTUSTTask<T> extends CacheTask<T> {
         parameter.dialogType = DialogType.error;
         parameter.desc = message ?? R.current.unknownError;
         if (message != null) {
+          //帳號輸入錯誤的可能
           parameter.btnOkText = R.current.setting;
           parameter.okResult = false;
           parameter.btnOkOnPress = () {
             RouteUtils.toLoginScreen()
-                .then((value) => Get.back<bool>(result: true));
+                .then((value) => Get.back<bool>(result: true));  //close dialog
           };
         }
         break;

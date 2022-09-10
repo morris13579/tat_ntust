@@ -64,6 +64,7 @@ class TaskFlow {
     while (_queue.isNotEmpty) {
       CacheTask task = _queue.first;
       TaskStatus status = await task.execute();
+      print(status);
       switch (status) {
         case TaskStatus.success:
           _queue.removeAt(0);

@@ -110,9 +110,7 @@ class _OtherPageState extends State<OtherPage> {
         ErrorDialog(parameter).show();
         break;
       case OnListViewPress.login:
-        RouteUtils.toLoginScreen().then((value) {
-          if (value) widget.pageController.jumpToPage(0);
-        });
+        RouteUtils.toLoginScreen();
         break;
       case OnListViewPress.fileViewer:
         FileStore.findLocalPath(context).then((filePath) {
