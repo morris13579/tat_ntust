@@ -171,14 +171,17 @@ class CourseTableJson {
     return add;
   }
 
-  SectionNumber? string2Time(String sectionNumber) {
+  List<SectionNumber> string2Time(String sectionNumber) {
+    List<SectionNumber> s = [];
     for (SectionNumber value in SectionNumber.values) {
-      String time = value.toString().split("_")[1];
-      if (sectionNumber.contains(time)) {
-        return value;
+      var time = value.toString().split("_")[1];
+      for (var t in sectionNumber.split(" ")) {
+        if (t.contains(time)) {
+          s.add(value);
+        }
       }
     }
-    return null;
+    return s;
   }
 
   bool addCourseDetailByCourseInfo(CourseMainInfoJson info) {
@@ -188,8 +191,10 @@ class CourseTableJson {
       Day day = Day.values[i];
       String time = info.course.time[day]!;
       courseInfo.main = info;
-      if (courseInfoMap[day]![string2Time(time)] != null) {
-        return false;
+      for (var t in string2Time(time)) {
+        if (courseInfoMap[day]![t] != null) {
+          return false;
+        }
       }
     }
     for (int i = 0; i < 7; i++) {
