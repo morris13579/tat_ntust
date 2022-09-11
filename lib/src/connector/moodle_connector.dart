@@ -335,8 +335,9 @@ class MoodleConnector {
       discussion.message = nodes.first.innerHtml;
       discussion.isNone = false;
       try {
-        var node =
-            tagNode.getElementById("partialcollapse")!.children[0].children[1];
+        var node = tagNode
+            .getElementsByClassName("content-alignment-container")[0]
+            .children[1];
         if (node.className == "") {
           nodes = node.getElementsByTagName("a");
           for (var node in nodes) {
@@ -347,7 +348,7 @@ class MoodleConnector {
           }
         }
       } catch (e, stack) {
-        Log.eWithStack(e, stack);
+        Log.d(e);
       }
       return discussion;
     } catch (e, stack) {
