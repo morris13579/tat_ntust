@@ -51,6 +51,7 @@ dependencies:
   #可儲存式cookies
   html: ^0.15.0
   #html解析器
+  fk_user_agent: ^2.1.0
   connectivity: ^3.0.6
   clipboard: ^0.1.3
   #剪貼簿

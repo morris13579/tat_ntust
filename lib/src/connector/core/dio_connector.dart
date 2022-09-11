@@ -4,6 +4,7 @@ import 'package:alice_lightweight/alice.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/interceptors/request_interceptor.dart';
 import 'package:get/get.dart' as get_utils;
@@ -16,7 +17,6 @@ typedef SavePathCallback = String Function(Headers responseHeaders);
 class DioConnector {
   static bool isInit = false;
   static final Map<String, String> _headers = {
-    HttpHeaders.userAgentHeader: presetUserAgent,
     "Upgrade-Insecure-Requests": "1",
   };
 
@@ -56,6 +56,11 @@ class DioConnector {
       dio.interceptors.add(CookieManager(_cookieJar));
       dio.interceptors.add(RequestInterceptors());
       dio.interceptors.add(alice.getDioInterceptor());
+      await FkUserAgent.init();
+      if (FkUserAgent.webViewUserAgent != null) {
+        Log.d("Set User Agent to\n${FkUserAgent.webViewUserAgent!}");
+        ConnectorParameter.presetUserAgent = FkUserAgent.webViewUserAgent!;
+      }
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
     }
