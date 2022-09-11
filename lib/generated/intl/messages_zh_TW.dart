@@ -194,6 +194,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseEnterStudentId":
             MessageLookupByLibrary.simpleMessage("請輸入學號或關鍵字"),
         "pleaseLogin": MessageLookupByLibrary.simpleMessage("請登入"),
+        "pleaseLoginWarning": MessageLookupByLibrary.simpleMessage("登入才可使用此功能"),
         "practicalTimes": MessageLookupByLibrary.simpleMessage("實習時數"),
         "prepareDownload": MessageLookupByLibrary.simpleMessage("準備下載中..."),
         "projectLink": MessageLookupByLibrary.simpleMessage("專案連結"),

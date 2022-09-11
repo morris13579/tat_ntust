@@ -229,6 +229,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseEnterStudentId":
             MessageLookupByLibrary.simpleMessage("Please enter student number"),
         "pleaseLogin": MessageLookupByLibrary.simpleMessage("Please Login"),
+        "pleaseLoginWarning":
+            MessageLookupByLibrary.simpleMessage("Login to use this feature"),
         "practicalTimes":
             MessageLookupByLibrary.simpleMessage("Practical times"),
         "prepareDownload":

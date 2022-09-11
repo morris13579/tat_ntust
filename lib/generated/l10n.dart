@@ -1939,6 +1939,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Login to use this feature`
+  String get pleaseLoginWarning {
+    return Intl.message(
+      'Login to use this feature',
+      name: 'pleaseLoginWarning',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

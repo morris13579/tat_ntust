@@ -188,5 +188,6 @@
   "inputCourseName": "Please enter the course number course name",
   "addCustomCourseError": "Can't join the class",
   "searching": "Searching...",
-  "remove": "Remove"
+  "remove": "Remove",
+  "pleaseLoginWarning": "Login to use this feature"
 }
