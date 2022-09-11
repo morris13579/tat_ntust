@@ -7,6 +7,7 @@ import 'package:flutter_app/src/task/moodle_webapi/moodle_course_directory_task.
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
+import 'package:flutter_app/ui/pages/error/error_page.dart';
 
 class CourseDirectoryPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -22,30 +23,15 @@ class CourseDirectoryPage extends StatefulWidget {
 
 class _CourseDirectoryPageState extends State<CourseDirectoryPage>
     with AutomaticKeepAliveClientMixin {
-  bool isLoading = true;
-  late List<MoodleCoreCourseGetContents> directoryList;
-
-  @override
-  void initState() {
-    super.initState();
+  Future<List<MoodleCoreCourseGetContents>?> initTask() async {
     String courseId = widget.courseInfo.main.course.id;
-    loadDirectory(courseId);
-  }
-
-  void loadDirectory(String courseId) async {
-    setState(() {
-      isLoading = true;
-    });
     TaskFlow taskFlow = TaskFlow();
     var task = MoodleCourseDirectoryTask(courseId);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
       AdManager.showDownloadAD();
-      directoryList = task.result;
-      setState(() {
-        isLoading = false;
-      });
     }
+    return task.result;
   }
 
   Color getColor(int index) {
@@ -57,16 +43,27 @@ class _CourseDirectoryPageState extends State<CourseDirectoryPage>
   @override
   Widget build(BuildContext context) {
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
-    return Scaffold(
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : buildTree(),
+    return Container(
+      padding: const EdgeInsets.only(top: 10),
+      child: FutureBuilder<List<MoodleCoreCourseGetContents>?>(
+        future: initTask(),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<MoodleCoreCourseGetContents>?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == null) {
+              return const ErrorPage();
+            } else {
+              return buildTree(snapshot.data!);
+            }
+          } else {
+            return const Text("");
+          }
+        },
+      ),
     );
   }
 
-  Widget buildTree() {
+  Widget buildTree(List<MoodleCoreCourseGetContents> directoryList) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: directoryList.length,
