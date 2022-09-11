@@ -5,6 +5,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_d
 import 'package:flutter_app/src/task/moodle_webapi/moodle_course_message_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/ui/pages/error/error_page.dart';
 import 'package:intl/intl.dart';
 
 class CourseAnnouncementPage extends StatefulWidget {
@@ -21,30 +22,20 @@ class CourseAnnouncementPage extends StatefulWidget {
 
 class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
     with AutomaticKeepAliveClientMixin {
-  bool isLoading = true;
-  late List<Discussions> discussions;
-
   @override
   void initState() {
     super.initState();
-    String courseId = widget.courseInfo.main.course.id;
-    loadAnnouncement(courseId);
   }
 
-  void loadAnnouncement(String courseId) async {
-    setState(() {
-      isLoading = true;
-    });
+  Future<List<Discussions>?> initTask() async {
+    String courseId = widget.courseInfo.main.course.id;
     TaskFlow taskFlow = TaskFlow();
     var task = MoodleCourseMessageTask(courseId);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
       AdManager.showDownloadAD();
-      discussions = task.result.discussions;
-      setState(() {
-        isLoading = false;
-      });
     }
+    return task.result.discussions;
   }
 
   Color getColor(int index) {
@@ -56,16 +47,27 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
   @override
   Widget build(BuildContext context) {
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
-    return Scaffold(
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : buildTree(),
+    return Container(
+      padding: const EdgeInsets.only(top: 10),
+      child: FutureBuilder<List<Discussions>?>(
+        future: initTask(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Discussions>?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == null) {
+              return const ErrorPage();
+            } else {
+              return buildTree(snapshot.data!);
+            }
+          } else {
+            return const Text("");
+          }
+        },
+      ),
     );
   }
 
-  Widget buildTree() {
+  Widget buildTree(List<Discussions> discussions) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: discussions.length,
