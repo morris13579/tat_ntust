@@ -6,6 +6,7 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_course_folder_detail_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/ui/pages/error/error_page.dart';
 
 class CourseFolderPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -22,32 +23,15 @@ class CourseFolderPage extends StatefulWidget {
 }
 
 class _CourseFolderPageState extends State<CourseFolderPage> {
-  bool isLoading = true;
-  late Modules modules;
-
-  @override
-  void initState() {
-    super.initState();
-    initDetail();
-  }
-
-  void initDetail() async {
+  Future<Modules?> initTask() async {
     if (widget.modules.folderIsNone) {
-      setState(() {
-        isLoading = true;
-      });
       TaskFlow taskFlow = TaskFlow();
       var task = MoodleCourseFolderDetailTask(widget.modules);
       taskFlow.addTask(task);
-      if (await taskFlow.start()) {
-        modules = task.result;
-      }
-      setState(() {
-        isLoading = false;
-      });
+      await taskFlow.start();
+      return task.result;
     } else {
-      modules = widget.modules;
-      isLoading = false;
+      return widget.modules;
     }
   }
 
@@ -57,11 +41,23 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
       appBar: AppBar(
         title: Text(widget.modules.name),
       ),
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : buildTree(),
+      body: Container(
+        padding: const EdgeInsets.only(top: 10),
+        child: FutureBuilder<Modules?>(
+          future: initTask(),
+          builder: (BuildContext context, AsyncSnapshot<Modules?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data == null) {
+                return const ErrorPage();
+              } else {
+                return buildTree(snapshot.data!);
+              }
+            } else {
+              return const Text("");
+            }
+          },
+        ),
+      ),
     );
   }
 
@@ -71,7 +67,7 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
         : Theme.of(context).dividerColor;
   }
 
-  Widget buildTree() {
+  Widget buildTree(Modules modules) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: modules.contents.length,

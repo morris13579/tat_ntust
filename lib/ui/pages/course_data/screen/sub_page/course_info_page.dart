@@ -26,25 +26,13 @@ class CourseInfoPage extends StatefulWidget {
 }
 
 class _CourseInfoPageState extends State<CourseInfoPage> {
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.contents.name),
-      ),
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : buildTree(),
-    );
+        appBar: AppBar(
+          title: Text(widget.contents.name),
+        ),
+        body: buildTree());
   }
 
   IconData getIcon(String type) {

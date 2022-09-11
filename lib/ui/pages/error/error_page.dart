@@ -9,13 +9,17 @@ class ErrorPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: const [
-        Icon(
-          Icons.warning_amber_outlined,
-          size: 150,
+        Center(
+          child: Icon(
+            Icons.warning_amber_outlined,
+            size: 150,
+          ),
         ),
-        Text(
-          "Opps something Error",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+        Center(
+          child: Text(
+            "Opps something Error",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+          ),
         ),
       ],
     );

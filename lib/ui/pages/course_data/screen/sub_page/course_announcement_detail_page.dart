@@ -7,6 +7,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_d
 import 'package:flutter_app/src/task/moodle_webapi/moodle_course_message_detail_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/ui/pages/error/error_page.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:html_unescape/html_unescape.dart';
 
@@ -26,42 +27,26 @@ class CourseAnnouncementDetailPage extends StatefulWidget {
 
 class _CourseAnnouncementDetailPageState
     extends State<CourseAnnouncementDetailPage> {
-  bool isLoading = true;
   late String html;
-  late Discussions discussion;
 
-  @override
-  void initState() {
-    super.initState();
-    initDetail();
-  }
-
-  void initDetail() async {
+  Future<Discussions?> initTask() async {
     if (widget.discussions.isNone) {
-      setState(() {
-        isLoading = true;
-      });
       TaskFlow taskFlow = TaskFlow();
       var task = MoodleCourseMessageDetailTask(widget.discussions);
       taskFlow.addTask(task);
-      if (await taskFlow.start()) {
-        discussion = task.result;
-      }
-      setState(() {
-        isLoading = false;
-      });
+      await taskFlow.start();
+      return task.result;
     } else {
-      discussion = widget.discussions;
-      isLoading = false;
+      return widget.discussions;
     }
   }
 
-  Future<bool> onLinkTap(url) async {
+  Future<bool> onLinkTap(Discussions discussions, String url) async {
     if (Uri.parse(url).path.contains("pluginfile.php")) {
       String dirName = widget.courseInfo.main.course.name;
       FileDownload.download(context, url, dirName);
     } else {
-      RouteUtils.toWebViewPage(discussion.name, url);
+      RouteUtils.toWebViewPage(discussions.name, url);
     }
     return true;
   }
@@ -80,61 +65,78 @@ class _CourseAnnouncementDetailPageState
       appBar: AppBar(
         title: Text(HtmlUnescape().convert(discussions.name)),
       ),
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
-                  child: HtmlWidget(
-                    html,
-                    isSelectable: true,
-                    onTapUrl: onLinkTap,
-                  ),
+      body: Container(
+        padding: const EdgeInsets.only(top: 10),
+        child: FutureBuilder<Discussions?>(
+          future: initTask(),
+          builder:
+              (BuildContext context, AsyncSnapshot<Discussions?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data == null) {
+                return const ErrorPage();
+              } else {
+                return buildTree(snapshot.data!);
+              }
+            } else {
+              return const Text("");
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildTree(Discussions discussions) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
+          child: HtmlWidget(
+            html,
+            isSelectable: true,
+            onTapUrl: (String s) => onLinkTap(discussions, s),
+          ),
+        ),
+        Container(
+          height: 20,
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: discussions.attachments.length,
+          itemBuilder: (BuildContext context, int index) {
+            var ap = discussions.attachments[index];
+            return InkWell(
+              child: Container(
+                color: getColor(index),
+                height: 50,
+                child: Row(
+                  children: [
+                    const Expanded(
+                      flex: 1,
+                      child: Icon(Icons.file_copy),
+                    ),
+                    Expanded(
+                      flex: 8,
+                      child: Text(ap.filename),
+                    ),
+                  ],
                 ),
-                Container(
-                  height: 20,
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: discussions.attachments.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var ap = discussions.attachments[index];
-                    return InkWell(
-                      child: Container(
-                        color: getColor(index),
-                        height: 50,
-                        child: Row(
-                          children: [
-                            const Expanded(
-                              flex: 1,
-                              child: Icon(Icons.file_copy),
-                            ),
-                            Expanded(
-                              flex: 8,
-                              child: Text(ap.filename),
-                            ),
-                          ],
-                        ),
-                      ),
-                      onTap: () async {
-                        String dirName = widget.courseInfo.main.course.name;
-                        FileDownload.download(
-                            context,
-                            Connector.uriAddQuery(
-                              ap.fileurl,
-                              {"token": MoodleWebApiConnector.wsToken},
-                            ),
-                            dirName,
-                            name: ap.filename);
-                      },
-                    );
-                  },
-                )
-              ],
-            ),
+              ),
+              onTap: () async {
+                String dirName = widget.courseInfo.main.course.name;
+                FileDownload.download(
+                    context,
+                    Connector.uriAddQuery(
+                      ap.fileurl,
+                      {"token": MoodleWebApiConnector.wsToken},
+                    ),
+                    dirName,
+                    name: ap.filename);
+              },
+            );
+          },
+        )
+      ],
     );
   }
 }
