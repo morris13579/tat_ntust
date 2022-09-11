@@ -22,6 +22,7 @@ import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
+import 'package:flutter_app/ui/pages/error/error_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -38,11 +39,13 @@ class CourseTablePage extends StatefulWidget {
   State<StatefulWidget> createState() => _CourseTablePageState();
 }
 
+enum CourseTableUIState { loading, fail, success }
+
 class _CourseTablePageState extends State<CourseTablePage> {
   final TextEditingController _studentIdControl = TextEditingController();
   final FocusNode _studentFocus = FocusNode();
   final GlobalKey _key = GlobalKey();
-  bool isLoading = true;
+  CourseTableUIState isLoading = CourseTableUIState.loading;
   CourseTableJson? courseTableData;
   static double dayHeight = 25;
   static double studentIdHeight = 40;
@@ -59,6 +62,9 @@ class _CourseTablePageState extends State<CourseTablePage> {
     UserDataJson userData = Model.instance.getUserData();
     Future.delayed(const Duration(milliseconds: 200)).then((_) {
       if (userData.account.isEmpty || userData.password.isEmpty) {
+        setState(() {
+          isLoading = CourseTableUIState.fail;
+        });
         RouteUtils.toLoginScreen();
       } else {
         _loadSetting();
@@ -113,6 +119,9 @@ class _CourseTablePageState extends State<CourseTablePage> {
       semesterJson = semesterSetting;
     }
     if (semesterJson == null) {
+      setState(() {
+        isLoading = CourseTableUIState.fail;
+      });
       return;
     }
     if (!semesterJson.isValid) {
@@ -149,6 +158,10 @@ class _CourseTablePageState extends State<CourseTablePage> {
       taskFlow.addTask(task);
       if (await taskFlow.start()) {
         courseTable = task.result;
+      } else {
+        setState(() {
+          isLoading = CourseTableUIState.fail;
+        });
       }
     }
     Model.instance.getCourseSetting().info = courseTable!; //儲存課表
@@ -400,7 +413,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
       child: OverRepaintBoundary(
         key: overRepaintKey,
         child: RepaintBoundary(
-          child: (isLoading)
+          child: (isLoading != CourseTableUIState.success)
               ? Column(
                   children: <Widget>[
                     Row(
@@ -411,9 +424,11 @@ class _CourseTablePageState extends State<CourseTablePage> {
                           //makes the red row full width
                           child: SizedBox(
                             height: courseHeight * showCourseTableNum,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
+                            child: (isLoading == CourseTableUIState.loading)
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : const ErrorPage(),
                           ),
                         ),
                       ],
@@ -664,20 +679,29 @@ class _CourseTablePageState extends State<CourseTablePage> {
   }
 
   void _showCourseTable(CourseTableJson? courseTable) async {
-    if (courseTable == null) {
+    if (courseTable == null || courseTable.isEmpty) {
+      setState(() {
+        isLoading = CourseTableUIState.fail;
+      });
       return;
     }
     courseTableData = courseTable;
     _studentIdControl.text = courseTable.studentId;
     _unFocusStudentInput();
     setState(() {
-      isLoading = true;
+      isLoading = CourseTableUIState.loading;
     });
     courseTableControl.set(courseTable); //設定課表顯示狀態
     await Future.delayed(const Duration(milliseconds: 50));
     setState(() {
-      isLoading = false;
+      isLoading = CourseTableUIState.success;
     });
+    //如果第一次直接設成小工具
+    Directory directory = await getApplicationSupportDirectory();
+    String path = directory.path;
+    if (!await File('$path/course_widget.png').exists()) {
+      screenshot();
+    }
   }
 
   static const platform = MethodChannel(AppConfig.methodChannelWidgetName);
@@ -694,7 +718,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     });
     await Future.delayed(const Duration(milliseconds: 100));
     setState(() {
-      isLoading = true;
+      isLoading = CourseTableUIState.loading;
     });
     Log.d(path);
 
@@ -703,7 +727,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     ui.Image image = await boundary.toImage(pixelRatio: 2);
     setState(() {
       courseHeight = originHeight;
-      isLoading = false;
+      isLoading = CourseTableUIState.success;
     });
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
