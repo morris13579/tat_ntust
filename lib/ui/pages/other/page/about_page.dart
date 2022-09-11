@@ -80,7 +80,7 @@ class _AboutPageState extends State<AboutPage> {
     switch (value) {
       case OnListViewPress.appUpdate:
         MyToast.show(R.current.checkingVersion);
-        bool result = await APPVersion.check();
+        bool result = await APPVersion.check(focusCheck: true);
         if (!result) {
           MyToast.show(R.current.isNewVersion);
         }

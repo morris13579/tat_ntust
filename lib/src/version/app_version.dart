@@ -15,12 +15,20 @@ class APPVersion {
     }
   }
 
-  static Future<bool> check() async {
+  static Future<bool> check({focusCheck = false}) async {
     RemoteConfigVersionInfo config = await RemoteConfigUtils.getVersionConfig();
     if (!(await config.isFocusUpdate)) {
-      if (!Model.instance.autoCheckAppUpdate ||
-          !await Model.instance.getFirstUse(Model.appCheckUpdate) ||
-          Model.instance.getAccount().isEmpty) return false; //跳過檢查
+      if (!focusCheck) {
+        if (!Model.instance.autoCheckAppUpdate) {
+          return false; //跳過檢查
+        }
+        if (!await Model.instance.getFirstUse(Model.appCheckUpdate)) {
+          return false; //跳過檢查
+        }
+        if (Model.instance.getAccount().isEmpty) {
+          return false; //跳過檢查
+        }
+      }
     }
     Model.instance.setAlreadyUse(Model.appCheckUpdate);
     Log.d("Start check update");
