@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/store/model.dart';
@@ -19,11 +20,27 @@ class ErrorPage extends StatelessWidget {
           ),
         ),
         Center(
-          child: Text(
-            Model.instance.getAccount().isEmpty
-                ? R.current.pleaseLoginWarning
-                : "Opps something Error",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+          child: FutureBuilder(
+            future: (Connectivity().checkConnectivity()),
+            builder: (BuildContext context,
+                AsyncSnapshot<ConnectivityResult> snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data == ConnectivityResult.none) {
+                  return Text(
+                    R.current.networkError,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 30),
+                  );
+                }
+              }
+              return Text(
+                Model.instance.getAccount().isEmpty
+                    ? R.current.pleaseLoginWarning
+                    : R.current.somethingError,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              );
+            },
           ),
         ),
         const SizedBox(

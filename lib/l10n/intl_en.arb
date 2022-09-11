@@ -189,5 +189,6 @@
   "addCustomCourseError": "Can't join the class",
   "searching": "Searching...",
   "remove": "Remove",
-  "pleaseLoginWarning": "Login to use this feature"
+  "pleaseLoginWarning": "Login to use this feature",
+  "somethingError": "Opps something Error"
 }

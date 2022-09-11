@@ -1949,6 +1949,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Opps something Error`
+  String get somethingError {
+    return Intl.message(
+      'Opps something Error',
+      name: 'somethingError',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -189,5 +189,6 @@
   "addCustomCourseError": "課程衝堂無法加入",
   "searching": "搜尋中...",
   "remove": "移除",
-  "pleaseLoginWarning": "登入才可使用此功能"
+  "pleaseLoginWarning": "登入才可使用此功能",
+  "somethingError": "發生無法預期的錯誤"
 }

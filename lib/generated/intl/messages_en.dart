@@ -267,6 +267,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Setting complete"),
         "settingCompleteWithError": MessageLookupByLibrary.simpleMessage(
             "Setup is complete, please add the weight again"),
+        "somethingError":
+            MessageLookupByLibrary.simpleMessage("Opps something Error"),
         "sortBy": MessageLookupByLibrary.simpleMessage("Sort by"),
         "startClass": MessageLookupByLibrary.simpleMessage("Start class"),
         "success": MessageLookupByLibrary.simpleMessage("success"),

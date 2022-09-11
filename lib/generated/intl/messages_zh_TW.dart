@@ -226,6 +226,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "settingComplete": MessageLookupByLibrary.simpleMessage("設定完成"),
         "settingCompleteWithError":
             MessageLookupByLibrary.simpleMessage("設定完成，請重新添加小工具"),
+        "somethingError": MessageLookupByLibrary.simpleMessage("發生無法預期的錯誤"),
         "sortBy": MessageLookupByLibrary.simpleMessage("排序"),
         "startClass": MessageLookupByLibrary.simpleMessage("開課班級"),
         "success": MessageLookupByLibrary.simpleMessage("成功"),
