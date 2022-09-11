@@ -1,14 +1,13 @@
 import 'dart:async';
 
-import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/generated/l10n.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_member_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/ui/pages/error/error_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:get/get.dart';
 
 class CourseMemberPage extends StatefulWidget {
   final String courseId;
@@ -26,48 +25,27 @@ class CourseMemberPage extends StatefulWidget {
 
 class _CourseMemberPageState extends State<CourseMemberPage>
     with AutomaticKeepAliveClientMixin {
-  bool isLoading = true;
   final List<Widget> listItem = [];
-  bool canPop = true;
 
   @override
   void initState() {
     super.initState();
-    isLoading = true;
-    BackButtonInterceptor.add(myInterceptor);
-    Future.delayed(Duration.zero, () {
-      _addTask();
-    });
   }
 
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
-
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo routeInfo) {
-    if (!canPop) {
-      Get.back();
-    }
-    return !canPop;
-  }
-
-  void _addTask() async {
+  Future<List<MoodleCoreEnrolGetUsers>?> initTask() async {
     String courseId = widget.courseId;
+    List<MoodleCoreEnrolGetUsers>? members;
     TaskFlow taskFlow = TaskFlow();
     var task = MoodleMemberTask(courseId, widget.semester);
     taskFlow.addTask(task);
-    late List<MoodleCoreEnrolGetUsers> members;
     if (await taskFlow.start()) {
       members = task.result;
       listItem.add(_buildClassmateNumber(0, members.length));
       for (int i = 1; i < members.length; i++) {
         listItem.add(_buildClassmateInfo(i, members[i]));
       }
-      isLoading = false;
-      setState(() {});
     }
+    return task.result;
   }
 
   @override
@@ -75,16 +53,20 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
     return Container(
       padding: const EdgeInsets.only(top: 10),
-      child: Column(
-        children: <Widget>[
-          (isLoading)
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Expanded(
-                  child: getAnimationList(),
-                ),
-        ],
+      child: FutureBuilder<List<MoodleCoreEnrolGetUsers>?>(
+        future: initTask(),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<MoodleCoreEnrolGetUsers>?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == null) {
+              return const ErrorPage();
+            } else {
+              return getAnimationList();
+            }
+          } else {
+            return const Text("");
+          }
+        },
       ),
     );
   }

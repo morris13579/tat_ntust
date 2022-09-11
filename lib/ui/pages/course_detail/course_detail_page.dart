@@ -10,7 +10,7 @@ import 'package:flutter_app/ui/pages/course_detail/tab_page.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import 'screen/course_member.dart';
+import 'screen/course_member_page.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
