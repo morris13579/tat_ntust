@@ -71,16 +71,6 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
     super.dispose();
   }
 
-  _onPopupMenuSelect(int value) async {
-    switch (value) {
-      case 0:
-        _addScoreRankTask();
-        break;
-      default:
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -90,18 +80,11 @@ class _ScoreViewerPageState extends State<ScoreViewerPage>
           title: Text(R.current.searchScore),
           actions: [
             if (semesterScoreList.isNotEmpty)
-              PopupMenuButton<int>(
-                onSelected: (result) {
-                  setState(() {
-                    _onPopupMenuSelect(result);
-                  });
+              IconButton(
+                onPressed: () {
+                  _addScoreRankTask();
                 },
-                itemBuilder: (BuildContext context) => [
-                  PopupMenuItem(
-                    value: 0,
-                    child: Text(R.current.refresh),
-                  ),
-                ],
+                icon: const Icon(Icons.refresh),
               ),
           ],
           bottom: TabBar(
