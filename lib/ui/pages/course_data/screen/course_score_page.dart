@@ -5,6 +5,7 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_score.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_score_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/ui/pages/error/error_page.dart';
 
 class CourseScorePage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -20,30 +21,15 @@ class CourseScorePage extends StatefulWidget {
 
 class _CourseScorePageState extends State<CourseScorePage>
     with AutomaticKeepAliveClientMixin {
-  bool isLoading = true;
-  late List<MoodleScoreItem> scoreList;
-
-  @override
-  void initState() {
-    super.initState();
+  Future<List<MoodleScoreItem>?> initTask() async {
     String courseId = widget.courseInfo.main.course.id;
-    loadScore(courseId);
-  }
-
-  void loadScore(String courseId) async {
-    setState(() {
-      isLoading = true;
-    });
     TaskFlow taskFlow = TaskFlow();
     var task = MoodleScoreTask(courseId);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
       AdManager.showDownloadAD();
-      scoreList = task.result;
-      setState(() {
-        isLoading = false;
-      });
     }
+    return task.result;
   }
 
   Color getColor(int index) {
@@ -55,18 +41,27 @@ class _CourseScorePageState extends State<CourseScorePage>
   @override
   Widget build(BuildContext context) {
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
-    return Scaffold(
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SingleChildScrollView(
-              child: buildTree(),
-            ),
+    return Container(
+      padding: const EdgeInsets.only(top: 10),
+      child: FutureBuilder<List<MoodleScoreItem>?>(
+        future: initTask(),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<MoodleScoreItem>?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == null) {
+              return const ErrorPage();
+            } else {
+              return buildTree(snapshot.data!);
+            }
+          } else {
+            return const Text("");
+          }
+        },
+      ),
     );
   }
 
-  Widget buildTree() {
+  Widget buildTree(List<MoodleScoreItem> scoreList) {
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
       child: Table(
