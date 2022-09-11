@@ -21,7 +21,6 @@ class AgreePrivacyPolicyScreen extends StatelessWidget {
         body: Column(
           children: [
             Expanded(
-              flex: 13,
               child: Container(
                 color: Theme.of(context).dividerColor,
                 child: FutureBuilder<String>(
@@ -51,33 +50,30 @@ class AgreePrivacyPolicyScreen extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            Expanded(
-              flex: 1,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: AppColors.mainColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32.0),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: AppColors.mainColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32.0),
                 ),
-                onPressed: () async {
-                  await Model.instance.setAgreeContributor(true);
-                  RouteUtils.toMainScreen();
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.1,
-                    right: MediaQuery.of(context).size.width * 0.1,
-                  ),
-                  child: Center(
-                    child: Text(
-                      R.current.agree,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                padding:
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              ),
+              onPressed: () async {
+                await Model.instance.setAgreeContributor(true);
+                RouteUtils.toMainScreen();
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.1,
+                  right: MediaQuery.of(context).size.width * 0.1,
+                ),
+                child: Center(
+                  child: Text(
+                    R.current.agree,
+                    style: const TextStyle(
+                      fontSize: 16,
                     ),
                   ),
                 ),
