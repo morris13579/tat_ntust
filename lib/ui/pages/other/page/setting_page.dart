@@ -49,6 +49,8 @@ class _SettingPageState extends State<SettingPage> {
     if (Platform.isAndroid) {
       listViewData.add(_buildOpenExternalVideoSetting());
     }
+
+    listViewData.add(_buildAutoUpdateSetting());
     if ((MediaQuery.of(context).platformBrightness ==
         AppThemes.darkTheme.brightness)) {
       listViewData.add(_buildDarkModeSetting());
@@ -142,6 +144,27 @@ class _SettingPageState extends State<SettingPage> {
           Provider.of<AppProvider>(context, listen: false)
               .setTheme(AppThemes.lightTheme, "light");
         }
+      },
+    );
+  }
+
+  Widget _buildAutoUpdateSetting() {
+    return SwitchListTile.adaptive(
+      contentPadding: const EdgeInsets.all(0),
+      title: Row(
+        children: <Widget>[
+          Text(
+            R.current.autoAppCheck,
+            style: textTitle,
+          ),
+        ],
+      ),
+      value: Model.instance.getOtherSetting().autoCheckAppUpdate,
+      onChanged: (value) {
+        setState(() {
+          Model.instance.getOtherSetting().autoCheckAppUpdate = value;
+          Model.instance.saveOtherSetting();
+        });
       },
     );
   }

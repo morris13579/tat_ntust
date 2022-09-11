@@ -20,12 +20,15 @@ class APPVersion {
     if (!(await config.isFocusUpdate)) {
       if (!focusCheck) {
         if (!Model.instance.autoCheckAppUpdate) {
+          Log.d("close check update because of close auto check");
           return false; //跳過檢查
         }
         if (!await Model.instance.getFirstUse(Model.appCheckUpdate)) {
+          Log.d("close check update because of already check");
           return false; //跳過檢查
         }
         if (Model.instance.getAccount().isEmpty) {
+          Log.d("close check update because of not login");
           return false; //跳過檢查
         }
       }
