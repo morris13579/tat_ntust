@@ -5,6 +5,7 @@ import 'package:flutter_app/src/task/ntust/ntust_sub_system_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/pages/error/error_page.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class SubSystemPage extends StatefulWidget {
   const SubSystemPage({
@@ -30,57 +31,73 @@ class _SubSystemPageState extends State<SubSystemPage> {
       appBar: AppBar(
         title: Text(R.current.informationSystem),
       ),
-      body: Container(
-        padding: const EdgeInsets.only(top: 10),
-        child: FutureBuilder<APTreeJson?>(
-          future: initTask(),
-          builder: (BuildContext context, AsyncSnapshot<APTreeJson?> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data == null) {
-                return const ErrorPage();
-              } else {
-                return buildTree(snapshot.data!);
-              }
+      body: FutureBuilder<APTreeJson?>(
+        future: initTask(),
+        builder: (BuildContext context, AsyncSnapshot<APTreeJson?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == null) {
+              return const ErrorPage();
             } else {
-              return const Text("");
+              return getAnimationList(snapshot.data!);
             }
-          },
-        ),
+          } else {
+            return const Text("");
+          }
+        },
       ),
     );
   }
 
-  Widget buildTree(APTreeJson apTree) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: apTree.apList.length,
-      itemBuilder: (BuildContext context, int index) {
-        APListJson ap = apTree.apList[index];
-        return InkWell(
-          child: SizedBox(
-            height: 50,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Icon((ap.type == 'link')
-                      ? Icons.link_outlined
-                      : Icons.folder_outlined),
+  Widget getAnimationList(APTreeJson apTree) {
+    return AnimationLimiter(
+      child: ListView.builder(
+        itemCount: apTree.apList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 375),
+            child: SlideAnimation(
+              verticalOffset: 50.0,
+              child: FadeInAnimation(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque, //讓透明部分有反應
+                  child: Container(
+                    child: buildTree(apTree.apList[index]),
+                  ),
+                  onTap: () {},
                 ),
-                Expanded(
-                  flex: 8,
-                  child: Text(ap.name),
-                ),
-              ],
+              ),
             ),
-          ),
-          onTap: () async {
-            if (ap.type == 'link') {
-              RouteUtils.toWebViewPage(ap.name, ap.url,
-                  openWithExternalWebView: false);
-            }
-          },
-        );
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildTree(APListJson ap) {
+    return InkWell(
+      child: SizedBox(
+        height: 50,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Icon((ap.type == 'link')
+                  ? Icons.link_outlined
+                  : Icons.folder_outlined),
+            ),
+            Expanded(
+              flex: 8,
+              child: Text(ap.name),
+            ),
+          ],
+        ),
+      ),
+      onTap: () async {
+        if (ap.type == 'link') {
+          RouteUtils.toWebViewPage(ap.name, ap.url,
+              openWithExternalWebView: false);
+        }
       },
     );
   }
