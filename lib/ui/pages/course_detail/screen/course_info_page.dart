@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
@@ -8,8 +7,8 @@ import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/task/course/course_extra_info_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/ui/pages/error/error_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:get/get.dart';
 import 'package:sprintf/sprintf.dart';
 
 class CourseInfoPage extends StatefulWidget {
@@ -28,36 +27,11 @@ class CourseInfoPage extends StatefulWidget {
 
 class _CourseInfoPageState extends State<CourseInfoPage>
     with AutomaticKeepAliveClientMixin {
-  late CourseExtraInfoJson courseExtraInfo;
-  bool isLoading = true;
   final List<Widget> courseData = [];
   final List<Widget?> listItem = [];
-  bool canPop = true;
 
-  @override
-  void initState() {
-    super.initState();
-    isLoading = true;
-    BackButtonInterceptor.add(myInterceptor);
-    Future.delayed(Duration.zero, () {
-      _addTask();
-    });
-  }
-
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
-
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo routeInfo) {
-    if (!canPop) {
-      Get.back();
-    }
-    return !canPop;
-  }
-
-  void _addTask() async {
+  Future<CourseExtraInfoJson?> initTask() async {
+    CourseExtraInfoJson courseExtraInfo;
     String courseId = widget.courseId;
     TaskFlow taskFlow = TaskFlow();
     var task = CourseExtraInfoTask(courseId, widget.semester);
@@ -122,9 +96,8 @@ class _CourseInfoPageState extends State<CourseInfoPage>
           R.current.courseGrading, courseExtraInfo.courseGrading));
       listItem.add(_buildCourseInfo(
           R.current.courseRemark, courseExtraInfo.courseRemark));
-      isLoading = false;
-      setState(() {});
     }
+    return task.result;
   }
 
   @override
@@ -132,16 +105,20 @@ class _CourseInfoPageState extends State<CourseInfoPage>
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
     return Container(
       padding: const EdgeInsets.only(top: 10),
-      child: Column(
-        children: <Widget>[
-          (isLoading)
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Expanded(
-                  child: getAnimationList(),
-                ),
-        ],
+      child: FutureBuilder<CourseExtraInfoJson?>(
+        future: initTask(),
+        builder: (BuildContext context,
+            AsyncSnapshot<CourseExtraInfoJson?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == null) {
+              return const ErrorPage();
+            } else {
+              return getAnimationList();
+            }
+          } else {
+            return const Text("");
+          }
+        },
       ),
     );
   }

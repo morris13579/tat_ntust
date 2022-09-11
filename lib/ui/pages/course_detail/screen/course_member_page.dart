@@ -27,11 +27,6 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     with AutomaticKeepAliveClientMixin {
   final List<Widget> listItem = [];
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<List<MoodleCoreEnrolGetUsers>?> initTask() async {
     String courseId = widget.courseId;
     List<MoodleCoreEnrolGetUsers>? members;
