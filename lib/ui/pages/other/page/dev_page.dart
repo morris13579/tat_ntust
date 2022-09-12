@@ -69,6 +69,7 @@ class _DevPageState extends State<DevPage> {
   @override
   void initState() {
     super.initState();
+    RemoteConfigUtils.init(focusUpdate: true);
     removeADItem();
   }
 

@@ -17,9 +17,9 @@ class RemoteConfigUtils {
   static String announcementKey = "announcement";
   static String announcementLastReadTimeKey = "announcement_last_read_time";
 
-  static Future<void> init() async {
+  static Future<void> init({focusUpdate = false}) async {
     _remoteConfig = FirebaseRemoteConfig.instance;
-    if (kDebugMode) {
+    if (kDebugMode || focusUpdate) {
       _remoteConfig.setConfigSettings(
         RemoteConfigSettings(
           fetchTimeout: Duration.zero,
