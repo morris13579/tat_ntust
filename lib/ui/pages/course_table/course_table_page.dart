@@ -244,31 +244,27 @@ class _CourseTablePageState extends State<CourseTablePage> {
       appBar: AppBar(
         title: Text(R.current.titleCourse),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 20,
-            ),
-            child: InkWell(
-              onTap: () {
-                RemoteConfigUtils.showAnnouncementDialog(allTime: true);
-              },
-              child: const Icon(Icons.announcement_outlined),
-            ),
+          IconButton(
+            icon: const Icon(Icons.announcement_outlined),
+            padding: const EdgeInsets.all(8.0),
+            iconSize: 24,
+            onPressed: () {
+              RemoteConfigUtils.showAnnouncementDialog(allTime: true);
+            },
+            enableFeedback: true,
           ),
           if (Model.instance.getAccount().isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
-              child: InkWell(
-                onTap: () {
-                  _getCourseTable(
-                    semesterSetting: semesterSetting,
-                    refresh: true,
-                  );
-                },
-                child: const Icon(EvaIcons.refreshOutline),
-              ),
+            IconButton(
+              icon: const Icon(EvaIcons.refreshOutline),
+              padding: const EdgeInsets.all(8.0),
+              iconSize: 24,
+              onPressed: () {
+                _getCourseTable(
+                  semesterSetting: semesterSetting,
+                  refresh: true,
+                );
+              },
+              enableFeedback: true,
             ),
           if (Model.instance.getAccount().isNotEmpty)
             PopupMenuButton<int>(
