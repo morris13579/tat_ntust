@@ -19,6 +19,7 @@ import 'package:flutter_app/src/task/course/course_search_task.dart';
 import 'package:flutter_app/src/task/course/course_semester_task.dart';
 import 'package:flutter_app/src/task/course/course_table_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/src/util/remote_config_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
@@ -243,6 +244,17 @@ class _CourseTablePageState extends State<CourseTablePage> {
       appBar: AppBar(
         title: Text(R.current.titleCourse),
         actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+              right: 20,
+            ),
+            child: InkWell(
+              onTap: () {
+                RemoteConfigUtils.showAnnouncementDialog(allTime: true);
+              },
+              child: const Icon(Icons.announcement_outlined),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(
               right: 20,

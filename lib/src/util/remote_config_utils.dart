@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/model/announcement/announcement_json.dart';
 import 'package:flutter_app/src/model/remote_config/remote_config_version_info.dart';
 import 'package:flutter_app/ui/pages/announcement/announcement_page.dart';
@@ -62,7 +63,8 @@ class RemoteConfigUtils {
     return (json.decode(result)["interval"] as int);
   }
 
-  static Future<List<AnnouncementInfoJson>> getAnnouncement(bool test) async {
+  static Future<List<AnnouncementInfoJson>> getAnnouncement(
+      bool test, bool allTime) async {
     await _remoteConfig.fetchAndActivate();
     String result = _remoteConfig.getString(announcementKey);
     var pref = await SharedPreferences.getInstance();
@@ -70,18 +72,34 @@ class RemoteConfigUtils {
         pref.getString(announcementLastReadTimeKey) ??
             DateTime.utc(2000).toString());
     DateTime now = DateTime.now();
+    now = now.toUtc().add(const Duration(hours: 8));
     List<AnnouncementInfoJson> info = [];
+    Log.d("Announcement last read: $lastRead");
     for (var i in AnnouncementJson.fromJson(json.decode(result)).list) {
       if (test) {
         info.add(i);
       } else {
-        if (i.startTime.compareTo(lastRead) > 0 && //開始時間比讀時間早(代表讀過)
-            i.startTime.compareTo(now) < 0 && //開始時間比現在時間晚(代表尚未開始)
-            i.endTime.compareTo(now) > 0) {
-          //結束時間比現在時間早(代表結束了)
-          if (!i.test) {
+        if (!i.test) {
+          if (allTime) {
             info.add(i);
+            continue;
           }
+          //開始時間比現在時間晚(代表尚未開始)
+          if (i.startTime.compareTo(now) > 0) {
+            Log.d("${i.title} not start");
+            continue;
+          }
+          //結束時間比現在時間早(代表結束了)
+          if (i.endTime.compareTo(now) < 0) {
+            Log.d("${i.title} already end");
+            continue;
+          }
+          //開始時間比讀時間早(代表讀過)
+          if (i.startTime.compareTo(lastRead) < 0) {
+            Log.d("${i.title} already read");
+            continue;
+          }
+          info.add(i);
         }
       }
     }
@@ -96,11 +114,14 @@ class RemoteConfigUtils {
 
   static Future<void> setAnnouncementRead() async {
     var pref = await SharedPreferences.getInstance();
-    pref.setString(announcementLastReadTimeKey, DateTime.now().toString());
+    DateTime now = DateTime.now();
+    now = now.toUtc().add(const Duration(hours: 8));
+    pref.setString(announcementLastReadTimeKey, now.toString());
   }
 
-  static Future<void> showAnnouncementDialog({bool test = false}) async {
-    List<AnnouncementInfoJson> info = await getAnnouncement(test);
+  static Future<void> showAnnouncementDialog(
+      {bool test = false, allTime = false}) async {
+    List<AnnouncementInfoJson> info = await getAnnouncement(test, allTime);
     if (info.isNotEmpty) {
       await Get.dialog<bool>(
         AnnouncementPage(
