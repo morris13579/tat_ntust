@@ -57,7 +57,7 @@ class AgreePrivacyPolicyScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(32.0),
                 ),
                 padding:
-                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               ),
               onPressed: () async {
                 await Model.instance.setAgreeContributor(true);

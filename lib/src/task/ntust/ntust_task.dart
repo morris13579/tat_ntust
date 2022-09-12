@@ -75,7 +75,7 @@ class NTUSTTask<T> extends CacheTask<T> {
           parameter.okResult = false;
           parameter.btnOkOnPress = () {
             RouteUtils.toLoginScreen()
-                .then((value) => Get.back<bool>(result: true));  //close dialog
+                .then((value) => Get.back<bool>(result: true)); //close dialog
           };
         }
         break;
