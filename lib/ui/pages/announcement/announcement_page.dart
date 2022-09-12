@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/announcement/announcement_json.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
+import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 
@@ -67,6 +68,9 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
                 selectable: true,
                 shrinkWrap: true,
                 data: widget.info[index].content,
+                onTapLink: (String text, String? href, String title) {
+                  RouteUtils.toWebViewPage(title, href!);
+                },
               );
             },
           ),
