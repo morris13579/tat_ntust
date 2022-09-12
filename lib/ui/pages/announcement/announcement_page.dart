@@ -48,11 +48,17 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(widget.info[index].title),
+      contentPadding: EdgeInsets.only(
+        left: 24.0,
+        top: Theme.of(context).useMaterial3 ? 16.0 : 20.0,
+        right: 24.0,
+        bottom: 0.0,
+      ),
       content: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
         child: SizedBox(
-          height: MediaQuery.of(Get.context!).size.height * 0.5,
-          width: MediaQuery.of(Get.context!).size.width * 0.8,
+          height: MediaQuery.of(Get.context!).size.height * 0.6,
+          width: MediaQuery.of(Get.context!).size.width * 0.85,
           child: Swiper(
             loop: false,
             itemCount: widget.info.length,
@@ -72,13 +78,16 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
               });
             },
             itemBuilder: (context, index) {
-              return Markdown(
-                selectable: true,
-                shrinkWrap: true,
-                data: widget.info[index].content,
-                onTapLink: (String text, String? href, String title) {
-                  RouteUtils.toWebViewPage(title, href!);
-                },
+              return Container(
+                padding: const EdgeInsets.only(bottom: 35),
+                child: Markdown(
+                  selectable: true,
+                  shrinkWrap: true,
+                  data: widget.info[index].content,
+                  onTapLink: (String text, String? href, String title) {
+                    RouteUtils.toWebViewPage(title, href!);
+                  },
+                ),
               );
             },
           ),
