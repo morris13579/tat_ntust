@@ -59,10 +59,11 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     R.set(context);
     bool catchError =
         await Model.instance.getInstance(); //一定要先getInstance()不然無法取得資料
+    bool needUpdate = false;
     try {
       await RemoteConfigUtils.init();
       await initLanguage();
-      await APPVersion.initAndCheck();
+      needUpdate = await APPVersion.initAndCheck();
       if (!(await Model.instance.getAgreeContributor())) {
         RouteUtils.toAgreePrivacyPolicyScreen();
         return;
@@ -89,8 +90,9 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       parameter.btnCancelOnPress = null;
       parameter.btnOkText = R.current.sure;
       await ErrorDialog(parameter).show();
+    } else if (!needUpdate) {
+      await RemoteConfigUtils.showAnnouncementDialog();
     }
-    await RemoteConfigUtils.showAnnouncementDialog();
   }
 
   void initFlutterDownloader() async {

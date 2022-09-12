@@ -6,13 +6,14 @@ import 'package:flutter_app/src/version/update/app_update.dart';
 import 'package:version/version.dart';
 
 class APPVersion {
-  static Future<void> initAndCheck() async {
+  static Future<bool> initAndCheck() async {
     try {
       await checkIFAPPUpdate(); //檢查是否有更新
-      check();
+      return await check();
     } catch (e) {
       Log.e(e);
     }
+    return false;
   }
 
   static Future<bool> check({focusCheck = false}) async {
