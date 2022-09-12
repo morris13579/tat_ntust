@@ -83,10 +83,6 @@ class RemoteConfigUtils {
         info.add(i);
       } else {
         if (!i.test) {
-          if (allTime) {
-            info.add(i);
-            continue;
-          }
           //開始時間比現在時間晚(代表尚未開始)
           if (i.startTime.compareTo(now) > 0) {
             Log.d("${i.title} not start");
@@ -95,6 +91,10 @@ class RemoteConfigUtils {
           //結束時間比現在時間早(代表結束了)
           if (i.endTime.compareTo(now) < 0) {
             Log.d("${i.title} already end");
+            continue;
+          }
+          if (allTime) {
+            info.add(i);
             continue;
           }
           //開始時間比讀時間早(代表讀過)
