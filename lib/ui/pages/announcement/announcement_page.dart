@@ -57,7 +57,15 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
             loop: false,
             itemCount: widget.info.length,
             controller: controller,
-            pagination: const SwiperPagination(),
+            pagination: SwiperPagination(
+              // SwiperPagination.fraction 數字1/5，默認點
+              builder: DotSwiperPaginationBuilder(
+                size: 8,
+                activeSize: 12,
+                color: Theme.of(context).primaryColor,
+                activeColor: Theme.of(context).primaryColorDark,
+              ),
+            ),
             onIndexChanged: (i) {
               setState(() {
                 index = i;
