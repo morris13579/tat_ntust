@@ -255,47 +255,49 @@ class _CourseTablePageState extends State<CourseTablePage> {
               child: const Icon(Icons.announcement_outlined),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 20,
+          if (Model.instance.getAccount().isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 20,
+              ),
+              child: InkWell(
+                onTap: () {
+                  _getCourseTable(
+                    semesterSetting: semesterSetting,
+                    refresh: true,
+                  );
+                },
+                child: const Icon(EvaIcons.refreshOutline),
+              ),
             ),
-            child: InkWell(
-              onTap: () {
-                _getCourseTable(
-                  semesterSetting: semesterSetting,
-                  refresh: true,
-                );
+          if (Model.instance.getAccount().isNotEmpty)
+            PopupMenuButton<int>(
+              onSelected: (result) {
+                setState(() {
+                  _onPopupMenuSelect(result);
+                });
               },
-              child: const Icon(EvaIcons.refreshOutline),
-            ),
-          ),
-          PopupMenuButton<int>(
-            onSelected: (result) {
-              setState(() {
-                _onPopupMenuSelect(result);
-              });
-            },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem(
-                value: 0,
-                child: Text(R.current.searchCredit),
-              ),
-              PopupMenuItem(
-                value: 1,
-                child: Text(R.current.loadFavorite),
-              ),
-              if (_studentIdControl.text == Model.instance.getAccount())
+              itemBuilder: (BuildContext context) => [
                 PopupMenuItem(
-                  value: 2,
-                  child: Text(R.current.importCourse),
+                  value: 0,
+                  child: Text(R.current.searchCredit),
                 ),
-              if (Platform.isAndroid)
                 PopupMenuItem(
-                  value: 3,
-                  child: Text(R.current.setAsAndroidWeight),
+                  value: 1,
+                  child: Text(R.current.loadFavorite),
                 ),
-            ],
-          )
+                if (_studentIdControl.text == Model.instance.getAccount())
+                  PopupMenuItem(
+                    value: 2,
+                    child: Text(R.current.importCourse),
+                  ),
+                if (Platform.isAndroid)
+                  PopupMenuItem(
+                    value: 3,
+                    child: Text(R.current.setAsAndroidWeight),
+                  ),
+              ],
+            )
         ],
       ),
       body: Column(
