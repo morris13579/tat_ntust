@@ -79,17 +79,32 @@ class RemoteConfigUtils {
     List<AnnouncementInfoJson> info = [];
     Log.d("Announcement last read: $lastRead");
     for (var i in AnnouncementJson.fromJson(json.decode(result)).list) {
+      i.startTime = DateTime.utc(
+          i.startTime.year,
+          i.startTime.month,
+          i.startTime.day,
+          i.startTime.hour,
+          i.startTime.minute,
+          i.startTime.second);
+      i.endTime = DateTime.utc(
+        i.endTime.year,
+        i.endTime.month,
+        i.endTime.day,
+        i.endTime.hour,
+        i.endTime.minute,
+        i.endTime.second,
+      );
       if (test) {
         info.add(i);
       } else {
         if (!i.test) {
           //開始時間比現在時間晚(代表尚未開始)
-          if (i.startTime.compareTo(now) > 0) {
+          if (i.startTime.isAfter(now)) {
             Log.d("${i.title} not start");
             continue;
           }
           //結束時間比現在時間早(代表結束了)
-          if (i.endTime.compareTo(now) < 0) {
+          if (i.endTime.isBefore(now)) {
             Log.d("${i.title} already end");
             continue;
           }
@@ -98,7 +113,7 @@ class RemoteConfigUtils {
             continue;
           }
           //開始時間比讀時間早(代表讀過)
-          if (i.startTime.compareTo(lastRead) < 0) {
+          if (i.startTime.isBefore(lastRead)) {
             Log.d("${i.title} already read");
             continue;
           }
