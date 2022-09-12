@@ -172,6 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "needValidateCaptcha":
             MessageLookupByLibrary.simpleMessage("如果出現驗證碼，請手動通過驗證碼"),
         "networkError": MessageLookupByLibrary.simpleMessage("網路發生錯誤"),
+        "noAnnouncement": MessageLookupByLibrary.simpleMessage("沒有任何公告"),
         "noAnyFavorite": MessageLookupByLibrary.simpleMessage("無加入最愛"),
         "noAppToOpen": MessageLookupByLibrary.simpleMessage("沒有支持的應用程式可以開啟"),
         "noFunction": MessageLookupByLibrary.simpleMessage("暫無功能"),

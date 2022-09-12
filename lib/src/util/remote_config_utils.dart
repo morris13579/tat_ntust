@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/debug/log/log.dart';
+import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/announcement/announcement_json.dart';
 import 'package:flutter_app/src/model/remote_config/remote_config_version_info.dart';
+import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/announcement/announcement_page.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -123,6 +126,10 @@ class RemoteConfigUtils {
       {bool test = false, allTime = false}) async {
     List<AnnouncementInfoJson> info = await getAnnouncement(test, allTime);
     if (info.isNotEmpty) {
+      if (Model.instance.getAccount().isEmpty && !allTime && !test) {
+        Log.d("show announcement close dialog close by no login");
+        return;
+      }
       await Get.dialog<bool>(
         AnnouncementPage(
           info: info,
@@ -130,6 +137,8 @@ class RemoteConfigUtils {
         ),
         barrierDismissible: false, // user must tap button!
       );
+    } else if (allTime) {
+      MyToast.show(R.current.noAnnouncement);
     }
   }
 }

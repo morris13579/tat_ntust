@@ -1959,6 +1959,16 @@ class S {
       args: [],
     );
   }
+
+  /// `No any announcement`
+  String get noAnnouncement {
+    return Intl.message(
+      'No any announcement',
+      name: 'noAnnouncement',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

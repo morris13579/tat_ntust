@@ -190,5 +190,6 @@
   "searching": "Searching...",
   "remove": "Remove",
   "pleaseLoginWarning": "Login to use this feature",
-  "somethingError": "Opps something Error"
+  "somethingError": "Opps something Error",
+  "noAnnouncement": "No any announcement"
 }

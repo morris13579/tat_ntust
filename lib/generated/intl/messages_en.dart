@@ -200,6 +200,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "needValidateCaptcha":
             MessageLookupByLibrary.simpleMessage("Need validate captcha"),
         "networkError": MessageLookupByLibrary.simpleMessage("Network error"),
+        "noAnnouncement":
+            MessageLookupByLibrary.simpleMessage("No any announcement"),
         "noAnyFavorite":
             MessageLookupByLibrary.simpleMessage("No any favorite"),
         "noAppToOpen": MessageLookupByLibrary.simpleMessage("noAppToOpen"),
