@@ -22,6 +22,7 @@ import 'package:flutter_app/ui/pages/web_view/inapp_web_view_page.dart';
 import 'package:flutter_app/ui/screen/agree_privacy_policy_screen.dart';
 import 'package:flutter_app/ui/screen/login_screen.dart';
 import 'package:flutter_app/ui/screen/main_screen.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 
 class RouteUtils {
@@ -119,13 +120,16 @@ class RouteUtils {
 
   static Future toWebViewPage(String title, String url,
       {bool openWithExternalWebView = true,
-      Function(Uri)? onWebViewDownload}) async {
+      Function(Uri)? onWebViewDownload,
+      Function(InAppWebViewController)? loadDone}) async {
+    loadDone ??= (controller) {};
     return await Get.to(
       () => InAppWebViewPage(
         title: title,
         url: Uri.parse(url),
         openWithExternalWebView: openWithExternalWebView,
         onWebViewDownload: onWebViewDownload,
+        loadDone: loadDone!,
       ),
       transition: transition,
     );

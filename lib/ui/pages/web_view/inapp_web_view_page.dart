@@ -11,12 +11,14 @@ class InAppWebViewPage extends StatefulWidget {
   final String title;
   final bool openWithExternalWebView;
   final Function(Uri)? onWebViewDownload;
+  final Function(InAppWebViewController) loadDone;
 
   const InAppWebViewPage({
     required this.title,
     required this.url,
     this.openWithExternalWebView = false,
     this.onWebViewDownload,
+    required this.loadDone,
     Key? key,
   }) : super(key: key);
 
@@ -55,6 +57,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
   }
 
   bool firstLoad = true;
+  bool firstLoadDone = false;
 
   Future<bool> setCookies() async {
     if (!firstLoad) return true;
@@ -170,6 +173,10 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                       },
                       onLoadStop:
                           (InAppWebViewController controller, Uri? url) async {
+                        if (firstLoadDone) {
+                          firstLoadDone = false;
+                          widget.loadDone(controller);
+                        }
                         setState(
                           () {
                             this.url = url!;
