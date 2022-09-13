@@ -194,6 +194,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("請確認網路連接狀態"),
         "pleaseEnterStudentId":
             MessageLookupByLibrary.simpleMessage("請輸入學號或關鍵字"),
+        "pleaseEnterWebMailPassword":
+            MessageLookupByLibrary.simpleMessage("請輸入WebMail密碼"),
         "pleaseLogin": MessageLookupByLibrary.simpleMessage("請登入"),
         "pleaseLoginWarning": MessageLookupByLibrary.simpleMessage("登入才可使用此功能"),
         "practicalTimes": MessageLookupByLibrary.simpleMessage("實習時數"),
@@ -246,6 +248,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "versionInfo": MessageLookupByLibrary.simpleMessage("版本資訊"),
         "wait": MessageLookupByLibrary.simpleMessage("等待"),
         "warning": MessageLookupByLibrary.simpleMessage("警告"),
+        "webMail": MessageLookupByLibrary.simpleMessage("臺科大校內電子郵件(WebMail)"),
         "weight": MessageLookupByLibrary.simpleMessage("權量"),
         "willRestart": MessageLookupByLibrary.simpleMessage("將自動重啟並套用語言")
       };

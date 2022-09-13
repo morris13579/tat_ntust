@@ -120,13 +120,18 @@ class _OtherPageState extends State<OtherPage> {
         break;
       case OnListViewPress.changePassword:
         if (await Get.dialog(const CheckPasswordDialog())) {
+          bool first = true;
           String changePasswordUrl =
               "https://stuinfosys.ntust.edu.tw/NTUSTSSOServ/SSO/ChangePWD";
           RouteUtils.toWebViewPage(R.current.changePassword, changePasswordUrl,
               loadDone: (webView) async {
+            if (!first) {
+              return;
+            }
+            first = false;
             await webView.evaluateJavascript(
                 source:
-                    'document.getElementsByName("userName")[0].value = "${Model.instance.getAccount()}}";');
+                    'document.getElementsByName("userName")[0].value = "${Model.instance.getAccount()}";');
             await webView.evaluateJavascript(
                 source:
                     'document.getElementsByName("pwd")[0].value = "${Model.instance.getPassword()}";');

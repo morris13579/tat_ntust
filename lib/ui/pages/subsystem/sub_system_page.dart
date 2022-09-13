@@ -1,11 +1,15 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/ntust/ap_tree_json.dart';
+import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/ntust/ntust_sub_system_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/pages/error/error_page.dart';
+import 'package:flutter_app/ui/pages/password/webmail_password_dialog.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get.dart';
 
 class SubSystemPage extends StatefulWidget {
   const SubSystemPage({
@@ -22,6 +26,12 @@ class _SubSystemPageState extends State<SubSystemPage> {
     var task = NTUSTSubSystemTask();
     taskFlow.addTask(task);
     await taskFlow.start();
+    task.result.apList.insert(
+        0,
+        APListJson(
+            name: R.current.webMail,
+            type: 'webMail_link',
+            url: "https://mail.ntust.edu.tw"));
     return task.result;
   }
 
@@ -84,12 +94,19 @@ class _SubSystemPageState extends State<SubSystemPage> {
               flex: 1,
               child: Icon((ap.type == 'link')
                   ? Icons.link_outlined
-                  : Icons.folder_outlined),
+                  : Icons.mail_outline),
             ),
             Expanded(
               flex: 8,
               child: Text(ap.name),
             ),
+            if (ap.type == "webMail_link")
+              IconButton(
+                  onPressed: () {
+                    Get.dialog(const WebMailPasswordDialog(),
+                        barrierDismissible: false);
+                  },
+                  icon: const Icon(EvaIcons.syncOutline))
           ],
         ),
       ),
@@ -97,6 +114,37 @@ class _SubSystemPageState extends State<SubSystemPage> {
         if (ap.type == 'link') {
           RouteUtils.toWebViewPage(ap.name, ap.url,
               openWithExternalWebView: false);
+        }
+        if (ap.type == 'webMail_link') {
+          if (Model.instance.getWebMailPassword().isEmpty) {
+            await Get.dialog(const WebMailPasswordDialog(),
+                barrierDismissible: false);
+          }
+
+          if (Model.instance.getWebMailPassword().isNotEmpty) {
+            RouteUtils.toWebViewPage(
+              ap.name,
+              ap.url,
+              openWithExternalWebView: false,
+              loadDone: (webView) async {
+                Uri? uri = await webView.getUrl();
+                if (uri!.host == "login.ntust.edu.tw") {
+                  await webView.evaluateJavascript(
+                      source:
+                          'document.getElementById("loginForm").kendoBindingTarget.target.obsCtrl.obsData.username = "${Model.instance.getAccount()}"');
+                  await webView.evaluateJavascript(
+                      source:
+                          'document.getElementById("loginForm").kendoBindingTarget.target.obsCtrl.obsData.password = "${Model.instance.getWebMailPassword()}"');
+                  await webView.evaluateJavascript(
+                      source:
+                          'document.getElementsByName("username")[0].value = "${Model.instance.getAccount()}"');
+                  await webView.evaluateJavascript(
+                      source:
+                          'document.getElementsByName("password")[0].value = "${Model.instance.getWebMailPassword()}"');
+                }
+              },
+            );
+          }
         }
       },
     );

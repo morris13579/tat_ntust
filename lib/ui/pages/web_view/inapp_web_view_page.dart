@@ -56,8 +56,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
     return false;
   }
 
-  bool firstLoad = true;
-  bool firstLoadDone = false;
+  bool firstLoad = false;
 
   Future<bool> setCookies() async {
     if (!firstLoad) return true;
@@ -173,10 +172,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                       },
                       onLoadStop:
                           (InAppWebViewController controller, Uri? url) async {
-                        if (!firstLoadDone) {
-                          firstLoadDone = true;
-                          widget.loadDone(controller);
-                        }
+                        widget.loadDone(controller);
                         setState(
                           () {
                             this.url = url!;

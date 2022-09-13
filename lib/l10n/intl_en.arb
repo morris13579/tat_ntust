@@ -191,5 +191,7 @@
   "remove": "Remove",
   "pleaseLoginWarning": "Login to use this feature",
   "somethingError": "Opps something Error",
-  "noAnnouncement": "No any announcement"
+  "noAnnouncement": "No any announcement",
+  "webMail": "WebMail",
+  "pleaseEnterWebMailPassword": "Please Enter WebMail Password"
 }

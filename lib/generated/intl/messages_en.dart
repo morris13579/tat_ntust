@@ -230,6 +230,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please connect to network"),
         "pleaseEnterStudentId":
             MessageLookupByLibrary.simpleMessage("Please enter student number"),
+        "pleaseEnterWebMailPassword": MessageLookupByLibrary.simpleMessage(
+            "Please Enter WebMail Password"),
         "pleaseLogin": MessageLookupByLibrary.simpleMessage("Please Login"),
         "pleaseLoginWarning":
             MessageLookupByLibrary.simpleMessage("Login to use this feature"),
@@ -292,6 +294,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "versionInfo": MessageLookupByLibrary.simpleMessage("Version info"),
         "wait": MessageLookupByLibrary.simpleMessage("Wait"),
         "warning": MessageLookupByLibrary.simpleMessage("Warning"),
+        "webMail": MessageLookupByLibrary.simpleMessage("WebMail"),
         "weight": MessageLookupByLibrary.simpleMessage("weight"),
         "willRestart":
             MessageLookupByLibrary.simpleMessage("Will restart automatically")

@@ -103,6 +103,14 @@ class Model {
     return _userData.account;
   }
 
+  String getWebMailPassword() {
+    return _userData.webMailPassword;
+  }
+
+  void setWebMailPassword(String password) {
+    _userData.webMailPassword = password;
+  }
+
   void setPassword(String password) {
     _userData.password = password;
   }

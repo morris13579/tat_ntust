@@ -191,5 +191,7 @@
   "remove": "移除",
   "pleaseLoginWarning": "登入才可使用此功能",
   "somethingError": "發生無法預期的錯誤",
-  "noAnnouncement": "沒有任何公告"
+  "noAnnouncement": "沒有任何公告",
+  "webMail": "臺科大校內電子郵件(WebMail)",
+  "pleaseEnterWebMailPassword": "請輸入WebMail密碼"
 }

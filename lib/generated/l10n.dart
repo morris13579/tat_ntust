@@ -1969,6 +1969,26 @@ class S {
       args: [],
     );
   }
+
+  /// `WebMail`
+  String get webMail {
+    return Intl.message(
+      'WebMail',
+      name: 'webMail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please Enter WebMail Password`
+  String get pleaseEnterWebMailPassword {
+    return Intl.message(
+      'Please Enter WebMail Password',
+      name: 'pleaseEnterWebMailPassword',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

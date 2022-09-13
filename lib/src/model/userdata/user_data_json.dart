@@ -7,8 +7,10 @@ part 'user_data_json.g.dart';
 class UserDataJson {
   String account;
   String password;
+  String webMailPassword;
 
-  UserDataJson({this.account = "", this.password = ""});
+  UserDataJson(
+      {this.account = "", this.password = "", this.webMailPassword = ""});
 
   factory UserDataJson.fromJson(Map<String, dynamic> json) =>
       _$UserDataJsonFromJson(json);
