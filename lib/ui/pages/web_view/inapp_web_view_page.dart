@@ -173,8 +173,8 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                       },
                       onLoadStop:
                           (InAppWebViewController controller, Uri? url) async {
-                        if (firstLoadDone) {
-                          firstLoadDone = false;
+                        if (!firstLoadDone) {
+                          firstLoadDone = true;
                           widget.loadDone(controller);
                         }
                         setState(

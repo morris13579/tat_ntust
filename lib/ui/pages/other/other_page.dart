@@ -12,6 +12,7 @@ import 'package:flutter_app/src/version/update/app_update.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/log_console/log_console.dart';
+import 'package:flutter_app/ui/pages/password/check_password_dialog.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 
@@ -118,9 +119,19 @@ class _OtherPageState extends State<OtherPage> {
         });
         break;
       case OnListViewPress.changePassword:
-        String changePasswordUrl =
-            "https://stuinfosys.ntust.edu.tw/NTUSTSSOServ/SSO/ChangePWD";
-        RouteUtils.toWebViewPage(R.current.changePassword, changePasswordUrl);
+        if (await Get.dialog(const CheckPasswordDialog())) {
+          String changePasswordUrl =
+              "https://stuinfosys.ntust.edu.tw/NTUSTSSOServ/SSO/ChangePWD";
+          RouteUtils.toWebViewPage(R.current.changePassword, changePasswordUrl,
+              loadDone: (webView) async {
+            await webView.evaluateJavascript(
+                source:
+                    'document.getElementsByName("userName")[0].value = "${Model.instance.getAccount()}}";');
+            await webView.evaluateJavascript(
+                source:
+                    'document.getElementsByName("pwd")[0].value = "${Model.instance.getPassword()}";');
+          });
+        }
         break;
       case OnListViewPress.about:
         RouteUtils.toAboutPage();
