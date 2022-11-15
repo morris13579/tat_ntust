@@ -56,7 +56,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
     return false;
   }
 
-  bool firstLoad = false;
+  bool firstLoad = true;
 
   Future<bool> setCookies() async {
     if (!firstLoad) return true;
