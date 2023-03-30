@@ -17,30 +17,30 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   path: ^1.8.1
-  provider: ^6.0.3
-  path_provider: ^2.0.11
-  quiver: ^3.1.0
-  url_launcher: ^6.1.5
+  provider: ^6.0.5
+  path_provider: ^2.0.14
+  quiver: ^3.2.1
+  url_launcher: ^6.1.10
   #開啟email phone url...
-  logger: ^1.1.0
+  logger: ^1.3.0
   #顯示Log
-  sprintf: ^6.0.2
+  sprintf: ^7.0.0
   flutter_local_notifications: ^9.9.1
   #通知欄  需修改android原始碼
-  rxdart: ^0.27.5
+  rxdart: ^0.27.7
   #通知欄有使用到
   android_intent: ^2.0.2
-  device_info: ^2.0.3
+  device_info_plus: ^8.1.0
   html_unescape: ^2.0.0
   #處理HTML特殊字
-  local_auth: ^2.1.2
+  local_auth: ^2.1.6
   #驗證身分指紋
   version: ^2.0.0
   #版本比較
-  file_picker: ^4.6.1
+  file_picker: ^5.2.6
   #選擇android資料夾
   #----------store data----------#
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.0.20
   flutter_cache_manager: ^3.3.0
   #----------internet----------#
   dio: ^4.0.6
@@ -49,56 +49,54 @@ dependencies:
   #用於產生cookie_jar與dio接口
   cookie_jar: ^3.0.1
   #可儲存式cookies
-  html: ^0.15.0
+  html: ^0.15.2
   #html解析器
   fk_user_agent: ^2.1.0
   connectivity: ^3.0.6
   clipboard: ^0.1.3
   #剪貼簿
   #----------WebView----------#
-  flutter_inappwebview: ^5.4.3+7
-  webview_flutter: ^3.0.4
+  flutter_inappwebview: ^5.7.2+3
   #---------icon----------#
   eva_icons_flutter: ^3.1.0
   #https://akveo.github.io/eva-icons/#/
   fluttericon: ^2.0.0
   #https://oblador.github.io/react-native-vector-icons/
   #---------json----------#
-  json_annotation: ^4.6.0
+  json_annotation: ^4.8.0
   #----------other----------#
-  back_button_interceptor: ^6.0.1
+  back_button_interceptor: ^6.0.2
   #攔截返回鍵訊息
-  intl: ^0.17.0
   #DateTime to String
   package_info: ^2.0.2
   #檢測app版本用於檢查更新
   #----------html viewer----------#
   #flutter_html: ^2.2.1
-  flutter_widget_from_html: ^0.8.5
+  flutter_widget_from_html: ^0.10.0
   #----------animation----------#
   flutter_staggered_animations: ^1.1.1
   #listView or gridView動畫
   #----------download----------#
-  flutter_downloader: ^1.8.3
+  flutter_downloader: ^1.10.2
   #下載app更新
-  open_file: ^3.2.1
-  permission_handler: ^10.0.0
+  open_filex: ^4.3.2
+  permission_handler: ^10.2.0
   mime_type: ^1.0.0
-  github: ^9.4.0
+  github: ^9.11.0
   #----------Widget----------#
   get: ^4.6.5
   bot_toast: ^4.0.3
   #提供ListView可下拉式更新並且可動態加載
-  cached_network_image: ^3.2.2
+  cached_network_image: ^3.2.3
   #用url顯示圖片
   auto_size_text: ^3.0.0
   #課表顯示有用到
-  table_calendar: ^3.0.7
+  table_calendar: ^3.0.9
   #顯示行事曆
   expansion_tile_card: ^2.0.0
-  fluttertoast: ^8.0.9
+  fluttertoast: ^8.2.1
   #Toast
-  awesome_dialog: ^3.0.0
+  awesome_dialog: ^3.0.2
   #顯示Error時用到
   flutter_slidable: ^2.0.0
   #email使用可左右滑抽屜
@@ -106,36 +104,37 @@ dependencies:
   #等待動畫
   card_swiper: 2.0.4
   #公告
-  flutter_markdown: ^0.6.10+5
+  flutter_markdown: ^0.6.14
   numberpicker: ^2.1.1
   #選擇學期
   alice_lightweight: ^3.1.0
   pretty_json: ^2.0.0
-  icalendar_parser: ^1.0.2
-  charset_converter: ^2.1.0
+  icalendar_parser: ^1.1.1
+  charset_converter: ^2.1.1
 
   # Firebase
-  firebase_core: ^1.22.0
-  firebase_analytics: ^9.3.4
-  firebase_crashlytics: ^2.8.10
-  firebase_remote_config: ^2.0.17
-  firebase_messaging: ^12.0.3
-  google_mobile_ads: ^2.0.1
+  firebase_core: ^2.8.0
+  firebase_analytics: ^10.1.6
+  firebase_crashlytics: ^3.0.17
+  firebase_remote_config: ^3.0.15
+  firebase_messaging: ^14.3.0
+  google_mobile_ads: ^2.4.0
 
-
+dependency_overrides:
+  intl: ^0.18.0
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.12.0
   #flutter pub run flutter_launcher_icons:main -f pubspec.yaml
   #利用以下的flutter_icons設定icon位置
-  flutter_native_splash: ^2.2.9
+  flutter_native_splash: ^2.2.19
   #flutter pub run flutter_native_splash:create
   #---------json----------#
-  build_runner: ^2.2.0
-  json_serializable: ^6.3.1
+  build_runner: ^2.3.3
+  json_serializable: ^6.6.1
   flutter_lints: ^2.0.1
 
 

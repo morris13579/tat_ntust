@@ -93,7 +93,7 @@ class _CourseAnnouncementDetailPageState
           padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
           child: HtmlWidget(
             html,
-            isSelectable: true,
+            renderMode: RenderMode.column,
             onTapUrl: (String s) => onLinkTap(discussions, s),
           ),
         ),

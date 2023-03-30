@@ -107,7 +107,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
             padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
             child: HtmlWidget(
               ap.description,
-              isSelectable: true,
+              renderMode: RenderMode.column,
             ));
       default:
         if (ap.description.isNotEmpty) {
@@ -124,7 +124,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
                 padding: const EdgeInsets.only(left: 20),
                 child: HtmlWidget(
                   ap.description,
-                  isSelectable: true,
+                  renderMode: RenderMode.column,
                 ),
               ),
               SizedBox(

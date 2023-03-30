@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/util/file_utils.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart' as p;
 
 import 'file_icon.dart';
@@ -21,7 +21,7 @@ class FileItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => OpenFile.open(file!.path),
+      onTap: () => OpenFilex.open(file!.path),
       contentPadding: const EdgeInsets.all(0),
       leading: SizedBox(
         height: 40,

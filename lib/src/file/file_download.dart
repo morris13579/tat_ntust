@@ -20,7 +20,7 @@ import 'package:flutter_app/src/notifications/notifications.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/file_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 
 import 'file_store.dart';
 
@@ -55,7 +55,7 @@ class FileDownload {
     }
     try {
       Log.d("try open $savePath");
-      OpenResult result = await OpenFile.open(savePath);
+      OpenResult result = await OpenFilex.open(savePath);
       if (result.type == ResultType.done) {
         return;
       } else if (result.type == ResultType.noAppToOpen) {

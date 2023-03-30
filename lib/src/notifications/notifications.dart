@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Notifications {
@@ -92,7 +92,7 @@ class Notifications {
           if (parse.containsKey("path")) {
             String path = parse["path"];
             Log.d("open $path");
-            await OpenFile.open(path);
+            await OpenFilex.open(path);
           }
           break;
         case "download_fail":
