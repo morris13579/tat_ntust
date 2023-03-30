@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:android_intent/android_intent.dart';
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:url_launcher/url_launcher.dart';
