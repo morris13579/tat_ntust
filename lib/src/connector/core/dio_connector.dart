@@ -25,9 +25,9 @@ class DioConnector {
   );
 
   static final BaseOptions dioOptions = BaseOptions(
-      connectTimeout: 5000,
-      receiveTimeout: 10000,
-      sendTimeout: 5000,
+      connectTimeout: const Duration(milliseconds: 5000),
+      receiveTimeout: const Duration(milliseconds: 10000),
+      sendTimeout: const Duration(milliseconds: 5000),
       headers: _headers,
       responseType: ResponseType.json,
       contentType: "application/x-www-form-urlencoded",
@@ -167,7 +167,7 @@ class DioConnector {
         .downloadUri(Uri.parse(url), savePath,
             onReceiveProgress: progressCallback,
             cancelToken: cancelToken,
-            options: Options(receiveTimeout: 0, headers: header)) //設置不超時
+            options: Options(receiveTimeout: Duration.zero, headers: header)) //設置不超時
         .catchError((onError, stack) {
       Log.eWithStack(onError.toString(), stack);
       throw onError;

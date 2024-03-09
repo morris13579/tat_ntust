@@ -6,6 +6,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/firebase_options.dart';
 import 'package:flutter_app/src/config/app_config.dart';
 import 'package:flutter_app/src/config/app_themes.dart';
 import 'package:flutter_app/src/providers/app_provider.dart';
@@ -23,7 +24,7 @@ import 'generated/l10n.dart';
 Future<void> main() async {
   // Pass all uncaught errors from the framework to Crashlytics.
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   await CloudMessagingUtils.init();
   await SystemChrome.setPreferredOrientations(

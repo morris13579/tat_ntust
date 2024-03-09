@@ -8,10 +8,10 @@ import 'package:open_filex/open_filex.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Notifications {
-  Notifications._privateConstructor();
+  Notifications._();
 
   static int idCount = 0;
-  static final Notifications instance = Notifications._privateConstructor();
+  static final Notifications instance = Notifications._();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   final BehaviorSubject<ReceivedNotification>
@@ -25,7 +25,7 @@ class Notifications {
   List<int> idList = []; //紀錄以點擊id
 
   Future<void> init() async {
-// needed if you intend to initialize in the `main` function
+    // needed if you intend to initialize in the `main` function
     WidgetsFlutterBinding.ensureInitialized();
     // NOTE: if you want to find out if the app was launched via notification then you could use the following call and then do something like
     // change the default route of the app
@@ -36,7 +36,7 @@ class Notifications {
         const AndroidInitializationSettings('app_icon');
     // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
     // of the `IOSFlutterLocalNotificationsPlugin` class
-    var initializationSettingsIOS = IOSInitializationSettings(
+    var initializationSettingsIOS = DarwinInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,
         requestSoundPermission: false,
@@ -49,10 +49,9 @@ class Notifications {
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
-      if (payload != null) {
-        selectNotificationSubject.add(payload);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: (NotificationResponse payload) async {
+      if (payload.payload != null) {
+        selectNotificationSubject.add(payload.payload!);
       }
     });
 
@@ -121,7 +120,7 @@ class Notifications {
         maxProgress: maxProgress,
         progress: nowProgress,
         playSound: false);
-    var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
+    var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
@@ -144,7 +143,7 @@ class Notifications {
         showProgress: true,
         indeterminate: true,
         playSound: false);
-    var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
+    var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
@@ -162,7 +161,7 @@ class Notifications {
         onlyAlertOnce: true,
         ticker: 'ticker',
         playSound: false);
-    var iOSPlatformChannelSpecifics = const IOSNotificationDetails();
+    var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,

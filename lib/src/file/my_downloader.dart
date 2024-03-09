@@ -16,7 +16,7 @@ class MyDownloader {
           _port.sendPort, 'downloader_send_port');
       _port.listen((dynamic data) {
         String id = data[0];
-        DownloadTaskStatus status = data[1];
+        DownloadTaskStatus status = DownloadTaskStatus.values[data[1] as int];
         int progress = data[2];
         _downloadListen(id, status, progress);
       });
@@ -25,7 +25,7 @@ class MyDownloader {
     }
   }
 
-  static _downloadListen(String id, DownloadTaskStatus status, int progress) {
+  static void _downloadListen(String id, DownloadTaskStatus status, int progress) {
     if (status == DownloadTaskStatus.complete) {
       Log.d("$id complete");
       List<String> keyList = _callBackMap.keys.toList();
@@ -44,13 +44,13 @@ class MyDownloader {
     }
   }
 
-  static deInit() async {
+  static void deInit() async {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     isInit = false;
   }
 
   static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
+      String id, int status, int progress) {
     final SendPort send =
         IsolateNameServer.lookupPortByName('downloader_send_port')!;
     send.send([id, status, progress]);
