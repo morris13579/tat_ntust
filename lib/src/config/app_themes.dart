@@ -37,6 +37,7 @@ class AppThemes {
 
   static final darkTheme = ThemeData(
     fontFamily: 'MyFont',
+    useMaterial3: false,
     brightness: Brightness.dark,
     backgroundColor: AppColors.darkBG,
     primaryColor: AppColors.darkPrimary,

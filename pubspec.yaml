@@ -22,41 +22,41 @@ dependencies:
   quiver: ^3.2.1
   url_launcher: ^6.1.10
   #開啟email phone url...
-  logger: ^1.3.0
+  logger: ^2.1.0
   #顯示Log
   sprintf: ^7.0.0
-  flutter_local_notifications: ^9.9.1
+  flutter_local_notifications: ^16.3.3
   #通知欄  需修改android原始碼
   rxdart: ^0.27.7
   #通知欄有使用到
-  android_intent_plus: ^3.1.6
-  device_info_plus: ^8.1.0
+  android_intent_plus: ^4.0.3
+  device_info_plus: ^9.1.2
   html_unescape: ^2.0.0
   #處理HTML特殊字
   local_auth: ^2.1.6
   #驗證身分指紋
-  version: ^2.0.0
+  version: ^3.0.2
   #版本比較
-  file_picker: ^5.2.6
+  file_picker: ^6.2.0
   #選擇android資料夾
   #----------store data----------#
   shared_preferences: ^2.0.20
   flutter_cache_manager: ^3.3.0
   #----------internet----------#
-  dio: ^4.0.6
+  dio: ^5.4.1
   #網路get post API
-  dio_cookie_manager: ^2.0.0
+  dio_cookie_manager: ^3.1.1
   #用於產生cookie_jar與dio接口
-  cookie_jar: ^3.0.1
+  cookie_jar: ^4.0.8
   #可儲存式cookies
   html: ^0.15.2
   #html解析器
   fk_user_agent: ^2.1.0
-  connectivity_plus: ^3.0.3
+  connectivity_plus: ^5.0.2
   clipboard: ^0.1.3
   #剪貼簿
   #----------WebView----------#
-  flutter_inappwebview: ^5.7.2+3
+  flutter_inappwebview: ^6.0.0
   #---------icon----------#
   eva_icons_flutter: ^3.1.0
   #https://akveo.github.io/eva-icons/#/
@@ -65,14 +65,14 @@ dependencies:
   #---------json----------#
   json_annotation: ^4.8.0
   #----------other----------#
-  back_button_interceptor: ^6.0.2
+  back_button_interceptor: ^7.0.2
   #攔截返回鍵訊息
   #DateTime to String
-  package_info_plus: ^3.0.3
+  package_info_plus: ^5.0.1
   #檢測app版本用於檢查更新
   #----------html viewer----------#
   #flutter_html: ^2.2.1
-  flutter_widget_from_html: ^0.10.0
+  flutter_widget_from_html: ^0.14.11
   #----------animation----------#
   flutter_staggered_animations: ^1.1.1
   #listView or gridView動畫
@@ -80,7 +80,7 @@ dependencies:
   flutter_downloader: ^1.10.2
   #下載app更新
   open_filex: ^4.3.2
-  permission_handler: ^10.2.0
+  permission_handler: ^11.3.0
   mime_type: ^1.0.0
   github: ^9.11.0
   #----------Widget----------#
@@ -93,32 +93,32 @@ dependencies:
   #課表顯示有用到
   table_calendar: ^3.0.9
   #顯示行事曆
-  expansion_tile_card: ^2.0.0
+  expansion_tile_card: ^3.0.0
   fluttertoast: ^8.2.1
   #Toast
   awesome_dialog: ^3.0.2
   #顯示Error時用到
-  flutter_slidable: ^2.0.0
+  flutter_slidable: ^3.0.1
   #email使用可左右滑抽屜
   flutter_spinkit: ^5.1.0
   #等待動畫
-  card_swiper: 2.0.4
+  card_swiper: ^3.0.1
   #公告
   flutter_markdown: ^0.6.14
   numberpicker: ^2.1.1
   #選擇學期
   alice_lightweight: ^3.1.0
   pretty_json: ^2.0.0
-  icalendar_parser: ^1.1.1
+  icalendar_parser: ^2.0.0
   charset_converter: ^2.1.1
 
   # Firebase
   firebase_core: ^2.8.0
   firebase_analytics: ^10.1.6
   firebase_crashlytics: ^3.0.17
-  firebase_remote_config: ^3.0.15
+  firebase_remote_config: ^4.3.17
   firebase_messaging: ^14.3.0
-  google_mobile_ads: ^2.4.0
+  google_mobile_ads: ^4.0.0
 
 dependency_overrides:
   intl: ^0.18.0
@@ -127,7 +127,7 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.12.0
+  flutter_launcher_icons: ^0.13.1
   #flutter pub run flutter_launcher_icons:main -f pubspec.yaml
   #利用以下的flutter_icons設定icon位置
   flutter_native_splash: ^2.2.19
@@ -135,7 +135,7 @@ dev_dependencies:
   #---------json----------#
   build_runner: ^2.3.3
   json_serializable: ^6.6.1
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.1
 
 
 flutter:

@@ -28,7 +28,7 @@ class LoginNTUSTPage extends StatefulWidget {
 class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
   final cookieManager = CookieManager.instance();
   final cookieJar = DioConnector.instance.cookiesManager;
-  final Uri ntustLoginUri = Uri.parse(NTUSTConnector.ntustLoginUrl);
+  final WebUri ntustLoginUri = WebUri(NTUSTConnector.ntustLoginUrl);
   late InAppWebViewController webView;
   Uri url = Uri();
   double progress = 0;
@@ -51,9 +51,6 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
           children: <Widget>[
             InAppWebView(
               initialUrlRequest: URLRequest(url: ntustLoginUri),
-              initialOptions: InAppWebViewGroupOptions(
-                crossPlatform: InAppWebViewOptions(),
-              ),
               onWebViewCreated: (InAppWebViewController controller) {
                 webView = controller;
               },
@@ -72,14 +69,13 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                           'document.getElementsByName("Password")[0].value = "${widget.password}";');
                   await webView.evaluateJavascript(
                       source: 'document.getElementById("btnLogIn").click();');
-                  Future.delayed(const Duration(seconds: 5)).then((value) {
-                    if (mounted) {
-                      setState(() {
-                        showDialog = false;
-                      });
-                      MyToast.show(R.current.needValidateCaptcha);
-                    }
-                  });
+                  await Future.delayed(const Duration(seconds: 5));
+                  if(mounted) {
+                    setState(() {
+                      showDialog = false;
+                    });
+                    MyToast.show(R.current.needValidateCaptcha);
+                  }
                 } else {
                   try {
                     await cookieJar.deleteAll();
@@ -111,8 +107,7 @@ class _LoginNTUSTPageState extends State<LoginNTUSTPage> {
                       }
                     }
                     if (add) {
-                      await cookieJar.saveFromResponse(
-                          ntustLoginUri, ioCookies);
+                      await cookieJar.saveFromResponse(ntustLoginUri, ioCookies);
                       Get.back(result: {"status": NTUSTLoginStatus.success});
                     } else {
                       Get.back(result: {"status": NTUSTLoginStatus.fail});

@@ -126,7 +126,7 @@ class RouteUtils {
     return await Get.to(
       () => InAppWebViewPage(
         title: title,
-        url: Uri.parse(url),
+        url: WebUri(url),
         openWithExternalWebView: openWithExternalWebView,
         onWebViewDownload: onWebViewDownload,
         loadDone: loadDone!,
