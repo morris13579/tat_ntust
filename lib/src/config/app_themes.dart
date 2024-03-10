@@ -64,6 +64,9 @@ class AppThemes {
         foregroundColor: Colors.white,
       ),
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      selectedItemColor: Colors.blue
+    )
   ).copyWith(
     colorScheme:
         ThemeData().colorScheme.copyWith(secondary: AppColors.darkAccent),
