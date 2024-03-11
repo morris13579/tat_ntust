@@ -37,6 +37,7 @@ class AppThemes {
 
   static final darkTheme = ThemeData(
     fontFamily: 'MyFont',
+    useMaterial3: false,
     brightness: Brightness.dark,
     backgroundColor: AppColors.darkBG,
     primaryColor: AppColors.darkPrimary,
@@ -63,6 +64,9 @@ class AppThemes {
         foregroundColor: Colors.white,
       ),
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      selectedItemColor: Colors.blue
+    )
   ).copyWith(
     colorScheme:
         ThemeData().colorScheme.copyWith(secondary: AppColors.darkAccent),

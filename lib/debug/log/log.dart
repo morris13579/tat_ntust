@@ -36,13 +36,13 @@ class Log {
 
   static void eWithStack(dynamic data, StackTrace stackTrace) {
     //用於顯示已用try catch的處理error
-    logger.e(data.toString(), null, stackTrace);
+    logger.e(data.toString(), stackTrace: stackTrace);
     FirebaseCrashlytics.instance.recordError(data, stackTrace);
   }
 
   static void error(dynamic data, StackTrace stackTrace) {
     //用於顯示無try catch的error
-    logger.e(data.toString(), null, stackTrace);
+    logger.e(data.toString(), stackTrace: stackTrace);
   }
 
   static void e(dynamic data) {

@@ -25,14 +25,11 @@ class NTUSTConnector {
       String account, String password) async {
     bool loadStop = false;
     try {
-      final Uri ntustLoginUri = Uri.parse(ntustLoginUrl);
+      final WebUri ntustLoginUri = WebUri(ntustLoginUrl);
       final cookieManager = CookieManager.instance();
       final cookieJar = DioConnector.instance.cookiesManager;
       var headlessWebView = HeadlessInAppWebView(
         initialUrlRequest: URLRequest(url: ntustLoginUri),
-        initialOptions: InAppWebViewGroupOptions(
-          crossPlatform: InAppWebViewOptions(),
-        ),
         onLoadStop: (InAppWebViewController controller, Uri? url) async {
           loadStop = true;
         },
@@ -48,15 +45,15 @@ class NTUSTConnector {
         }
         if (loadStop) {
           loadStop = false;
-          if (await webView.getUrl() == ntustLoginUri) {
+          if (await webView?.getUrl() == ntustLoginUri) {
             await Future.delayed(const Duration(milliseconds: 100));
-            await webView.evaluateJavascript(
+            await webView?.evaluateJavascript(
                 source:
                     'document.getElementsByName("UserName")[0].value = "$account";');
-            await webView.evaluateJavascript(
+            await webView?.evaluateJavascript(
                 source:
                     'document.getElementsByName("Password")[0].value = "$password";');
-            await webView.evaluateJavascript(
+            await webView?.evaluateJavascript(
                 source: 'document.getElementById("btnLogIn").click();');
             Future.delayed(const Duration(seconds: 5)).then((value) {});
             Log.d("wait 5 sec");
@@ -66,7 +63,7 @@ class NTUSTConnector {
             } catch (e) {
               Log.d(e);
             }
-            String? result = await webView.getHtml();
+            String? result = await webView?.getHtml();
             var tagNode = parse(result);
             var nodes =
                 tagNode.getElementsByClassName("validation-summary-errors");
