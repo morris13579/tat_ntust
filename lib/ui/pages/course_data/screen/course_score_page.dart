@@ -62,47 +62,48 @@ class _CourseScorePageState extends State<CourseScorePage>
   }
 
   Widget buildTree(List<MoodleScoreItem> scoreList) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-      child: Table(
-        columnWidths: const <int, TableColumnWidth>{
-          //指定索引及固定列宽
-          0: FixedColumnWidth(75.0),
-        },
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        //設定表格樣式
-        border: TableBorder.all(style: BorderStyle.solid),
-        children: <TableRow>[
-          TableRow(
-            children: <Widget>[
-              Text(R.current.rankItem),
-              Text(R.current.weight),
-              Text(R.current.score),
-              Text(R.current.fullRange),
-              Text(R.current.percentage),
-              Text(R.current.feedback),
-              Text(R.current.contribute),
-            ],
-          ),
-          ...scoreList
-              .map(
-                (e) => TableRow(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Text(e.name),
-                    ),
-                    Text(e.weight),
-                    Text(e.score),
-                    Text(e.fullRange),
-                    Text(e.percentage),
-                    Text(e.feedback),
-                    Text(e.contribute),
-                  ],
-                ),
-              )
-              .toList()
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+        child: Table(
+          columnWidths: const <int, TableColumnWidth>{
+            //指定索引及固定列宽
+            0: FixedColumnWidth(75.0),
+          },
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          //設定表格樣式
+          border: TableBorder.all(style: BorderStyle.solid, color: Colors.white),
+          children: <TableRow>[
+            TableRow(
+              children: <Widget>[
+                Text(R.current.rankItem),
+                Text(R.current.weight),
+                Text(R.current.score),
+                Text(R.current.fullRange),
+                Text(R.current.percentage),
+                Text(R.current.feedback),
+                Text(R.current.contribute),
+              ],
+            ),
+            ...scoreList
+                .map(
+                  (e) => TableRow(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(top: 5, bottom: 5),
+                        child: Text(e.name),
+                      ),
+                      Text(e.weight),
+                      Text(e.score),
+                      Text(e.fullRange),
+                      Text(e.percentage),
+                      Text(e.feedback),
+                      Text(e.contribute),
+                    ],
+                  ),
+                )
+          ],
+        ),
       ),
     );
   }
