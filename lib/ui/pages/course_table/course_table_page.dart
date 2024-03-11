@@ -7,6 +7,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_config.dart';
@@ -61,7 +62,7 @@ class _CourseTablePageState extends State<CourseTablePage> {
     super.initState();
     _studentIdControl.text = " ";
     UserDataJson userData = Model.instance.getUserData();
-    Future.delayed(const Duration(milliseconds: 200)).then((_) {
+    Future.delayed(const Duration(milliseconds: 200)).then((_) async {
       if (userData.account.isEmpty || userData.password.isEmpty) {
         setState(() {
           isLoading = CourseTableUIState.fail;
@@ -772,6 +773,9 @@ class _CourseTablePageState extends State<CourseTablePage> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
                       labelText: R.current.inputCourseName,
+                      prefixIconColor: Colors.black,
+                      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
+                      floatingLabelStyle: const TextStyle(color: Colors.blue)
                     ),
                     onEditingComplete: () async {
                       FocusScope.of(context).unfocus();

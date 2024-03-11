@@ -353,7 +353,7 @@ class CourseConnector {
       parameter = ConnectorParameter(_courseSearchUrl, data: data);
       var json = await Connector.getDataByPostResponse(parameter);
       if (json.data.length == 0) {
-        Map data = {
+        Map<String, dynamic> data = {
           "CourseName": keyword,
           "CourseNo": "",
           "CourseNotes": "",

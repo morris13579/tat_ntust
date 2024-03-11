@@ -14,6 +14,7 @@ class AppThemes {
     appBarTheme: const AppBarTheme(color: AppColors.mainColor),
     toggleableActiveColor: Colors.blue,
     dividerColor: const Color(0xFFF8F8F8),
+    primarySwatch: Colors.blue,
     scaffoldBackgroundColor: AppColors.lightBG,
     cupertinoOverrideTheme: const CupertinoThemeData(
       primaryColor: AppColors.mainColor,
@@ -36,38 +37,37 @@ class AppThemes {
   );
 
   static final darkTheme = ThemeData(
-    fontFamily: 'MyFont',
-    useMaterial3: false,
-    brightness: Brightness.dark,
-    backgroundColor: AppColors.darkBG,
-    primaryColor: AppColors.darkPrimary,
-    scaffoldBackgroundColor: AppColors.darkBG,
-    textSelectionTheme: const TextSelectionThemeData(
-      cursorColor: AppColors.darkAccent,
-    ),
-    appBarTheme: const AppBarTheme(color: AppColors.darkAccent),
-    toggleableActiveColor: Colors.blueAccent,
-    dividerColor: const Color(0xFF2F2F2F),
-    cupertinoOverrideTheme: const CupertinoThemeData(
-      primaryColor: AppColors.darkAccent,
-    ),
-    buttonTheme: const ButtonThemeData(buttonColor: AppColors.darkAccent),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: Colors.white,
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        backgroundColor: Colors.white12,
-        foregroundColor: Colors.white,
-      ),
-    ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      selectedItemColor: Colors.blue
-    )
-  ).copyWith(
+          fontFamily: 'MyFont',
+          useMaterial3: false,
+          brightness: Brightness.dark,
+          backgroundColor: AppColors.darkBG,
+          primaryColor: AppColors.darkPrimary,
+          scaffoldBackgroundColor: AppColors.darkBG,
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: AppColors.darkAccent,
+          ),
+          appBarTheme: const AppBarTheme(color: AppColors.darkAccent),
+          toggleableActiveColor: Colors.blueAccent,
+          dividerColor: const Color(0xFF2F2F2F),
+          cupertinoOverrideTheme: const CupertinoThemeData(
+            primaryColor: AppColors.darkAccent,
+          ),
+          buttonTheme: const ButtonThemeData(buttonColor: AppColors.darkAccent),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+            ),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              backgroundColor: Colors.white12,
+              foregroundColor: Colors.white,
+            ),
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              selectedItemColor: Colors.blue))
+      .copyWith(
     colorScheme:
         ThemeData().colorScheme.copyWith(secondary: AppColors.darkAccent),
   );
