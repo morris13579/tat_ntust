@@ -39,7 +39,6 @@ class CourseTableControl {
     "20:15 - 21:05",
     "21:00 - 22:00"
   ];
-
   List<String> sectionStringList = [
     "1",
     "2",
@@ -91,7 +90,7 @@ class CourseTableControl {
     Day day = Day.values[intDay];
     SectionNumber number = SectionNumber.values[intNumber];
     //Log.d( day.toString()  + " " + number.toString() );
-    return courseTable!.courseInfoMap[day]![number];
+    return courseTable?.courseInfoMap[day]?[number];
   }
 
   Color getCourseInfoColor(int intDay, int intNumber) {
