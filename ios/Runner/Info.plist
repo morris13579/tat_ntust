@@ -53,6 +53,8 @@
 	<string>App 需要您的同意, 才能訪問通信錄</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Check change password</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App 需要您的同意, 才能使用麥克風</string>
 	<key>NSMotionUsageDescription</key>
 	<string>App 需要您的同意, 才能訪問運動與健身</string>
 	<key>NSPhotoLibraryUsageDescription</key>

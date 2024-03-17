@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/course_config.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_app/ui/components/page/base_page.dart';
 import 'package:flutter_app/ui/components/widget_size_render_object.dart';
 import 'package:flutter_app/ui/pages/course_table/component/course_menu.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -42,9 +44,9 @@ class CourseTablePage extends GetView<CourseController> {
   List<Widget> actionList() {
     return [
       IconButton(
-        icon: const Icon(Icons.announcement_outlined),
-        padding: const EdgeInsets.all(8.0),
+        icon: SvgPicture.asset("assets/image/img_announcement.svg", color: Get.iconColor,),
         iconSize: 24,
+        splashRadius: 18,
         onPressed: () {
           RemoteConfigUtils.showAnnouncementDialog(allTime: true);
         },
@@ -53,8 +55,8 @@ class CourseTablePage extends GetView<CourseController> {
       Visibility(
         visible: Model.instance.getAccount().isNotEmpty,
         child: IconButton(
-          icon: const Icon(EvaIcons.refreshOutline),
-          padding: const EdgeInsets.all(8.0),
+          icon: const Icon(CupertinoIcons.refresh),
+          splashRadius: 18,
           iconSize: 24,
           onPressed: () {
             controller.getCourseTable(

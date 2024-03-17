@@ -62,7 +62,14 @@ class CustomCoursePage extends GetView<CourseController> {
           SvgPicture.asset("assets/image/img_search.svg",
               color: Colors.grey, height: 76),
           const SizedBox(height: 24),
-          Text(R.current.courseSearchHint, style: const TextStyle(fontSize: 16, color: Colors.grey),),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Text(
+              "${R.current.courseSearchHint}\n\n${R.current.importCourseWarning}",
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          ),
           const SizedBox(height: 48),
         ],
       ),

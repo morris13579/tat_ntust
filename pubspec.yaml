@@ -146,17 +146,17 @@ flutter:
     - assets/
     - assets/image/
 
-fonts:
-  - family: MyIcon
-    fonts:
-      - asset: assets/fonts/MyIcon.ttf
-  - family: MyFont
-    fonts:
-      - asset: assets/font/GenSenRounded-R.ttc
-      - asset: assets/font/GenSenRounded-B.ttc
-        weight: 600
-      - asset: assets/font/GenSenRounded-EL.ttc
-        weight: 200
+  fonts:
+    - family: MyIcon
+      fonts:
+        - asset: assets/fonts/MyIcon.ttf
+    - family: MyFont
+      fonts:
+        - asset: assets/fonts/GenSenRounded-R.ttc
+        - asset: assets/fonts/GenSenRounded-B.ttc
+          weight: 600
+        - asset: assets/fonts/GenSenRounded-EL.ttc
+          weight: 200
 
 flutter_intl:
   enabled: true

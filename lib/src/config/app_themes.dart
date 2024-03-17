@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
-import 'package:get/get.dart';
 
 class AppThemes {
   static final lightTheme = ThemeData(
@@ -41,7 +40,7 @@ class AppThemes {
   );
 
   static final darkTheme = ThemeData(
-          fontFamily: 'MyFont',
+          fontFamily: "MyFont",
           useMaterial3: false,
           brightness: Brightness.dark,
           backgroundColor: AppColors.darkBG,
