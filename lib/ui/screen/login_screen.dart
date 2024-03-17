@@ -7,7 +7,7 @@ import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _LoginScreenState();

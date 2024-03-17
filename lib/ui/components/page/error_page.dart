@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/src/R.dart';
 import 'package:get/get.dart';
 
 class ErrorPage extends StatelessWidget {
-  const ErrorPage({super.key, required this.errorMsg, required this.onRetry});
+  const ErrorPage({super.key, required this.errorMsg});
 
   final String? errorMsg;
-  final Function()? onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +17,16 @@ class ErrorPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             alertIcon(),
+            const SizedBox(height: 16),
             Text(
               errorMsg?.isEmpty == true
-                  ? ("error.someError".tr)
-                  : (errorMsg ?? ("error.someError".tr)),
+                  ? R.current.error
+                  : (errorMsg ?? R.current.error),
               style: const TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
               maxLines: 5,
               overflow: TextOverflow.fade,
             ),
-            TextButton(
-                onPressed: onRetry, child: Text("common.retry".tr)),
             const SizedBox(height: 32)
           ],
         ),
@@ -36,9 +35,6 @@ class ErrorPage extends StatelessWidget {
   }
 
   Widget alertIcon() {
-    return const Padding(
-      padding: EdgeInsets.only(left: 36.0),
-      child: Icon(CupertinoIcons.exclamationmark_triangle_fill)
-    );
+    return const Icon(CupertinoIcons.exclamationmark_triangle_fill, size: 32);
   }
 }

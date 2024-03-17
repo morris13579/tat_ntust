@@ -11,7 +11,6 @@ class BasePage extends StatelessWidget {
     required this.child,
     this.isError = false,
     this.errorMsg,
-    this.onRetry,
     this.isLoading = false,
     this.loadingPadding,
     this.action,
@@ -28,7 +27,6 @@ class BasePage extends StatelessWidget {
   // error control
   final bool isError;
   final String? errorMsg;
-  final Function()? onRetry;
 
   // loading control
   final bool isLoading;
@@ -43,7 +41,7 @@ class BasePage extends StatelessWidget {
       appBar: mainAppbar(title: title, action: action),
       floatingActionButton: floatingActionButton,
       body: isError
-          ? ErrorPage(errorMsg: errorMsg, onRetry: onRetry)
+          ? ErrorPage(errorMsg: errorMsg)
           : isLoading
               ? const LoadingPage(isLoading: true)
               : SafeArea(child: child),

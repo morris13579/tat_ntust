@@ -8,7 +8,6 @@ import 'package:flutter_app/ui/components/input/search_bar.dart';
 import 'package:flutter_app/ui/components/page/base_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:sprintf/sprintf.dart';
 
 class CustomCoursePage extends GetView<CourseController> {
   const CustomCoursePage({super.key});

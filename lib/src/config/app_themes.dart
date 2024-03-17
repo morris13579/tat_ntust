@@ -45,6 +45,7 @@ class AppThemes {
           brightness: Brightness.dark,
           backgroundColor: AppColors.darkBG,
           primaryColor: AppColors.darkPrimary,
+          primarySwatch: AppColors.mainColor,
           scaffoldBackgroundColor: AppColors.darkBG,
           textSelectionTheme: const TextSelectionThemeData(
             cursorColor: AppColors.darkAccent,

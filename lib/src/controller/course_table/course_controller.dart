@@ -1,13 +1,10 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_config.dart';
-import 'package:flutter_app/src/config/course_config.dart';
 import 'package:flutter_app/src/enum/course_table_ui_state.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
@@ -26,6 +23,7 @@ import 'package:flutter_app/ui/pages/course_table/modal/course_detail_dialog.dar
 import 'package:flutter_app/ui/pages/course_table/modal/favorite_dialog.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/semester_dialog.dart';
 import 'package:flutter_app/ui/components/over_repaint_boundary.dart';
+import 'package:flutter_app/ui/screen/login_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -59,8 +57,9 @@ class CourseController extends GetxController {
 
     UserDataJson userData = Model.instance.getUserData();
     if (userData.account.isEmpty || userData.password.isEmpty) {
-      isLoading.value = CourseTableUIState.fail;
-      RouteUtils.toLoginScreen();
+      isLoading.value = CourseTableUIState.loading;
+      await Future.delayed(const Duration(milliseconds: 500));
+      Get.offAll(() => const LoginScreen());
     } else {
       await _loadSetting();
     }
@@ -311,7 +310,7 @@ class CourseController extends GetxController {
 
   Future<void> _addCustomCourse() async {
     courseInfoList.clear();
-    var info = await Get.to(const CustomCoursePage()) as CourseMainInfoJson?;
+    var info = await Get.to(() => const CustomCoursePage()) as CourseMainInfoJson?;
     if (info == null) {
       return;
     }
