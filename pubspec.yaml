@@ -120,6 +120,7 @@ dependencies:
   firebase_messaging: ^14.3.0
   google_mobile_ads: ^4.0.0
   flutter_svg: ^2.0.10+1
+  screenshot: ^2.3.0
 
 dependency_overrides:
   intl: ^0.18.0

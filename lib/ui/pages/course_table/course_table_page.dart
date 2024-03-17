@@ -15,6 +15,7 @@ import 'package:flutter_app/ui/components/widget_size_render_object.dart';
 import 'package:flutter_app/ui/pages/course_table/component/course_menu.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:screenshot/screenshot.dart';
 
 import '../../components/over_repaint_boundary.dart';
 
@@ -118,9 +119,35 @@ class CourseTablePage extends GetView<CourseController> {
           Expanded(
             child: controller.isLoading.value != CourseTableUIState.success
                 ? const SizedBox()
-                : _buildListViewWithScreenshot(),
+                : _buildListView(),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildListView() {
+    return SingleChildScrollView(
+      child: Screenshot(
+        controller: controller.screenshotController,
+        child: Column(
+          children: List.generate(
+            controller.courseTableControl.getSectionIntList.length + 1,
+                (index) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 375),
+                child: ScaleAnimation(
+                  child: FadeInAnimation(
+                    child: (index == 0)
+                        ? _buildDay()
+                        : _buildCourseTable(index - 1),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

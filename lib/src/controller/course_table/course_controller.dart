@@ -28,8 +28,8 @@ import 'package:flutter_app/ui/pages/course_table/modal/semester_dialog.dart';
 import 'package:flutter_app/ui/components/over_repaint_boundary.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../task/cache_task.dart';
@@ -39,6 +39,7 @@ class CourseController extends GetxController {
   final RxString studentId = "".obs;
   final FocusNode studentFocus = FocusNode();
   final GlobalKey<OverRepaintBoundaryState> overRepaintKey = GlobalKey();
+  final ScreenshotController screenshotController = ScreenshotController();
   final platform = const MethodChannel(AppConfig.methodChannelWidgetName);
   final GlobalKey key = GlobalKey();
   Rx<CourseTableUIState> isLoading = CourseTableUIState.loading.obs;
@@ -274,37 +275,22 @@ class CourseController extends GetxController {
   }
 
   Future screenshot() async {
-    double originHeight = courseHeight.value;
-    RenderObject? renderObject = key.currentContext!.findRenderObject();
-    double height = renderObject!.semanticBounds.size.height -
-        CourseConfig.studentIdHeight -
-        CourseConfig.dayHeight;
-    Directory directory = await getApplicationSupportDirectory();
-    String path = directory.path;
-    courseHeight.value = height / courseTableControl.getSectionIntList.length;
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    isLoading.value = CourseTableUIState.loading;
-    Log.d(path);
-
-    final RenderRepaintBoundary boundary = overRepaintKey.currentContext!
-        .findRenderObject()! as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage(pixelRatio: 2);
-
-    courseHeight.value = originHeight;
-    isLoading.value = CourseTableUIState.success;
-
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    Uint8List pngBytes = byteData!.buffer.asUint8List();
+    Uint8List? pngBytes = await screenshotController.capture();
+    if(pngBytes == null) {
+      return;
+    }
+    String path = (await getApplicationSupportDirectory()).path;
     File imgFile = File('$path/course_widget.png');
     await imgFile.writeAsBytes(pngBytes);
     final bool result = await platform.invokeMethod('update_weight');
     Log.d("complete $result");
-    if (result) {
-      MyToast.show(R.current.settingComplete);
-    } else {
+
+    if (!result) {
       MyToast.show(R.current.settingCompleteWithError);
+      return;
     }
+
+    MyToast.show(R.current.settingComplete);
   }
 
   Future<void> onCustomCourseSearchSubmit(String value) async {
