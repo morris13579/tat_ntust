@@ -5,7 +5,7 @@ import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 
 class ErrorPage extends StatelessWidget {
-  const ErrorPage({Key? key}) : super(key: key);
+  const ErrorPage({super.key});
 
   @override
   Widget build(BuildContext context) {

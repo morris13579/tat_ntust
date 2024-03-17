@@ -75,6 +75,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "courseObject": MessageLookupByLibrary.simpleMessage("課程宗旨"),
         "courseRefbook": MessageLookupByLibrary.simpleMessage("參考書目"),
         "courseRemark": MessageLookupByLibrary.simpleMessage("備註說明"),
+        "courseSearchHint":
+            MessageLookupByLibrary.simpleMessage("在上方輸入文字來搜尋課程"),
+        "courseSearchNotFound":
+            MessageLookupByLibrary.simpleMessage("未搜尋到任何相關課程"),
         "courseTextbook": MessageLookupByLibrary.simpleMessage("教科書"),
         "courseTimes": MessageLookupByLibrary.simpleMessage("上課時數"),
         "courseURL": MessageLookupByLibrary.simpleMessage("課程相關網址"),

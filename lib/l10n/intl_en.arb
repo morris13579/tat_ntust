@@ -193,5 +193,7 @@
   "somethingError": "Opps something Error",
   "noAnnouncement": "No any announcement",
   "webMail": "WebMail",
-  "pleaseEnterWebMailPassword": "Please Enter WebMail Password"
+  "pleaseEnterWebMailPassword": "Please Enter WebMail Password",
+  "courseSearchHint": "Enter text above to search for courses",
+  "courseSearchNotFound": "No relevant courses found"
 }

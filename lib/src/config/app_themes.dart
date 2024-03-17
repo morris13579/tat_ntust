@@ -16,6 +16,9 @@ class AppThemes {
     dividerColor: const Color(0xFFF8F8F8),
     primarySwatch: Colors.blue,
     scaffoldBackgroundColor: AppColors.lightBG,
+    iconTheme: const IconThemeData(
+        color: Colors.black
+    ),
     cupertinoOverrideTheme: const CupertinoThemeData(
       primaryColor: AppColors.mainColor,
     ),
@@ -37,14 +40,18 @@ class AppThemes {
   );
 
   static final darkTheme = ThemeData(
-          fontFamily: 'MyFont',
+          fontFamily: "MyFont",
           useMaterial3: false,
           brightness: Brightness.dark,
           backgroundColor: AppColors.darkBG,
           primaryColor: AppColors.darkPrimary,
+          primarySwatch: AppColors.mainColor,
           scaffoldBackgroundColor: AppColors.darkBG,
           textSelectionTheme: const TextSelectionThemeData(
             cursorColor: AppColors.darkAccent,
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.white
           ),
           appBarTheme: const AppBarTheme(color: AppColors.darkAccent),
           toggleableActiveColor: Colors.blueAccent,

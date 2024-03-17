@@ -23,7 +23,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _MainScreenState();
@@ -114,32 +114,13 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     return Consumer<AppProvider>(
       builder: (BuildContext context, AppProvider appProvider, Widget? child) {
         appProvider.navigatorKey = Get.key;
-        return WillPopScope(
-          onWillPop: _onWillPop,
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            body: _buildPageView(),
-            bottomNavigationBar: _buildBottomNavigationBar(),
-          ),
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: _buildPageView(),
+          bottomNavigationBar: _buildBottomNavigationBar(),
         );
       },
     );
-  }
-
-  Future<bool> _onWillPop() async {
-    var canPop = Navigator.of(context).canPop();
-    //Log.d(canPop.toString());
-    if (canPop) {
-      Navigator.of(context).pop();
-      _closeAppCount = 0;
-    } else {
-      _closeAppCount++;
-      MyToast.show(R.current.closeOnce);
-      Future.delayed(const Duration(seconds: 2)).then((_) {
-        _closeAppCount = 0;
-      });
-    }
-    return (_closeAppCount >= 2);
   }
 
   Widget _buildPageView() {

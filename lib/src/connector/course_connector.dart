@@ -220,7 +220,7 @@ class CourseConnector {
     try {
       List<CourseMainInfoJson> courseMainInfoList = [];
       for (var courseId in courseIds) {
-        Map data = {
+        Map<String, dynamic> data = {
           "CourseName": "",
           "CourseNo": courseId,
           "CourseNotes": "",
@@ -335,7 +335,7 @@ class CourseConnector {
 
     try {
       ConnectorParameter parameter;
-      Map data = {
+      Map<String, dynamic> data = {
         "CourseName": "",
         "CourseNo": keyword,
         "CourseNotes": "",

@@ -81,6 +81,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "courseObject": MessageLookupByLibrary.simpleMessage("Course object"),
         "courseRefbook": MessageLookupByLibrary.simpleMessage("Course Refbook"),
         "courseRemark": MessageLookupByLibrary.simpleMessage("Course remark"),
+        "courseSearchHint": MessageLookupByLibrary.simpleMessage(
+            "Enter text above to search for courses"),
+        "courseSearchNotFound":
+            MessageLookupByLibrary.simpleMessage("No relevant courses found"),
         "courseTextbook":
             MessageLookupByLibrary.simpleMessage("Course textbook"),
         "courseTimes": MessageLookupByLibrary.simpleMessage("Course times"),
