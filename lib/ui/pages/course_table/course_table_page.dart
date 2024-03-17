@@ -16,7 +16,7 @@ import 'package:flutter_app/ui/pages/course_table/component/course_menu.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 
-import 'over_repaint_boundary.dart';
+import '../../components/over_repaint_boundary.dart';
 
 class CourseTablePage extends GetView<CourseController> {
   const CourseTablePage({super.key});

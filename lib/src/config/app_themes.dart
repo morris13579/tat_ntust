@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
+import 'package:get/get.dart';
 
 class AppThemes {
   static final lightTheme = ThemeData(
@@ -16,6 +17,9 @@ class AppThemes {
     dividerColor: const Color(0xFFF8F8F8),
     primarySwatch: Colors.blue,
     scaffoldBackgroundColor: AppColors.lightBG,
+    iconTheme: const IconThemeData(
+        color: Colors.black
+    ),
     cupertinoOverrideTheme: const CupertinoThemeData(
       primaryColor: AppColors.mainColor,
     ),
@@ -45,6 +49,9 @@ class AppThemes {
           scaffoldBackgroundColor: AppColors.darkBG,
           textSelectionTheme: const TextSelectionThemeData(
             cursorColor: AppColors.darkAccent,
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.white
           ),
           appBarTheme: const AppBarTheme(color: AppColors.darkAccent),
           toggleableActiveColor: Colors.blueAccent,

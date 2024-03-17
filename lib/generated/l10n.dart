@@ -1989,6 +1989,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Enter text above to search for courses`
+  String get courseSearchHint {
+    return Intl.message(
+      'Enter text above to search for courses',
+      name: 'courseSearchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No relevant courses found`
+  String get courseSearchNotFound {
+    return Intl.message(
+      'No relevant courses found',
+      name: 'courseSearchNotFound',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

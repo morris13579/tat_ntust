@@ -119,6 +119,7 @@ dependencies:
   firebase_remote_config: ^4.3.17
   firebase_messaging: ^14.3.0
   google_mobile_ads: ^4.0.0
+  flutter_svg: ^2.0.10+1
 
 dependency_overrides:
   intl: ^0.18.0
@@ -142,6 +143,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/image/
 
 fonts:
   - family: MyIcon
@@ -149,10 +151,11 @@ fonts:
       - asset: assets/fonts/MyIcon.ttf
   - family: MyFont
     fonts:
-      - asset: fonts/GenSenRounded-R.ttc
-        weight: 400
-      - asset: fonts/GenSenRounded-B.ttc
-        weight: 700
+      - asset: assets/font/GenSenRounded-R.ttc
+      - asset: assets/font/GenSenRounded-B.ttc
+        weight: 600
+      - asset: assets/font/GenSenRounded-EL.ttc
+        weight: 200
 
 flutter_intl:
   enabled: true
