@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
@@ -18,8 +15,6 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:screenshot/screenshot.dart';
-
-import '../../components/over_repaint_boundary.dart';
 
 class CourseTablePage extends GetView<CourseController> {
   const CourseTablePage({super.key});
@@ -148,34 +143,6 @@ class CourseTablePage extends GetView<CourseController> {
                 ),
               );
             },
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildListViewWithScreenshot() {
-    return SingleChildScrollView(
-      child: OverRepaintBoundary(
-        key: controller.overRepaintKey,
-        child: RepaintBoundary(
-          child: Column(
-            children: List.generate(
-              controller.courseTableControl.getSectionIntList.length + 1,
-              (index) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: ScaleAnimation(
-                    child: FadeInAnimation(
-                      child: (index == 0)
-                          ? _buildDay()
-                          : _buildCourseTable(index - 1),
-                    ),
-                  ),
-                );
-              },
-            ),
           ),
         ),
       ),

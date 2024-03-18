@@ -11,29 +11,24 @@ import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/userdata/user_data_json.dart';
 import 'package:flutter_app/src/store/model.dart';
-import 'package:flutter_app/src/task/course/course_semester_task.dart';
-import 'package:flutter_app/src/task/course/course_table_task.dart';
-import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/components/custom_snackbar.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
-import 'package:flutter_app/ui/pages/course_table/course_table_control.dart';
+import 'package:flutter_app/ui/pages/course_table/model/course_model.dart';
+import 'package:flutter_app/ui/pages/course_table/model/course_table_control.dart';
 import 'package:flutter_app/ui/pages/course_table/custom_course_page.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/course_detail_dialog.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/favorite_dialog.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/semester_dialog.dart';
 import 'package:flutter_app/ui/components/over_repaint_boundary.dart';
 import 'package:flutter_app/ui/screen/login_screen.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:sprintf/sprintf.dart';
 
-import '../../task/cache_task.dart';
-import '../../task/course/course_search_task.dart';
 
 class CourseController extends GetxController {
+  final courseModel = CourseModel();
   final RxString studentId = "".obs;
   final FocusNode studentFocus = FocusNode();
   final GlobalKey<OverRepaintBoundaryState> overRepaintKey = GlobalKey();
@@ -78,26 +73,16 @@ class CourseController extends GetxController {
   }
 
   Future<void> _loadSetting() async {
-    CourseTableJson? courseTable = Model.instance.getCourseSetting().info;
-    if (courseTable.isEmpty) {
+    CourseTableJson? courseTable = courseModel.getCourseSettingInfo();
+    if (courseTable?.isEmpty == true) {
       await getCourseTable();
     } else {
       _showCourseTable(courseTable);
     }
   }
 
-  void showSemesterList() async {
-    //顯示選擇學期
-    if (Model.instance.getSemesterList().isEmpty) {
-      TaskFlow taskFlow = TaskFlow();
-      var task = CourseSemesterTask(studentId.value);
-      taskFlow.addTask(task);
-      if (await taskFlow.start()) {
-        Model.instance.setSemesterJsonList(task.result);
-      }
-    }
-    List<SemesterJson> semesterList = Model.instance.getSemesterList();
-
+  Future<void> showSemesterList() async {
+    var semesterList = await courseModel.getSemesterList(studentId.value);
     Get.dialog(SemesterDialog(
         semesterList: semesterList,
         onSelected: (value) => getCourseTable(semesterSetting: value)));
@@ -125,72 +110,13 @@ class CourseController extends GetxController {
 
   Future<void> getCourseTable(
       {SemesterJson? semesterSetting, bool refresh = false}) async {
-    await Future.delayed(const Duration(microseconds: 100)); //等待頁面刷新
-    String studentId = Model.instance.getAccount();
-    SemesterJson? semesterJson;
-    if (semesterSetting == null) {
-      await _getSemesterList(studentId);
-      semesterJson = Model.instance.getSemesterJsonItem(0);
-    } else {
-      semesterJson = semesterSetting;
-    }
-    if (semesterJson == null) {
-      isLoading.value = CourseTableUIState.fail;
-      return;
-    }
-    if (!semesterJson.isValid) {
-      MyToast.show(
-        sprintf(R.current.selectSemesterWarning, [semesterJson.year]),
-        toastLength: Toast.LENGTH_LONG,
-      );
-      SemesterJson? select =
-          await CourseSemesterTask.selectSemesterDialog(allowSelectNull: true);
-      if (select == null) return;
-      semesterJson.year = select.year;
-      semesterJson.semester = select.semester;
-      var s = Model.instance.getSemesterList();
-      List<SemesterJson> v = [];
-      for (var i in s) {
-        if (!v.contains(i)) {
-          v.add(i);
-        }
-      }
-      Model.instance.setSemesterJsonList(v);
-    }
-
-    CourseTableJson? courseTable;
-    if (!refresh) {
-      //是否要去找暫存的
-      courseTable =
-          Model.instance.getCourseTable(studentId, semesterSetting); //去取找是否已經暫存
-    }
-    if (courseTable == null) {
-      //代表沒有暫存的需要爬蟲
-      TaskFlow taskFlow = TaskFlow();
-      final task = CourseTableTask(studentId, semesterJson);
-      taskFlow.addTask(task);
-      if (await taskFlow.start()) {
-        courseTable = task.result;
-      } else {
-        isLoading.value = CourseTableUIState.fail;
-      }
-    }
-    Model.instance.getCourseSetting().info = courseTable!; //儲存課表
-    Model.instance.saveCourseSetting();
+    CourseTableJson courseTable = await courseModel.getCourseTable(semesterSetting: semesterSetting, refresh: refresh);
+    courseModel.saveCourse(courseTable);
     _showCourseTable(courseTable);
   }
 
-  Future<void> _getSemesterList(String studentId) async {
-    TaskFlow taskFlow = TaskFlow();
-    var task = CourseSemesterTask(studentId);
-    taskFlow.addTask(task);
-    if (await taskFlow.start()) {
-      Model.instance.setSemesterJsonList(task.result);
-    }
-  }
-
   Future<void> _loadFavorite() async {
-    List<CourseTableJson> value = Model.instance.getCourseTableList();
+    List<CourseTableJson> value = courseModel.getCacheCourseTableList();
     if (value.isEmpty) {
       MyToast.show(R.current.noAnyFavorite);
       return;
@@ -198,16 +124,12 @@ class CourseController extends GetxController {
     Get.dialog(FavoriteDialog(
         value: value,
         onPressed: (index) {
-          Model.instance.getCourseSetting().info = value[index]; //儲存課表
-          Model.instance.saveCourseSetting();
-          _showCourseTable(value[index]);
-          Model.instance.clearSemesterJsonList(); //須清除已儲存學期
+          CourseTableJson info = value[index];
+          courseModel.saveFavoriteCourse(info);
+          _showCourseTable(info);
           Get.back();
         },
-        onDelete: (index) async {
-          Model.instance.removeCourseTable(value[index]);
-          await Model.instance.saveCourseTableList();
-        }));
+        onDelete: (index) => courseModel.removeFavoriteCourse(value[index])));
   }
 
   //顯示課程對話框
@@ -222,9 +144,10 @@ class CourseController extends GetxController {
           _showCourseData(courseInfo, 0);
         },
         onRemoveTap: () async {
-          courseTableData!.removeCourseByCourseId(courseInfo.main.course.id);
-          Model.instance.getCourseSetting().info = courseTableData!; //儲存課表
-          Model.instance.saveCourseSetting();
+          if(courseTableData != null) {
+            courseTableData!.removeCourseByCourseId(courseInfo.main.course.id);
+            courseModel.saveCourse(courseTableData!);
+          }
           await _loadSetting();
         }));
   }
@@ -274,7 +197,7 @@ class CourseController extends GetxController {
   }
 
   Future screenshot() async {
-    Uint8List? pngBytes = await screenshotController.capture();
+    Uint8List? pngBytes = await screenshotController.capture(pixelRatio: 2.0);
     if(pngBytes == null) {
       return;
     }
@@ -288,23 +211,15 @@ class CourseController extends GetxController {
       MyToast.show(R.current.settingCompleteWithError);
       return;
     }
-
     MyToast.show(R.current.settingComplete);
   }
 
   Future<void> onCustomCourseSearchSubmit(String value) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    CacheTask? task;
-
-    final taskFlow = TaskFlow();
-    task = CourseSearchTask(
-        courseTableData!.courseSemester, value);
-    taskFlow.addTask(task);
-    if (await taskFlow.start()) {
-      courseInfoList.value = task.result;
-      if(courseInfoList.isEmpty) {
-        CustomSnackBar.showCustomErrorSnackBar(title: R.current.error, message: R.current.courseSearchNotFound);
-      }
+    var res = await courseModel.getQueryCourse(courseTableData!.courseSemester, value);
+    courseInfoList.value = res;
+    if(courseInfoList.isEmpty) {
+      CustomSnackBar.showCustomErrorSnackBar(title: R.current.error, message: R.current.courseSearchNotFound);
     }
   }
 
@@ -318,8 +233,7 @@ class CourseController extends GetxController {
     if (!courseTableData!.addCourseDetailByCourseInfo(info)) {
       MyToast.show(R.current.addCustomCourseError);
     }
-    Model.instance.getCourseSetting().info = courseTableData!; //儲存課表
-    Model.instance.saveCourseSetting();
+    courseModel.saveCourse(courseTableData!);
     _loadSetting();
   }
 }
