@@ -60,6 +60,26 @@ class S {
     );
   }
 
+  /// `NTUST TAT`
+  String get loginTitle {
+    return Intl.message(
+      'NTUST TAT',
+      name: 'loginTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A school affairs app specially designed for students of National Taiwan University of Science and Technology\nMoodle, semester schedule, score inquiry, school certificate, etc.\nAll kinds of services are available in one app`
+  String get loginDescription {
+    return Intl.message(
+      'A school affairs app specially designed for students of National Taiwan University of Science and Technology\nMoodle, semester schedule, score inquiry, school certificate, etc.\nAll kinds of services are available in one app',
+      name: 'loginDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Loading data error, some wrong data will be cleared`
   String get loadDataFail {
     return Intl.message(
@@ -1510,10 +1530,10 @@ class S {
     );
   }
 
-  /// `Information System`
+  /// `Info`
   String get informationSystem {
     return Intl.message(
-      'Information System',
+      'Info',
       name: 'informationSystem',
       desc: '',
       args: [],
@@ -2005,6 +2025,16 @@ class S {
     return Intl.message(
       'No relevant courses found',
       name: 'courseSearchNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Announcement`
+  String get announcementEmpty {
+    return Intl.message(
+      'No Announcement',
+      name: 'announcementEmpty',
       desc: '',
       args: [],
     );

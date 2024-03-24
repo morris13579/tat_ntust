@@ -6,14 +6,15 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_score.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_score_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/ui/pages/error/error_page.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class CourseScorePage extends StatefulWidget {
   final CourseInfoJson courseInfo;
 
   const CourseScorePage(
     this.courseInfo, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _CourseScorePageState();
@@ -30,12 +31,6 @@ class _CourseScorePageState extends State<CourseScorePage>
       AdManager.showDownloadAD();
     }
     return task.result;
-  }
-
-  Color getColor(int index) {
-    return (index % 2 == 1)
-        ? Theme.of(context).backgroundColor
-        : Theme.of(context).dividerColor;
   }
 
   @override
@@ -97,7 +92,7 @@ class _CourseScorePageState extends State<CourseScorePage>
                       Text(e.score),
                       Text(e.fullRange),
                       Text(e.percentage),
-                      Text(e.feedback),
+                      HtmlWidget(e.feedback),
                       Text(e.contribute),
                     ],
                   ),

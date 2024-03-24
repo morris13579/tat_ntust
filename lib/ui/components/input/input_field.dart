@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class InputField extends StatelessWidget {
   const InputField(
-      {Key? key,
+      {super.key,
       required this.hint,
       this.controller,
       this.inputType,
@@ -13,8 +13,9 @@ class InputField extends StatelessWidget {
       this.errorMsg = "",
       this.onChange,
       this.readOnly = false,
-      this.label, this.onTap, this.maxLines})
-      : super(key: key);
+      this.label,
+      this.onTap,
+      this.maxLines,});
 
   final String hint;
   final String? label;
@@ -56,6 +57,9 @@ class InputField extends StatelessWidget {
             maxLength: maxLength,
             readOnly: readOnly,
             onChanged: onChange,
+            autofillHints: [
+              inputType == TextInputType.visiblePassword ? AutofillHints.password : ''
+            ],
             onTap: onTap,
             maxLines: inputType == TextInputType.visiblePassword ? 1 : maxLines,
             style: const TextStyle(height: 1),

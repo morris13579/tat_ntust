@@ -18,7 +18,9 @@ AppBar mainAppbar(
 AppBar baseAppbar(
     {String title = "",
     List<Widget>? action,
-    BuildContext? context}) {
+    BuildContext? context,
+    PreferredSizeWidget? bottom,
+    Color? backgroundColor}) {
   return AppBar(
     leading: IconButton(
       splashColor: Colors.transparent,
@@ -34,8 +36,9 @@ AppBar baseAppbar(
     ),
     actions: action,
     centerTitle: false,
-    backgroundColor: Colors.transparent,
+    backgroundColor: Get.theme.appBarTheme.backgroundColor,
     elevation: 0,
+    bottom: bottom,
     title: Text(title),
   );
 }

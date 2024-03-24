@@ -28,7 +28,8 @@ Tables _$TablesFromJson(Map<String, dynamic> json) => Tables(
       userFullName: json['userfullname'] as String? ?? "",
       maxDepth: json['maxdepth'] as int? ?? 0,
       tableData: (json['tabledata'] as List<dynamic>?)
-          ?.map((e) => TableData.fromJson(e as Map<String, dynamic>))
+          ?.where((element) => element.length != 0)
+          .map((e) => TableData.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

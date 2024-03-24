@@ -1,6 +1,8 @@
 {
   "@@locale": "zh_TW",
   "app_name": "TAT",
+  "loginTitle": "臺灣科技大學 TAT",
+  "loginDescription": "專為臺灣科技大學學生設計的校務App\nMoodle、學期課表、成績查詢、在學證明等等\n一App在手 各種服務應有盡有",
   "loadDataFail": "載入資料錯誤，將清除部分錯誤資料",
   "agree": "同意",
   "wait": "等待",
@@ -195,5 +197,6 @@
   "webMail": "臺科大校內電子郵件(WebMail)",
   "pleaseEnterWebMailPassword": "請輸入WebMail密碼",
   "courseSearchHint": "在上方輸入文字來搜尋課程",
-  "courseSearchNotFound": "未搜尋到任何相關課程"
+  "courseSearchNotFound": "未搜尋到任何相關課程",
+  "announcementEmpty": "暫無公告"
 }

@@ -21,7 +21,7 @@ import 'package:flutter_app/ui/pages/course_table/modal/course_detail_dialog.dar
 import 'package:flutter_app/ui/pages/course_table/modal/favorite_dialog.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/semester_dialog.dart';
 import 'package:flutter_app/ui/components/over_repaint_boundary.dart';
-import 'package:flutter_app/ui/screen/login_screen.dart';
+import 'package:flutter_app/ui/screen/login/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';

@@ -44,6 +44,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "agree": MessageLookupByLibrary.simpleMessage("Agree"),
         "alertError": MessageLookupByLibrary.simpleMessage("An error occurred"),
         "announcement": MessageLookupByLibrary.simpleMessage("Announcements"),
+        "announcementEmpty":
+            MessageLookupByLibrary.simpleMessage("No Announcement"),
         "appWillClose": MessageLookupByLibrary.simpleMessage("APP will close"),
         "app_name": MessageLookupByLibrary.simpleMessage("TAT"),
         "areYouSureToDownload": MessageLookupByLibrary.simpleMessage(
@@ -164,8 +166,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "importCourse": MessageLookupByLibrary.simpleMessage("Import course"),
         "importCourseWarning": MessageLookupByLibrary.simpleMessage(
             "Note! After importing, it will not really join the course selection, just to facilitate viewing the time and place"),
-        "informationSystem":
-            MessageLookupByLibrary.simpleMessage("Information System"),
+        "informationSystem": MessageLookupByLibrary.simpleMessage("Info"),
         "inputCourseName": MessageLookupByLibrary.simpleMessage(
             "Please enter the course number course name"),
         "instructor": MessageLookupByLibrary.simpleMessage("Instructor"),
@@ -185,6 +186,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Login course system..."),
         "loginCourseError":
             MessageLookupByLibrary.simpleMessage("Login course system error"),
+        "loginDescription": MessageLookupByLibrary.simpleMessage(
+            "A school affairs app specially designed for students of National Taiwan University of Science and Technology\nMoodle, semester schedule, score inquiry, school certificate, etc.\nAll kinds of services are available in one app"),
         "loginMoodle": MessageLookupByLibrary.simpleMessage("Login Moodle..."),
         "loginMoodleError":
             MessageLookupByLibrary.simpleMessage("Login Moodle error"),
@@ -195,6 +198,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginNTUST": MessageLookupByLibrary.simpleMessage("login NTUST"),
         "loginSave": MessageLookupByLibrary.simpleMessage(
             "Account password has been saved"),
+        "loginTitle": MessageLookupByLibrary.simpleMessage("NTUST TAT"),
         "logout": MessageLookupByLibrary.simpleMessage("Sign out"),
         "logoutWarning": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to log out? \nAll data will be cleared"),

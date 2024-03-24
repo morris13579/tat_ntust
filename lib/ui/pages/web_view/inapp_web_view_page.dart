@@ -1,10 +1,14 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class InAppWebViewPage extends StatefulWidget {
   final WebUri url;
@@ -19,8 +23,8 @@ class InAppWebViewPage extends StatefulWidget {
     this.openWithExternalWebView = false,
     this.onWebViewDownload,
     required this.loadDone,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _InAppWebViewPageState();
@@ -73,7 +77,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
           name: cookie.name,
           value: cookie.value,
           domain: cookie.domain,
-          path: cookie.path!,
+          path: cookie.path ?? "/",
           maxAge: cookie.maxAge,
           isSecure: cookie.secure,
           isHttpOnly: cookie.httpOnly,
@@ -86,54 +90,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          SizedBox(
-            width: 50,
-            child: InkWell(
-              onTap: () async {
-                if (webView != null) {
-                  await webView!.goBack();
-                }
-              },
-              child: const Icon(Icons.arrow_back, color: Colors.white),
-            ),
-          ),
-          SizedBox(
-            width: 50,
-            child: InkWell(
-              onTap: () async {
-                if (webView != null) {
-                  await webView!.goForward();
-                }
-              },
-              child: const Icon(Icons.arrow_forward, color: Colors.white),
-            ),
-          ),
-          SizedBox(
-            width: 50,
-            child: InkWell(
-              onTap: () async {
-                if (webView != null) {
-                  await webView!.reload();
-                }
-              },
-              child: const Icon(Icons.refresh, color: Colors.white),
-            ),
-          ),
-          if (widget.openWithExternalWebView)
-            SizedBox(
-              width: 50,
-              child: InkWell(
-                onTap: () async {
-                  OpenUtils.launchURL(url.toString());
-                },
-                child: const Icon(Icons.open_in_new, color: Colors.white),
-              ),
-            ),
-        ],
-      ),
+      appBar: baseAppbar(title: widget.title, action: actionList),
       body: FutureBuilder<bool>(
         future: setCookies(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -149,14 +106,8 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                   Expanded(
                     child: InAppWebView(
                       initialUrlRequest: URLRequest(url: widget.url),
-                      initialOptions: InAppWebViewGroupOptions(
-                        android: AndroidInAppWebViewOptions(
-                          useHybridComposition: true, //android 12 keyboard
-                        ),
-                        crossPlatform: InAppWebViewOptions(
-                          useOnDownloadStart: true,
-                        ),
-                      ),
+                      initialSettings: InAppWebViewSettings(
+                          useHybridComposition: true, useOnDownloadStart: true),
                       onWebViewCreated: (InAppWebViewController controller) {
                         webView = controller;
                       },
@@ -213,5 +164,50 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
         },
       ),
     );
+  }
+
+  List<Widget> get actionList {
+    return [
+      IconButton(
+          splashRadius: 16,
+          onPressed: () async {
+            if (webView != null) {
+              await webView?.goBack();
+            }
+          },
+          icon: const Icon(
+            CupertinoIcons.left_chevron,
+            size: 18,
+          )),
+      IconButton(
+          splashRadius: 16,
+          onPressed: () async {
+            if (webView != null) {
+              await webView?.goForward();
+            }
+          },
+          icon: const Icon(
+            CupertinoIcons.right_chevron,
+            size: 18,
+          )),
+      IconButton(
+          splashRadius: 16,
+          onPressed: () async {
+            if (webView != null) {
+              await webView?.reload();
+            }
+          },
+          icon: const Icon(CupertinoIcons.refresh, size: 18)),
+
+      Visibility(
+          visible: widget.openWithExternalWebView,
+          child: IconButton(
+            splashRadius: 16,
+            onPressed: () async {
+              OpenUtils.launchURL(url.toString());
+            },
+            icon: SvgPicture.asset("assets/image/img_external_link.svg", color: Get.iconColor, height: 20,),
+          ))
+    ];
   }
 }

@@ -145,6 +145,7 @@ flutter:
   assets:
     - assets/
     - assets/image/
+    - assets/launcher/
 
   fonts:
     - family: MyIcon

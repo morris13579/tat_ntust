@@ -8,8 +8,12 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
+import 'package:flutter_app/ui/components/tile/course_info_tile.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/get.dart';
 
 class CourseInfoPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -29,26 +33,26 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.contents.name),
+        appBar: baseAppbar(
+          title: widget.contents.name,
         ),
         body: buildTree());
   }
 
-  IconData getIcon(String type) {
+  String getIcon(String type) {
     switch (type) {
       case "forum":
-        return Icons.message_outlined;
+        return "img_message";
       case "assign":
-        return Icons.assignment_outlined;
+        return "img_clipboard";
       case "folder":
-        return Icons.folder_outlined;
+        return "img_folder";
       case "label":
-        return Icons.label_outline;
+        return "img_tag";
       case "url":
-        return Icons.link_outlined;
+        return "img_link";
       default:
-        return Icons.file_copy_outlined;
+        return "img_copy";
     }
   }
 
@@ -177,13 +181,10 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
             color: getColor(index),
             child: Row(
               children: [
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: SvgPicture.asset("assets/image/${getIcon(ap.modname)}.svg", color: Get.iconColor,)),
                 Expanded(
-                  flex: 1,
-                  //https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1624611875/${ap.icon.pix}
-                  child: Icon(getIcon(ap.modname)),
-                ),
-                Expanded(
-                  flex: 8,
                   child: buildItem(ap, index),
                 ),
               ],

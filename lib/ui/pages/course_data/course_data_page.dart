@@ -4,6 +4,7 @@ import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/other/my_progress_dialog.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_directory_page.dart';
@@ -91,11 +92,8 @@ class _CourseDataPageState extends State<CourseDataPage>
     return DefaultTabController(
       length: tabPageList.length,
       child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: () => Get.back(),
-          ),
-          title: Text(course.name),
+        appBar: baseAppbar(
+          title: course.name,
           bottom: TabBar(
             indicatorColor: Get.theme.indicatorColor,
             indicatorPadding: const EdgeInsets.all(0),

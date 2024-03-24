@@ -218,14 +218,16 @@ class MoodleWebApiConnector {
       for (var i = grade.tables[0].tableData.length - 1; i >= 1; i--) {
         var g = grade.tables[0].tableData[i];
         var tagNode = parse(g.itemName.content);
-        String name;
-        if (tagNode
-            .getElementsByClassName("gradeitemheader")[0]
-            .attributes
-            .containsKey("href")) {
-          name = tagNode.getElementsByTagName("a")[0].text;
+        String name = "";
+        if (tagNode.getElementsByClassName("gradeitemheader").isNotEmpty &&
+            tagNode.attributes.containsKey("href")) {
+          if(tagNode.getElementsByTagName("a").isNotEmpty) {
+            name = tagNode.getElementsByTagName("a")[0].text;
+          }
         } else {
-          name = tagNode.getElementsByTagName("span")[0].attributes["title"]!;
+          if(tagNode.getElementsByTagName("span").isNotEmpty) {
+            name = tagNode.getElementsByTagName("span")[0].attributes["title"] ?? "";
+          }
         }
         value.add(MoodleScoreItem(
           name: name,
