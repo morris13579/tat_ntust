@@ -45,7 +45,7 @@ class InputField extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 4),
           decoration: BoxDecoration(
               border: Border.all(
-                  color: isError ? Colors.redAccent : Get.theme.primaryColor,
+                  color: isError ? Colors.redAccent : Get.iconColor!,
                   width: 1.2),
               borderRadius: BorderRadius.circular(8)),
           child: TextField(
@@ -66,7 +66,7 @@ class InputField extends StatelessWidget {
                 hintStyle: TextStyle(
                     color: isError
                         ? Colors.redAccent.withOpacity(0.4)
-                        : Get.theme.primaryColor.withOpacity(0.4)),
+                        : Colors.grey.withOpacity(0.4)),
                 contentPadding: const EdgeInsets.only(
                     left: 12, right: 12, top: 12, bottom: 12),
                 border: InputBorder.none),

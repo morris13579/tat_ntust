@@ -1730,10 +1730,10 @@ class S {
     );
   }
 
-  /// `Privacy policy`
+  /// `Privacy Policy`
   String get PrivacyPolicy {
     return Intl.message(
-      'Privacy policy',
+      'Privacy Policy',
       name: 'PrivacyPolicy',
       desc: '',
       args: [],

@@ -3,6 +3,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/ui/components/input/input_field.dart';
 import 'package:get/get.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -41,8 +42,11 @@ class CourseDetailDialog extends StatelessWidget {
               Model.instance.saveOtherSetting();
             },
           ),
+          const SizedBox(height: 4),
           Text(sprintf("%s : %s", [R.current.time, time])),
+          const SizedBox(height: 4),
           Text(sprintf("%s : %s", [R.current.location, classroomName])),
+          const SizedBox(height: 4),
           Text(sprintf("%s : %s", [R.current.instructor, teacherName])),
         ],
       ),
@@ -83,10 +87,9 @@ class CourseDetailDialog extends StatelessWidget {
         content: Row(
           children: <Widget>[
             Expanded(
-              child: TextField(
+              child: InputField(
                 controller: controller,
-                autofocus: true,
-                decoration: InputDecoration(hintText: value),
+                hint: value,
               ),
             )
           ],
@@ -104,7 +107,6 @@ class CourseDetailDialog extends StatelessWidget {
               })
         ],
       ),
-      barrierDismissible: true,
     );
     return v ?? value;
   }

@@ -18,8 +18,8 @@ class CourseDataPage extends StatefulWidget {
   const CourseDataPage(
     this.courseInfo,
     this.index, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _CourseDataPageState();
@@ -35,8 +35,30 @@ class _CourseDataPageState extends State<CourseDataPage>
   @override
   void initState() {
     super.initState();
-    tabPageList = TabPageList();
     testMoodleWebApi();
+
+    tabPageList = TabPageList();
+    _tabController = TabController(vsync: this, length: 3);
+    var filePage = TabPage(
+        R.current.file,
+        "img_file.svg",
+        CourseDirectoryPage(
+          widget.courseInfo,
+        ));
+    var announcementPage = TabPage(
+        R.current.announcement,
+        "img_message.svg",
+        CourseAnnouncementPage(
+          widget.courseInfo,
+        ));
+    tabPageList.add((widget.index == 0) ? filePage : announcementPage);
+    tabPageList.add((widget.index == 0) ? announcementPage : filePage);
+    tabPageList.add(TabPage(
+      R.current.score,
+      "img_education.svg",
+      CourseScorePage(widget.courseInfo),
+    ));
+    setState(() {});
   }
 
   void testMoodleWebApi() async {
@@ -49,28 +71,6 @@ class _CourseDataPageState extends State<CourseDataPage>
       MyProgressDialog.hideAllDialog();
       Model.instance.getOtherSetting().useMoodleWebApi = result;
     }
-
-    _tabController = TabController(vsync: this, length: 3);
-    var filePage = TabPage(
-        R.current.file,
-        Icons.folder,
-        CourseDirectoryPage(
-          widget.courseInfo,
-        ));
-    var announcementPage = TabPage(
-        R.current.announcement,
-        Icons.message,
-        CourseAnnouncementPage(
-          widget.courseInfo,
-        ));
-    tabPageList.add((widget.index == 0) ? filePage : announcementPage);
-    tabPageList.add((widget.index == 0) ? announcementPage : filePage);
-    tabPageList.add(TabPage(
-      R.current.score,
-      Icons.score,
-      CourseScorePage(widget.courseInfo),
-    ));
-    setState(() {});
   }
 
   @override
@@ -97,9 +97,9 @@ class _CourseDataPageState extends State<CourseDataPage>
           ),
           title: Text(course.name),
           bottom: TabBar(
+            indicatorColor: Get.theme.indicatorColor,
             indicatorPadding: const EdgeInsets.all(0),
-            labelPadding: const EdgeInsets.all(0),
-            isScrollable: true,
+            isScrollable: false,
             controller: _tabController,
             tabs: tabPageList.getTabList(context),
             onTap: (index) {

@@ -30,11 +30,8 @@ import 'package:screenshot/screenshot.dart';
 class CourseController extends GetxController {
   final courseModel = CourseModel();
   final RxString studentId = "".obs;
-  final FocusNode studentFocus = FocusNode();
-  final GlobalKey<OverRepaintBoundaryState> overRepaintKey = GlobalKey();
   final ScreenshotController screenshotController = ScreenshotController();
   final platform = const MethodChannel(AppConfig.methodChannelWidgetName);
-  final GlobalKey key = GlobalKey();
   Rx<CourseTableUIState> isLoading = CourseTableUIState.loading.obs;
   CourseTableJson? courseTableData;
   RxDouble courseHeight = 60.0.obs;
@@ -58,12 +55,6 @@ class CourseController extends GetxController {
     } else {
       await _loadSetting();
     }
-  }
-
-  @override
-  void onClose() {
-    studentFocus.dispose();
-    super.onClose();
   }
 
   void refreshSemester() {

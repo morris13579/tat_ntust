@@ -19,6 +19,7 @@ class AppThemes {
     iconTheme: const IconThemeData(
         color: Colors.black
     ),
+    indicatorColor: Colors.black,
     cupertinoOverrideTheme: const CupertinoThemeData(
       primaryColor: AppColors.mainColor,
     ),
@@ -56,9 +57,6 @@ class AppThemes {
           appBarTheme: const AppBarTheme(color: AppColors.darkAccent),
           toggleableActiveColor: Colors.blueAccent,
           dividerColor: const Color(0xFF2F2F2F),
-          cupertinoOverrideTheme: const CupertinoThemeData(
-            primaryColor: AppColors.darkAccent,
-          ),
           buttonTheme: const ButtonThemeData(buttonColor: AppColors.darkAccent),
           textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
@@ -71,6 +69,10 @@ class AppThemes {
               backgroundColor: Colors.white12,
               foregroundColor: Colors.white,
             ),
+          ),
+          indicatorColor: Colors.white,
+          tabBarTheme: const TabBarTheme(
+            indicatorColor: Colors.white
           ),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               selectedItemColor: Colors.blue))

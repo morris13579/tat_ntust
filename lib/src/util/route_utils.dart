@@ -19,7 +19,7 @@ import 'package:flutter_app/ui/pages/other/page/setting_page.dart';
 import 'package:flutter_app/ui/pages/other/page/store_edit_page.dart';
 import 'package:flutter_app/ui/pages/subsystem/sub_system_page.dart';
 import 'package:flutter_app/ui/pages/web_view/inapp_web_view_page.dart';
-import 'package:flutter_app/ui/screen/agree_privacy_policy_screen.dart';
+import 'package:flutter_app/ui/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:flutter_app/ui/screen/login_screen.dart';
 import 'package:flutter_app/ui/screen/main_screen.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -151,7 +151,7 @@ class RouteUtils {
 
   static Future toAgreePrivacyPolicyScreen() async {
     return await Get.offAll(
-      () => const AgreePrivacyPolicyScreen(),
+      () => const PrivacyPolicyScreen(),
       transition: transition,
     );
   }

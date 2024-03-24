@@ -26,7 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Contributors": MessageLookupByLibrary.simpleMessage("Contributors"),
         "Friday": MessageLookupByLibrary.simpleMessage("FRI"),
         "Monday": MessageLookupByLibrary.simpleMessage("MON"),
-        "PrivacyPolicy": MessageLookupByLibrary.simpleMessage("Privacy policy"),
+        "PrivacyPolicy": MessageLookupByLibrary.simpleMessage("Privacy Policy"),
         "Saturday": MessageLookupByLibrary.simpleMessage("SAT"),
         "Sunday": MessageLookupByLibrary.simpleMessage("SUN"),
         "Thursday": MessageLookupByLibrary.simpleMessage("THU"),

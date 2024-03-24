@@ -81,7 +81,6 @@ class CourseTablePage extends GetView<CourseController> {
             CourseConfig.showCourseTableNum; //計算每堂課高度
       },
       child: Column(
-        key: controller.key,
         children: <Widget>[
           Container(
             height: CourseConfig.studentIdHeight,
@@ -106,7 +105,7 @@ class CourseTablePage extends GetView<CourseController> {
                       const Padding(
                         padding: EdgeInsets.all(5),
                       ),
-                      const Icon(Icons.arrow_drop_down),
+                      SvgPicture.asset("assets/image/img_arrow_down.svg", color: Get.iconColor)
                     ],
                   ),
                 ),
@@ -213,6 +212,7 @@ class CourseTablePage extends GetView<CourseController> {
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 14,
+                        height: 1.2
                       ),
                       minFontSize: 10,
                       maxLines: 3,

@@ -21,8 +21,8 @@ class CourseDetailPage extends StatefulWidget {
     this.courseInfo,
     this.semester,
     this.index, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _CourseDetailPageState();
@@ -41,7 +41,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
     tabPageList = TabPageList();
     var courseInfoPage = TabPage(
       R.current.course,
-      Icons.info,
+      "img_info.svg",
       CourseInfoPage(
         widget.courseInfo.main.course.id,
         widget.semester,
@@ -50,7 +50,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
 
     var courseMemberPage = TabPage(
       R.current.member,
-      Icons.people,
+      "img_group.svg",
       CourseMemberPage(
         widget.courseInfo.main.course.id,
         widget.semester,
