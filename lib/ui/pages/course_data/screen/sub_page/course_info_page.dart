@@ -7,13 +7,15 @@ import 'package:flutter_app/src/file/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
+import 'package:flutter_app/src/util/open_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
-import 'package:flutter_app/ui/components/tile/course_info_tile.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_html_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class CourseInfoPage extends StatefulWidget {
   final CourseInfoJson courseInfo;
@@ -22,8 +24,8 @@ class CourseInfoPage extends StatefulWidget {
   const CourseInfoPage(
     this.courseInfo,
     this.contents, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _CourseInfoPageState();
@@ -86,7 +88,12 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
       case "label":
         break;
       case "url":
-        openWebView(ap, openWithExternalWebView: true);
+        if(ap.contents.isNotEmpty) {
+          OpenUtils.launchURL(ap.contents.first.fileurl);
+        }
+        break;
+      case "page":
+        Get.to(() => CourseHtmlPage(ap: ap));
         break;
       case "resource":
       default:
@@ -102,7 +109,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
     }
   }
 
-  final titleTextStyle = const TextStyle(fontSize: 14);
+  final titleTextStyle = const TextStyle(fontSize: 14, height: 1.2);
 
   Widget buildItem(Modules ap, int index) {
     switch (ap.modname) {
@@ -137,7 +144,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
                   children: [
                     Expanded(
                       child: InkWell(
-                        child: const Icon(Icons.download_outlined),
+                        child: SvgPicture.asset("assets/image/img_download.svg", color: Get.iconColor),
                         onTap: () {
                           handleTap(ap);
                         },
@@ -154,9 +161,13 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
           padding: const EdgeInsets.only(left: 20),
           child: Row(
             children: [
-              Text(
-                ap.name,
-                style: titleTextStyle,
+              Expanded(
+                child: Text(
+                  ap.name,
+                  style: titleTextStyle,
+                  overflow: TextOverflow.fade,
+                  maxLines: 2,
+                ),
               )
             ],
           ),
