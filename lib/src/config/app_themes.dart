@@ -75,6 +75,7 @@ class AppThemes {
             indicatorColor: Colors.white
           ),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            unselectedItemColor: Colors.grey,
               selectedItemColor: Colors.blue))
       .copyWith(
     colorScheme:

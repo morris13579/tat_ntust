@@ -19,6 +19,7 @@ import 'package:flutter_app/ui/pages/course_table/course_table_page.dart';
 import 'package:flutter_app/ui/pages/other/other_page.dart';
 import 'package:flutter_app/ui/pages/score/score_page.dart';
 import 'package:flutter_app/ui/pages/subsystem/sub_system_page.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -139,31 +140,46 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       onTap: _onTap,
       items: [
         BottomNavigationBarItem(
-          icon: const Icon(
-            EvaIcons.clockOutline,
+          icon: SvgPicture.asset(
+            "assets/image/img_clock.svg",
+            color: _currentIndex == 0
+                ? Get.theme.bottomNavigationBarTheme.selectedItemColor
+                : Get.theme.bottomNavigationBarTheme.unselectedItemColor,
           ),
           label: R.current.titleCourse,
         ),
         BottomNavigationBarItem(
-          icon: const Icon(
-            EvaIcons.infoOutline,
+          icon: SvgPicture.asset(
+            "assets/image/img_info.svg",
+            color: _currentIndex == 1
+                ? Get.theme.bottomNavigationBarTheme.selectedItemColor
+                : Get.theme.bottomNavigationBarTheme.unselectedItemColor,
           ),
           label: R.current.informationSystem,
         ),
         BottomNavigationBarItem(
-          icon: const Icon(
-            EvaIcons.calendarOutline,
+          icon: SvgPicture.asset(
+            "assets/image/img_calendar.svg",
+            color: _currentIndex == 2
+                ? Get.theme.bottomNavigationBarTheme.selectedItemColor
+                : Get.theme.bottomNavigationBarTheme.unselectedItemColor,
           ),
           label: R.current.calendar,
         ),
         BottomNavigationBarItem(
-            icon: const Icon(
-              EvaIcons.bookOpenOutline,
+            icon: SvgPicture.asset(
+              "assets/image/img_book.svg",
+              color: _currentIndex == 3
+                  ? Get.theme.bottomNavigationBarTheme.selectedItemColor
+                  : Get.theme.bottomNavigationBarTheme.unselectedItemColor,
             ),
             label: R.current.titleScore),
         BottomNavigationBarItem(
-            icon: const Icon(
-              EvaIcons.menu,
+            icon: SvgPicture.asset(
+              "assets/image/img_menu.svg",
+              color: _currentIndex == 4
+                  ? Get.theme.bottomNavigationBarTheme.selectedItemColor
+                  : Get.theme.bottomNavigationBarTheme.unselectedItemColor,
             ),
             label: R.current.titleOther),
       ],
