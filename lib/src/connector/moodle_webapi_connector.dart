@@ -250,6 +250,7 @@ class MoodleWebApiConnector {
   static Future<bool> testMoodleWebApi() async {
     try {
       var r = await DioConnector.instance.dio.get(_webAPIUrl);
+      print(r.statusCode);
       return 200 == r.statusCode;
     } catch (e) {
       return false;
