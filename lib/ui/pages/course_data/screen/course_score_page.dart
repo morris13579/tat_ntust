@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/ad/ad_manager.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
+import 'package:flutter_app/src/model/grade/table_data_type_a.dart';
+import 'package:flutter_app/src/model/grade/table_data_type_b.dart';
+import 'package:flutter_app/src/model/grade/tables.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_score.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_score_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
@@ -22,7 +25,7 @@ class CourseScorePage extends StatefulWidget {
 
 class _CourseScorePageState extends State<CourseScorePage>
     with AutomaticKeepAliveClientMixin {
-  Future<List<MoodleScoreItem>?> initTask() async {
+  Future<TablesEntity?> initTask() async {
     String courseId = widget.courseInfo.main.course.id;
     TaskFlow taskFlow = TaskFlow();
     var task = MoodleScoreTask(courseId);
@@ -38,10 +41,10 @@ class _CourseScorePageState extends State<CourseScorePage>
     super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
     return Container(
       padding: const EdgeInsets.only(top: 10),
-      child: FutureBuilder<List<MoodleScoreItem>?>(
+      child: FutureBuilder<TablesEntity?>(
         future: initTask(),
         builder: (BuildContext context,
-            AsyncSnapshot<List<MoodleScoreItem>?> snapshot) {
+            AsyncSnapshot<TablesEntity?> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data == null) {
               return const ErrorPage();
@@ -56,51 +59,21 @@ class _CourseScorePageState extends State<CourseScorePage>
     );
   }
 
-  Widget buildTree(List<MoodleScoreItem> scoreList) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-        child: Table(
-          columnWidths: const <int, TableColumnWidth>{
-            //指定索引及固定列宽
-            0: FixedColumnWidth(75.0),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          //設定表格樣式
-          border: TableBorder.all(style: BorderStyle.solid, color: Colors.white),
-          children: <TableRow>[
-            TableRow(
-              children: <Widget>[
-                Text(R.current.rankItem),
-                Text(R.current.weight),
-                Text(R.current.score),
-                Text(R.current.fullRange),
-                Text(R.current.percentage),
-                Text(R.current.feedback),
-                Text(R.current.contribute),
-              ],
-            ),
-            ...scoreList
-                .map(
-                  (e) => TableRow(
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Text(e.name),
-                      ),
-                      Text(e.weight),
-                      Text(e.score),
-                      Text(e.fullRange),
-                      Text(e.percentage),
-                      HtmlWidget(e.feedback),
-                      Text(e.contribute),
-                    ],
-                  ),
-                )
-          ],
-        ),
-      ),
-    );
+  Widget buildTree(TablesEntity scoreData) {
+    return ListView.builder(itemBuilder: (context, index) {
+      var data = scoreData.tableData[index];
+      if(data.length <= 2) {
+        // 標題
+        var typeA = TableDataTypeAEntity.fromJson(data);
+        // TODO: 加上UI
+        return HtmlWidget("* ${typeA.itemName?.content ?? ""}");
+      } else {
+        // 成績內容
+        var typeB = TableDataTypeBEntity.fromJson(data);
+        // TODO: 加上UI
+        return HtmlWidget(typeB.itemName?.content ?? "");
+      }
+    }, itemCount: scoreData.tableData.length,);
   }
 
   @override

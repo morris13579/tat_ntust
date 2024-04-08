@@ -18,6 +18,12 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   var controller = Get.put(MainController());
 
   @override
+  void initState() {
+    super.initState();
+    controller.appInit();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     AnalyticsUtils.observer

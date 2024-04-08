@@ -84,9 +84,9 @@ class _CourseInfoPageState extends State<CourseInfoPage>
       listItem.add(
           _buildCourseInfo(R.current.courseURL, courseExtraInfo.courseURL));
       listItem.add(_buildCourseInfo(
-          R.current.courseObject, courseExtraInfo.courseObject));
+          R.current.courseObject, courseExtraInfo.courseObject.trimLeft()));
       listItem.add(_buildCourseInfo(
-          R.current.courseContent, courseExtraInfo.courseContent));
+          R.current.courseContent, courseExtraInfo.courseContent.trimLeft()));
       listItem.add(_buildCourseInfo(
           R.current.courseTextbook, courseExtraInfo.courseTextbook));
       listItem.add(_buildCourseInfo(

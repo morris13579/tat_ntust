@@ -24,12 +24,6 @@ class MainController extends GetxController {
   RxInt currentIndex = 0.obs;
   RxList<Widget> pageList = <Widget>[].obs;
 
-  @override
-  Future<void> onInit() async {
-    super.onInit();
-    await appInit();
-  }
-
   Future<void> appInit() async {
     var context = Get.context;
     if(context == null) {
