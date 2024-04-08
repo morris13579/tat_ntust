@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_link.dart';
+import 'package:flutter_app/src/controller/main_page/main_controller.dart';
 import 'package:flutter_app/src/file/file_store.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
@@ -27,12 +28,9 @@ enum OnListViewPress {
 }
 
 class OtherPage extends StatefulWidget {
-  final PageController pageController;
-
-  const OtherPage(
-    this.pageController, {
-    Key? key,
-  }) : super(key: key);
+  const OtherPage({
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _OtherPageState();
@@ -101,12 +99,11 @@ class _OtherPageState extends State<OtherPage> {
             dialogType: DialogType.warning,
             title: R.current.warning,
             btnOkText: R.current.sure,
-            btnOkOnPress: () {
+            btnOkOnPress: () async {
               Get.back();
               TaskFlow.resetLoginStatus();
-              Model.instance.logout().then((_) {
-                widget.pageController.jumpToPage(0);
-              });
+              await Model.instance.logout();
+              Get.find<MainController>().pageController.jumpToPage(0);
             });
         ErrorDialog(parameter).show();
         break;
@@ -142,7 +139,7 @@ class _OtherPageState extends State<OtherPage> {
         RouteUtils.toAboutPage();
         break;
       case OnListViewPress.setting:
-        RouteUtils.toSettingPage(widget.pageController);
+        RouteUtils.toSettingPage();
         break;
       case OnListViewPress.report:
         String link = AppLink.feedbackBaseUrl;

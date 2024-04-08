@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 
 import 'debug/log/log.dart';
 import 'generated/l10n.dart';
+import 'src/controller/main_page/main_controller.dart';
 
 Future<void> main() async {
   await runZonedGuarded(() async {

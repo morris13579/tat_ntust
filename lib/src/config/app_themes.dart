@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
+import 'package:get/get.dart';
 
 class AppThemes {
   static final lightTheme = ThemeData(
@@ -69,6 +70,9 @@ class AppThemes {
               backgroundColor: Colors.white12,
               foregroundColor: Colors.white,
             ),
+          ),
+          progressIndicatorTheme: ProgressIndicatorThemeData(
+            color: Get.theme.primaryColor
           ),
           indicatorColor: Colors.white,
           tabBarTheme: const TabBarTheme(

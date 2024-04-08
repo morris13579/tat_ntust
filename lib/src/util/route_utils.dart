@@ -111,9 +111,9 @@ class RouteUtils {
     );
   }
 
-  static Future toSettingPage(PageController controller) async {
+  static Future toSettingPage() async {
     return await Get.to(
-      () => SettingPage(controller),
+      () => const SettingPage(),
       transition: transition,
     );
   }
