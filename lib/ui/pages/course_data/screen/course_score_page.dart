@@ -5,7 +5,7 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_score.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_score_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
-import 'package:flutter_app/ui/pages/error/error_page.dart';
+import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class CourseScorePage extends StatefulWidget {

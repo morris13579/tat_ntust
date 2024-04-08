@@ -5,6 +5,7 @@ import 'package:flutter_app/src/config/app_themes.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/providers/app_provider.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/pages/course_detail/screen/course_info_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/tab_page.dart';
 import 'package:get/get.dart';
@@ -47,7 +48,6 @@ class _CourseDetailPageState extends State<CourseDetailPage>
         widget.semester,
       ),
     );
-
     var courseMemberPage = TabPage(
       R.current.member,
       "img_group.svg",
@@ -73,12 +73,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
             bool pop = (currentState == null) ? true : currentState.canPop();
             return pop;
           },
-          child: MaterialApp(
-            title: AppConfig.appName,
-            theme: appProvider.theme,
-            darkTheme: AppThemes.darkTheme,
-            home: tabPageView(),
-          ),
+          child: tabPageView()
         );
       },
     );
@@ -90,11 +85,8 @@ class _CourseDetailPageState extends State<CourseDetailPage>
     return DefaultTabController(
       length: tabPageList.length,
       child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: () => Get.back(),
-          ),
-          title: Text(course.name),
+        appBar: baseAppbar(
+          title: course.name,
           bottom: TabBar(
             indicatorPadding: const EdgeInsets.all(0),
             labelPadding: const EdgeInsets.all(0),

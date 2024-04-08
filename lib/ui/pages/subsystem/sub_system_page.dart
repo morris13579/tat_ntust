@@ -6,7 +6,7 @@ import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/ntust/ntust_sub_system_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
-import 'package:flutter_app/ui/pages/error/error_page.dart';
+import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_app/ui/pages/password/webmail_password_dialog.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';

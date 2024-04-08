@@ -7,7 +7,7 @@ import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/task/course/course_extra_info_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
-import 'package:flutter_app/ui/pages/error/error_page.dart';
+import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -18,8 +18,8 @@ class CourseInfoPage extends StatefulWidget {
   const CourseInfoPage(
     this.courseId,
     this.semester, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _CourseInfoPageState();
@@ -37,6 +37,7 @@ class _CourseInfoPageState extends State<CourseInfoPage>
     var task = CourseExtraInfoTask(courseId, widget.semester);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
+      listItem.clear();
       courseExtraInfo = task.result;
 
       listItem
@@ -127,6 +128,7 @@ class _CourseInfoPageState extends State<CourseInfoPage>
     return AnimationLimiter(
       child: ListView.builder(
         itemCount: listItem.length,
+        padding: const EdgeInsets.only(bottom: 6),
         itemBuilder: (BuildContext context, int index) {
           return AnimationConfiguration.staggeredList(
             position: index,
@@ -134,13 +136,7 @@ class _CourseInfoPageState extends State<CourseInfoPage>
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque, //讓透明部分有反應
-                  child: Container(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: listItem[index]),
-                  onTap: () {},
-                ),
+                child: listItem[index] ?? const SizedBox(),
               ),
             ),
           );
@@ -153,12 +149,17 @@ class _CourseInfoPageState extends State<CourseInfoPage>
     if (info.isEmpty) {
       return null;
     }
-    return Container(
-      padding: const EdgeInsets.only(bottom: 5),
-      child: Card(
-        child: ListTile(
-          title: Text(text),
-          subtitle: Text(info),
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+            const SizedBox(height: 6),
+            Text(info, style: const TextStyle(height: 1.2),),
+          ],
         ),
       ),
     );

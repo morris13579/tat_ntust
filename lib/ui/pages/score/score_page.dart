@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
-import 'package:flutter_app/ui/pages/error/error_page.dart';
-import 'package:flutter_app/ui/pages/score/score_page_controller.dart';
+import 'package:flutter_app/src/controller/score_page/score_page_controller.dart';
+import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:get/get.dart';
 
 class ScoreViewerPage extends StatefulWidget {

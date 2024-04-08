@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_config.dart';
+import 'package:flutter_app/src/controller/main_page/main_controller.dart';
 import 'package:flutter_app/src/enum/course_table_ui_state.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
@@ -51,7 +52,10 @@ class CourseController extends GetxController {
     if (userData.account.isEmpty || userData.password.isEmpty) {
       isLoading.value = CourseTableUIState.loading;
       await Future.delayed(const Duration(milliseconds: 500));
+
       Get.offAll(() => const LoginScreen());
+      Get.delete<CourseController>();
+      Get.delete<MainController>();
     } else {
       await _loadSetting();
     }

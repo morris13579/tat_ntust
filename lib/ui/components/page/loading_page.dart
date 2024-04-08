@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_utils/src/platform/platform.dart';
 
 class LoadingPage extends StatelessWidget {
@@ -49,7 +50,9 @@ class LoadingPage extends StatelessWidget {
 
       );
     } else {
-      return const CircularProgressIndicator();
+      return CircularProgressIndicator(
+        color: Get.theme.indicatorColor,
+      );
     }
   }
 }
