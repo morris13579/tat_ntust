@@ -24,6 +24,12 @@ class MainController extends GetxController {
   RxInt currentIndex = 0.obs;
   RxList<Widget> pageList = <Widget>[].obs;
 
+  @override
+  Future<void> onInit() async {
+    super.onInit();
+    await appInit();
+  }
+
   Future<void> appInit() async {
     var context = Get.context;
     if(context == null) {
@@ -56,6 +62,7 @@ class MainController extends GetxController {
         const ScoreViewerPage(),
         const OtherPage()
       ]);
+      Get.forceAppUpdate();
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
     }
