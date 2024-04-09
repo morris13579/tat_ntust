@@ -121,6 +121,7 @@ dependencies:
   google_mobile_ads: ^4.0.0
   flutter_svg: ^2.0.10+1
   screenshot: ^2.3.0
+  photo_view: ^0.14.0
 
 dependency_overrides:
   intl: ^0.18.0

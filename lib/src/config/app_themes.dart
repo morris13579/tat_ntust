@@ -55,6 +55,10 @@ class AppThemes {
           iconTheme: const IconThemeData(
             color: Colors.white
           ),
+          colorScheme: ColorScheme.fromSwatch(
+            brightness: Brightness.dark,
+            accentColor: AppColors.mainColor
+          ),
           appBarTheme: const AppBarTheme(color: AppColors.darkAccent),
           toggleableActiveColor: Colors.blueAccent,
           dividerColor: const Color(0xFF2F2F2F),
@@ -80,9 +84,6 @@ class AppThemes {
           ),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             unselectedItemColor: Colors.grey,
-              selectedItemColor: Colors.blue))
-      .copyWith(
-    colorScheme:
-        ThemeData().colorScheme.copyWith(secondary: AppColors.darkAccent),
+              selectedItemColor: Colors.blue)
   );
 }

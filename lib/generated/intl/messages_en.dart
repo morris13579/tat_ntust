@@ -72,6 +72,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "closeOnce":
             MessageLookupByLibrary.simpleMessage("Press again to close"),
         "contribute": MessageLookupByLibrary.simpleMessage("contribute"),
+        "contributionCourse": MessageLookupByLibrary.simpleMessage(
+            "Contribution to course total"),
         "coreAbility": MessageLookupByLibrary.simpleMessage("Core ability"),
         "course": MessageLookupByLibrary.simpleMessage("Course"),
         "courseContent": MessageLookupByLibrary.simpleMessage("Course content"),

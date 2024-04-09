@@ -2039,6 +2039,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Contribution to course total`
+  String get contributionCourse {
+    return Intl.message(
+      'Contribution to course total',
+      name: 'contributionCourse',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

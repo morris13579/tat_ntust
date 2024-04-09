@@ -34,6 +34,8 @@ class TablesEntity {
         tableDataList.add(item as Map<String, dynamic>);
       } catch(e) {
         // item 可能是空list 沒辦法解析成map
+        // 加入空map，ui判斷繪製分隔線
+        tableDataList.add({});
       }
     }
     return TablesEntity(json["courseid"] as int, json["userid"] as int,

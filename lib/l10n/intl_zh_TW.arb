@@ -198,5 +198,6 @@
   "pleaseEnterWebMailPassword": "請輸入WebMail密碼",
   "courseSearchHint": "在上方輸入文字來搜尋課程",
   "courseSearchNotFound": "未搜尋到任何相關課程",
-  "announcementEmpty": "暫無公告"
+  "announcementEmpty": "暫無公告",
+  "contributionCourse": "貢獻到課程總分"
 }

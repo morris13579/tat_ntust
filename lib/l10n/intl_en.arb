@@ -198,5 +198,6 @@
   "pleaseEnterWebMailPassword": "Please Enter WebMail Password",
   "courseSearchHint": "Enter text above to search for courses",
   "courseSearchNotFound": "No relevant courses found",
-  "announcementEmpty": "No Announcement"
+  "announcementEmpty": "No Announcement",
+  "contributionCourse": "Contribution to course total"
 }

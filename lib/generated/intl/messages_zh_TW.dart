@@ -65,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "classroom": MessageLookupByLibrary.simpleMessage("教室"),
         "closeOnce": MessageLookupByLibrary.simpleMessage("再按一次關閉"),
         "contribute": MessageLookupByLibrary.simpleMessage("貢獻到課程總分"),
+        "contributionCourse": MessageLookupByLibrary.simpleMessage("貢獻到課程總分"),
         "coreAbility": MessageLookupByLibrary.simpleMessage("專業核心能力"),
         "course": MessageLookupByLibrary.simpleMessage("課程"),
         "courseContent": MessageLookupByLibrary.simpleMessage("課程大綱"),
