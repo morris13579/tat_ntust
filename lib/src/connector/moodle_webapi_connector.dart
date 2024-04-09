@@ -1,15 +1,14 @@
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
+import 'package:flutter_app/src/model/grade/tables.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
-import 'package:flutter_app/src/model/moodle_webapi/moodle_gradereport_user_get_grades_table.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
-import 'package:flutter_app/src/model/moodle_webapi/moodle_score.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
-import 'package:html/parser.dart';
 
 enum MoodleWebApiConnectorStatus { loginSuccess, loginFail, unknownError }
 
@@ -186,9 +185,9 @@ class MoodleWebApiConnector {
     }
   }
 
-  static Future<List<MoodleScoreItem>?> getScore(String id) async {
+  static Future<TablesEntity?> getScore(String id) async {
     ConnectorParameter parameter;
-    Map result;
+    Map<String, dynamic> result;
     try {
       parameter = ConnectorParameter(_webAPIUrl);
       parameter.data = {
@@ -211,34 +210,9 @@ class MoodleWebApiConnector {
         "courseid": id,
         "userid": userId
       };
-      List<MoodleScoreItem> value = [];
       result = await Connector.getJsonByPost(parameter);
-      var grade = MoodleGradeReportUserGetGradesTable.fromJson(
-          result as Map<String, dynamic>);
-      for (var i = grade.tables[0].tableData.length - 1; i >= 1; i--) {
-        var g = grade.tables[0].tableData[i];
-        var tagNode = parse(g.itemName.content);
-        String name;
-        if (tagNode
-            .getElementsByClassName("gradeitemheader")[0]
-            .attributes
-            .containsKey("href")) {
-          name = tagNode.getElementsByTagName("a")[0].text;
-        } else {
-          name = tagNode.getElementsByTagName("span")[0].attributes["title"]!;
-        }
-        value.add(MoodleScoreItem(
-          name: name,
-          weight: HtmlUtils.clean(g.weight.content),
-          score: HtmlUtils.clean(g.grade.content),
-          fullRange: HtmlUtils.clean(g.range.content),
-          percentage: HtmlUtils.clean(g.percentage.content),
-          feedback: HtmlUtils.clean(g.feedback.content),
-          contribute: HtmlUtils.clean(g.contributiontocoursetotal.content),
-        ));
-      }
-
-      return value;
+      var tableData = TablesEntity.fromJson(result["tables"][0]);
+      return tableData;
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
       return null;
@@ -248,6 +222,7 @@ class MoodleWebApiConnector {
   static Future<bool> testMoodleWebApi() async {
     try {
       var r = await DioConnector.instance.dio.get(_webAPIUrl);
+      print(r.statusCode);
       return 200 == r.statusCode;
     } catch (e) {
       return false;

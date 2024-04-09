@@ -9,8 +9,8 @@ class MyToast {
         toastLength: toastLength,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: AppColors.mainColor,
-        textColor: Colors.white,
+        backgroundColor: Colors.white,
+        textColor: Colors.black,
         fontSize: 16.0);
   }
 }

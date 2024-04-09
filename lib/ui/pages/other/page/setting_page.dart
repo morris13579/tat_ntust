@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_themes.dart';
+import 'package:flutter_app/src/controller/main_page/main_controller.dart';
 import 'package:flutter_app/src/file/file_store.dart';
 import 'package:flutter_app/src/providers/app_provider.dart';
 import 'package:flutter_app/src/store/model.dart';
@@ -15,12 +16,9 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class SettingPage extends StatefulWidget {
-  final PageController pageController;
-
-  const SettingPage(
-    this.pageController, {
-    Key? key,
-  }) : super(key: key);
+  const SettingPage({
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _SettingPageState();
@@ -103,15 +101,12 @@ class _SettingPageState extends State<SettingPage> {
         ],
       ),
       value: (LanguageUtils.getLangIndex() == LangEnum.en),
-      onChanged: (value) {
-        setState(() {
-          int langIndex = 1 - LanguageUtils.getLangIndex().index;
-          LanguageUtils.setLangByIndex(LangEnum.values.toList()[langIndex])
-              .then((_) {
-            widget.pageController.jumpToPage(0);
-            Get.back();
-          });
-        });
+      onChanged: (value) async {
+        int langIndex = 1 - LanguageUtils.getLangIndex().index;
+        await LanguageUtils.setLangByIndex(LangEnum.values.toList()[langIndex]);
+        Get.find<MainController>().pageController.jumpToPage(0);
+        Get.back();
+        setState(() {});
       },
     );
   }

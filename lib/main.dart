@@ -22,18 +22,18 @@ import 'debug/log/log.dart';
 import 'generated/l10n.dart';
 
 Future<void> main() async {
-  // Pass all uncaught errors from the framework to Crashlytics.
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  await CloudMessagingUtils.init();
-  await SystemChrome.setPreferredOrientations(
-    [
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ],
-  );
-  runZonedGuarded(() {
+  await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    await CloudMessagingUtils.init();
+    await SystemChrome.setPreferredOrientations(
+      [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ],
+    );
+
     runApp(
       MultiProvider(
         providers: [
@@ -50,7 +50,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

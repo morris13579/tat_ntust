@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:alice_lightweight/alice.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -7,6 +8,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/interceptors/request_interceptor.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:get/get.dart' as get_utils;
 import 'package:path_provider/path_provider.dart';
 
@@ -25,7 +27,7 @@ class DioConnector {
   );
 
   static final BaseOptions dioOptions = BaseOptions(
-      connectTimeout: const Duration(milliseconds: 5000),
+      connectTimeout: const Duration(milliseconds: 10000),
       receiveTimeout: const Duration(milliseconds: 10000),
       sendTimeout: const Duration(milliseconds: 5000),
       headers: _headers,
@@ -125,6 +127,20 @@ class DioConnector {
       response = await dio.get(url, queryParameters: data);
       return response;
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Uint8List?> getData(ConnectorParameter parameter) async {
+    try {
+      String url = parameter.url;
+      dio.interceptors.add(CookieManager(_cookieJar));
+      var response = await dio.get<Uint8List>(url, options: Options(
+        responseType: ResponseType.bytes,
+      ));
+
+      return response.data;
+    } catch (_) {
       rethrow;
     }
   }

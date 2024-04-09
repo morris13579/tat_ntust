@@ -25,7 +25,7 @@ class MoodleConnector {
     List<Element> nodes;
     ConnectorParameter parameter;
     try {
-      String? loginToken;
+      String loginToken = "";
 
       parameter = ConnectorParameter(_loginUrl);
       result = await Connector.getRedirects(parameter);
@@ -40,7 +40,7 @@ class MoodleConnector {
       for (var i in nodes) {
         if (i.attributes["name"] != null &&
             i.attributes["name"]!.contains("logintoken")) {
-          loginToken = i.attributes["value"];
+          loginToken = i.attributes["value"] ?? "";
           break;
         }
       }
@@ -48,7 +48,7 @@ class MoodleConnector {
         "username": account,
         "password": password,
         "anchor": "",
-        "logintoken": loginToken!
+        "logintoken": loginToken
       };
       parameter.data = data;
       result = await Connector.getRedirects(parameter, usePost: true);

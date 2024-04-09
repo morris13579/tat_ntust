@@ -1,23 +1,25 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class TabPage {
   late GlobalKey<NavigatorState> navigatorKey;
   late Widget tab;
   late Widget tabPage;
 
-  TabPage(String title, IconData icons, Widget initPage,
+  TabPage(String title, String path, Widget initPage,
       {useNavigatorKey = false}) {
     navigatorKey = GlobalKey();
-    tab = Column(
-      children: <Widget>[
-        Icon(icons),
-        AutoSizeText(
-          title,
-          maxLines: 1,
-          minFontSize: 6,
-        ),
-      ],
+    tab = Tab(
+      icon: SvgPicture.asset("assets/image/$path", color: Get.iconColor, height: 24),
+      iconMargin: const EdgeInsets.only(bottom: 6),
+      height: 64.0,
+      child: AutoSizeText(
+        title,
+        maxLines: 1,
+        minFontSize: 6,
+      ),
     );
     tabPage = (useNavigatorKey)
         ? Navigator(

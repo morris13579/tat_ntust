@@ -42,6 +42,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "agree": MessageLookupByLibrary.simpleMessage("同意"),
         "alertError": MessageLookupByLibrary.simpleMessage("發生錯誤"),
         "announcement": MessageLookupByLibrary.simpleMessage("公告"),
+        "announcementEmpty": MessageLookupByLibrary.simpleMessage("暫無公告"),
         "appWillClose": MessageLookupByLibrary.simpleMessage("即將關閉應用程式"),
         "app_name": MessageLookupByLibrary.simpleMessage("TAT"),
         "areYouSureToDownload":
@@ -64,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "classroom": MessageLookupByLibrary.simpleMessage("教室"),
         "closeOnce": MessageLookupByLibrary.simpleMessage("再按一次關閉"),
         "contribute": MessageLookupByLibrary.simpleMessage("貢獻到課程總分"),
+        "contributionCourse": MessageLookupByLibrary.simpleMessage("貢獻到課程總分"),
         "coreAbility": MessageLookupByLibrary.simpleMessage("專業核心能力"),
         "course": MessageLookupByLibrary.simpleMessage("課程"),
         "courseContent": MessageLookupByLibrary.simpleMessage("課程大綱"),
@@ -75,6 +77,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "courseObject": MessageLookupByLibrary.simpleMessage("課程宗旨"),
         "courseRefbook": MessageLookupByLibrary.simpleMessage("參考書目"),
         "courseRemark": MessageLookupByLibrary.simpleMessage("備註說明"),
+        "courseSearchHint":
+            MessageLookupByLibrary.simpleMessage("在上方輸入文字來搜尋課程"),
+        "courseSearchNotFound":
+            MessageLookupByLibrary.simpleMessage("未搜尋到任何相關課程"),
         "courseTextbook": MessageLookupByLibrary.simpleMessage("教科書"),
         "courseTimes": MessageLookupByLibrary.simpleMessage("上課時數"),
         "courseURL": MessageLookupByLibrary.simpleMessage("課程相關網址"),
@@ -155,6 +161,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("登入"),
         "loginCourse": MessageLookupByLibrary.simpleMessage("登入課程系統..."),
         "loginCourseError": MessageLookupByLibrary.simpleMessage("登入課程系統錯誤"),
+        "loginDescription": MessageLookupByLibrary.simpleMessage(
+            "專為臺灣科技大學學生設計的校務App\nMoodle、學期課表、成績查詢、在學證明等等\n一App在手 各種服務應有盡有"),
         "loginMoodle": MessageLookupByLibrary.simpleMessage("登入Moodle中..."),
         "loginMoodleError": MessageLookupByLibrary.simpleMessage("登入Moodle錯誤"),
         "loginMoodleWebApi":
@@ -163,6 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "登入Moodle錯誤\n如果一直發生錯誤，請嘗試到設定中關閉Moodle WebAPI"),
         "loginNTUST": MessageLookupByLibrary.simpleMessage("登入台科大系統..."),
         "loginSave": MessageLookupByLibrary.simpleMessage("帳號密碼已儲存"),
+        "loginTitle": MessageLookupByLibrary.simpleMessage("臺灣科技大學 TAT"),
         "logout": MessageLookupByLibrary.simpleMessage("登出"),
         "logoutWarning":
             MessageLookupByLibrary.simpleMessage("確定要登出嗎? \n將會清除所有資料"),

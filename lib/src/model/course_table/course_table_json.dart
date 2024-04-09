@@ -73,6 +73,7 @@ class CourseTableJson {
         if (courseDetail != null) {
           if (courseDetail.main.course.id == courseId) {
             String creditString = courseDetail.main.course.credits;
+            print("${courseDetail.main.course.name} ${creditString}");
             try {
               return double.parse(creditString).toInt();
             } catch (e) {
@@ -144,17 +145,17 @@ class CourseTableJson {
           continue;
         }
         if (!courseInfoMap[day]!.containsKey(value)) {
-          courseInfoMap[day]![value] = courseInfo;
+          courseInfoMap[day]?[value] = courseInfo;
           //Log.d( day.toString() + value.toString() + courseInfo.toString() );
           break;
         }
       }
-    }
-    /* else if (courseInfoMap[day].containsKey(sectionNumber)) {
-      throw Exception("衝堂");
-    } */
-    else {
-      courseInfoMap[day]![sectionNumber] = courseInfo;
+    } else if (courseInfoMap[day]?.containsKey(sectionNumber) == true) {
+      if(courseInfo.main.course.name.contains("實習") || courseInfo.main.course.name.contains("Lab for")) {
+        courseInfoMap[day]?[sectionNumber] = courseInfo;
+      }
+    } else {
+      courseInfoMap[day]?[sectionNumber] = courseInfo;
     }
   }
 

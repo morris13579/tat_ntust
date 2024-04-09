@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/generated/l10n.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_member_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
-import 'package:flutter_app/ui/pages/error/error_page.dart';
+import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class CourseMemberPage extends StatefulWidget {
@@ -16,8 +17,8 @@ class CourseMemberPage extends StatefulWidget {
   const CourseMemberPage(
     this.courseId,
     this.semester, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _CourseMemberPageState();
@@ -34,6 +35,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
     var task = MoodleMemberTask(courseId, widget.semester);
     taskFlow.addTask(task);
     if (await taskFlow.start()) {
+      listItem.clear();
       members = task.result;
       listItem.add(_buildClassmateNumber(0, members.length));
       for (int i = 1; i < members.length; i++) {
@@ -77,12 +79,9 @@ class _CourseMemberPageState extends State<CourseMemberPage>
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque, //讓透明部分有反應
-                  child: Container(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: listItem[index]),
-                  onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: listItem[index],
                 ),
               ),
             ),
@@ -93,23 +92,15 @@ class _CourseMemberPageState extends State<CourseMemberPage>
   }
 
   Widget _buildClassmateNumber(int index, int number) {
-    Color color;
-    color = (index % 2 == 1)
+    Color color = (index % 2 == 1)
         ? Theme.of(context).backgroundColor
         : Theme.of(context).dividerColor;
     return Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(8),
       color: color,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              "${S.current.totalMember} $number",
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
+      child: Text(
+        "${S.current.totalMember} $number",
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -120,15 +111,26 @@ class _CourseMemberPageState extends State<CourseMemberPage>
         ? Theme.of(context).backgroundColor
         : Theme.of(context).dividerColor;
     return Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(8),
       color: color,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
-              child: Text(
-            member.studentId,
-            textAlign: TextAlign.center,
+              child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(member.profileImageUrl),
+                radius: 16,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                member.studentId,
+                textAlign: TextAlign.center,
+              ),
+            ],
           )),
           Expanded(
             child: Text(

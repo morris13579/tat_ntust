@@ -1,6 +1,8 @@
 {
   "@@locale": "en",
   "app_name": "TAT",
+  "loginTitle": "NTUST TAT",
+  "loginDescription": "A school affairs app specially designed for students of National Taiwan University of Science and Technology\nMoodle, semester schedule, score inquiry, school certificate, etc.\nAll kinds of services are available in one app",
   "loadDataFail": "Loading data error, some wrong data will be cleared",
   "agree": "Agree",
   "wait": "Wait",
@@ -146,7 +148,7 @@
   "languageSwitch": "Use English interface",
   "willRestart": "Will restart automatically",
   "moodleSetting": "Use Moodle WebAPI",
-  "informationSystem": "Information System",
+  "informationSystem": "Info",
   "scoreSearch": "Score query",
   "downloadFile": "Download file",
   "fileViewer": "Downloads",
@@ -168,7 +170,7 @@
   "isNewVersion": "Already the latest version",
   "autoAppCheck": "Auto App Check",
   "logoutWarning": "Are you sure you want to log out? \nAll data will be cleared",
-  "PrivacyPolicy": "Privacy policy",
+  "PrivacyPolicy": "Privacy Policy",
   "projectLink": "Project link",
   "github": "Github",
   "Contributors": "Contributors",
@@ -193,5 +195,9 @@
   "somethingError": "Opps something Error",
   "noAnnouncement": "No any announcement",
   "webMail": "WebMail",
-  "pleaseEnterWebMailPassword": "Please Enter WebMail Password"
+  "pleaseEnterWebMailPassword": "Please Enter WebMail Password",
+  "courseSearchHint": "Enter text above to search for courses",
+  "courseSearchNotFound": "No relevant courses found",
+  "announcementEmpty": "No Announcement",
+  "contributionCourse": "Contribution to course total"
 }

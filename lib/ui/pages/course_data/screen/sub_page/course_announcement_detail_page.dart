@@ -7,7 +7,9 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_d
 import 'package:flutter_app/src/task/moodle_webapi/moodle_course_message_detail_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
-import 'package:flutter_app/ui/pages/error/error_page.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
+import 'package:flutter_app/ui/components/page/error_page.dart';
+import 'package:flutter_app/ui/components/tile/course_info_tile.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:html_unescape/html_unescape.dart';
 
@@ -18,8 +20,8 @@ class CourseAnnouncementDetailPage extends StatefulWidget {
   const CourseAnnouncementDetailPage(
     this.courseInfo,
     this.discussions, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _CourseAnnouncementDetailPageState();
@@ -62,8 +64,8 @@ class _CourseAnnouncementDetailPageState
     Discussions discussions = widget.discussions;
     html = discussions.message;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(HtmlUnescape().convert(discussions.name)),
+      appBar: baseAppbar(
+        title: HtmlUnescape().convert(discussions.name)
       ),
       body: Container(
         padding: const EdgeInsets.only(top: 10),
@@ -94,6 +96,7 @@ class _CourseAnnouncementDetailPageState
           child: HtmlWidget(
             html,
             renderMode: RenderMode.column,
+            textStyle: const TextStyle(height: 1.2),
             onTapUrl: (String s) => onLinkTap(discussions, s),
           ),
         ),
@@ -105,35 +108,17 @@ class _CourseAnnouncementDetailPageState
           itemCount: discussions.attachments.length,
           itemBuilder: (BuildContext context, int index) {
             var ap = discussions.attachments[index];
-            return InkWell(
-              child: Container(
-                color: getColor(index),
-                height: 50,
-                child: Row(
-                  children: [
-                    const Expanded(
-                      flex: 1,
-                      child: Icon(Icons.file_copy),
-                    ),
-                    Expanded(
-                      flex: 8,
-                      child: Text(ap.filename),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () async {
-                String dirName = widget.courseInfo.main.course.name;
-                FileDownload.download(
-                    context,
-                    Connector.uriAddQuery(
-                      ap.fileurl,
-                      {"token": MoodleWebApiConnector.wsToken},
-                    ),
-                    dirName,
-                    name: ap.filename);
-              },
-            );
+            return CourseInfoTile(index: index, title: ap.filename, img: "img_doc", onTap: () {
+              String dirName = widget.courseInfo.main.course.name;
+              FileDownload.download(
+                  context,
+                  Connector.uriAddQuery(
+                    ap.fileurl,
+                    {"token": MoodleWebApiConnector.wsToken},
+                  ),
+                  dirName,
+                  name: ap.filename);
+            });
           },
         )
       ],
