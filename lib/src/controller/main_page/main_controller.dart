@@ -41,10 +41,13 @@ class MainController extends GetxController {
     try {
       if (!(await Model.instance.getAgreeContributor())) {
         RouteUtils.toAgreePrivacyPolicyScreen();
+        Get.delete<MainController>();
         return;
       }
       await RemoteConfigUtils.init();
-      await LanguageUtils.init(context);
+      if(context.mounted) {
+        await LanguageUtils.init(context);
+      }
       APPVersion.initAndCheck().then((needUpdate) {
         if (!needUpdate) {
           RemoteConfigUtils.showAnnouncementDialog();
