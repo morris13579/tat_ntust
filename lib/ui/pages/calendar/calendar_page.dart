@@ -1,12 +1,11 @@
-import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/task/ntust/ntust_calendar_task.dart';
-import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/src/config/app_colors.dart';
+import 'package:flutter_app/src/controller/calendar/calendar_controller.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
-import 'package:icalendar_parser/icalendar_parser.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
+import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 /*
@@ -18,201 +17,96 @@ final kNow = DateTime.now();
 final kFirstDay = DateTime(kNow.year, kNow.month - 12, kNow.day);
 final kLastDay = DateTime(kNow.year, kNow.month + 12, kNow.day);
 
-class CalendarPage extends StatefulWidget {
-  const CalendarPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _CalendarPageState();
-}
-
-class _CalendarPageState extends State<CalendarPage> {
-  late List _selectedEvents;
-  Map<DateTime, List<String>> _events = {};
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
-  DateTime _focusedDay = DateTime.now();
-  late DateTime _selectedDay;
-  DateTime? _rangeStart;
-  DateTime? _rangeEnd;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedDay = _focusedDay;
-    _selectedEvents = [];
-    _addEvent();
-  }
-
-  void _addEvent({bool forceUpdate = false}) async {
-    _events = {};
-    TaskFlow taskFlow = TaskFlow();
-    NTUSTCalendarTask task = NTUSTCalendarTask(forceUpdate: forceUpdate);
-    taskFlow.addTask(task);
-    if (await taskFlow.start(checkNetwork: false)) {
-      String savePath = task.result;
-      final icsLines = await File(savePath).readAsLines();
-      final iCalendar = ICalendar.fromLines(icsLines);
-      for (var i in iCalendar.data) {
-        IcsDateTime timeStart = i["dtstart"];
-        DateTime dt = DateTime.parse(timeStart.dt);
-        var time = DateTime.utc(dt.year, dt.month, dt.day);
-        String event = i["summary"];
-        for (var i in event.split("  ")) {
-          i = i.replaceAll(" ", "");
-          if (i != "") {
-            try {
-              int.parse(i[0]);
-              i = i.substring(2, i.length);
-            } catch (e) {
-              Log.d(e.toString());
-            }
-            if (_events.containsKey(time)) {
-              _events[time]!.add(i);
-            } else {
-              _events[time] = [i];
-            }
-          }
-        }
-      }
-      var today = DateTime.now().toUtc();
-      today = today.add(const Duration(hours: 8)); //to TW time
-      setState(() {
-        _selectedDay = today;
-      });
-      _selectEvent();
-    }
-  }
-
-  void _selectEvent() {
-    for (DateTime time in _events.keys) {
-      if (_selectedDay.year == time.year &&
-          _selectedDay.month == time.month &&
-          _selectedDay.day == time.day) {
-        setState(() {
-          _selectedEvents = _events[time] ?? [];
-        });
-        break;
-      }
-    }
-  }
-
-  Future<void> _getEvent(DateTime time) async {
-    setState(() {
-      _selectedDay = time;
-    });
-    _selectEvent();
-  }
-
-  List<String> _getEventsForDay(DateTime day) {
-    return _events[day] ?? [];
-  }
-
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    if (!isSameDay(_focusedDay, focusedDay)) {
-      setState(() {
-        _selectedDay = selectedDay;
-        _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
-        _rangeEnd = null;
-        _rangeSelectionMode = RangeSelectionMode.toggledOff;
-        _selectedEvents = _getEventsForDay(focusedDay);
-      });
-    }
-  }
+class CalendarPage extends GetView<CalendarController> {
+  const CalendarPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(R.current.calendar),
-        actions: [
+    Get.put(CalendarController());
+    return Obx(() {
+      return Scaffold(
+        appBar: mainAppbar(title: R.current.calendar, action: [
           IconButton(
+            icon: const Icon(CupertinoIcons.refresh),
+            splashRadius: 18,
+            iconSize: 24,
             onPressed: () {
-              _addEvent(forceUpdate: true);
+              controller.addEvent(forceUpdate: true);
             },
-            icon: const Icon(Icons.update_outlined),
             tooltip: R.current.update,
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          TableCalendar<String>(
-            locale: (LanguageUtils.getLangIndex() == LangEnum.zh)
-                ? "zh_CN"
-                : "en_US",
-            availableCalendarFormats: const {
-              CalendarFormat.month: 'Month',
-            },
-            daysOfWeekHeight: 24,
-            firstDay: kFirstDay,
-            lastDay: kLastDay,
-            focusedDay: _focusedDay,
-            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            rangeStartDay: _rangeStart,
-            rangeEndDay: _rangeEnd,
-            calendarFormat: _calendarFormat,
-            rangeSelectionMode: _rangeSelectionMode,
-            eventLoader: _getEventsForDay,
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            daysOfWeekStyle: const DaysOfWeekStyle(
-              weekdayStyle: TextStyle(
-                color: Color(0xFF4F4F4F),
-              ),
-              weekendStyle: TextStyle(
-                color: Colors.deepOrange,
-              ),
-            ),
-            calendarStyle: CalendarStyle(
-              // Use `CalendarStyle` to customize the UI
-              outsideDaysVisible: false,
-              weekendTextStyle: const TextStyle(
-                color: Colors.deepOrange,
-              ),
-              markerDecoration: BoxDecoration(
-                color: Colors.brown[700],
-                shape: BoxShape.circle,
-              ),
-              selectedDecoration: BoxDecoration(
-                color: Colors.deepOrange[300],
-                shape: BoxShape.circle,
-              ),
-              todayDecoration: BoxDecoration(
-                color: Colors.deepOrange[200],
-                shape: BoxShape.circle,
-              ),
-            ),
-            onDaySelected: _onDaySelected,
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-              _getEvent(_focusedDay);
-            },
           ),
-          const SizedBox(height: 8.0),
-          Expanded(child: _buildEventList()),
-        ],
-      ),
-    );
+        ]),
+        body: Column(
+          children: [
+            TableCalendar<String>(
+              locale: (LanguageUtils.getLangIndex() == LangEnum.zh)
+                  ? "zh_CN"
+                  : "en_US",
+              availableCalendarFormats: const {
+                CalendarFormat.month: 'Month',
+              },
+              daysOfWeekHeight: 24,
+              firstDay: kFirstDay,
+              lastDay: kLastDay,
+              focusedDay: controller.focusedDay.value,
+              selectedDayPredicate: (day) =>
+                  isSameDay(controller.selectedDay.value, day),
+              rangeStartDay: controller.rangeStart.value,
+              rangeEndDay: controller.rangeEnd.value,
+              calendarFormat: controller.calendarFormat.value,
+              rangeSelectionMode: controller.rangeSelectionMode.value,
+              eventLoader: controller.getEventsForDay,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              daysOfWeekStyle: const DaysOfWeekStyle(
+                weekdayStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                weekendStyle: TextStyle(
+                  color: Colors.deepOrange,
+                ),
+              ),
+              calendarStyle: CalendarStyle(
+                // Use `CalendarStyle` to customize the UI
+                outsideDaysVisible: false,
+                weekendTextStyle: const TextStyle(
+                  color: Colors.deepOrange,
+                ),
+                markerDecoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                selectedDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(width: 1.2, color: Colors.deepOrange)),
+                todayDecoration: BoxDecoration(
+                  color: Colors.deepOrange[200],
+                  shape: BoxShape.circle,
+                ),
+              ),
+              onDaySelected: controller.onDaySelected,
+              onFormatChanged: controller.onFormatChanged,
+              onPageChanged: controller.onPageChanged,
+            ),
+            const SizedBox(height: 8.0),
+            Expanded(child: _buildEventList()),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildEventList() {
     return ListView(
-      children: _selectedEvents
+      children: controller.selectedEvents
           .map((event) => Container(
                 decoration: BoxDecoration(
-                  border: Border.all(width: 0.8),
+                  border: Border.all(
+                      width: 0.8, color: Get.iconColor ?? Colors.grey),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 margin:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                child: ListTile(title: Text(event), onTap: () {}),
+                child: ListTile(title: Text(event, style: const TextStyle(height: 1.2),), onTap: () {}),
               ))
           .toList(),
     );

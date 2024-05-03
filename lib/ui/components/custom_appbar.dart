@@ -5,12 +5,15 @@ import 'package:get/get.dart';
 AppBar mainAppbar(
     {String title = "",
       List<Widget>? action,
+      bool isShowBack = false,
       BuildContext? context}) {
   return AppBar(
     actions: action,
     centerTitle: false,
     backgroundColor: Colors.transparent,
     elevation: 0,
+    leading: !isShowBack ? const SizedBox(width: 0,) : null,
+    leadingWidth: !isShowBack ? 0 : null,
     title: Text(title),
   );
 }

@@ -6,18 +6,20 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/announcement/announcement_json.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/ui/components/page/base_page.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AnnouncementPage extends StatefulWidget {
   final List<AnnouncementInfoJson> info;
   final int countDown;
 
   const AnnouncementPage({
-    Key? key,
+    super.key,
     required this.info,
     required this.countDown,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _AnnouncementPageState();
@@ -46,30 +48,25 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget.info[index].title),
-      contentPadding: EdgeInsets.only(
-        left: 24.0,
-        top: Theme.of(context).useMaterial3 ? 16.0 : 20.0,
-        right: 24.0,
-        bottom: 0.0,
-      ),
-      content: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
+    return BasePage(
+        title: widget.info[index].title,
+        action: [
+          btnConfirm()
+        ],
         child: SizedBox(
-          height: MediaQuery.of(Get.context!).size.height * 0.6,
-          width: MediaQuery.of(Get.context!).size.width * 0.85,
+          height: Get.height,
+          width: Get.width,
           child: Swiper(
             loop: false,
             itemCount: widget.info.length,
             controller: controller,
             pagination: SwiperPagination(
-              // SwiperPagination.fraction 數字1/5，默認點
               builder: DotSwiperPaginationBuilder(
                 size: 8,
-                activeSize: 12,
-                color: Theme.of(context).primaryColor,
-                activeColor: Theme.of(context).primaryColorDark,
+                activeSize: widget.info.length == 1 ? 0 : 12,
+                space: 12,
+                color: Colors.grey,
+                activeColor: Get.iconColor,
               ),
             ),
             onIndexChanged: (i) {
@@ -84,26 +81,32 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
                   selectable: true,
                   shrinkWrap: true,
                   data: widget.info[index].content,
+                  styleSheet: MarkdownStyleSheet.fromTheme(Get.theme.copyWith(
+                      textTheme: Get.textTheme.copyWith(
+                          bodyMedium: Get.textTheme.bodyMedium
+                              ?.copyWith(height: 1.2)))),
                   onTapLink: (String text, String? href, String title) {
-                    RouteUtils.toWebViewPage(title, href!);
+                    if (href != null) {
+                      launchUrlString(href);
+                    }
                   },
                 ),
               );
             },
           ),
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: count > 0
-              ? null
-              : () {
-                  Get.back<bool>(result: true);
-                  RemoteConfigUtils.setAnnouncementRead();
-                },
-          child: Text(count > 0 ? "${R.current.wait} $count" : R.current.sure),
-        ),
-      ],
+        ));
+  }
+
+  Widget btnConfirm() {
+    return TextButton(
+      onPressed: count > 0
+          ? null
+          : () {
+        Get.back<bool>(result: true);
+        RemoteConfigUtils.setAnnouncementRead();
+      },
+      child:
+      Text(count > 0 ? "${R.current.wait} $count" : R.current.sure),
     );
   }
 }
