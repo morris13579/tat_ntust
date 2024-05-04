@@ -16,6 +16,7 @@ class BasePage extends StatelessWidget {
     this.action,
     this.floatingActionButton, this.loadingMsg,
     this.resizeToAvoidBottomInset = true,
+    this.isShowBack = false,
   });
 
   final String title;
@@ -23,6 +24,7 @@ class BasePage extends StatelessWidget {
   final List<Widget>? action;
   final FloatingActionButton? floatingActionButton;
   final bool resizeToAvoidBottomInset;
+  final bool isShowBack;
 
   // error control
   final bool isError;

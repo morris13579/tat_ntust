@@ -3,6 +3,7 @@ import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/ui/screen/main_screen.dart';
 import 'package:get/get.dart';
 
 class PrivacyPolicyController extends GetxController {

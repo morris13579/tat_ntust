@@ -333,6 +333,11 @@ class Model {
     await _writeString("version", version); //寫入目前版本
   }
 
+  Future<bool> clearAll() async {
+    var pref = await SharedPreferences.getInstance();
+    return pref.clear();
+  }
+
   Future<bool> getInstance() async {
     bool catchError = false;
     try {

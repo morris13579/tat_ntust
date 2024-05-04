@@ -145,13 +145,11 @@ class RemoteConfigUtils {
         Log.d("show announcement close dialog close by no login");
         return;
       }
-      await Get.dialog<bool>(
-        AnnouncementPage(
-          info: info,
-          countDown: await getAnnouncementCountTime(),
-        ),
-        barrierDismissible: false, // user must tap button!
-      );
+
+      Get.to(AnnouncementPage(
+        info: info,
+        countDown: await getAnnouncementCountTime(),
+      ),transition: Transition.downToUp);
     } else if (allTime) {
       MyToast.show(R.current.noAnnouncement);
     }

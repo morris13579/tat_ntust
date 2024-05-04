@@ -33,10 +33,12 @@ class MoodleTask<T> extends CacheTask<T> {
       super.onEnd();
       if (value == MoodleWebApiConnectorStatus.loginSuccess) {
         _isLogin = true;
+        return TaskStatus.success;
       } else {
         return await onError(R.current.loginMoodleWebApiError);
       }
     }
+
     String account = Model.instance.getAccount();
     String password = Model.instance.getPassword();
     if (account.isEmpty || password.isEmpty) {
