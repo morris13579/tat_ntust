@@ -74,6 +74,7 @@ class MyApp extends StatelessWidget {
         ],
         supportedLocales: S.delegate.supportedLocales,
         home: const MainScreen(),
+        debugShowCheckedModeBanner: false,
         logWriterCallback: (String text, {bool? isError}) {
           Log.d(text);
         },
