@@ -67,7 +67,7 @@ class LoginScreen extends GetView<LoginController> {
               backgroundColor: AppColors.mainColor,
               padding: const EdgeInsets.symmetric(vertical: 14),
               borderRadius: BorderRadius.circular(8),
-              child: Text(R.current.login),
+              child: Text(R.current.login, style: const TextStyle(color: Colors.white),),
             ),
           ],
         ),
