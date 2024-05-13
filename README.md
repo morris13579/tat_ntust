@@ -35,6 +35,9 @@ https://www.gdaily.org/26293/altstore-ipa
 若有意願贊助開發者帳號費用，協助我們上架App Store，歡迎聯繫我們。
 
 --------------------------------
+## 聯絡我們
+- [seielika064@icloud.com](mailto:seielika064@icloud.com)
+  
 ## 貢獻者
 - [morris13579](https://github.com/morris13579)
 
