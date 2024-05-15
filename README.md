@@ -1,4 +1,4 @@
-![image](https://github.com/morris13579/tat_ntust/assets/84628528/185253b4-055a-41ff-a28a-fb54d2c8adee)<p align="center">
+<p align="center">
   <img alt='TAT' src='https://github.com/morris13579/tat_ntust/blob/master/assets/launcher/android-icon.png?raw=true'/>
   <h3 align="center">臺灣科技大學TAT App</h3>
   <p align="center">
@@ -26,8 +26,9 @@
 請至App Store商店下載:
 
 <a href='https://apps.apple.com/tw/app/%E5%8F%B0%E7%A7%91%E5%A4%A7-tat/id6479219269'>
-  <img width="180" alt='Get it on App Store' src='https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg'/>
+  <img width="150" alt='Get it on App Store' src='https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg'/>
 </a>
+<br>
 
 也可以點擊[此處](https://drive.google.com/drive/folders/1GDBc_coOp9jR_JzmgEgtOBcka0AkE9cL?usp=sharing)下載IPA安裝檔，第三方安裝的方式請參考下方。
 #### 使用AltStore安裝(推薦)
