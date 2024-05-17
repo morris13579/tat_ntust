@@ -28,7 +28,7 @@
 <a href='https://apps.apple.com/tw/app/%E5%8F%B0%E7%A7%91%E5%A4%A7-tat/id6479219269'>
   <img width="150" alt='Get it on App Store' src='https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg'/>
 </a>
-<br>
+<br><br>
 
 也可以點擊[此處](https://drive.google.com/drive/folders/1GDBc_coOp9jR_JzmgEgtOBcka0AkE9cL?usp=sharing)下載IPA安裝檔，第三方安裝的方式請參考下方。
 #### 使用AltStore安裝(推薦)
