@@ -7,6 +7,7 @@ import 'package:flutter_app/src/task/cache_task.dart';
 import 'package:flutter_app/src/task/course/course_search_task.dart';
 import 'package:flutter_app/src/task/course/course_semester_task.dart';
 import 'package:flutter_app/src/task/course/course_table_task.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_course_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:fluttertoast/fluttertoast.dart';

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/course_connector.dart';
+import 'package:flutter_app/src/connector/moodle_connector.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/connector/score_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
@@ -22,14 +24,25 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
     if (status == TaskStatus.success) {
       List<SemesterJson>? value;
       super.onStart(R.current.getCourseSemester);
+
       value = await CourseConnector.getCourseSemester();
+
       try {
+        // 從選課系統取得資料
         ScoreRankJson? v = await ScoreConnector.getScoreRank();
         Model.instance.setScore(v!);
         Model.instance.saveScore();
         value ??= [];
         for (var i in v.info) {
-          if (!value.contains(i.semester)) value.add(i.semester);
+          if (!value.contains(i.semester)) {
+            value.add(i.semester);
+          }
+        }
+
+        // 從moodle 取得資料
+        var currentSemester = await MoodleWebApiConnector.getCurrentSemester();
+        if(currentSemester != null) {
+          value.add(currentSemester);
         }
       } catch (e) {
         Log.d(e);
