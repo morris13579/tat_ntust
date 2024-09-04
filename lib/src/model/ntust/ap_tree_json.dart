@@ -4,10 +4,11 @@ part 'ap_tree_json.g.dart';
 
 @JsonSerializable()
 class APTreeJson {
+  String serviceId;
   @JsonKey(name: 'apList')
   List<APListJson> apList;
 
-  APTreeJson(this.apList);
+  APTreeJson(this.serviceId, this.apList);
 
   factory APTreeJson.fromJson(Map<String, dynamic> srcJson) =>
       _$APTreeJsonFromJson(srcJson);

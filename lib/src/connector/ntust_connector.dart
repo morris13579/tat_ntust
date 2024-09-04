@@ -102,10 +102,10 @@ class NTUSTConnector {
     return {"status": NTUSTLoginStatus.fail};
   }
 
-  static Future<APTreeJson?> getSubSystem() async {
+  static Future<List<APTreeJson>> getSubSystem() async {
     String result;
     Document tagNode;
-    Element node;
+    Element? node;
     List<Element> nodes;
     try {
       String subSystemUrl = (LanguageUtils.getLangIndex() == LangEnum.zh)
@@ -114,22 +114,36 @@ class NTUSTConnector {
       ConnectorParameter parameter = ConnectorParameter(subSystemUrl);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
-      node = tagNode.getElementById("service")!;
-      nodes = node.getElementsByTagName("a");
-      List<APListJson> apList = [];
-      for (var i in nodes) {
-        if (i.text.contains("瀏覽器尚無使用記錄") ||
-            i.text.contains("No browsing history")) {
+      node = tagNode.getElementById("service");
+      if(node == null) {
+        return [];
+      }
+
+      List<APTreeJson> resList = [];
+
+
+      var serviceFunctions = node.children.where((element) => element.id.contains("service")).toList();
+      for (var i in serviceFunctions) {
+        List<APListJson> apList = [];
+        var serviceId = i.id;
+
+        if(serviceId == "commonly-used-service") {
           continue;
         }
-        APListJson item =
-            APListJson(name: i.text, url: i.attributes["href"]!, type: "link");
-        apList.add(item);
+
+        var links = i.getElementsByTagName("a");
+
+        for(var link in links) {
+          apList.add(APListJson(name: link.text, url: link.attributes["href"] ?? "", type: "link"));
+        }
+
+        var tree = APTreeJson(serviceId, apList);
+        resList.add(tree);
       }
-      APTreeJson apTreeJson = APTreeJson(apList);
-      return apTreeJson;
+      return resList;
     } catch (e) {
-      return null;
+      Log.e(e);
+      return [];
     }
   }
 

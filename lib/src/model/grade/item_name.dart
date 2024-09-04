@@ -7,11 +7,10 @@ class ItemNameEntity {
   String class_;
   int colspan;
   String content;
-  String celltype;
   String id;
 
   ItemNameEntity(
-      this.class_, this.colspan, this.content, this.celltype, this.id);
+      this.class_, this.colspan, this.content, this.id);
 
   factory ItemNameEntity.fromJson(Map<String, dynamic> json) =>
       _$ItemNameEntityFromJson(json);

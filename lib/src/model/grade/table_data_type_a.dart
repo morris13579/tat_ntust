@@ -5,12 +5,12 @@ import 'package:json_annotation/json_annotation.dart';
 part 'table_data_type_a.g.dart';
 @JsonSerializable()
 class TableDataTypeAEntity extends BaseTableData {
-  @override
   @JsonKey(name: 'itemname')
   ItemNameEntity? itemName;
-  LeaderEntity leader;
+  @override
+  List<int> parentcategories;
 
-  TableDataTypeAEntity(this.itemName, this.leader);
+  TableDataTypeAEntity(this.itemName, this.parentcategories);
 
   factory TableDataTypeAEntity.fromJson(Map<String, dynamic> json) =>
       _$TableDataTypeAEntityFromJson(json);

@@ -19,6 +19,9 @@ TableDataTypeBEntity _$TableDataTypeBEntityFromJson(
       WeightEntity.fromJson(json['feedback'] as Map<String, dynamic>),
       WeightEntity.fromJson(
           json['contributiontocoursetotal'] as Map<String, dynamic>),
+      (json['parentcategories'] as List)
+          .map((e) => int.parse(e.toString()))
+          .toList(),
     );
 
 Map<String, dynamic> _$TableDataTypeBEntityToJson(
@@ -31,4 +34,5 @@ Map<String, dynamic> _$TableDataTypeBEntityToJson(
       'percentage': instance.percentage,
       'feedback': instance.feedback,
       'contributiontocoursetotal': instance.contributionToCourseTotal,
+      'parentcategories': instance.parentcategories,
     };

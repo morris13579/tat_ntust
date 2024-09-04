@@ -30,8 +30,8 @@ class CalendarPage extends GetView<CalendarController> {
             icon: const Icon(CupertinoIcons.refresh),
             splashRadius: 18,
             iconSize: 24,
-            onPressed: () {
-              controller.addEvent(forceUpdate: true);
+            onPressed: () async {
+              await controller.addEvent(forceUpdate: true);
             },
             tooltip: R.current.update,
           ),
@@ -55,7 +55,7 @@ class CalendarPage extends GetView<CalendarController> {
               rangeEndDay: controller.rangeEnd.value,
               calendarFormat: controller.calendarFormat.value,
               rangeSelectionMode: controller.rangeSelectionMode.value,
-              eventLoader: controller.getEventsForDay,
+              eventLoader: (day) => controller.events[day] ?? [],
               startingDayOfWeek: StartingDayOfWeek.monday,
               daysOfWeekStyle: const DaysOfWeekStyle(
                 weekdayStyle: TextStyle(
@@ -106,7 +106,13 @@ class CalendarPage extends GetView<CalendarController> {
                 ),
                 margin:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                child: ListTile(title: Text(event, style: const TextStyle(height: 1.2),), onTap: () {}),
+                child: ListTile(
+                    title: Text(
+                      event,
+                      style: const TextStyle(height: 1.2),
+                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                    onTap: () {}),
               ))
           .toList(),
     );

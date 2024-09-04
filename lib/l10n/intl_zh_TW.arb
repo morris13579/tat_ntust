@@ -1,6 +1,7 @@
 {
   "@@locale": "zh_TW",
   "app_name": "TAT",
+
   "loginTitle": "臺灣科技大學 TAT",
   "loginDescription": "專為臺灣科技大學學生設計的校務App\nMoodle、學期課表、成績查詢、在學證明等等\n一App在手 各種服務應有盡有",
   "loadDataFail": "載入資料錯誤，將清除部分錯誤資料",
@@ -199,5 +200,13 @@
   "courseSearchHint": "在上方輸入文字來搜尋課程",
   "courseSearchNotFound": "未搜尋到任何相關課程",
   "announcementEmpty": "暫無公告",
-  "contributionCourse": "貢獻到課程總分"
+  "contributionCourse": "貢獻到課程總分",
+  "copy_course_id": "課程代碼已複製",
+  "copy": "已複製!",
+  "curriculum": "課程資訊",
+  "person_info": "個人資訊",
+  "campus_life": "生活資訊",
+  "financial_support": "助學資訊",
+  "activities": "活動資訊",
+  "resources": "校園資訊"
 }
