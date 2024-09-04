@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/ui/components/input/input_field.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -37,6 +39,10 @@ class CourseDetailDialog extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
             child: Text(sprintf("%s : %s", [R.current.courseId, course.id])),
+            onTap: () async {
+              await Clipboard.setData(ClipboardData(text: course.id));
+              Fluttertoast.showToast(msg: R.current.copy_course_id);
+            },
             onLongPress: () async {
               course.id = await _showEditDialog(course.id);
               Model.instance.saveOtherSetting();

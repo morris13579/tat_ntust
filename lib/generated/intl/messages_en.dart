@@ -74,6 +74,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "contribute": MessageLookupByLibrary.simpleMessage("contribute"),
         "contributionCourse": MessageLookupByLibrary.simpleMessage(
             "Contribution to course total"),
+        "copy": MessageLookupByLibrary.simpleMessage("Copied!"),
+        "copy_course_id":
+            MessageLookupByLibrary.simpleMessage("Course code copied"),
         "coreAbility": MessageLookupByLibrary.simpleMessage("Core ability"),
         "course": MessageLookupByLibrary.simpleMessage("Course"),
         "courseContent": MessageLookupByLibrary.simpleMessage("Course content"),

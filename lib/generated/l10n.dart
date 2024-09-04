@@ -2049,6 +2049,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Course code copied`
+  String get copy_course_id {
+    return Intl.message(
+      'Course code copied',
+      name: 'copy_course_id',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copied!`
+  String get copy {
+    return Intl.message(
+      'Copied!',
+      name: 'copy',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

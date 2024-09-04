@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_app/src/task/course/course_extra_info_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sprintf/sprintf.dart';
 
 class CourseInfoPage extends StatefulWidget {
@@ -149,17 +151,23 @@ class _CourseInfoPageState extends State<CourseInfoPage>
     if (info.isEmpty) {
       return null;
     }
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
-            const SizedBox(height: 6),
-            Text(info, style: const TextStyle(height: 1.2),),
-          ],
+    return GestureDetector(
+      onTap: () async {
+        await Clipboard.setData(ClipboardData(text: info));
+        Fluttertoast.showToast(msg: R.current.copy);
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+              const SizedBox(height: 6),
+              Text(info, style: const TextStyle(height: 1.2),),
+            ],
+          ),
         ),
       ),
     );
