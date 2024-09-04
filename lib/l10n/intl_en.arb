@@ -201,5 +201,11 @@
   "announcementEmpty": "No Announcement",
   "contributionCourse": "Contribution to course total",
   "copy_course_id": "Course code copied",
-  "copy": "Copied!"
+  "copy": "Copied!",
+  "curriculum": "Curriculum",
+  "person_info": "Person Information",
+  "campus_life": "Campus Life",
+  "financial_support": "Financial Support",
+  "activities": "Activities",
+  "resources": "Resources"
 }

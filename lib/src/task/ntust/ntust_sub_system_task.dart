@@ -4,7 +4,7 @@ import 'package:flutter_app/src/model/ntust/ap_tree_json.dart';
 import 'package:flutter_app/src/task/ntust/ntust_task.dart';
 import 'package:flutter_app/src/task/task.dart';
 
-class NTUSTSubSystemTask extends NTUSTTask<APTreeJson> {
+class NTUSTSubSystemTask extends NTUSTTask<List<APTreeJson>> {
   NTUSTSubSystemTask() : super("NTUSTSubSystemTask");
 
   @override
@@ -12,12 +12,8 @@ class NTUSTSubSystemTask extends NTUSTTask<APTreeJson> {
     TaskStatus status = await super.execute();
     if (status == TaskStatus.success) {
       var value = await NTUSTConnector.getSubSystem();
-      if (value != null) {
-        result = value;
-        return TaskStatus.success;
-      } else {
-        return await super.onError(R.current.error);
-      }
+      result = value;
+      return TaskStatus.success;
     }
     return status;
   }

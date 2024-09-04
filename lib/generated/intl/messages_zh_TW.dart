@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "account": MessageLookupByLibrary.simpleMessage("帳號"),
         "accountNull": MessageLookupByLibrary.simpleMessage("請輸入帳號"),
         "accountPasswordError": MessageLookupByLibrary.simpleMessage("帳號密碼錯誤"),
+        "activities": MessageLookupByLibrary.simpleMessage("活動資訊"),
         "addCustomCourseError":
             MessageLookupByLibrary.simpleMessage("課程衝堂無法加入"),
         "agree": MessageLookupByLibrary.simpleMessage("同意"),
@@ -49,6 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("確定要下載檔案嗎"),
         "autoAppCheck": MessageLookupByLibrary.simpleMessage("自動檢查更新"),
         "calendar": MessageLookupByLibrary.simpleMessage("行事曆"),
+        "campus_life": MessageLookupByLibrary.simpleMessage("生活資訊"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "cannotWrite": MessageLookupByLibrary.simpleMessage("無法寫入此存儲設備！"),
         "changePassword": MessageLookupByLibrary.simpleMessage("更改密碼"),
@@ -89,6 +91,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "createFolder": MessageLookupByLibrary.simpleMessage("創建資料夾"),
         "createNewFolder": MessageLookupByLibrary.simpleMessage("創建新資料夾"),
         "credit": MessageLookupByLibrary.simpleMessage("學分"),
+        "curriculum": MessageLookupByLibrary.simpleMessage("課程資訊"),
         "darkMode": MessageLookupByLibrary.simpleMessage("暗黑模式"),
         "delete": MessageLookupByLibrary.simpleMessage("刪除"),
         "details": MessageLookupByLibrary.simpleMessage("詳細內容"),
@@ -109,6 +112,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "fileNameAlreadyExists":
             MessageLookupByLibrary.simpleMessage("檔案名稱已經存在!"),
         "fileViewer": MessageLookupByLibrary.simpleMessage("下載項目"),
+        "financial_support": MessageLookupByLibrary.simpleMessage("助學資訊"),
         "findNewVersion": MessageLookupByLibrary.simpleMessage("發現新版本"),
         "folderNameAlreadyExists":
             MessageLookupByLibrary.simpleMessage("資料夾名稱已經存在!"),
@@ -201,6 +205,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "passwordNotSame": MessageLookupByLibrary.simpleMessage("與原始密碼不一致"),
         "passwordNull": MessageLookupByLibrary.simpleMessage("請輸入密碼"),
         "percentage": MessageLookupByLibrary.simpleMessage("百分比"),
+        "person_info": MessageLookupByLibrary.simpleMessage("個人資訊"),
         "pleaseConnectToNetwork":
             MessageLookupByLibrary.simpleMessage("請確認網路連接狀態"),
         "pleaseEnterStudentId":
@@ -218,6 +223,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rename": MessageLookupByLibrary.simpleMessage("重新命名"),
         "renameItem": MessageLookupByLibrary.simpleMessage("重新命名"),
         "requireOption": MessageLookupByLibrary.simpleMessage("選必修"),
+        "resources": MessageLookupByLibrary.simpleMessage("校園資訊"),
         "restart": MessageLookupByLibrary.simpleMessage("重試"),
         "resultsOfVariousSubjects":
             MessageLookupByLibrary.simpleMessage("各科成績"),

@@ -7,6 +7,7 @@ part of 'ap_tree_json.dart';
 // **************************************************************************
 
 APTreeJson _$APTreeJsonFromJson(Map<String, dynamic> json) => APTreeJson(
+      json["serviceId"] as String,
       (json['apList'] as List<dynamic>)
           .map((e) => APListJson.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -14,6 +15,7 @@ APTreeJson _$APTreeJsonFromJson(Map<String, dynamic> json) => APTreeJson(
 
 Map<String, dynamic> _$APTreeJsonToJson(APTreeJson instance) =>
     <String, dynamic>{
+      'serviceId': instance.serviceId,
       'apList': instance.apList,
     };
 

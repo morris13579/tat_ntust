@@ -202,5 +202,11 @@
   "announcementEmpty": "暫無公告",
   "contributionCourse": "貢獻到課程總分",
   "copy_course_id": "課程代碼已複製",
-  "copy": "已複製!"
+  "copy": "已複製!",
+  "curriculum": "課程資訊",
+  "person_info": "個人資訊",
+  "campus_life": "生活資訊",
+  "financial_support": "助學資訊",
+  "activities": "活動資訊",
+  "resources": "校園資訊"
 }
