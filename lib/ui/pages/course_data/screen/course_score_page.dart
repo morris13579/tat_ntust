@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/grade/table_data_type_a.dart';
 import 'package:flutter_app/src/model/grade/table_data_type_b.dart';
+import 'package:flutter_app/src/model/grade/table_data_type_c.dart';
 import 'package:flutter_app/src/model/grade/tables.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_score_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
@@ -29,8 +31,7 @@ import '../../../../src/R.dart';
 class CourseScorePage extends StatefulWidget {
   final CourseInfoJson courseInfo;
 
-  const CourseScorePage(
-    this.courseInfo, {
+  const CourseScorePage(this.courseInfo, {
     super.key,
   });
 
@@ -78,7 +79,17 @@ class _CourseScorePageState extends State<CourseScorePage>
       itemBuilder: (context, index) {
         var data = scoreData.tableData[index];
         if (data.length == 2) {
-          var typeA = TableDataTypeAEntity.fromJson(data);
+          // 113-1 更改type，長度為2的有兩種obj, 1: itemname, parentcategories, 2: leader, parentcategories
+          var content = "";
+          if (data.keys.contains("itemname")) {
+            var typeA = TableDataTypeAEntity.fromJson(data);
+            content = typeA.itemName?.content ?? "";
+          } else if (data.keys.contains("leader")) {
+            // 功能不明
+            var typeC = TableDataTypeCEntity.fromJson(data);
+            content = typeC.leader.toString();
+            return const SizedBox();
+          }
           // 第一個為課程名字
           if (index == 0) {
             return const SizedBox();
@@ -92,13 +103,13 @@ class _CourseScorePageState extends State<CourseScorePage>
                     color: Get.iconColor, height: 22),
                 const SizedBox(width: 4),
                 HtmlWidget(
-                  typeA.itemName?.content ?? "",
+                  content,
                   textStyle: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           );
-        } else if (data.length == 7) {
+        } else if (data.length == 8) {
           // 成績內容
           var typeB = TableDataTypeBEntity.fromJson(data);
           var itemName = typeB.itemName;
@@ -111,15 +122,25 @@ class _CourseScorePageState extends State<CourseScorePage>
           return ExpansionTile(
             title: HtmlWidget(typeB.itemName?.content ?? "",
                 textStyle: const TextStyle(height: 1.2),
-                customStylesBuilder: (element) {
-              if (element.localName == 'a') {
-                String colorString = AppColors.mainColor.toString();
-                String urlColor =
-                    '#${colorString.split('(0xff')[1].split(')')[0]}';
-                return {'color': urlColor};
-              }
-              return null;
-            }),
+                customWidgetBuilder: (element) {
+                  var title = element
+                      .nodes
+                      .last
+                      .nodes
+                      .last
+                      .nodes
+                      .first
+                      .nodes
+                      .first
+                      .text;
+                  TextStyle? style;
+
+                  if (title == "課程總分") {
+                    style = const TextStyle(fontWeight: FontWeight.bold);
+                  }
+
+                  return Text(title ?? "", style: style,);
+                }),
             tilePadding: EdgeInsets.only(left: isInFolder ? 18 : 0),
             dense: true,
             clipBehavior: Clip.antiAlias,
@@ -131,27 +152,49 @@ class _CourseScorePageState extends State<CourseScorePage>
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
             children: [
+
               _gradeItem(R.current.weight, typeB.weight.content),
+
+              Visibility(
+                visible: typeB.grade.content.isNotEmpty,
+                child:
+                _gradeItem(R.current.score, typeB.grade.content),
+              ),
+
               Visibility(
                 visible: typeB.percentage.content.isNotEmpty,
                 child:
-                    _gradeItem(R.current.percentage, typeB.percentage.content),
+                _gradeItem(R.current.percentage, typeB.percentage.content),
               ),
+
               _gradeItem(R.current.fullRange, typeB.range.content),
+
               Visibility(
-                visible: typeB.feedback.content.isNotEmpty,
+                visible: typeB.feedback.content
+                    .trim()
+                    .replaceAll("&nbsp;", "")
+                    .isNotEmpty,
                 child: _gradeItem(R.current.feedback, typeB.feedback.content),
               ),
+
               Visibility(
                 visible: typeB.percentage.content.isNotEmpty,
                 child:
-                    _gradeItem(R.current.percentage, typeB.percentage.content),
+                _gradeItem(R.current.percentage, typeB.percentage.content),
               ),
+
               _gradeItem(R.current.contributionCourse,
                   typeB.contributionToCourseTotal.content),
             ],
           );
-        } else {
+        }  else {
+          // 避免同時出現兩條分隔線
+          if(index != 0) {
+            if(scoreData.tableData[index].length == 1 && scoreData.tableData[index - 1].length == 1) {
+              return const SizedBox();
+            }
+          }
+
           return Divider(color: Get.iconColor);
         }
       },
@@ -169,32 +212,34 @@ class _CourseScorePageState extends State<CourseScorePage>
           title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 4),
-        HtmlWidget(content ?? "-", textStyle: Get.textTheme.bodyMedium,
+        const SizedBox(height: 6),
+        HtmlWidget(content, textStyle: Get.textTheme.bodyMedium,
             customWidgetBuilder: (element) {
-          if (element.localName == 'img') {
-            var url = element.attributes["src"] ?? "";
-            return FutureBuilder<Uint8List?>(
-              future: DioConnector.instance.getData(ConnectorParameter(url)),
-              builder: (context, snapshot) {
-                if(snapshot.hasData) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: GestureDetector(onTap: () {
-                      Get.to(PhotoView(imageData:snapshot.data!));
-                    }, child: Image.memory(snapshot.data!)),
-                  );
-                }
-                return const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: LoadingPage(isLoading: true, isShowBackground: false,),
+              if (element.localName == 'img') {
+                var url = element.attributes["src"] ?? "";
+                return FutureBuilder<Uint8List?>(
+                    future: DioConnector.instance.getData(
+                        ConnectorParameter(url)),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: GestureDetector(onTap: () {
+                            Get.to(PhotoView(imageData: snapshot.data!));
+                          }, child: Image.memory(snapshot.data!)),
+                        );
+                      }
+                      return const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: LoadingPage(
+                          isLoading: true, isShowBackground: false,),
+                      );
+                    }
                 );
               }
-            );
-          }
-          return null;
-        }),
-        const SizedBox(height: 8),
+              return null;
+            }),
+        const SizedBox(height: 12),
       ],
     );
   }

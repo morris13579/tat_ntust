@@ -121,7 +121,8 @@ class MoodleWebApiConnector {
       for (var i in v) {
         if (i.name.contains("一般")) {
           for (var j in i.modules) {
-            if (j.name.contains("公告")) {
+            // 113-1 學期新增 課程公佈欄、課程討論區 取代公告
+            if (j.name.contains("公告") || j.name.contains("課程公佈欄")) {
               forumId = j.instance.toString();
               break;
             }

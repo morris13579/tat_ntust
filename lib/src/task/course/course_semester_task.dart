@@ -41,7 +41,12 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
 
         // 從moodle 取得資料
         var currentSemester = await MoodleWebApiConnector.getCurrentSemester();
-        if(currentSemester != null) {
+        if (currentSemester != null &&
+            value
+                .where((element) =>
+                    element.year == currentSemester.year &&
+                    element.semester == currentSemester.semester)
+                .isEmpty) {
           value.add(currentSemester);
         }
       } catch (e) {

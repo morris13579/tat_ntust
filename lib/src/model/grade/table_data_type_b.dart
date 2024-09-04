@@ -6,7 +6,6 @@ part 'table_data_type_b.g.dart';
 
 @JsonSerializable()
 class TableDataTypeBEntity extends BaseTableData {
-  @override
   @JsonKey(name: 'itemname')
   ItemNameEntity? itemName;
   WeightEntity weight;
@@ -16,9 +15,11 @@ class TableDataTypeBEntity extends BaseTableData {
   WeightEntity feedback;
   @JsonKey(name: 'contributiontocoursetotal')
   WeightEntity contributionToCourseTotal;
+  @override
+  List<int> parentcategories;
 
   TableDataTypeBEntity(this.itemName, this.weight, this.grade, this.range,
-      this.percentage, this.feedback, this.contributionToCourseTotal);
+      this.percentage, this.feedback, this.contributionToCourseTotal, this.parentcategories);
 
   factory TableDataTypeBEntity.fromJson(Map<String, dynamic> json) =>
       _$TableDataTypeBEntityFromJson(json);
