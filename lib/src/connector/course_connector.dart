@@ -253,45 +253,47 @@ class CourseConnector {
         parameter = ConnectorParameter(_courseSearchUrl, data: data);
         var json = await Connector.getDataByPostResponse(parameter);
         if (json.data.length == 0) continue;
-        CourseSearchJson info = CourseSearchJson.fromJson(json.data[0]);
-
-        CourseMainInfoJson courseMainInfo = CourseMainInfoJson();
-        CourseMainJson courseMain = CourseMainJson(
-          id: courseId,
-          href: "",
-          name: info.courseName,
-          credits: info.creditPoint,
-          category: "",
-          note: info.contents,
-          hours: "",
-          time: {},
-        );
-        for (int j = 0; j < 7; j++) {
-          Day day = dayEnum[j]; //初始化
-          courseMain.time[day] = "";
-        }
-        for (var t in info.node.split(",")) {
-          if (t.isEmpty) {
-            continue;
+        // 同個課程代碼如果不同教室會有多筆資料
+        for(var data in json.data) {
+          CourseSearchJson info = CourseSearchJson.fromJson(data);
+          CourseMainInfoJson courseMainInfo = CourseMainInfoJson();
+          CourseMainJson courseMain = CourseMainJson(
+            id: courseId,
+            href: "",
+            name: info.courseName,
+            credits: info.creditPoint,
+            category: "",
+            note: info.contents,
+            hours: "",
+            time: {},
+          );
+          for (int j = 0; j < 7; j++) {
+            Day day = dayEnum[j]; //初始化
+            courseMain.time[day] = "";
           }
-          int dayIndex = dayString.indexOf(t.substring(0, 1));
-          int timeIndex;
-          try {
-            timeIndex = int.parse(t.substring(1)) - 1;
-          } catch (e) {
-            timeIndex = t.codeUnitAt(1) - 'A'.codeUnitAt(0) + 10;
+          for (var t in info.node.split(",")) {
+            if (t.isEmpty) {
+              continue;
+            }
+            int dayIndex = dayString.indexOf(t.substring(0, 1));
+            int timeIndex;
+            try {
+              timeIndex = int.parse(t.substring(1)) - 1;
+            } catch (e) {
+              timeIndex = t.codeUnitAt(1) - 'A'.codeUnitAt(0) + 10;
+            }
+            Day day = dayEnum[dayIndex];
+            courseMain.time[day] =
+            "${courseMain.time[day]!}${timeEnum[timeIndex]} ";
           }
-          Day day = dayEnum[dayIndex];
-          courseMain.time[day] =
-              "${courseMain.time[day]!}${timeEnum[timeIndex]} ";
+          TeacherJson teacher = TeacherJson(name: info.courseTeacher, href: "");
+          ClassroomJson classroom =
+          ClassroomJson(name: info.classRoomNo, href: '');
+          courseMainInfo.classroom.add(classroom);
+          courseMainInfo.teacher.add(teacher);
+          courseMainInfo.course = courseMain;
+          courseMainInfoList.add(courseMainInfo);
         }
-        TeacherJson teacher = TeacherJson(name: info.courseTeacher, href: "");
-        ClassroomJson classroom =
-            ClassroomJson(name: info.classRoomNo, href: '');
-        courseMainInfo.classroom.add(classroom);
-        courseMainInfo.teacher.add(teacher);
-        courseMainInfo.course = courseMain;
-        courseMainInfoList.add(courseMainInfo);
       }
       var info = CourseMainInfo(
         studentName: "",
