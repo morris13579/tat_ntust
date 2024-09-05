@@ -40,7 +40,7 @@ class BasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      appBar: mainAppbar(title: title, action: action),
+      appBar: mainAppbar(title: title, action: action, isShowBack: isShowBack),
       floatingActionButton: floatingActionButton,
       body: isError
           ? ErrorPage(errorMsg: errorMsg)

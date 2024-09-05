@@ -12,6 +12,7 @@ import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/src/version/update/app_update.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/components/page/loading_page.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
@@ -167,9 +168,7 @@ class _OtherPageState extends State<OtherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(R.current.titleOther),
-      ),
+      appBar: mainAppbar(title: R.current.titleOther),
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
