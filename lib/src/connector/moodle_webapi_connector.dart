@@ -9,6 +9,7 @@ import 'package:flutter_app/src/model/grade/tables.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_profile_entity.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
 
@@ -195,8 +196,7 @@ class MoodleWebApiConnector {
       parameter = ConnectorParameter(_webAPIUrl);
       parameter.data = {
         "moodlewsrestformat": "json",
-        "wsfunction":
-            "core_course_get_enrolled_courses_by_timeline_classification",
+        "wsfunction": "core_course_get_enrolled_courses_by_timeline_classification",
         "classification": "inprogress",
         "wstoken": wsToken
       };
@@ -284,6 +284,25 @@ class MoodleWebApiConnector {
       return 200 == r.statusCode;
     } catch (e) {
       return false;
+    }
+  }
+
+  static Future<MoodleProfileEntity?> getProfile() async {
+    if(wsToken == null) {
+      await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
+    }
+    try {
+      var parameter = ConnectorParameter(_webAPIUrl);
+      parameter.data = {
+        "moodlewsrestformat": "json",
+        "wsfunction": "core_webservice_get_site_info",
+        "wstoken": wsToken
+      };
+      var result = await Connector.getDataByPostResponse(parameter);
+      return MoodleProfileEntity.fromJson(result.data);
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
+      return null;
     }
   }
 }
