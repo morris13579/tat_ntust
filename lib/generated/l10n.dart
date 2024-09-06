@@ -2049,6 +2049,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Course code copied`
+  String get copy_course_id {
+    return Intl.message(
+      'Course code copied',
+      name: 'copy_course_id',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copied!`
+  String get copy {
+    return Intl.message(
+      'Copied!',
+      name: 'copy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Curriculum`
+  String get curriculum {
+    return Intl.message(
+      'Curriculum',
+      name: 'curriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Person Information`
+  String get person_info {
+    return Intl.message(
+      'Person Information',
+      name: 'person_info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Campus Life`
+  String get campus_life {
+    return Intl.message(
+      'Campus Life',
+      name: 'campus_life',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Financial Support`
+  String get financial_support {
+    return Intl.message(
+      'Financial Support',
+      name: 'financial_support',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activities`
+  String get activities {
+    return Intl.message(
+      'Activities',
+      name: 'activities',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resources`
+  String get resources {
+    return Intl.message(
+      'Resources',
+      name: 'resources',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

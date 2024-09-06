@@ -187,6 +187,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
       itemCount: widget.contents.modules.length,
       itemBuilder: (BuildContext context, int index) {
         var ap = widget.contents.modules[index];
+
         return InkWell(
           child: Container(
             color: getColor(index),

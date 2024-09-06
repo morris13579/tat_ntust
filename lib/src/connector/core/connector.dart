@@ -63,11 +63,9 @@ class Connector {
       while (redirectsTime <= 4) {
         Uri uri = Uri.parse(parameter.url);
         if (usePost) {
-          result = await DioConnector.instance.dio
-              .post(parameter.url, options: options, data: parameter.data);
+          result = await DioConnector.instance.getDataByPostResponse(parameter);
         } else {
-          result = await DioConnector.instance.dio.get(parameter.url,
-              options: options, queryParameters: parameter.data);
+          result = await DioConnector.instance.getDataByGetResponse(parameter);
         }
         usePost = false;
         if (result.statusCode != 302) {

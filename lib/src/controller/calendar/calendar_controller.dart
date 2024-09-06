@@ -18,12 +18,12 @@ class CalendarController extends GetxController {
   Rx<DateTime?> rangeEnd = Rx(null);
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
-    addEvent();
+    await addEvent();
   }
 
-  void addEvent({bool forceUpdate = false}) async {
+  Future<void> addEvent({bool forceUpdate = false}) async {
     events.clear();
     TaskFlow taskFlow = TaskFlow();
     NTUSTCalendarTask task = NTUSTCalendarTask(forceUpdate: forceUpdate);
@@ -56,13 +56,12 @@ class CalendarController extends GetxController {
       }
       var today = DateTime.now().toUtc();
       today = today.add(const Duration(hours: 8)); //to TW time
+
       selectedDay.value = today;
+      selectedEvents.value = events[today] ?? [];
+
       _selectEvent();
     }
-  }
-
-  List<String> getEventsForDay(DateTime day) {
-    return events[day] ?? [];
   }
 
   void onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -72,7 +71,7 @@ class CalendarController extends GetxController {
       rangeStart.value = null; // Important to clean those
       rangeEnd.value = null;
       rangeSelectionMode.value = RangeSelectionMode.toggledOff;
-      selectedEvents.value = getEventsForDay(focusedDay);
+      selectedEvents.value = events[focusedDay] ?? [];
     }
   }
 

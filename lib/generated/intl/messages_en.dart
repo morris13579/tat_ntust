@@ -39,6 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter your account"),
         "accountPasswordError":
             MessageLookupByLibrary.simpleMessage("Account password error"),
+        "activities": MessageLookupByLibrary.simpleMessage("Activities"),
         "addCustomCourseError":
             MessageLookupByLibrary.simpleMessage("Can\'t join the class"),
         "agree": MessageLookupByLibrary.simpleMessage("Agree"),
@@ -52,6 +53,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Are you sure you want to download the file"),
         "autoAppCheck": MessageLookupByLibrary.simpleMessage("Auto App Check"),
         "calendar": MessageLookupByLibrary.simpleMessage("Calendar"),
+        "campus_life": MessageLookupByLibrary.simpleMessage("Campus Life"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "cannotWrite": MessageLookupByLibrary.simpleMessage(
             "Cannot write to this Storage device!"),
@@ -74,6 +76,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "contribute": MessageLookupByLibrary.simpleMessage("contribute"),
         "contributionCourse": MessageLookupByLibrary.simpleMessage(
             "Contribution to course total"),
+        "copy": MessageLookupByLibrary.simpleMessage("Copied!"),
+        "copy_course_id":
+            MessageLookupByLibrary.simpleMessage("Course code copied"),
         "coreAbility": MessageLookupByLibrary.simpleMessage("Core ability"),
         "course": MessageLookupByLibrary.simpleMessage("Course"),
         "courseContent": MessageLookupByLibrary.simpleMessage("Course content"),
@@ -97,6 +102,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "createNewFolder":
             MessageLookupByLibrary.simpleMessage("Create New folder"),
         "credit": MessageLookupByLibrary.simpleMessage("Credit"),
+        "curriculum": MessageLookupByLibrary.simpleMessage("Curriculum"),
         "darkMode": MessageLookupByLibrary.simpleMessage("Dark mode"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
@@ -120,6 +126,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "fileNameAlreadyExists": MessageLookupByLibrary.simpleMessage(
             "A File with that name already exists!"),
         "fileViewer": MessageLookupByLibrary.simpleMessage("Downloads"),
+        "financial_support":
+            MessageLookupByLibrary.simpleMessage("Financial Support"),
         "findNewVersion":
             MessageLookupByLibrary.simpleMessage("Find new version"),
         "folderNameAlreadyExists": MessageLookupByLibrary.simpleMessage(
@@ -236,6 +244,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "passwordNull":
             MessageLookupByLibrary.simpleMessage("Please enter the password"),
         "percentage": MessageLookupByLibrary.simpleMessage("percentage"),
+        "person_info":
+            MessageLookupByLibrary.simpleMessage("Person Information"),
         "pleaseConnectToNetwork":
             MessageLookupByLibrary.simpleMessage("Please connect to network"),
         "pleaseEnterStudentId":
@@ -256,6 +266,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "renameItem": MessageLookupByLibrary.simpleMessage("Rename item"),
         "requireOption": MessageLookupByLibrary.simpleMessage("Require option"),
+        "resources": MessageLookupByLibrary.simpleMessage("Resources"),
         "restart": MessageLookupByLibrary.simpleMessage("Restart"),
         "resultsOfVariousSubjects":
             MessageLookupByLibrary.simpleMessage("Score"),

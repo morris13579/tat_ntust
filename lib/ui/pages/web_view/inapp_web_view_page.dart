@@ -2,10 +2,14 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
+import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
+import 'package:flutter_app/src/connector/ntust_connector.dart';
 import 'package:flutter_app/src/file/file_download.dart';
+import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -38,6 +42,8 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
   double progress = 0;
   int onLoadStopTime = -1;
   Uri? lastLoadUri;
+  final String ntustLoginUri = "https://ssoam.ntust.edu.tw/nidp/app/login";
+  final String moodleLoginUri = "https://moodle2.ntust.edu.tw/login";
 
   @override
   void initState() {
@@ -123,6 +129,24 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                       },
                       onLoadStop:
                           (InAppWebViewController controller, Uri? url) async {
+                        if (url?.toString().startsWith(ntustLoginUri) == true) {
+                          await controller.evaluateJavascript(
+                              source:
+                                  'document.getElementsByName("Ecom_User_ID")[0].value = "${Model.instance.getAccount()}";');
+                          await controller.evaluateJavascript(
+                              source:
+                                  'document.getElementsByName("Ecom_Password")[0].value = "${Model.instance.getPassword()}";');
+                          await controller.evaluateJavascript(
+                              source:
+                                  'document.getElementById("loginButton2").click();');
+                        } else if (url.toString().startsWith(moodleLoginUri)) {
+                          await controller.evaluateJavascript(
+                              source:
+                                  'document.getElementsByName("username")[0].value = "${Model.instance.getAccount()}";');
+                          await controller.evaluateJavascript(
+                              source:
+                                  'document.getElementsByName("password")[0].value = "${Model.instance.getPassword()}";');
+                        }
                         widget.loadDone(controller);
                         setState(
                           () {
@@ -198,7 +222,6 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
             }
           },
           icon: const Icon(CupertinoIcons.refresh, size: 18)),
-
       Visibility(
           visible: widget.openWithExternalWebView,
           child: IconButton(
@@ -206,7 +229,11 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
             onPressed: () async {
               OpenUtils.launchURL(url.toString());
             },
-            icon: SvgPicture.asset("assets/image/img_external_link.svg", color: Get.iconColor, height: 20,),
+            icon: SvgPicture.asset(
+              "assets/image/img_external_link.svg",
+              color: Get.iconColor,
+              height: 20,
+            ),
           ))
     ];
   }

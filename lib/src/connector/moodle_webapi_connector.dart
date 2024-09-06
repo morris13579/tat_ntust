@@ -4,10 +4,12 @@ import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
+import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/grade/tables.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
+import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
 
 enum MoodleWebApiConnectorStatus { loginSuccess, loginFail, unknownError }
@@ -119,7 +121,8 @@ class MoodleWebApiConnector {
       for (var i in v) {
         if (i.name.contains("一般")) {
           for (var j in i.modules) {
-            if (j.name.contains("公告")) {
+            // 113-1 學期新增 課程公佈欄、課程討論區 取代公告
+            if (j.name.contains("公告") || j.name.contains("課程公佈欄")) {
               forumId = j.instance.toString();
               break;
             }
@@ -179,6 +182,61 @@ class MoodleWebApiConnector {
         if (!user.fullName.contains("老師")) userinfo.add(user);
       }
       return userinfo;
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
+      return null;
+    }
+  }
+
+  static Future<List<String>> getCourseIds(SemesterJson semester) async {
+    ConnectorParameter parameter;
+    Response result;
+    try {
+      parameter = ConnectorParameter(_webAPIUrl);
+      parameter.data = {
+        "moodlewsrestformat": "json",
+        "wsfunction":
+            "core_course_get_enrolled_courses_by_timeline_classification",
+        "classification": "inprogress",
+        "wstoken": wsToken
+      };
+      result = await Connector.getDataByPostResponse(parameter);
+
+      var courseList = result.data["courses"] as List;
+      // 取得moodle課程資料
+      return courseList
+          .map((e) => (e["idnumber"] as String)
+              .replaceAll("${semester.year}${semester.semester}", ""))
+          .toList();
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
+      return [];
+    }
+  }
+
+  static Future<SemesterJson?> getCurrentSemester() async {
+    if(wsToken == null) {
+      await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
+    }
+    ConnectorParameter parameter;
+    Response result;
+    try {
+      parameter = ConnectorParameter(_webAPIUrl);
+      parameter.data = {
+        "moodlewsrestformat": "json",
+        "wsfunction":
+        "core_course_get_enrolled_courses_by_timeline_classification",
+        "classification": "inprogress",
+        "wstoken": wsToken
+      };
+      result = await Connector.getDataByPostResponse(parameter);
+
+      var courseList = result.data["courses"] as List;
+      var id = courseList.first["idnumber"] as String;
+
+      var year = id.substring(0, 3);
+      var semester = id.substring(3, 4);
+      return SemesterJson(year: year, semester: semester);
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
       return null;

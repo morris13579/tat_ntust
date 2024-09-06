@@ -7,6 +7,8 @@ import 'package:flutter_app/src/model/course/course_search_json.dart';
 import 'package:flutter_app/src/model/course/course_semester.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_course_task.dart';
+import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
@@ -82,7 +84,7 @@ class CourseConnector {
     try {
       ConnectorParameter parameter;
       Document tagNode;
-      Element node;
+      Element? node;
       List<Element> nodes;
       List<SemesterJson> value = [];
       String langUrl =
@@ -97,7 +99,10 @@ class CourseConnector {
       parameter = ConnectorParameter(host);
       result = await Connector.getDataByGet(parameter);
       tagNode = parse(result);
-      node = tagNode.getElementById("navigation")!;
+      node = tagNode.getElementById("navigation");
+      if(node == null) {
+        throw Exception("navigation tag not found");
+      }
       nodes = node
           .getElementsByClassName("dropdown")[3]
           .getElementsByClassName("dropdown-menu")[0]
@@ -215,8 +220,17 @@ class CourseConnector {
   static Future<CourseMainInfo?> getCourseMainInfoListByCourseId(
       SemesterJson semester) async {
     ConnectorParameter parameter;
-    var courseIds =
-        await Model.instance.getScore().getCourseIdBySemester(semester);
+
+    var courseIds = await Model.instance.getScore().getCourseIdBySemester(semester);
+    if(courseIds.isEmpty) {
+      // 如果成績查詢系統抓不到資料，改用moodle查詢課程代碼
+      var taskFlow = TaskFlow();
+      var task = MoodleCourseTask(semester);
+      taskFlow.addTask(task);
+      await taskFlow.start();
+      courseIds = task.result;
+    }
+
     try {
       List<CourseMainInfoJson> courseMainInfoList = [];
       for (var courseId in courseIds) {
@@ -239,45 +253,47 @@ class CourseConnector {
         parameter = ConnectorParameter(_courseSearchUrl, data: data);
         var json = await Connector.getDataByPostResponse(parameter);
         if (json.data.length == 0) continue;
-        CourseSearchJson info = CourseSearchJson.fromJson(json.data[0]);
-
-        CourseMainInfoJson courseMainInfo = CourseMainInfoJson();
-        CourseMainJson courseMain = CourseMainJson(
-          id: courseId,
-          href: "",
-          name: info.courseName,
-          credits: info.creditPoint,
-          category: "",
-          note: info.contents,
-          hours: "",
-          time: {},
-        );
-        for (int j = 0; j < 7; j++) {
-          Day day = dayEnum[j]; //初始化
-          courseMain.time[day] = "";
-        }
-        for (var t in info.node.split(",")) {
-          if (t.isEmpty) {
-            continue;
+        // 同個課程代碼如果不同教室會有多筆資料
+        for(var data in json.data) {
+          CourseSearchJson info = CourseSearchJson.fromJson(data);
+          CourseMainInfoJson courseMainInfo = CourseMainInfoJson();
+          CourseMainJson courseMain = CourseMainJson(
+            id: courseId,
+            href: "",
+            name: info.courseName,
+            credits: info.creditPoint,
+            category: "",
+            note: info.contents,
+            hours: "",
+            time: {},
+          );
+          for (int j = 0; j < 7; j++) {
+            Day day = dayEnum[j]; //初始化
+            courseMain.time[day] = "";
           }
-          int dayIndex = dayString.indexOf(t.substring(0, 1));
-          int timeIndex;
-          try {
-            timeIndex = int.parse(t.substring(1)) - 1;
-          } catch (e) {
-            timeIndex = t.codeUnitAt(1) - 'A'.codeUnitAt(0) + 10;
+          for (var t in info.node.split(",")) {
+            if (t.isEmpty) {
+              continue;
+            }
+            int dayIndex = dayString.indexOf(t.substring(0, 1));
+            int timeIndex;
+            try {
+              timeIndex = int.parse(t.substring(1)) - 1;
+            } catch (e) {
+              timeIndex = t.codeUnitAt(1) - 'A'.codeUnitAt(0) + 10;
+            }
+            Day day = dayEnum[dayIndex];
+            courseMain.time[day] =
+            "${courseMain.time[day]!}${timeEnum[timeIndex]} ";
           }
-          Day day = dayEnum[dayIndex];
-          courseMain.time[day] =
-              "${courseMain.time[day]!}${timeEnum[timeIndex]} ";
+          TeacherJson teacher = TeacherJson(name: info.courseTeacher, href: "");
+          ClassroomJson classroom =
+          ClassroomJson(name: info.classRoomNo, href: '');
+          courseMainInfo.classroom.add(classroom);
+          courseMainInfo.teacher.add(teacher);
+          courseMainInfo.course = courseMain;
+          courseMainInfoList.add(courseMainInfo);
         }
-        TeacherJson teacher = TeacherJson(name: info.courseTeacher, href: "");
-        ClassroomJson classroom =
-            ClassroomJson(name: info.classRoomNo, href: '');
-        courseMainInfo.classroom.add(classroom);
-        courseMainInfo.teacher.add(teacher);
-        courseMainInfo.course = courseMain;
-        courseMainInfoList.add(courseMainInfo);
       }
       var info = CourseMainInfo(
         studentName: "",

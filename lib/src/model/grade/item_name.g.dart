@@ -11,7 +11,6 @@ ItemNameEntity _$ItemNameEntityFromJson(Map<String, dynamic> json) =>
       json['class'] as String,
       json['colspan'] as int,
       json['content'] as String,
-      json['celltype'] as String,
       json['id'] as String,
     );
 
@@ -20,6 +19,5 @@ Map<String, dynamic> _$ItemNameEntityToJson(ItemNameEntity instance) =>
       'class': instance.class_,
       'colspan': instance.colspan,
       'content': instance.content,
-      'celltype': instance.celltype,
       'id': instance.id,
     };
