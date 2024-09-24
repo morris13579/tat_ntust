@@ -1,17 +1,10 @@
-//
-//  file_store.dart
-//  北科課程助手
-//  文件儲存位置
-//  Created by morris13579 on 2020/02/12.
-//  Copyright © 2020 morris13579 All rights reserved.
-//
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/util/permissions_utils.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,13 +12,13 @@ class FileStore {
   static String storeKey = "download_path";
 
   static Future<String> findLocalPath(BuildContext context) async {
-    bool checkPermission = await PermissionsUtils.check(context);
+    bool checkPermission = await PermissionsUtils.isStoragePermission();
     if (!checkPermission) {
       MyToast.show(R.current.noPermission);
       return "";
     }
     Directory? directory = await _getFilePath();
-    directory ??= Theme.of(context).platform == TargetPlatform.android
+    directory ??= Get.theme.platform == TargetPlatform.android
         ? await getExternalStorageDirectory()
         : await getApplicationSupportDirectory();
     return directory!.path;
