@@ -14,6 +14,7 @@ import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/src/version/update/app_update.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/components/page/loading_page.dart';
+import 'package:flutter_app/ui/components/shimmer/profile_loading.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/log_console/log_console.dart';
@@ -232,7 +233,7 @@ class _OtherPageState extends State<OtherPage> {
       future: MoodleWebApiConnector.getProfile(),
       builder: (context, snapshot) {
         if(!snapshot.hasData || snapshot.data == null) {
-          return const LoadingPage(isLoading: true, isShowBackground: false,);
+          return const ProfileLoading();
         }
 
         return UserProfile(data: snapshot.data!);

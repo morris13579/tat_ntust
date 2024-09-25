@@ -15,7 +15,7 @@ import 'package:flutter_app/ui/pages/other/page/about_page.dart';
 import 'package:flutter_app/ui/pages/other/page/agree_privacy_policy_screen.dart';
 import 'package:flutter_app/ui/pages/other/page/contributors_page.dart';
 import 'package:flutter_app/ui/pages/other/page/dev_page.dart';
-import 'package:flutter_app/ui/pages/other/page/setting_page.dart';
+import 'package:flutter_app/ui/pages/other/page/setting/setting_page.dart';
 import 'package:flutter_app/ui/pages/other/page/store_edit_page.dart';
 import 'package:flutter_app/ui/pages/subsystem/sub_system_page.dart';
 import 'package:flutter_app/ui/pages/web_view/inapp_web_view_page.dart';

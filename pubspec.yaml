@@ -122,6 +122,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   screenshot: ^2.3.0
   photo_view: ^0.14.0
+  shimmer: ^3.0.0
 
 dependency_overrides:
   intl: ^0.18.0

@@ -13,6 +13,7 @@ import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/components/page/base_page.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
+import 'package:flutter_app/ui/pages/other/page/setting/moodle_setting_page.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -51,12 +52,15 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> listViewData = [];
-    listViewData.add(_buildLanguageSetting());
+    List<Widget> listViewData = [
+      _buildLanguageSetting(),
+      _buildMoodleSetting(),
+      _buildFolderPathSetting()
+    ];
+
     if (Platform.isAndroid) {
-      listViewData.add(_buildOpenExternalVideoSetting());
+      listViewData.insert(1, _buildOpenExternalVideoSetting());
     }
-    listViewData.add(_buildFolderPathSetting());
 
     return Scaffold(
       appBar: baseAppbar(title: R.current.setting),
@@ -113,6 +117,23 @@ class _SettingPageState extends State<SettingPage> {
           Model.instance.getOtherSetting().useExternalVideoPlayer = value;
           Model.instance.saveOtherSetting();
         });
+      },
+    );
+  }
+
+  Widget _buildMoodleSetting() {
+    return ListTile(
+      contentPadding: contentPadding,
+      shape: shape,
+      title: Text(
+        R.current.moodle_setting,
+      ),
+      subtitle: Text(
+        R.current.moodle_setting_description,
+      ),
+      trailing: const Icon(Icons.chevron_right, size: 20,),
+      onTap: () {
+        Get.to(() => const MoodleSettingPage());
       },
     );
   }

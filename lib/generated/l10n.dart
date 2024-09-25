@@ -2129,6 +2129,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Moodle setting`
+  String get moodle_setting {
+    return Intl.message(
+      'Moodle setting',
+      name: 'moodle_setting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sync NTUST Moodle website settings`
+  String get moodle_setting_description {
+    return Intl.message(
+      'Sync NTUST Moodle website settings',
+      name: 'moodle_setting_description',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

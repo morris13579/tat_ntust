@@ -17,6 +17,8 @@ class BasePage extends StatelessWidget {
     this.floatingActionButton, this.loadingMsg,
     this.resizeToAvoidBottomInset = true,
     this.isShowBack = false,
+    this.isSubPage = false,
+    this.bottom,
   });
 
   final String title;
@@ -25,6 +27,8 @@ class BasePage extends StatelessWidget {
   final FloatingActionButton? floatingActionButton;
   final bool resizeToAvoidBottomInset;
   final bool isShowBack;
+  final bool isSubPage;
+  final PreferredSizeWidget? bottom;
 
   // error control
   final bool isError;
@@ -40,7 +44,7 @@ class BasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      appBar: mainAppbar(title: title, action: action, isShowBack: isShowBack),
+      appBar: isSubPage ? baseAppbar(title: title, action: action, bottom: bottom) : mainAppbar(title: title, action: action, isShowBack: isShowBack, bottom: bottom),
       floatingActionButton: floatingActionButton,
       body: isError
           ? ErrorPage(errorMsg: errorMsg)

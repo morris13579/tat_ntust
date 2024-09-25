@@ -184,6 +184,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "member": MessageLookupByLibrary.simpleMessage("成員"),
         "moodleSetting":
             MessageLookupByLibrary.simpleMessage("使用Moodle WebAPI"),
+        "moodle_setting": MessageLookupByLibrary.simpleMessage("Moodle 設定"),
+        "moodle_setting_description":
+            MessageLookupByLibrary.simpleMessage("同步台科Moodle設定"),
         "needValidateCaptcha":
             MessageLookupByLibrary.simpleMessage("如果出現驗證碼，請手動通過驗證碼"),
         "networkError": MessageLookupByLibrary.simpleMessage("網路發生錯誤"),

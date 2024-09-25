@@ -10,6 +10,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_conte
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions_paginated.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_profile_entity.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_setting_entity.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
 
@@ -303,6 +304,48 @@ class MoodleWebApiConnector {
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
       return null;
+    }
+  }
+
+  static Future<MoodleSettingEntity?> getSettings() async {
+    if(wsToken == null) {
+      await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
+    }
+    try {
+      var parameter = ConnectorParameter(_webAPIUrl);
+      parameter.data = {
+        "moodlewsrestformat": "json",
+        "wsfunction": "core_message_get_user_notification_preferences",
+        "wstoken": wsToken
+      };
+      var result = await Connector.getDataByPostResponse(parameter);
+      return MoodleSettingEntity.fromJson(result.data);
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
+      return null;
+    }
+  }
+
+  static Future<void> toggleSetting(String key, List<String> values) async {
+    if(wsToken == null) {
+      await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
+    }
+    try {
+      var parameter = ConnectorParameter(_webAPIUrl);
+      parameter.data = {
+        "moodlewsrestformat": "json",
+        "wsfunction": "core_user_update_user_preferences",
+        "wstoken": wsToken,
+        "preferences[0][type]": "${key}_enabled",
+        "preferences[0][value]": values.join(","),
+        "moodlewssettingfilter": true,
+        "moodlewssettingfileurl": true
+      };
+
+      var result = await Connector.getDataByPostResponse(parameter);
+      print(result);
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
     }
   }
 }

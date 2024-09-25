@@ -215,6 +215,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "member": MessageLookupByLibrary.simpleMessage("member"),
         "moodleSetting":
             MessageLookupByLibrary.simpleMessage("Use Moodle WebAPI"),
+        "moodle_setting":
+            MessageLookupByLibrary.simpleMessage("Moodle setting"),
+        "moodle_setting_description": MessageLookupByLibrary.simpleMessage(
+            "Sync NTUST Moodle website settings"),
         "needValidateCaptcha":
             MessageLookupByLibrary.simpleMessage("Need validate captcha"),
         "networkError": MessageLookupByLibrary.simpleMessage("Network error"),
