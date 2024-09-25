@@ -6,6 +6,7 @@ AppBar mainAppbar(
     {String title = "",
       List<Widget>? action,
       bool isShowBack = false,
+      PreferredSizeWidget? bottom,
       BuildContext? context}) {
   return AppBar(
     actions: action,
@@ -14,6 +15,7 @@ AppBar mainAppbar(
     elevation: 0,
     leading: !isShowBack ? const SizedBox(width: 0,) : null,
     leadingWidth: !isShowBack ? 0 : null,
+    bottom: bottom,
     title: Text(title),
   );
 }

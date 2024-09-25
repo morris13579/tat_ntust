@@ -4,15 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_link.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/controller/main_page/main_controller.dart';
 import 'package:flutter_app/src/file/file_store.dart';
+import 'package:flutter_app/src/model/moodle_webapi/moodle_profile_entity.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/src/version/update/app_update.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
+import 'package:flutter_app/ui/components/page/loading_page.dart';
+import 'package:flutter_app/ui/components/shimmer/profile_loading.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/log_console/log_console.dart';
+import 'package:flutter_app/ui/pages/other/components/user_profile.dart';
 import 'package:flutter_app/ui/pages/password/check_password_dialog.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
@@ -163,91 +169,75 @@ class _OtherPageState extends State<OtherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(R.current.titleOther),
-      ),
-      body: Column(children: <Widget>[
-        const SizedBox(
-          height: 16,
-        ),
-        if (Model.instance.getAccount().isNotEmpty)
-          Container(
-            padding: const EdgeInsets.only(
-                top: 24.0, left: 24.0, right: 24.0, bottom: 24.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(
-                  width: 16.0,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      (Model.instance.getAccount().isEmpty)
-                          ? R.current.pleaseLogin
-                          : Model.instance.getAccount(),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+      appBar: mainAppbar(title: R.current.titleOther),
+      body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: _buildAccountTile(),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Expanded(
+              child: AnimationLimiter(
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  itemCount: optionList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 375),
+                      child: ScaleAnimation(
+                        child: _buildSetting(optionList[index]),
                       ),
-                    ),
-                  ],
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 4);
+                  },
                 ),
-              ],
+              ),
             ),
-          ),
-        const SizedBox(
-          height: 16,
-        ),
-        Expanded(
-          child: AnimationLimiter(
-            child: ListView.builder(
-              itemCount: optionList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: ScaleAnimation(
-                    child: _buildSetting(optionList[index]),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ]),
+          ]),
     );
   }
 
   Widget _buildSetting(Map data) {
-    return InkWell(
+    return ListTile(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       onTap: () {
         _onListViewPress(data['onPress']);
       },
-      child: Container(
-        padding: const EdgeInsets.only(
-            top: 24.0, left: 24.0, right: 24.0, bottom: 24.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Icon(
-              data['icon'],
-              color: data['color'],
-            ),
-            const SizedBox(
-              width: 20.0,
-            ),
-            Expanded(
-              child: Text(
-                data['title'],
-                style: const TextStyle(fontSize: 18),
-              ),
-            )
-          ],
-        ),
+      title: Text(
+        data['title'],
+        style: const TextStyle(fontSize: 18),
       ),
+      leading: Icon(
+        data['icon'],
+        color: data['color'],
+      ),
+    );
+  }
+
+  Widget _buildAccountTile() {
+    if (Model.instance.getAccount().isEmpty) {
+      return Text(R.current.pleaseLogin);
+    }
+
+    return FutureBuilder<MoodleProfileEntity?>(
+      future: MoodleWebApiConnector.getProfile(),
+      builder: (context, snapshot) {
+        if(!snapshot.hasData || snapshot.data == null) {
+          return const ProfileLoading();
+        }
+
+        return UserProfile(data: snapshot.data!);
+      }
     );
   }
 }
