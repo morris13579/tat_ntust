@@ -4,6 +4,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
 import 'package:flutter_app/src/config/app_link.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:github/github.dart';
@@ -13,14 +14,12 @@ class ContributorsPage extends StatelessWidget {
   final repositorySlug =
       RepositorySlug(AppLink.githubOwner, AppLink.githubName);
 
-  ContributorsPage({Key? key}) : super(key: key);
+  ContributorsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(R.current.Contribution),
-      ),
+      appBar: baseAppbar(title: R.current.Contribution),
       body: Column(
         children: [
           Row(
