@@ -56,21 +56,27 @@ class _OtherPageState extends State<OtherPage> {
       "title": R.current.fileViewer,
       "onPress": OnListViewPress.fileViewer
     },
-    if (Model.instance.getPassword().isNotEmpty)
+    if (Model.instance
+        .getPassword()
+        .isNotEmpty)
       {
         "icon": EvaIcons.syncOutline,
         "color": Colors.lightGreen,
         "title": R.current.changePassword,
         "onPress": OnListViewPress.changePassword
       },
-    if (Model.instance.getPassword().isNotEmpty)
+    if (Model.instance
+        .getPassword()
+        .isNotEmpty)
       {
         "icon": EvaIcons.undoOutline,
         "color": Colors.teal[400],
         "title": R.current.logout,
         "onPress": OnListViewPress.logout
       },
-    if (Model.instance.getPassword().isEmpty)
+    if (Model.instance
+        .getPassword()
+        .isEmpty)
       {
         "icon": EvaIcons.logIn,
         "color": Colors.teal[400],
@@ -91,11 +97,6 @@ class _OtherPageState extends State<OtherPage> {
     }
   ];
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _onListViewPress(OnListViewPress value) async {
     switch (value) {
       case OnListViewPress.logout:
@@ -109,7 +110,10 @@ class _OtherPageState extends State<OtherPage> {
               Get.back();
               TaskFlow.resetLoginStatus();
               await Model.instance.logout();
-              Get.find<MainController>().pageController.jumpToPage(0);
+              Get
+                  .find<MainController>()
+                  .pageController
+                  .jumpToPage(0);
             });
         ErrorDialog(parameter).show();
         break;
@@ -128,17 +132,19 @@ class _OtherPageState extends State<OtherPage> {
               "https://stuinfosys.ntust.edu.tw/NTUSTSSOServ/SSO/ChangePWD";
           RouteUtils.toWebViewPage(R.current.changePassword, changePasswordUrl,
               loadDone: (webView) async {
-            if (!first) {
-              return;
-            }
-            first = false;
-            await webView.evaluateJavascript(
-                source:
-                    'document.getElementsByName("userName")[0].value = "${Model.instance.getAccount()}";');
-            await webView.evaluateJavascript(
-                source:
-                    'document.getElementsByName("pwd")[0].value = "${Model.instance.getPassword()}";');
-          });
+                if (!first) {
+                  return;
+                }
+                first = false;
+                await webView.evaluateJavascript(
+                    source:
+                    'document.getElementsByName("userName")[0].value = "${Model
+                        .instance.getAccount()}";');
+                await webView.evaluateJavascript(
+                    source:
+                    'document.getElementsByName("pwd")[0].value = "${Model
+                        .instance.getPassword()}";');
+              });
         }
         break;
       case OnListViewPress.about:
@@ -225,19 +231,21 @@ class _OtherPageState extends State<OtherPage> {
   }
 
   Widget _buildAccountTile() {
-    if (Model.instance.getAccount().isEmpty) {
+    if (Model.instance
+        .getAccount()
+        .isEmpty) {
       return Text(R.current.pleaseLogin);
     }
 
-    return FutureBuilder<MoodleProfileEntity?>(
-      future: MoodleWebApiConnector.getProfile(),
-      builder: (context, snapshot) {
-        if(!snapshot.hasData || snapshot.data == null) {
-          return const ProfileLoading();
-        }
+    var controller = Get.find<MainController>();
 
-        return UserProfile(data: snapshot.data!);
+    return Obx(() {
+      if (controller.isProfileLoading.value ||
+          controller.profile.value == null) {
+        return const ProfileLoading();
       }
-    );
+
+      return UserProfile(data: controller.profile.value!);
+    });
   }
 }
