@@ -1,9 +1,14 @@
-import 'package:cookie_jar/cookie_jar.dart';
+import 'dart:async';
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_app/debug/log/log.dart';
+import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
+import 'package:flutter_app/src/connector/moodle_login_page.dart';
+import 'package:flutter_app/src/entity/moodle_token_entity.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/grade/tables.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
@@ -12,7 +17,10 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_d
 import 'package:flutter_app/src/model/moodle_webapi/moodle_profile_entity.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_setting_entity.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_task.dart';
 import 'package:flutter_app/src/util/html_utils.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
+import 'package:get/get.dart' as g;
 
 enum MoodleWebApiConnectorStatus { loginSuccess, loginFail, unknownError }
 
@@ -20,30 +28,31 @@ class MoodleWebApiConnector {
   static const String host = "https://moodle2.ntust.edu.tw";
   static const String _webAPIUrl = "$host/webservice/rest/server.php";
   static const String _webAPILoginUrl = "$host/login/token.php";
+  static String moodleLoginUrl =
+      "$host/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=${Random.secure().nextInt(500)}&urlscheme=moodlemobile&lang=zh_tw";
 
   static String? wsToken;
+  static String? privateToken;
 
-  static Future<MoodleWebApiConnectorStatus> login(
-      String account, String password) async {
-    ConnectorParameter parameter;
-    Map result;
+  static Future<MoodleWebApiConnectorStatus> login(String account, String password) async {
     try {
-      parameter = ConnectorParameter(_webAPILoginUrl);
-      parameter.data = {
-        "username": account,
-        "password": password,
-        "service": "moodle_mobile_app"
-      };
-      result = await Connector.getJsonByPost(parameter);
-      if (result.containsKey("token")) {
-        wsToken = result["token"];
-        return MoodleWebApiConnectorStatus.loginSuccess;
+      final tokenData = (await g.Get.to(() => LoginMoodlePage(username: account, password: password))) as MoodleTokenEntity?;
+      if(tokenData == null) {
+        return MoodleWebApiConnectorStatus.loginFail;
       }
-      return MoodleWebApiConnectorStatus.loginFail;
+
+      wsToken = tokenData.token;
+      privateToken = tokenData.privateToken;
+      MoodleTask.isLogin = true;
+
+      await Model.instance.setMoodleToken(tokenData);
+
+      return MoodleWebApiConnectorStatus.loginSuccess;
     } catch (e, stack) {
-      Log.eWithStack(e.toString(), stack);
-      return MoodleWebApiConnectorStatus.loginFail;
+      Log.eWithStack(e, stack);
     }
+
+    return MoodleWebApiConnectorStatus.loginFail;
   }
 
   static Future<String?> getCourseUrl(String courseId) async {
@@ -216,8 +225,9 @@ class MoodleWebApiConnector {
   }
 
   static Future<SemesterJson?> getCurrentSemester() async {
-    if(wsToken == null) {
-      await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
+    if (wsToken == null) {
+      await MoodleWebApiConnector.login(
+          Model.instance.getAccount(), Model.instance.getPassword());
     }
     ConnectorParameter parameter;
     Response result;
@@ -226,7 +236,7 @@ class MoodleWebApiConnector {
       parameter.data = {
         "moodlewsrestformat": "json",
         "wsfunction":
-        "core_course_get_enrolled_courses_by_timeline_classification",
+            "core_course_get_enrolled_courses_by_timeline_classification",
         "classification": "inprogress",
         "wstoken": wsToken
       };
@@ -288,8 +298,8 @@ class MoodleWebApiConnector {
     }
   }
 
-  static Future<MoodleProfileEntity?> getProfile() async {
-    if(wsToken == null) {
+  static Future<MoodleProfileEntity?> getProfile({isRetry = false}) async {
+    if (wsToken == null) {
       await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
     }
     try {
@@ -300,6 +310,16 @@ class MoodleWebApiConnector {
         "wstoken": wsToken
       };
       var result = await Connector.getDataByPostResponse(parameter);
+      if((result.data as Map<String, dynamic>).containsKey("errorcode")) {
+        if(isRetry) {
+          Model.instance.clearMoodleToken();
+          MyToast.show(R.current.loginMoodleWebApiError);
+          return null;
+        }
+
+        await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
+        return getProfile(isRetry: true);
+      }
       return MoodleProfileEntity.fromJson(result.data);
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
@@ -308,8 +328,9 @@ class MoodleWebApiConnector {
   }
 
   static Future<MoodleSettingEntity?> getSettings() async {
-    if(wsToken == null) {
-      await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
+    if (wsToken == null) {
+      await MoodleWebApiConnector.login(
+          Model.instance.getAccount(), Model.instance.getPassword());
     }
     try {
       var parameter = ConnectorParameter(_webAPIUrl);
@@ -327,8 +348,9 @@ class MoodleWebApiConnector {
   }
 
   static Future<void> toggleSetting(String key, List<String> values) async {
-    if(wsToken == null) {
-      await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
+    if (wsToken == null) {
+      await MoodleWebApiConnector.login(
+          Model.instance.getAccount(), Model.instance.getPassword());
     }
     try {
       var parameter = ConnectorParameter(_webAPIUrl);

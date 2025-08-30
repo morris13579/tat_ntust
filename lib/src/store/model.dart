@@ -1,11 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
+import 'package:flutter_app/src/connector/moodle_connector.dart';
+import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
+import 'package:flutter_app/src/entity/moodle_token_entity.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/model/setting/setting_json.dart';
 import 'package:flutter_app/src/model/userdata/user_data_json.dart';
+import 'package:flutter_app/src/task/moodle_webapi/moodle_task.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -325,6 +329,7 @@ class Model {
     return stringList;
   }
 
+  //--------------------App Version--------------------//
   Future<String> getVersion() async {
     return (await _readString("version")) ?? "";
   }
@@ -332,6 +337,37 @@ class Model {
   Future<void> setVersion(String version) async {
     await _writeString("version", version); //寫入目前版本
   }
+
+  //--------------------Moodle Token--------------------//
+  Future<MoodleTokenEntity?> getMoodleToken() async {
+    var json = await _readString("moodle_token");
+    if(json == null) {
+      return null;
+    }
+
+    return MoodleTokenEntity.fromJson(jsonDecode(json));
+  }
+
+  Future<void> setMoodleToken(MoodleTokenEntity token) async {
+    await _writeString("moodle_token", jsonEncode(token));
+  }
+
+  Future<void> loadMoodleToken() async {
+    var token = await getMoodleToken();
+    if(token == null) {
+      return;
+    }
+
+    MoodleTask.isLogin = true;
+    MoodleWebApiConnector.wsToken = token.token;
+    MoodleWebApiConnector.privateToken = token.privateToken;
+  }
+
+  Future<void> clearMoodleToken() async {
+    var pref = await SharedPreferences.getInstance();
+    await pref.remove("moodle_token");
+  }
+
 
   Future<bool> clearAll() async {
     var pref = await SharedPreferences.getInstance();
@@ -371,6 +407,18 @@ class Model {
       catchError = true;
       await clearScore();
     }
+    try {
+      await loadScore();
+    } catch (e) {
+      catchError = true;
+      await clearScore();
+    }
+    try {
+      //await loadMoodleToken();
+    } catch (e) {
+      catchError = true;
+      await clearMoodleToken();
+    }
     return catchError;
   }
 
@@ -380,6 +428,7 @@ class Model {
     await clearCourseTableList();
     await clearCourseSetting();
     await clearScore();
+    await clearMoodleToken();
     DioConnector.instance.deleteCookies();
     await cacheManager.emptyCache(); //clears all data in cache.
     await getInstance();

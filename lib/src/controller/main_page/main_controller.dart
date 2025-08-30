@@ -43,8 +43,7 @@ class MainController extends GetxController {
     }
 
     R.set(context);
-    bool catchError =
-        await Model.instance.getInstance(); //一定要先getInstance()不然無法取得資料
+    bool catchError = await Model.instance.getInstance(); //一定要先getInstance()不然無法取得資料
     try {
       if (!(await Model.instance.getAgreeContributor())) {
         RouteUtils.toAgreePrivacyPolicyScreen();

@@ -49,6 +49,21 @@ class CourseSemesterTask extends ScoreSystemTask<List<SemesterJson>> {
                 .isEmpty) {
           value.add(currentSemester);
         }
+
+        // 排序年度/學期
+        value.sort((a, b) {
+          final yearA = int.tryParse(a.year) ?? 0;
+          final yearB = int.tryParse(b.year) ?? 0;
+          final semesterA = int.tryParse(a.semester) ?? 0;
+          final semesterB = int.tryParse(b.semester) ?? 0;
+
+          int yearCompare = yearB.compareTo(yearA);
+          if (yearCompare != 0) {
+            return yearCompare;
+          } else {
+            return semesterB.compareTo(semesterA);
+          }
+        });
       } catch (e) {
         Log.d(e);
       }
