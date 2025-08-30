@@ -7,13 +7,11 @@ class AppThemes {
   static final lightTheme = ThemeData(
     fontFamily: 'MyFont',
     brightness: Brightness.light,
-    backgroundColor: AppColors.lightBG,
     primaryColor: AppColors.mainColor,
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: AppColors.lightAccent,
     ),
     appBarTheme: const AppBarTheme(color: AppColors.mainColor),
-    toggleableActiveColor: Colors.blue,
     dividerColor: const Color(0xFFF8F8F8),
     primarySwatch: Colors.blue,
     scaffoldBackgroundColor: AppColors.lightBG,
@@ -45,7 +43,6 @@ class AppThemes {
           fontFamily: "MyFont",
           useMaterial3: false,
           brightness: Brightness.dark,
-          backgroundColor: AppColors.darkBG,
           primaryColor: AppColors.darkPrimary,
           primarySwatch: AppColors.mainColor,
           scaffoldBackgroundColor: AppColors.darkBG,
@@ -60,7 +57,6 @@ class AppThemes {
             accentColor: AppColors.mainColor
           ),
           appBarTheme: const AppBarTheme(color: AppColors.darkAccent),
-          toggleableActiveColor: Colors.blueAccent,
           dividerColor: const Color(0xFF2F2F2F),
           buttonTheme: const ButtonThemeData(buttonColor: AppColors.darkAccent),
           textButtonTheme: TextButtonThemeData(

@@ -414,7 +414,7 @@ class Model {
       await clearScore();
     }
     try {
-      //await loadMoodleToken();
+      await loadMoodleToken();
     } catch (e) {
       catchError = true;
       await clearMoodleToken();

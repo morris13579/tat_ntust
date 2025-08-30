@@ -93,7 +93,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
 
   Widget _buildClassmateNumber(int index, int number) {
     Color color = (index % 2 == 1)
-        ? Theme.of(context).backgroundColor
+        ? Theme.of(context).scaffoldBackgroundColor
         : Theme.of(context).dividerColor;
     return Container(
       padding: const EdgeInsets.all(8),
@@ -108,7 +108,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
   Widget _buildClassmateInfo(int index, MoodleCoreEnrolGetUsers member) {
     Color color;
     color = (index % 2 == 1)
-        ? Theme.of(context).backgroundColor
+        ? Theme.of(context).scaffoldBackgroundColor
         : Theme.of(context).dividerColor;
     return Container(
       padding: const EdgeInsets.all(8),

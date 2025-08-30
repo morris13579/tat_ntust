@@ -163,7 +163,7 @@ class _FileViewerPageState extends State<FileViewerPage>
                                   ? Theme.of(context).colorScheme.secondary
                                   : Theme.of(context)
                                       .textTheme
-                                      .headline6!
+                                      .bodyLarge!
                                       .color,
                             ),
                             onPressed: () {
@@ -201,7 +201,7 @@ class _FileViewerPageState extends State<FileViewerPage>
                                               .secondary
                                           : Theme.of(context)
                                               .textTheme
-                                              .headline6!
+                                              .bodyLarge!
                                               .color,
                                     ),
                                   ),

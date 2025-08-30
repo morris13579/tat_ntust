@@ -37,6 +37,18 @@ class _LoginMoodlePageState extends State<LoginMoodlePage> {
     super.initState();
   }
 
+  Future<void> moodleTokenCallback(InAppWebViewController controller, WebUri? url) async {
+    if(url.toString().startsWith("moodlemobile://") && url?.host.startsWith("token=") == true) {
+      final base64Token = url?.rawValue.split("token=")[1] ?? "";
+      final decodeToken = utf8.decode(base64Url.decode(base64Token)).split(":::");
+      Get.back(result: MoodleTokenEntity(
+          decodeToken[0],
+          decodeToken[1],
+          decodeToken.length == 3 ? decodeToken[2] : ""
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,10 +63,13 @@ class _LoginMoodlePageState extends State<LoginMoodlePage> {
               onWebViewCreated: (InAppWebViewController controller) {
                 webView = controller;
               },
-              onLoadStart: (InAppWebViewController controller, Uri? url) async {
-
+              onLoadStart: (InAppWebViewController controller, WebUri? url) async {
+                await moodleTokenCallback(controller, url);
               },
-              onLoadStop: (InAppWebViewController controller, Uri? url) async {
+              onReceivedError: (InAppWebViewController controller, request, error) async {
+                await moodleTokenCallback(controller, request.url);
+              },
+              onLoadStop: (InAppWebViewController controller, WebUri? url) async {
                 if (url.toString().startsWith(loginPageUri)) {
                   if(await controller.waitForElement(condition: 'document.getElementById("Username") != null')) {
                     await controller.evaluateJavascript(source: 'document.getElementById("Username").value = "${widget.username}";');
@@ -65,16 +80,9 @@ class _LoginMoodlePageState extends State<LoginMoodlePage> {
                   if(await controller.waitForElement(condition: 'document.querySelector(\'[name="cf-turnstile-response"]\') != null && document.querySelector(\'[name="cf-turnstile-response"]\').value !== ""')) {
                     await controller.evaluateJavascript(source: 'document.getElementById("loginButton").click();');
                   }
-                } else if(url.toString().startsWith("moodlemobile://") && url?.host.startsWith("token=") == true) {
-                  final originUrl = await controller.getUrl();
-                  final base64Token = originUrl?.rawValue.split("token=")[1] ?? "";
-                  final decodeToken = utf8.decode(base64Url.decode(base64Token)).split(":::");
-                  Get.back(result: MoodleTokenEntity(
-                      decodeToken[0],
-                      decodeToken[1],
-                      decodeToken[2]
-                  ));
                 }
+
+                await moodleTokenCallback(controller, url);
               },
               onProgressChanged:
                   (InAppWebViewController controller, int progress) {

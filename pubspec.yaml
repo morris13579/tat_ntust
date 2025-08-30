@@ -9,7 +9,7 @@ version: 1.5.0+101
 
 environment:
   flutter: ">=3.3.0 <4.0.0"
-  sdk: ">=2.17.2 <3.0.0"
+  sdk: "^3.0.0"
 
 dependencies:
   flutter:
@@ -20,12 +20,13 @@ dependencies:
   provider: ^6.0.5
   path_provider: ^2.0.14
   quiver: ^3.2.1
-  url_launcher: ^6.1.10
+  url_launcher: ^6.2.5
+  url_launcher_ios: ^6.2.5
   #開啟email phone url...
   logger: ^2.1.0
   #顯示Log
   sprintf: ^7.0.0
-  flutter_local_notifications: ^16.3.3
+  flutter_local_notifications: ^19.4.1
   #通知欄  需修改android原始碼
   rxdart: ^0.27.7
   #通知欄有使用到
@@ -51,12 +52,15 @@ dependencies:
   #可儲存式cookies
   html: ^0.15.2
   #html解析器
-  fk_user_agent: ^2.1.0
+  fk_user_agent:
+    git:
+      url: https://github.com/maeltoukap/fk_user_agent.git
+      ref: master
   connectivity_plus: ^5.0.2
   clipboard: ^0.1.3
   #剪貼簿
   #----------WebView----------#
-  flutter_inappwebview: ^6.0.0
+  flutter_inappwebview: ^6.1.0
   #---------icon----------#
   eva_icons_flutter: ^3.1.0
   #https://akveo.github.io/eva-icons/#/
@@ -68,7 +72,7 @@ dependencies:
   back_button_interceptor: ^7.0.2
   #攔截返回鍵訊息
   #DateTime to String
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.3.0
   #檢測app版本用於檢查更新
   #----------html viewer----------#
   #flutter_html: ^2.2.1
@@ -120,12 +124,13 @@ dependencies:
   firebase_messaging: ^14.3.0
   google_mobile_ads: ^4.0.0
   flutter_svg: ^2.0.10+1
-  screenshot: ^2.3.0
+  screenshot: ^3.0.0
   photo_view: ^0.14.0
   shimmer: ^3.0.0
 
 dependency_overrides:
   intl: ^0.18.0
+  wakelock_plus: 1.3.1
 
 
 dev_dependencies:

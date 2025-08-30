@@ -123,7 +123,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
       default:
         if (ap.description.isNotEmpty) {
           return ExpansionTileCard(
-            expandedTextColor: Theme.of(context).textTheme.bodyText1!.color,
+            expandedTextColor: Theme.of(context).textTheme.bodyMedium!.color,
             expandedColor: getColor(index),
             baseColor: getColor(index),
             title: Text(
@@ -177,7 +177,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
 
   Color getColor(int index) {
     return (index % 2 == 1)
-        ? Theme.of(context).backgroundColor
+        ? Theme.of(context).scaffoldBackgroundColor
         : Theme.of(context).dividerColor;
   }
 
