@@ -81,7 +81,7 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   #listView or gridView動畫
   #----------download----------#
-  flutter_downloader: ^1.10.2
+  flutter_downloader: ^1.11.6
   #下載app更新
   open_filex: ^4.3.2
   permission_handler: ^11.3.0

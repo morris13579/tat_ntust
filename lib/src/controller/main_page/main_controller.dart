@@ -46,8 +46,8 @@ class MainController extends GetxController {
     bool catchError = await Model.instance.getInstance(); //一定要先getInstance()不然無法取得資料
     try {
       if (!(await Model.instance.getAgreeContributor())) {
-        RouteUtils.toAgreePrivacyPolicyScreen();
-        Get.delete<MainController>();
+        await Get.delete<MainController>();
+        await RouteUtils.toAgreePrivacyPolicyScreen();
         return;
       }
       await RemoteConfigUtils.init();
@@ -65,11 +65,11 @@ class MainController extends GetxController {
       await Notifications.instance.init();
 
       pageList.addAll([
-        const CourseTablePage(),
-        const SubSystemPage(),
-        const CalendarPage(),
-        const ScoreViewerPage(),
-        const OtherPage()
+        CourseTablePage(),
+        SubSystemPage(),
+        CalendarPage(),
+        ScoreViewerPage(),
+        OtherPage()
       ]);
       Get.forceAppUpdate();
     } catch (e, stack) {
@@ -87,6 +87,10 @@ class MainController extends GetxController {
 
   Future<void> getMoodleProfile() async {
     try {
+      if(Model.instance.getAccount().isEmpty || Model.instance.getPassword().isEmpty) {
+        await RouteUtils.toLoginScreen();
+      }
+
       isProfileLoading.value = true;
       profile.value = await MoodleWebApiConnector.getProfile();
     } catch (e) {
