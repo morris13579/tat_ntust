@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
+import 'package:flutter_app/src/util/permissions_utils.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:rxdart/rxdart.dart';
@@ -36,15 +37,15 @@ class Notifications {
         const AndroidInitializationSettings('app_icon');
     // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
     // of the `IOSFlutterLocalNotificationsPlugin` class
-    var initializationSettingsIOS = DarwinInitializationSettings(
+    var initializationSettingsIOS = const DarwinInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,
         requestSoundPermission: false,
-        onDidReceiveLocalNotification:
-            (int id, String? title, String? body, String? payload) async {
-          didReceiveLocalNotificationSubject.add(ReceivedNotification(
-              id: id, title: title, body: body, payload: payload));
-        });
+        // onDidReceiveLocalNotification: (int id, String? title, String? body, String? payload) async {
+        //   didReceiveLocalNotificationSubject.add(ReceivedNotification(
+        //       id: id, title: title, body: body, payload: payload));
+        // }
+    );
     var initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
@@ -56,6 +57,7 @@ class Notifications {
     });
 
     _requestIOSPermissions();
+    await _requestAndroidPermissions();
     _configureDidReceiveLocalNotificationSubject();
     _configureSelectNotificationSubject();
   }
@@ -69,6 +71,10 @@ class Notifications {
           badge: true,
           sound: true,
         );
+  }
+
+  Future<void> _requestAndroidPermissions() async {
+    await PermissionsUtils.isNotificationPermission();
   }
 
   void _configureDidReceiveLocalNotificationSubject() {

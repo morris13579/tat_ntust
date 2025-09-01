@@ -55,7 +55,7 @@ class _CourseAnnouncementDetailPageState
 
   Color getColor(int index) {
     return (index % 2 == 1)
-        ? Theme.of(context).backgroundColor
+        ? Theme.of(context).scaffoldBackgroundColor
         : Theme.of(context).dividerColor;
   }
 

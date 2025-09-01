@@ -8,7 +8,6 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/connector/interceptors/request_interceptor.dart';
-import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:get/get.dart' as get_utils;
 import 'package:path_provider/path_provider.dart';
 

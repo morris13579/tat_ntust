@@ -84,7 +84,7 @@ class CourseTablePage extends GetView<CourseController> {
         children: <Widget>[
           Container(
             height: CourseConfig.studentIdHeight,
-            color: Get.theme.backgroundColor,
+            color: Get.theme.scaffoldBackgroundColor,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -164,7 +164,7 @@ class CourseTablePage extends GetView<CourseController> {
       );
     }
     return Container(
-      color: Get.theme.backgroundColor
+      color: Get.theme.scaffoldBackgroundColor
           .withAlpha(CourseConfig.courseTableWithAlpha),
       height: CourseConfig.dayHeight,
       child: Row(
@@ -178,7 +178,7 @@ class CourseTablePage extends GetView<CourseController> {
     int section = courseTableControl.getSectionIntList[index];
     Color color;
     color =
-        (index % 2 == 1) ? Get.theme.backgroundColor : Get.theme.dividerColor;
+        (index % 2 == 1) ? Get.theme.scaffoldBackgroundColor : Get.theme.dividerColor;
     color = color.withAlpha(CourseConfig.courseTableWithAlpha);
     List<Widget> widgetList = [];
     widgetList.add(

@@ -48,7 +48,7 @@ class CourseInfoTile extends StatelessWidget {
 
   Color getColor(int index) {
     return (index % 2 == 1)
-        ? Get.theme.backgroundColor
+        ? Get.theme.scaffoldBackgroundColor
         : Get.theme.dividerColor;
   }
 }

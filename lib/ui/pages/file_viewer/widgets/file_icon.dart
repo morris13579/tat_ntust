@@ -61,7 +61,7 @@ class FileIcon extends StatelessWidget {
           {
             return Icon(
               FontAwesome5.file,
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyMedium!.color,
             );
           }
       }

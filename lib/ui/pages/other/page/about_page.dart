@@ -5,6 +5,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/src/version/app_version.dart';
 import 'package:flutter_app/src/version/update/app_update.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/password/check_password_dialog.dart';
@@ -13,7 +14,7 @@ import 'package:get/get.dart';
 enum OnListViewPress { appUpdate, contribution, privacyPolicy, version, dev }
 
 class AboutPage extends StatefulWidget {
-  const AboutPage({Key? key}) : super(key: key);
+  const AboutPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _AboutPageState();
@@ -31,8 +32,7 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   void initList() {
-    listViewData = [];
-    listViewData.addAll([
+    listViewData = [
       {
         "icon": EvaIcons.refreshOutline,
         "title": R.current.checkVersion,
@@ -57,7 +57,7 @@ class _AboutPageState extends State<AboutPage> {
         "title": R.current.versionInfo,
         "onPress": OnListViewPress.version
       }
-    ]);
+    ];
     _addDevListItem();
   }
 
@@ -119,10 +119,9 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(R.current.about),
-      ),
+      appBar: baseAppbar(title: R.current.about),
       body: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         itemCount: listViewData.length,
         itemBuilder: (context, index) {
           Widget widget;
@@ -135,36 +134,25 @@ class _AboutPageState extends State<AboutPage> {
           );
         },
         separatorBuilder: (context, index) {
-          // 顯示格線
-          return Container(
-            color: Colors.black12,
-            height: 1,
-          );
+          return const SizedBox(height: 4);
         },
       ),
     );
   }
 
-  Container _buildAbout(Map data) {
-    return Container(
-      //color: Colors.yellow,
-      padding: const EdgeInsets.only(
-          top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Icon(
-            data['icon'],
-            color: data['color'],
-          ),
-          const SizedBox(
-            width: 20.0,
-          ),
-          Text(
-            data['title'],
-            style: const TextStyle(fontSize: 18),
-          ),
-        ],
+  Widget _buildAbout(Map data) {
+    return ListTile(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      onTap: () {
+        _onListViewPress(data['onPress']);
+      },
+      title: Text(
+        data['title'],
+        style: const TextStyle(fontSize: 18),
+      ),
+      leading: Icon(
+        data['icon'],
+        color: data['color'],
       ),
     );
   }

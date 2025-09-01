@@ -31,8 +31,10 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 34
-    ndkVersion "26.2.11394342"
+    namespace "club.ntust.tat"
+
+    compileSdk 35
+    ndkVersion "27.0.12077973"
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -46,6 +48,16 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     signingConfigs {
@@ -81,6 +93,8 @@ flutter {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.23"
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test:runner:1.4.0'

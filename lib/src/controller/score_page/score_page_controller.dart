@@ -55,6 +55,21 @@ class ScorePageController extends GetxController
     }
     tabLabelList.clear();
     tabChildList.clear();
+
+    semesterScoreList.sort((a, b) {
+      final yearA = int.tryParse(a.semester.year) ?? 0;
+      final yearB = int.tryParse(b.semester.year) ?? 0;
+      final semesterA = int.tryParse(a.semester.semester) ?? 0;
+      final semesterB = int.tryParse(b.semester.semester) ?? 0;
+
+      int yearCompare = yearB.compareTo(yearA);
+      if (yearCompare != 0) {
+        return yearCompare;
+      } else {
+        return semesterB.compareTo(semesterA);
+      }
+    });
+
     for (int i = 0; i < semesterScoreList.length; i++) {
       var semester = semesterScoreList[i].semester;
       tabLabelList.add(_buildTabLabel("${semester.year}-${semester.semester}"));
