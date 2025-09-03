@@ -1,25 +1,18 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
-import 'package:flutter_app/src/ad/ad_manager.dart';
+import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
-import 'package:flutter_app/src/file/my_downloader.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_profile_entity.dart';
-import 'package:flutter_app/src/notifications/notifications.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
-import 'package:flutter_app/src/util/language_utils.dart';
-import 'package:flutter_app/src/util/remote_config_utils.dart';
-import 'package:flutter_app/src/util/route_utils.dart';
-import 'package:flutter_app/src/version/app_version.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
+import 'package:get/get.dart';
 import 'package:flutter_app/ui/pages/calendar/calendar_page.dart';
 import 'package:flutter_app/ui/pages/course_table/course_table_page.dart';
 import 'package:flutter_app/ui/pages/other/other_page.dart';
 import 'package:flutter_app/ui/pages/score/score_page.dart';
 import 'package:flutter_app/ui/pages/subsystem/sub_system_page.dart';
-import 'package:get/get.dart';
-
-import '../../R.dart';
 
 class MainController extends GetxController {
   final pageController = PageController();
@@ -32,74 +25,27 @@ class MainController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    await appInit();
-    await getMoodleProfile();
+
+    pageList.addAll([
+      CourseTablePage(),
+      SubSystemPage(),
+      CalendarPage(),
+      ScoreViewerPage(),
+      OtherPage()
+    ]);
   }
 
-  Future<void> appInit() async {
-    var context = Get.context;
-    if (context == null) {
-      throw Exception("BuildContext is null");
-    }
+  @override
+  Future<void> onReady() async {
+    super.onReady();
+    final isAvailable = await _checkMoodle();
 
-    R.set(context);
-    bool catchError = await Model.instance.getInstance(); //一定要先getInstance()不然無法取得資料
-    try {
-      if (!(await Model.instance.getAgreeContributor())) {
-        await Get.delete<MainController>();
-        await RouteUtils.toAgreePrivacyPolicyScreen();
-        return;
-      }
-      await RemoteConfigUtils.init();
-      if (context.mounted) {
-        await LanguageUtils.init(context);
-      }
-      APPVersion.initAndCheck().then((needUpdate) {
-        if (!needUpdate) {
-          RemoteConfigUtils.showAnnouncementDialog();
-        }
-      });
-      AdManager.init();
-      Log.init();
-      await MyDownloader.init();
-      await Notifications.instance.init();
-
-      pageList.addAll([
-        CourseTablePage(),
-        SubSystemPage(),
-        CalendarPage(),
-        ScoreViewerPage(),
-        OtherPage()
-      ]);
-      Get.forceAppUpdate();
-    } catch (e, stack) {
-      Log.eWithStack(e.toString(), stack);
-    }
-    if (catchError) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      ErrorDialogParameter parameter =
-          ErrorDialogParameter(desc: R.current.loadDataFail);
-      parameter.btnCancelOnPress = null;
-      parameter.btnOkText = R.current.sure;
-      await ErrorDialog(parameter).show();
+    if(isAvailable) {
+      await _getMoodleProfile();
     }
   }
 
-  Future<void> getMoodleProfile() async {
-    try {
-      if(Model.instance.getAccount().isEmpty || Model.instance.getPassword().isEmpty) {
-        await RouteUtils.toLoginScreen();
-      }
-
-      isProfileLoading.value = true;
-      profile.value = await MoodleWebApiConnector.getProfile();
-    } catch (e) {
-      Log.e(e);
-    } finally {
-      isProfileLoading.value = false;
-    }
-  }
-
+  /// Event Handler
   void onBottomNavigationTap(int index) {
     pageController.jumpToPage(index);
   }
@@ -109,5 +55,39 @@ class MainController extends GetxController {
 
     String screenName = pageList[index].toString();
     AnalyticsUtils.setScreenName(screenName);
+  }
+
+  /// Private Method
+  Future<bool> _checkMoodle() async {
+    final isMoodleAvailable = await MoodleWebApiConnector.isMoodleTokenAvailable();
+    if(isMoodleAvailable) {
+      return true;
+    }
+
+    final status = await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
+    if(status == MoodleWebApiConnectorStatus.loginFail || status == MoodleWebApiConnectorStatus.unknownError) {
+      await ErrorDialog(ErrorDialogParameter(
+        title: R.current.error,
+        dialogType: DialogType.error,
+        desc: R.current.loginMoodleError,
+        okResult: false,
+        btnOkText: R.current.sure,
+        offCancelBtn: true,
+      )).show();
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<void> _getMoodleProfile() async {
+    try {
+      isProfileLoading.value = true;
+      profile.value = await MoodleWebApiConnector.getProfile();
+    } catch (e) {
+      Log.e(e);
+    } finally {
+      isProfileLoading.value = false;
+    }
   }
 }

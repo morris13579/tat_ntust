@@ -36,8 +36,6 @@ class _CourseDataPageState extends State<CourseDataPage>
   @override
   void initState() {
     super.initState();
-    testMoodleWebApi();
-
     tabPageList = TabPageList();
     _tabController = TabController(vsync: this, length: 3);
     var filePage = TabPage(
@@ -60,18 +58,6 @@ class _CourseDataPageState extends State<CourseDataPage>
       CourseScorePage(widget.courseInfo),
     ));
     setState(() {});
-  }
-
-  void testMoodleWebApi() async {
-    const moodleCheckKey = "moodle_api_check";
-    if (Model.instance.getOtherSetting().useMoodleWebApi &&
-        await Model.instance.getFirstUse(moodleCheckKey)) {
-      Model.instance.setAlreadyUse(moodleCheckKey);
-      MyProgressDialog.progressDialog(R.current.testMoodleApi);
-      var result = await MoodleWebApiConnector.testMoodleWebApi();
-      MyProgressDialog.hideAllDialog();
-      Model.instance.getOtherSetting().useMoodleWebApi = result;
-    }
   }
 
   @override

@@ -150,7 +150,7 @@ class RouteUtils {
   }
 
   static Future toAgreePrivacyPolicyScreen() async {
-    return await Get.offAll(
+    return await Get.to(
       () => const PrivacyPolicyScreen(),
       transition: transition,
     );

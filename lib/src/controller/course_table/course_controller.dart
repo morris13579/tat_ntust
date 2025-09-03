@@ -48,17 +48,7 @@ class CourseController extends GetxController {
     refreshSemester();
     studentId.value = "";
 
-    UserDataJson userData = Model.instance.getUserData();
-    if (userData.account.isEmpty || userData.password.isEmpty) {
-      isLoading.value = CourseTableUIState.loading;
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      Get.offAll(() => const LoginScreen());
-      Get.delete<CourseController>();
-      Get.delete<MainController>();
-    } else {
-      await _loadSetting();
-    }
+    await _loadSetting();
   }
 
   void refreshSemester() {

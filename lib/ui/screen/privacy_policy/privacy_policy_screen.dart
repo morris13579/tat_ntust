@@ -16,28 +16,31 @@ class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
     Get.put(PrivacyPolicyController());
 
     return Obx(() {
-      return BasePage(
-          title: R.current.PrivacyPolicy,
-          isError: controller.isError.value,
-          errorMsg: controller.errorMsg.value,
-          isLoading: controller.isLoading.value,
-          child: Column(
-            children: [
-              Expanded(
-                child: contentBody(),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: agreeButton(),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-            ],
-          ));
+      return PopScope(
+        canPop: false,
+        child: BasePage(
+            title: R.current.PrivacyPolicy,
+            isError: controller.isError.value,
+            errorMsg: controller.errorMsg.value,
+            isLoading: controller.isLoading.value,
+            child: Column(
+              children: [
+                Expanded(
+                  child: contentBody(),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: agreeButton(),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
+            )),
+      );
     });
   }
 
