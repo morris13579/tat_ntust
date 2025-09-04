@@ -26,23 +26,19 @@ class MainController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
 
-    pageList.addAll([
-      CourseTablePage(),
-      SubSystemPage(),
-      CalendarPage(),
-      ScoreViewerPage(),
-      OtherPage()
-    ]);
-  }
-
-  @override
-  Future<void> onReady() async {
-    super.onReady();
     final isAvailable = await _checkMoodle();
 
     if(isAvailable) {
       await _getMoodleProfile();
     }
+
+    pageList.addAll([
+      const CourseTablePage(),
+      const SubSystemPage(),
+      const CalendarPage(),
+      const ScoreViewerPage(),
+      const OtherPage()
+    ]);
   }
 
   /// Event Handler

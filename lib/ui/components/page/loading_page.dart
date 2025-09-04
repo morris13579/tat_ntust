@@ -46,9 +46,7 @@ class LoadingPage extends StatelessWidget {
 
   Widget indicator() {
     if (GetPlatform.isIOS) {
-      return const CupertinoActivityIndicator(
-
-      );
+      return const CupertinoActivityIndicator();
     } else {
       return CircularProgressIndicator(
         color: Get.theme.indicatorColor,

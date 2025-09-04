@@ -6,6 +6,7 @@ import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/entity/moodle_token_entity.dart';
 import 'package:flutter_app/src/util/web_view_utils.dart';
 import 'package:flutter_app/ui/other/my_progress_dialog.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 
@@ -87,6 +88,8 @@ class _LoginMoodlePageState extends State<LoginMoodlePage> {
                     await controller.evaluateJavascript(
                         source:
                             'document.getElementById("loginButton").click();');
+                  } else {
+                    MyToast.show(R.current.needValidateCaptcha);
                   }
                 }
               },

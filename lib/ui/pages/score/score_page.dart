@@ -6,7 +6,7 @@ import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:get/get.dart';
 
 class ScoreViewerPage extends StatefulWidget {
-  const ScoreViewerPage({Key? key}) : super(key: key);
+  const ScoreViewerPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _ScoreViewerPageState();

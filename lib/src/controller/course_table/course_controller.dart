@@ -51,12 +51,8 @@ class CourseController extends GetxController {
     await _loadSetting();
   }
 
-  void refreshSemester() {
-    semesterSetting.value = courseTableData?.courseSemester ?? SemesterJson();
-    semesterString.value =
-        "${semesterSetting.value.year}-${semesterSetting.value.semester}";
-  }
 
+  /// Init
   Future<void> _loadSetting() async {
     CourseTableJson? courseTable = courseModel.getCourseSettingInfo();
     if (courseTable?.isEmpty == true) {
@@ -66,6 +62,7 @@ class CourseController extends GetxController {
     }
   }
 
+  /// Event Handler
   Future<void> showSemesterList() async {
     var semesterList = await courseModel.getSemesterList(studentId.value);
     Get.dialog(SemesterDialog(
@@ -73,12 +70,17 @@ class CourseController extends GetxController {
         onSelected: (value) => getCourseTable(semesterSetting: value)));
   }
 
+  void refreshSemester() {
+    semesterSetting.value = courseTableData?.courseSemester ?? SemesterJson();
+    semesterString.value = "${semesterSetting.value.year}-${semesterSetting.value.semester}";
+  }
+
   Future<void> onPopupMenuSelect(int value) async {
     Map<int, Function> map = {
       0: _getCredit,
       1: _loadFavorite,
       2: _addCustomCourse,
-      3: screenshot
+      3: setWidget
     };
 
     if (!map.containsKey(value)) {
@@ -88,33 +90,10 @@ class CourseController extends GetxController {
     map[value]!();
   }
 
-  Future<void> _getCredit() async {
-    MyToast.show(
-        "${R.current.credit}: ${courseTableData!.getTotalCredit().toString()}");
-  }
-
-  Future<void> getCourseTable(
-      {SemesterJson? semesterSetting, bool refresh = false}) async {
+  Future<void> getCourseTable({SemesterJson? semesterSetting, bool refresh = false}) async {
     CourseTableJson courseTable = await courseModel.getCourseTable(semesterSetting: semesterSetting, refresh: refresh);
     courseModel.saveCourse(courseTable);
     _showCourseTable(courseTable);
-  }
-
-  Future<void> _loadFavorite() async {
-    List<CourseTableJson> value = courseModel.getCacheCourseTableList();
-    if (value.isEmpty) {
-      MyToast.show(R.current.noAnyFavorite);
-      return;
-    }
-    Get.dialog(FavoriteDialog(
-        value: value,
-        onPressed: (index) {
-          CourseTableJson info = value[index];
-          courseModel.saveFavoriteCourse(info);
-          _showCourseTable(info);
-          Get.back();
-        },
-        onDelete: (index) => courseModel.removeFavoriteCourse(value[index])));
   }
 
   //顯示課程對話框
@@ -123,10 +102,10 @@ class CourseController extends GetxController {
         courseInfo: courseInfo,
         time: courseTableControl.getTimeString(section),
         onDetailTap: () {
-          _showCourseDetail(courseInfo, 0);
+          _showCourseDetail(courseInfo);
         },
         onMoodleTap: () {
-          _showCourseData(courseInfo, 0);
+          _showCourseData(courseInfo);
         },
         onRemoveTap: () async {
           if(courseTableData != null) {
@@ -137,51 +116,8 @@ class CourseController extends GetxController {
         }));
   }
 
-  void _showCourseData(CourseInfoJson courseInfo, int index) {
-    CourseMainJson course = courseInfo.main.course;
-    Get.back();
-
-    if (course.id.isEmpty) {
-      MyToast.show(course.name + R.current.noSupport);
-      return;
-    }
-
-    RouteUtils.toCourseDataPage(courseInfo, index);
-  }
-
-  void _showCourseDetail(CourseInfoJson courseInfo, int index) {
-    CourseMainJson course = courseInfo.main.course;
-
-    if (course.id.isEmpty) {
-      MyToast.show(course.name + R.current.noSupport);
-      return;
-    }
-
-    RouteUtils.toCourseDetailPage(
-        courseTableData!.courseSemester, courseInfo, index);
-  }
-
-  void _showCourseTable(CourseTableJson? courseTable) async {
-    if (courseTable == null || courseTable.isEmpty) {
-      isLoading.value = CourseTableUIState.fail;
-      return;
-    }
-    courseTableData = courseTable;
-    studentId.value = courseTable.studentId;
-    isLoading.value = CourseTableUIState.loading;
-    courseTableControl.set(courseTable); //設定課表顯示狀態
-    refreshSemester();
-    await Future.delayed(const Duration(milliseconds: 50));
-    isLoading.value = CourseTableUIState.success;
-    //如果第一次直接設成小工具
-    Directory directory = await getApplicationSupportDirectory();
-    String path = directory.path;
-    if (!await File('$path/course_widget.png').exists()) {
-      screenshot();
-    }
-  }
-
-  Future screenshot() async {
+  // 截圖課表Widget 設為桌面小工具
+  Future setWidget() async {
     Uint8List? pngBytes = await screenshotController.capture(pixelRatio: 2.0);
     if(pngBytes == null) {
       return;
@@ -208,6 +144,55 @@ class CourseController extends GetxController {
     }
   }
 
+  /// Private method
+  /* Course Detail Dialog Handler */
+  void _showCourseData(CourseInfoJson courseInfo) {
+    CourseMainJson course = courseInfo.main.course;
+    Get.back();
+
+    if (course.id.isEmpty) {
+      MyToast.show(course.name + R.current.noSupport);
+      return;
+    }
+
+    RouteUtils.toCourseDataPage(courseInfo, 0);
+  }
+
+  void _showCourseDetail(CourseInfoJson courseInfo) {
+    CourseMainJson course = courseInfo.main.course;
+
+    if (course.id.isEmpty) {
+      MyToast.show(course.name + R.current.noSupport);
+      return;
+    }
+
+    RouteUtils.toCourseDetailPage(
+        courseTableData!.courseSemester, courseInfo, 0);
+  }
+
+  /* Course Table */
+  // 刷新畫面上課表
+  void _showCourseTable(CourseTableJson? courseTable) async {
+    if (courseTable == null || courseTable.isEmpty) {
+      isLoading.value = CourseTableUIState.fail;
+      return;
+    }
+    courseTableData = courseTable;
+    studentId.value = courseTable.studentId;
+    isLoading.value = CourseTableUIState.loading;
+    courseTableControl.set(courseTable); //設定課表顯示狀態
+    refreshSemester();
+    await Future.delayed(const Duration(milliseconds: 50));
+    isLoading.value = CourseTableUIState.success;
+    //如果第一次直接設成小工具
+    Directory directory = await getApplicationSupportDirectory();
+    String path = directory.path;
+    if (!await File('$path/course_widget.png').exists()) {
+      setWidget();
+    }
+  }
+
+  // 加入自訂義課程
   Future<void> _addCustomCourse() async {
     courseInfoList.clear();
     var info = await Get.to(() => const CustomCoursePage()) as CourseMainInfoJson?;
@@ -220,5 +205,29 @@ class CourseController extends GetxController {
     }
     courseModel.saveCourse(courseTableData!);
     _loadSetting();
+  }
+
+  // 計算學分
+  Future<void> _getCredit() async {
+    MyToast.show(
+        "${R.current.credit}: ${courseTableData!.getTotalCredit().toString()}");
+  }
+
+  // 載入快取中保存的課表
+  Future<void> _loadFavorite() async {
+    List<CourseTableJson> value = courseModel.getCacheCourseTableList();
+    if (value.isEmpty) {
+      MyToast.show(R.current.noAnyFavorite);
+      return;
+    }
+    Get.dialog(FavoriteDialog(
+        value: value,
+        onPressed: (index) {
+          CourseTableJson info = value[index];
+          courseModel.saveFavoriteCourse(info);
+          _showCourseTable(info);
+          Get.back();
+        },
+        onDelete: (index) => courseModel.removeFavoriteCourse(value[index])));
   }
 }

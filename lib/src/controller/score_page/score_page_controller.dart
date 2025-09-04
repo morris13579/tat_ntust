@@ -138,18 +138,16 @@ class ScorePageController extends GetxController
                   style: const TextStyle(fontSize: 16.0),
                 ),
               ),
-              SizedBox(
-                width: 40,
-                child: GestureDetector(
-                  child: Text(
-                    score.score,
-                    style: const TextStyle(fontSize: 16.0),
-                    textAlign: TextAlign.end,
-                  ),
-                  onTap: () {
-                    MyToast.show(score.score);
-                  },
+              const SizedBox(width: 24),
+              GestureDetector(
+                child: Text(
+                  score.score,
+                  style: const TextStyle(fontSize: 16.0),
+                  textAlign: TextAlign.end,
                 ),
+                onTap: () {
+                  MyToast.show(score.score);
+                },
               ),
             ],
           ),
