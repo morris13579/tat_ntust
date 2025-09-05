@@ -22,18 +22,16 @@ class UIUtils {
   static List<Color> generateHarmoniousColors(int count) {
     final List<Color> colors = [];
     final HSLColor hslSeed = HSLColor.fromColor(Get.theme.colorScheme.primary);
+    final bool isLight = Get.theme.brightness == Brightness.light;
+
+    final double lightness = isLight ? 0.90 : 0.85;
 
     final double rotation = 360.0 / (count + 1);
 
     for (int i = 0; i < count; i++) {
       final double currentHue = (hslSeed.hue + i * rotation) % 360.0;
 
-      final HSLColor derivedColor = HSLColor.fromAHSL(
-        1.0,
-        currentHue,
-        0.4,
-        0.9,
-      );
+      final HSLColor derivedColor = HSLColor.fromAHSL(1.0, currentHue, 0.4, lightness);
       colors.add(derivedColor.toColor());
     }
     return colors;

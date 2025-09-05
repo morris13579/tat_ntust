@@ -129,7 +129,7 @@ class _SubSystemPageState extends State<SubSystemPage> {
     return FilledButton(
       style: FilledButton.styleFrom(
         backgroundColor: Get.theme.colorScheme.surfaceContainer,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6),),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
         minimumSize: const Size(0, 120)
       ),
       onPressed: () {

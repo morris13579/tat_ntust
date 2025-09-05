@@ -101,6 +101,7 @@ class CourseTablePage extends GetView<CourseController> {
                       Text(
                         controller.semesterString.value,
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: Get.theme.colorScheme.onSurface),
                       ),
                       const Padding(
                         padding: EdgeInsets.all(5),
@@ -201,7 +202,7 @@ class CourseTablePage extends GetView<CourseController> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       backgroundColor: color,
                       elevation: 0
                     ),
