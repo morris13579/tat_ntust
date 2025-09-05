@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomProgressDialog extends StatelessWidget {
   const CustomProgressDialog({
@@ -35,15 +36,10 @@ class CustomProgressDialog extends StatelessWidget {
   /// {@endtemplate}
   final ShapeBorder? shape;
 
-  Color _getColor(BuildContext context) {
-    return Theme.of(context).dialogBackgroundColor;
-  }
-
   @override
   Widget build(BuildContext context) {
     return AnimatedPadding(
-      padding: MediaQuery.of(context).viewInsets +
-          const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+      padding: MediaQuery.of(context).viewInsets + const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
       duration: insetAnimationDuration,
       curve: insetAnimationCurve,
       child: MediaQuery.removeViewInsets(
@@ -57,9 +53,9 @@ class CustomProgressDialog extends StatelessWidget {
             constraints: const BoxConstraints(),
             child: Material(
               elevation: 24.0,
-              color: _getColor(context),
+              color: Get.theme.colorScheme.surfaceContainerHighest,
               type: MaterialType.card,
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              borderRadius: const BorderRadius.all(Radius.circular(24)),
               child: child,
             ),
           ),

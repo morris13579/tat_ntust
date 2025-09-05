@@ -7,6 +7,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_profile_entity.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
+import 'package:flutter_app/ui/other/my_progress_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter_app/ui/pages/calendar/calendar_page.dart';
 import 'package:flutter_app/ui/pages/course_table/course_table_page.dart';
@@ -31,6 +32,8 @@ class MainController extends GetxController {
     if(isAvailable) {
       await _getMoodleProfile();
     }
+
+    MyProgressDialog.progressDialog("test");
 
     pageList.addAll([
       const CourseTablePage(),
