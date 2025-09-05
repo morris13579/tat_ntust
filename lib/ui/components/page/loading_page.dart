@@ -7,11 +7,10 @@ import 'package:get/get_utils/src/platform/platform.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage(
-      {Key? key,
+      {super.key,
       required this.isLoading,
       this.isShowBackground = true,
-      this.message})
-      : super(key: key);
+      this.message});
 
   final bool isLoading;
   final bool isShowBackground;
@@ -48,9 +47,8 @@ class LoadingPage extends StatelessWidget {
     if (GetPlatform.isIOS) {
       return const CupertinoActivityIndicator();
     } else {
-      return CircularProgressIndicator(
-        color: Get.theme.indicatorColor,
-      );
+      return const CircularProgressIndicator(
+          strokeCap: StrokeCap.round, strokeWidth: 4.5);
     }
   }
 }

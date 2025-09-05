@@ -83,9 +83,9 @@ class RouteUtils {
   }
 
   static Future toCourseDetailPage(
-      SemesterJson semester, CourseInfoJson courseInfo, int index) async {
+      SemesterJson semester, CourseInfoJson courseInfo) async {
     return await Get.to(
-      () => CourseDetailPage(courseInfo, semester, index),
+      () => CourseDetailPage(courseInfo, semester),
       transition: transition,
     );
   }

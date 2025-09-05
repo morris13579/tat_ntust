@@ -1,16 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
-import 'package:flutter_app/ui/other/my_progress_dialog.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_announcement_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_directory_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/course_score_page.dart';
-import 'package:flutter_app/ui/pages/course_detail/tab_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 

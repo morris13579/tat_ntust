@@ -47,7 +47,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   Widget _buildPageView() {
     return Obx(() {
       if(controller.pageList.isEmpty) {
-        return const LoadingPage(isLoading: true);
+        return const LoadingPage(isLoading: true, isShowBackground: false,);
       }
       return PageView(
           controller: controller.pageController,

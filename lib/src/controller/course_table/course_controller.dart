@@ -167,7 +167,7 @@ class CourseController extends GetxController {
     }
 
     RouteUtils.toCourseDetailPage(
-        courseTableData!.courseSemester, courseInfo, 0);
+        courseTableData!.courseSemester, courseInfo);
   }
 
   /* Course Table */
