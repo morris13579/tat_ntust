@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -72,36 +73,41 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(builder: (BuildContext context, AppProvider appProvider, Widget? child) {
       appProvider.navigatorKey = Get.key;
-      return GetMaterialApp(
-        title: AppConfig.appName,
-        initialBinding: AppBindings(),
-        onReady: () async {
-          FlutterNativeSplash.remove();
-          await Get.find<AppService>().init();
-        },
-        theme: appProvider.theme,
-        darkTheme: AppThemes.darkTheme,
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate
-        ],
-        builder: BotToastInit(),
-        navigatorObservers: [
-          BotToastNavigatorObserver(),
-          AnalyticsUtils.observer
-        ],
-        supportedLocales: S.delegate.supportedLocales,
-        initialRoute: initialRoute,
-        getPages: [
-          GetPage(name: '/home', page: () => const MainScreen()),
-          GetPage(name: '/login', page: () => const LoginScreen()),
-        ],
-        debugShowCheckedModeBanner: false,
-        logWriterCallback: (String text, {bool? isError}) {
-          Log.d(text);
-        },
+      return DynamicColorBuilder(
+        builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+          return GetMaterialApp(
+            title: AppConfig.appName,
+            initialBinding: AppBindings(),
+            onReady: () async {
+              FlutterNativeSplash.remove();
+              await Get.find<AppService>().init();
+            },
+            themeMode: ThemeMode.light,
+            theme: AppThemes.lightTheme(lightDynamic),
+            darkTheme: AppThemes.darkTheme(darkDynamic),
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate
+            ],
+            builder: BotToastInit(),
+            navigatorObservers: [
+              BotToastNavigatorObserver(),
+              AnalyticsUtils.observer
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            initialRoute: initialRoute,
+            getPages: [
+              GetPage(name: '/home', page: () => const MainScreen()),
+              GetPage(name: '/login', page: () => const LoginScreen()),
+            ],
+            debugShowCheckedModeBanner: false,
+            logWriterCallback: (String text, {bool? isError}) {
+              Log.d(text);
+            },
+          );
+        }
       );
     });
   }

@@ -8,6 +8,7 @@ import 'package:flutter_app/src/enum/course_table_ui_state.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
+import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/page/base_page.dart';
 import 'package:flutter_app/ui/components/widget_size_render_object.dart';
 import 'package:flutter_app/ui/pages/course_table/component/course_menu.dart';
@@ -82,9 +83,8 @@ class CourseTablePage extends GetView<CourseController> {
       },
       child: Column(
         children: <Widget>[
-          Container(
+          SizedBox(
             height: CourseConfig.studentIdHeight,
-            color: Get.theme.scaffoldBackgroundColor,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -97,7 +97,7 @@ class CourseTablePage extends GetView<CourseController> {
                 TextButton(
                   onPressed: controller.showSemesterList,
                   child: Row(
-                    children: <Widget>[
+                    children: [
                       Text(
                         controller.semesterString.value,
                         textAlign: TextAlign.center,
@@ -164,8 +164,7 @@ class CourseTablePage extends GetView<CourseController> {
       );
     }
     return Container(
-      color: Get.theme.scaffoldBackgroundColor
-          .withAlpha(CourseConfig.courseTableWithAlpha),
+      color: Get.theme.scaffoldBackgroundColor.withAlpha(CourseConfig.courseTableWithAlpha),
       height: CourseConfig.dayHeight,
       child: Row(
         children: widgetList,
@@ -176,10 +175,7 @@ class CourseTablePage extends GetView<CourseController> {
   Widget _buildCourseTable(int index) {
     var courseTableControl = controller.courseTableControl;
     int section = courseTableControl.getSectionIntList[index];
-    Color color;
-    color =
-        (index % 2 == 1) ? Get.theme.scaffoldBackgroundColor : Get.theme.dividerColor;
-    color = color.withAlpha(CourseConfig.courseTableWithAlpha);
+
     List<Widget> widgetList = [];
     widgetList.add(
       Container(
@@ -191,26 +187,28 @@ class CourseTablePage extends GetView<CourseController> {
         ),
       ),
     );
+
     for (int day in courseTableControl.getDayIntList) {
-      CourseInfoJson? courseInfo =
-          courseTableControl.getCourseInfo(day, section);
+      CourseInfoJson? courseInfo = courseTableControl.getCourseInfo(day, section);
       Color color = courseTableControl.getCourseInfoColor(day, section);
       courseInfo = courseInfo ?? CourseInfoJson();
       widgetList.add(
         Expanded(
-          child: (courseInfo.isEmpty)
+          child: courseInfo.isEmpty
               ? const SizedBox()
               : Container(
                   padding: const EdgeInsets.all(1),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(0),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       backgroundColor: color,
+                      elevation: 0
                     ),
                     child: AutoSizeText(
                       courseInfo.main.course.name,
-                      style: const TextStyle(
-                        color: Colors.black,
+                      style: TextStyle(
+                        color: UIUtils.getOnColor(color),
                         fontSize: 14,
                         height: 1.2
                       ),
@@ -226,8 +224,9 @@ class CourseTablePage extends GetView<CourseController> {
         ),
       );
     }
+
     return Container(
-      color: color,
+      color: UIUtils.getListColor(index),
       height: controller.courseHeight.value,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
