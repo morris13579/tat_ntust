@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +24,7 @@ class CourseInfoTile extends StatelessWidget {
     return InkWell(
         onTap: onTap,
         child: Container(
-          color: getColor(index),
+          color: UIUtils.getListColor(index),
           height: 50,
           child: Row(
             children: [
@@ -31,11 +32,11 @@ class CourseInfoTile extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: SvgPicture.asset(
                   "assets/image/$img.svg",
-                  color: Get.iconColor,
+                  color: Get.theme.colorScheme.onSurface,
                 ),
               ),
               Expanded(
-                child: Text(title),
+                child: Text(title, style: TextStyle(color: Get.theme.colorScheme.onSurface,),),
               ),
               Visibility(
                   visible: isShowArrow,
@@ -44,11 +45,5 @@ class CourseInfoTile extends StatelessWidget {
             ],
           ),
         ));
-  }
-
-  Color getColor(int index) {
-    return (index % 2 == 1)
-        ? Get.theme.scaffoldBackgroundColor
-        : Get.theme.dividerColor;
   }
 }

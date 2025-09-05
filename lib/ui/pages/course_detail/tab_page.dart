@@ -8,13 +8,11 @@ class TabPage {
   late Widget tab;
   late Widget tabPage;
 
-  TabPage(String title, String path, Widget initPage,
-      {useNavigatorKey = false}) {
+  TabPage(String title, String path, Widget initPage, {useNavigatorKey = false}) {
     navigatorKey = GlobalKey();
     tab = Tab(
-      icon: SvgPicture.asset("assets/image/$path", color: Get.iconColor, height: 24),
+      icon: SvgPicture.asset("assets/image/$path", color: Get.theme.indicatorColor, height: 24),
       iconMargin: const EdgeInsets.only(bottom: 6),
-      height: 64.0,
       child: AutoSizeText(
         title,
         maxLines: 1,
