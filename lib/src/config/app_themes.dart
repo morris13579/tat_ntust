@@ -7,15 +7,13 @@ class AppThemes {
   static ThemeData lightTheme(ColorScheme? lightDynamic) => ThemeData(
     fontFamily: 'MyFont',
     useMaterial3: true,
-    brightness: Brightness.light,
-    colorScheme: lightDynamic ?? ColorScheme.fromSeed(seedColor: Colors.blue)
+    colorScheme: ColorScheme.fromSeed(seedColor: lightDynamic?.primary ?? Colors.blue)
   );
 
   static ThemeData darkTheme(ColorScheme? darkDynamic) => ThemeData(
       fontFamily: 'MyFont',
       useMaterial3: true,
-      brightness: Brightness.dark,
-      colorScheme: darkDynamic ?? ColorScheme.fromSeed(seedColor: Colors.blue)
+      colorScheme: ColorScheme.fromSeed(seedColor: darkDynamic?.primary ?? Colors.blue)
   );
 
 

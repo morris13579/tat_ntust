@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/config/course_config.dart';
 import 'package:get/get.dart';
@@ -10,7 +8,7 @@ class UIUtils {
   static Color getListColor(int index) {
     return ((index % 2 == 1)
             ? Get.theme.colorScheme.surface
-            : Get.theme.colorScheme.surfaceVariant)
+            : Get.theme.colorScheme.surfaceContainer)
         .withAlpha(CourseConfig.courseTableWithAlpha);
   }
 
