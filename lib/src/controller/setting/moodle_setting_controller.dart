@@ -3,7 +3,8 @@ import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_setting_entity.dart';
 import 'package:get/get.dart';
 
-class MoodleSettingController extends GetxController with GetSingleTickerProviderStateMixin {
+class MoodleSettingController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   TabController? tabController;
 
   var settingList = RxList<MoodleSettingPreferencesComponents>();
@@ -28,10 +29,10 @@ class MoodleSettingController extends GetxController with GetSingleTickerProvide
       settingList.value = res?.preferences.components ?? [];
 
       tab.value = res?.preferences.processors ?? [];
-      tab.sort((a,b) => a.displayname.compareTo(b.displayname));
+      tab.sort((a, b) => a.displayname.compareTo(b.displayname));
 
       tabController = TabController(length: tab.length, vsync: this);
-    } catch(e) {
+    } catch (e) {
       isError.value = true;
       errorMsg.value = e.toString();
     } finally {
@@ -44,46 +45,29 @@ class MoodleSettingController extends GetxController with GetSingleTickerProvide
       isLoading.value = true;
       isError.value = false;
 
-      var values = <String>[];
+      var values = settingList
+          .firstWhere((e) {
+            var setting = e.notifications
+                .firstWhereOrNull((element) => element.preferencekey == key);
+            return setting != null;
+          })
+          .notifications
+          .firstWhere((element) => element.preferencekey == key)
+          .processors
+          .where((p) => p.enabled)
+          .map((p) => p.name)
+          .toList();
 
-      if(type == "email") {
-        if(checked) {
-          values.add("email");
-        }
-
-        var isAnotherEnabled = settingList.where((e) {
-          var setting = e.notifications.firstWhereOrNull((element) => element.preferencekey == key);
-          if(setting == null) {
-            return false;
-          }
-          return setting.processors.firstWhere((element) => element.name == "popup").enabled;
-        }).isNotEmpty;
-
-        if(isAnotherEnabled) {
-          values.add("popup");
-        }
-      } else if(type == "popup") {
-        if(checked) {
-          values.add("popup");
-        }
-
-        var isAnotherEnabled = settingList.where((e) {
-          var setting = e.notifications.firstWhereOrNull((element) => element.preferencekey == key);
-          if(setting == null) {
-            return false;
-          }
-          return setting.processors.firstWhere((element) => element.name == "email").enabled;
-        }).isNotEmpty;
-
-        if(isAnotherEnabled) {
-          values.add("email");
-        }
+      if (checked) {
+        values.add(type);
+      } else {
+        values.remove(type);
       }
 
       await MoodleWebApiConnector.toggleSetting(key, values);
       var res = await MoodleWebApiConnector.getSettings();
       settingList.value = res?.preferences.components ?? [];
-    } catch(e) {
+    } catch (e) {
       isError.value = true;
       errorMsg.value = e.toString();
     } finally {

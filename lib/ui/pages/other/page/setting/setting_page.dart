@@ -63,7 +63,7 @@ class _SettingPageState extends State<SettingPage> {
         },
         separatorBuilder: (context, index) {
           return const SizedBox(
-            height: 1,
+            height: 4,
           );
         },
       ),
