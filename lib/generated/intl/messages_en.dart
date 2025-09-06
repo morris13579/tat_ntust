@@ -210,6 +210,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginSave": MessageLookupByLibrary.simpleMessage(
             "Account password has been saved"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("NTUST TAT"),
+        "login_hint": MessageLookupByLibrary.simpleMessage(
+            "\"Your login information will be stored only on this device and will not be uploaded to any server."),
         "logout": MessageLookupByLibrary.simpleMessage("Sign out"),
         "logoutWarning": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to log out? \nAll data will be cleared"),

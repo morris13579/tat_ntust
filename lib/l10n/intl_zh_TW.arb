@@ -216,5 +216,6 @@
   "theme_setting_description": "切換TAT的主題樣式",
   "theme_system": "跟隨系統",
   "theme_light": "日間模式",
-  "theme_dark": "夜間模式"
+  "theme_dark": "夜間模式",
+  "login_hint": "您的帳號密碼將僅儲存於此裝置，不會上傳至任何伺服器"
 }

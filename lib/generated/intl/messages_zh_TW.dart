@@ -179,6 +179,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginNTUST": MessageLookupByLibrary.simpleMessage("登入台科大系統..."),
         "loginSave": MessageLookupByLibrary.simpleMessage("帳號密碼已儲存"),
         "loginTitle": MessageLookupByLibrary.simpleMessage("臺灣科技大學 TAT"),
+        "login_hint":
+            MessageLookupByLibrary.simpleMessage("您的帳號密碼將僅儲存於此裝置，不會上傳至任何伺服器"),
         "logout": MessageLookupByLibrary.simpleMessage("登出"),
         "logoutWarning":
             MessageLookupByLibrary.simpleMessage("確定要登出嗎? \n將會清除所有資料"),

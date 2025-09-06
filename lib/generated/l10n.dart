@@ -2209,6 +2209,16 @@ class S {
       args: [],
     );
   }
+
+  /// `"Your login information will be stored only on this device and will not be uploaded to any server.`
+  String get login_hint {
+    return Intl.message(
+      '"Your login information will be stored only on this device and will not be uploaded to any server.',
+      name: 'login_hint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

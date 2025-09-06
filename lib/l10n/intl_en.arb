@@ -215,5 +215,6 @@
   "theme_setting_description": "Change TAT Theme Style",
   "theme_system": "System",
   "theme_light": "Light",
-  "theme_dark": "Dark"
+  "theme_dark": "Dark",
+  "login_hint": "\"Your login information will be stored only on this device and will not be uploaded to any server."
 }
