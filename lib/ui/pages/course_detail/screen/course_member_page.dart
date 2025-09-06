@@ -48,7 +48,7 @@ class _CourseMemberPageState extends State<CourseMemberPage> with AutomaticKeepA
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
+    super.build(context);
     return Container(
       padding: const EdgeInsets.only(top: 10),
       child: FutureBuilder<List<MoodleCoreEnrolGetUsers>?>(

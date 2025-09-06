@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,8 +9,8 @@ class CustomProgressDialog extends StatelessWidget {
     this.insetAnimationDuration = const Duration(milliseconds: 100),
     this.insetAnimationCurve = Curves.decelerate,
     this.shape,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The widget below this widget in the tree.
   ///
@@ -51,12 +53,18 @@ class CustomProgressDialog extends StatelessWidget {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(),
-            child: Material(
-              elevation: 24.0,
-              color: Get.theme.colorScheme.surfaceContainerHighest,
-              type: MaterialType.card,
+            child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(24)),
-              child: child,
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                child: Material(
+                  elevation: 24.0,
+                  color: Get.theme.colorScheme.surfaceContainerHighest.withOpacity(0.85),
+                  type: MaterialType.card,
+                  borderRadius: const BorderRadius.all(Radius.circular(24)),
+                  child: child,
+                ),
+              ),
             ),
           ),
         ),

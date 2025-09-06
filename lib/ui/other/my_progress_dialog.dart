@@ -55,7 +55,7 @@ class MyProgressDialog {
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
                   "$message",
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: Get.theme.colorScheme.onSurface),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -30,7 +30,7 @@ class FavoriteDialog extends StatelessWidget {
                   value[index].studentName,
                   value[index].courseSemester.year,
                   value[index].courseSemester.semester
-                ])),
+                ]), style: TextStyle(color: Get.theme.colorScheme.onSurface),),
               ),
             );
           },

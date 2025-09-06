@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
               FlutterNativeSplash.remove();
               await Get.find<AppService>().init();
             },
-            themeMode: ThemeMode.dark,
+            themeMode: ThemeMode.light,
             theme: AppThemes.lightTheme(lightDynamic),
             darkTheme: AppThemes.darkTheme(darkDynamic),
             localizationsDelegates: const [

@@ -24,16 +24,37 @@ class CourseDetailPage extends StatefulWidget {
   State<StatefulWidget> createState() => _CourseDetailPageState();
 }
 
-class _CourseDetailPageState extends State<CourseDetailPage>
-    with SingleTickerProviderStateMixin {
+class _CourseDetailPageState extends State<CourseDetailPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final PageController _pageController = PageController();
   int _currentIndex = 0;
+  List<Widget> _pages = [];
+  List<Map<String, dynamic>> _tabItems = [];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 2);
+    _pages = [
+      CourseInfoPage(
+        widget.courseInfo.main.course.id,
+        widget.semester,
+      ),
+      CourseMemberPage(
+        widget.courseInfo.main.course.id,
+        widget.semester,
+      ),
+    ];
+    _tabItems = [
+      {
+        "name": R.current.course,
+        "icon": "img_info.svg"
+      },
+      {
+        "name": R.current.member,
+        "icon": "img_group.svg"
+      }
+    ];
+    _tabController = TabController(vsync: this, length: _tabItems.length);
   }
 
   @override
@@ -43,36 +64,18 @@ class _CourseDetailPageState extends State<CourseDetailPage>
 
   Widget tabPageView() {
     CourseMainJson course = widget.courseInfo.main.course;
-    final items = [
-      {
-        "name": R.current.course,
-        "icon": "img_info.svg",
-        "page": CourseInfoPage(
-          widget.courseInfo.main.course.id,
-          widget.semester,
-        )
-      },
-      {
-        "name": R.current.member,
-        "icon": "img_group.svg",
-        "page": CourseMemberPage(
-          widget.courseInfo.main.course.id,
-          widget.semester,
-        ),
-      }
-    ];
 
     return DefaultTabController(
-      length: items.length,
+      length: _tabItems.length,
       child: Scaffold(
         appBar: baseAppbar(
           title: course.name,
-          bottom: _buildTabBar(items),
+          bottom: _buildTabBar(_tabItems),
         ),
         body: PageView(
           //控制滑動
           controller: _pageController,
-          children: items.map((item) => item["page"] as Widget).toList(),
+          children: _pages,
           onPageChanged: (index) {
             _tabController.animateTo(index);
             setState(() {

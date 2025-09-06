@@ -28,8 +28,7 @@ class CourseInfoPage extends StatefulWidget {
   State<StatefulWidget> createState() => _CourseInfoPageState();
 }
 
-class _CourseInfoPageState extends State<CourseInfoPage>
-    with AutomaticKeepAliveClientMixin {
+class _CourseInfoPageState extends State<CourseInfoPage> with AutomaticKeepAliveClientMixin {
   final List<Widget> courseData = [];
   final List<Widget?> listItem = [];
 
@@ -106,7 +105,7 @@ class _CourseInfoPageState extends State<CourseInfoPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
+    super.build(context);
     return Container(
       padding: const EdgeInsets.only(top: 10),
       child: FutureBuilder<CourseExtraInfoJson?>(

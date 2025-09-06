@@ -33,8 +33,6 @@ class MainController extends GetxController {
       await _getMoodleProfile();
     }
 
-    MyProgressDialog.progressDialog("test");
-
     pageList.addAll([
       const CourseTablePage(),
       const SubSystemPage(),

@@ -15,7 +15,7 @@ class SemesterItem extends StatelessWidget {
       semesterString += ("-${semester.semester}");
     }
     return TextButton(
-      child: Text(semesterString),
+      child: Text(semesterString, style: TextStyle(color: Get.theme.colorScheme.onSurface)),
       onPressed: () async {
         Get.back();
         onPress(semester);

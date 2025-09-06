@@ -23,9 +23,7 @@ class LoadingPage extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-                child: Container(
-                    color:
-                        Colors.black.withOpacity(isShowBackground ? 0.4 : 0))),
+                child: Container(color: Colors.black.withOpacity(isShowBackground ? 0.4 : 0))),
             Center(
                 child: Column(
               mainAxisSize: MainAxisSize.min,

@@ -27,11 +27,32 @@ class _CourseDataPageState extends State<CourseDataPage>
   TabController? _tabController;
   final PageController _pageController = PageController();
   int _currentIndex = 0;
+  List<Widget> _pages = [];
+  List<Map<String, dynamic>> _tabItems = [];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3);
+    _pages = [
+      CourseDirectoryPage(widget.courseInfo),
+      CourseAnnouncementPage(widget.courseInfo),
+      CourseScorePage(widget.courseInfo)
+    ];
+    _tabItems = [
+      {
+        "name": R.current.file,
+        "icon": "img_file.svg"
+      },
+      {
+        "name": R.current.announcement,
+        "icon": "img_message.svg"
+      },
+      {
+        "name": R.current.score,
+        "icon": "img_education.svg"
+      }
+    ];
+    _tabController = TabController(vsync: this, length: _tabItems.length);
   }
 
   @override
@@ -41,31 +62,14 @@ class _CourseDataPageState extends State<CourseDataPage>
 
   Widget tabPageView() {
     CourseMainJson course = widget.courseInfo.main.course;
-    final items = [
-      {
-        "name": R.current.file,
-        "icon": "img_file.svg",
-        "page": CourseDirectoryPage(widget.courseInfo)
-      },
-      {
-        "name": R.current.announcement,
-        "icon": "img_message.svg",
-        "page": CourseAnnouncementPage(widget.courseInfo)
-      },
-      {
-        "name": R.current.score,
-        "icon": "img_education.svg",
-        "page": CourseScorePage(widget.courseInfo),
-      }
-    ];
 
     return DefaultTabController(
-      length: items.length,
+      length: _tabItems.length,
       child: Scaffold(
-        appBar: baseAppbar(title: course.name, bottom: _buildTabBar(items)),
+        appBar: baseAppbar(title: course.name, bottom: _buildTabBar(_tabItems)),
         body: PageView(
           controller: _pageController,
-          children: items.map((item) => item["page"] as Widget).toList(),
+          children: _pages,
           onPageChanged: (index) {
             _tabController?.animateTo(index);
             setState(() {
