@@ -3,43 +3,33 @@ import 'dart:math';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 
 import 'custom_progress_dialog.dart';
 
 const double kitSize = 20;
-const kitColor = Colors.blue;
 final kits = <Widget>[
-  const SpinKitRotatingCircle(size: kitSize, color: kitColor),
-  const SpinKitRotatingPlain(size: kitSize, color: kitColor),
-  const SpinKitChasingDots(size: kitSize + 5, color: kitColor),
-  const SpinKitPulse(size: kitSize, color: kitColor),
-  const SpinKitDoubleBounce(size: kitSize, color: kitColor),
-  const SpinKitWave(
-      size: kitSize, color: kitColor, type: SpinKitWaveType.start),
-  const SpinKitThreeBounce(size: kitSize, color: kitColor),
-  const SpinKitThreeInOut(size: kitSize, color: kitColor),
-  const SpinKitWanderingCubes(size: kitSize, color: kitColor),
-  const SpinKitCircle(size: kitSize + 5, color: kitColor),
-  const SpinKitFadingFour(size: kitSize + 5, color: kitColor),
-  const SpinKitFadingCube(size: kitSize, color: kitColor),
-  const SpinKitCubeGrid(size: kitSize, color: kitColor),
-  const SpinKitFoldingCube(size: kitSize, color: kitColor),
-  const SpinKitRing(size: kitSize, color: kitColor),
-  const SpinKitDualRing(size: kitSize, color: kitColor),
-  const SpinKitSpinningLines(size: kitSize, color: kitColor),
-  const SpinKitFadingGrid(size: kitSize, color: kitColor),
-  const SpinKitSquareCircle(size: kitSize, color: kitColor),
-  const SpinKitSpinningCircle(size: kitSize, color: kitColor),
-  const SpinKitFadingCircle(size: kitSize + 5, color: kitColor),
-  const SpinKitHourGlass(size: kitSize, color: kitColor),
-  const SpinKitPouringHourGlass(size: kitSize + 10, color: kitColor),
-  const SpinKitRipple(size: kitSize, color: kitColor),
+  SpinKitRotatingCircle(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitChasingDots(size: kitSize + 5, color: Get.theme.colorScheme.primary),
+  SpinKitPulse(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitDoubleBounce(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitThreeBounce(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitThreeInOut(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitCircle(size: kitSize + 5, color: Get.theme.colorScheme.primary),
+  SpinKitFadingFour(size: kitSize + 5, color: Get.theme.colorScheme.primary),
+  SpinKitRing(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitDualRing(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitSpinningLines(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitFadingGrid(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitSquareCircle(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitSpinningCircle(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitFadingCircle(size: kitSize + 5, color: Get.theme.colorScheme.primary),
+  SpinKitHourGlass(size: kitSize, color: Get.theme.colorScheme.primary),
+  SpinKitPouringHourGlass(size: kitSize + 10, color: Get.theme.colorScheme.primary),
+  SpinKitRipple(size: kitSize, color: Get.theme.colorScheme.primary),
 ];
 
 class MyProgressDialog {
-  static void showProgressDialogOld(
-      BuildContext context, String message) async {}
-
   static void progressDialog(String? message) async {
     BotToast.showCustomLoading(toastBuilder: (cancel) {
       return dialog(message);
@@ -49,10 +39,7 @@ class MyProgressDialog {
   static Widget dialog(String? message) {
     final int number = Random().nextInt(kits.length);
     return CustomProgressDialog(
-      child: Container(
-        decoration: const BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.all(Radius.circular(5))),
+      child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -60,20 +47,19 @@ class MyProgressDialog {
             SizedBox(
               height: 60,
               width: 100,
-              child: kits[number],
+              child: kits[10],
             ),
-            message == null
-                ? const Padding(
-                    padding: EdgeInsets.all(0),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(
-                      message,
-                      style: const TextStyle(color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+            Visibility(
+              visible: message != null,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(
+                  "$message",
+                  style: TextStyle(color: Get.theme.colorScheme.onSurface),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ],
         ),
       ),

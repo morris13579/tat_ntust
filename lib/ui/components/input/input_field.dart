@@ -45,10 +45,8 @@ class InputField extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(bottom: 4),
           decoration: BoxDecoration(
-              border: Border.all(
-                  color: isError ? Colors.redAccent : Get.iconColor!,
-                  width: 1.2),
-              borderRadius: BorderRadius.circular(8)),
+              color: Get.theme.colorScheme.surfaceContainer,
+              borderRadius: BorderRadius.circular(10)),
           child: TextField(
             controller: controller,
             obscureText: inputType == TextInputType.visiblePassword,

@@ -222,6 +222,7 @@ class CourseConnector {
     ConnectorParameter parameter;
 
     var courseIds = await Model.instance.getScore().getCourseIdBySemester(semester);
+
     if(courseIds.isEmpty) {
       // 如果成績查詢系統抓不到資料，改用moodle查詢課程代碼
       var taskFlow = TaskFlow();
@@ -241,8 +242,7 @@ class CourseConnector {
           "CourseTeacher": "",
           "Dimension": "",
           "ForeignLanguage": 0,
-          "language":
-              (LanguageUtils.getLangIndex() == LangEnum.zh) ? "zh" : "en",
+          "language": (LanguageUtils.getLangIndex() == LangEnum.zh) ? "zh" : "en",
           "OnleyNTUST": 0,
           "OnlyGeneral": 0,
           "OnlyMaster": 0,

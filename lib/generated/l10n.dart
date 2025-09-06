@@ -2149,6 +2149,76 @@ class S {
       args: [],
     );
   }
+
+  /// `Dimension`
+  String get general_dimension {
+    return Intl.message(
+      'Dimension',
+      name: 'general_dimension',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Theme setting`
+  String get theme_setting {
+    return Intl.message(
+      'Theme setting',
+      name: 'theme_setting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change TAT Theme Style`
+  String get theme_setting_description {
+    return Intl.message(
+      'Change TAT Theme Style',
+      name: 'theme_setting_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System`
+  String get theme_system {
+    return Intl.message(
+      'System',
+      name: 'theme_system',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light`
+  String get theme_light {
+    return Intl.message(
+      'Light',
+      name: 'theme_light',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark`
+  String get theme_dark {
+    return Intl.message(
+      'Dark',
+      name: 'theme_dark',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `"Your login information will be stored only on this device and will not be uploaded to any server.`
+  String get login_hint {
+    return Intl.message(
+      '"Your login information will be stored only on this device and will not be uploaded to any server.',
+      name: 'login_hint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

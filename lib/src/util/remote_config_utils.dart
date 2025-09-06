@@ -146,9 +146,10 @@ class RemoteConfigUtils {
         return;
       }
 
-      Get.to(AnnouncementPage(
+      final countDown = await getAnnouncementCountTime();
+      Get.to(() => AnnouncementPage(
         info: info,
-        countDown: await getAnnouncementCountTime(),
+        countDown: countDown,
       ),transition: Transition.downToUp);
     } else if (allTime) {
       MyToast.show(R.current.noAnnouncement);

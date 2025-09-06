@@ -36,6 +36,6 @@ class PrivacyPolicyController extends GetxController {
 
   Future<void> onAgreePrivacyPolicy() async {
     await Model.instance.setAgreeContributor(true);
-    await RouteUtils.toMainScreen();
+    Get.back();
   }
 }

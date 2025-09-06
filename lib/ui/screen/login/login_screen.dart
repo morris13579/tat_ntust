@@ -22,12 +22,12 @@ class LoginScreen extends GetView<LoginController> {
         return Scaffold(
           body: SafeArea(
               child: Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 32.0, vertical: 20),
-                  child: contentView(),
-                ),
-              )),
+            child: SingleChildScrollView(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20),
+              child: contentView(),
+            ),
+          )),
         );
       }),
     );
@@ -44,18 +44,17 @@ class LoginScreen extends GetView<LoginController> {
             Text(
               R.current.loginTitle,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: Get.theme.colorScheme.onSurface),
             ),
             const SizedBox(height: 14),
             Text(R.current.loginDescription,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                     height: 1.2,
-                    color: Colors.grey
-                )),
+                    color: Get.theme.colorScheme.onSurfaceVariant)),
             const SizedBox(height: 32),
             emailField(),
             const SizedBox(height: 20),
@@ -64,11 +63,22 @@ class LoginScreen extends GetView<LoginController> {
             AdaptiveButton(
               onPressed: controller.onLoginEvent,
               width: double.infinity,
-              backgroundColor: AppColors.mainColor,
+              backgroundColor: Get.theme.colorScheme.primaryContainer,
               padding: const EdgeInsets.symmetric(vertical: 14),
-              borderRadius: BorderRadius.circular(8),
-              child: Text(R.current.login, style: const TextStyle(color: Colors.white),),
+              borderRadius: BorderRadius.circular(10),
+              child: Text(
+                R.current.login,
+                style:
+                    TextStyle(color: Get.theme.colorScheme.onPrimaryContainer),
+              ),
             ),
+            const SizedBox(height: 8),
+            Text(R.current.login_hint,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color:
+                        Get.theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                    fontSize: 12))
           ],
         ),
         SizedBox(height: Get.height * 0.2),
@@ -80,10 +90,10 @@ class LoginScreen extends GetView<LoginController> {
     return Container(
         clipBehavior: Clip.antiAlias,
         decoration:
-        BoxDecoration(borderRadius: BorderRadius.circular(999), boxShadow: [
+            BoxDecoration(borderRadius: BorderRadius.circular(999), boxShadow: [
           BoxShadow(
               offset: const Offset(1, 1),
-              color: Get.iconColor!,
+              color: Get.theme.colorScheme.onSurface,
               blurRadius: 12)
         ]),
         child: Image.asset("assets/launcher/ios-icon.png", height: 120));

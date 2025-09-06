@@ -7,17 +7,17 @@ import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
-  const PrivacyPolicyPage({Key? key}) : super(key: key);
+  const PrivacyPolicyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: baseAppbar(title: R.current.PrivacyPolicy),
       body: FutureBuilder<String>(
-        future: Connector.getDataByGet(
-            ConnectorParameter(AppLink.privacyPolicyUrl)),
+        future: Connector.getDataByGet(ConnectorParameter(AppLink.privacyPolicyUrl)),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
             return Markdown(
@@ -29,9 +29,9 @@ class PrivacyPolicyPage extends StatelessWidget {
               child: Icon(Icons.error),
             );
           }
-          return const Center(
+          return Center(
             child: SpinKitDoubleBounce(
-              color: AppColors.mainColor,
+              color: Get.theme.colorScheme.primary,
             ),
           );
         },

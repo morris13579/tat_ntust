@@ -53,12 +53,6 @@ class _CourseAnnouncementDetailPageState
     return true;
   }
 
-  Color getColor(int index) {
-    return (index % 2 == 1)
-        ? Theme.of(context).scaffoldBackgroundColor
-        : Theme.of(context).dividerColor;
-  }
-
   @override
   Widget build(BuildContext context) {
     Discussions discussions = widget.discussions;

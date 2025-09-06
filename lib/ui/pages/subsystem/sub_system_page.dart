@@ -12,12 +12,13 @@ import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_app/ui/pages/password/webmail_password_dialog.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class SubSystemPage extends StatefulWidget {
   const SubSystemPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _SubSystemPageState();
@@ -101,7 +102,10 @@ class _SubSystemPageState extends State<SubSystemPage> {
       children: [
         Text(
           serviceMap[ap.serviceId] ?? "",
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Get.theme.colorScheme.onSurface),
         ),
         const SizedBox(height: 8),
         GridView.builder(
@@ -123,20 +127,19 @@ class _SubSystemPageState extends State<SubSystemPage> {
   }
 
   Widget buildItem(APListJson ap) {
-    return Material(
-      color: Get.theme.colorScheme.background,
-      borderRadius: BorderRadius.circular(6),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(6),
-        child: Container(
-          alignment: Alignment.center,
-          height: 100,
-          child: Text(ap.name),
-        ),
-        onTap: () async {
-          RouteUtils.toWebViewPage(ap.name, ap.url,
-              openWithExternalWebView: false);
-        },
+    return FilledButton(
+      style: FilledButton.styleFrom(
+        backgroundColor: Get.theme.colorScheme.surfaceContainer,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+        minimumSize: const Size(0, 120)
+      ),
+      onPressed: () {
+        RouteUtils.toWebViewPage(ap.name, ap.url, openWithExternalWebView: false);
+      },
+      child: Text(
+        ap.name,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Get.theme.colorScheme.onSurfaceVariant),
       ),
     );
   }
@@ -187,7 +190,7 @@ class _SubSystemPageState extends State<SubSystemPage> {
                       Get.dialog(const WebMailPasswordDialog(),
                           barrierDismissible: false);
                     },
-                    icon: const Icon(EvaIcons.syncOutline))
+                    icon: SvgPicture.asset("assets/image/img_refresh.svg"))
             ],
           ),
         ),

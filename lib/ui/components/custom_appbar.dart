@@ -1,19 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 AppBar mainAppbar(
     {String title = "",
-      List<Widget>? action,
-      bool isShowBack = false,
-      PreferredSizeWidget? bottom,
-      BuildContext? context}) {
+    List<Widget>? action,
+    bool isShowBack = false,
+    PreferredSizeWidget? bottom,
+    BuildContext? context}) {
   return AppBar(
+    systemOverlayStyle: SystemUiOverlayStyle(
+      statusBarIconBrightness: Get.theme.brightness == Brightness.light
+          ? Brightness.dark
+          : Brightness.light,
+    ),
     actions: action,
     centerTitle: false,
     backgroundColor: Colors.transparent,
     elevation: 0,
-    leading: !isShowBack ? const SizedBox(width: 0,) : null,
+    leading: !isShowBack
+        ? const SizedBox(
+            width: 0,
+          )
+        : null,
     leadingWidth: !isShowBack ? 0 : null,
     bottom: bottom,
     title: Text(title),
@@ -27,21 +37,26 @@ AppBar baseAppbar(
     PreferredSizeWidget? bottom,
     Color? backgroundColor}) {
   return AppBar(
+    systemOverlayStyle:
+        SystemUiOverlayStyle(
+          statusBarIconBrightness: Get.theme.brightness == Brightness.light
+              ? Brightness.dark
+              : Brightness.light,
+        ),
     leading: IconButton(
       splashColor: Colors.transparent,
       splashRadius: 18,
       icon: Icon(
-              Icons.arrow_back_ios_new,
-              size: 18,
-              color: Get.iconColor,
-            ),
+        Icons.arrow_back_ios_new,
+        size: 18,
+        color: Get.iconColor,
+      ),
       onPressed: () {
         Get.back();
       },
     ),
     actions: action,
     centerTitle: false,
-    backgroundColor: Get.theme.appBarTheme.backgroundColor,
     elevation: 0,
     bottom: bottom,
     title: Text(title),

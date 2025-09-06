@@ -46,8 +46,7 @@ class CourseModel {
     await Model.instance.saveCourseTableList();
   }
 
-  Future<CourseTableJson> getCourseTable(
-      {SemesterJson? semesterSetting, bool refresh = false}) async {
+  Future<CourseTableJson> getCourseTable({SemesterJson? semesterSetting, bool refresh = false}) async {
     String studentId = Model.instance.getAccount();
     SemesterJson? semesterJson;
 
@@ -67,8 +66,7 @@ class CourseModel {
         sprintf(R.current.selectSemesterWarning, [semesterJson.year]),
         toastLength: Toast.LENGTH_LONG,
       );
-      SemesterJson? select =
-          await CourseSemesterTask.selectSemesterDialog(allowSelectNull: true);
+      SemesterJson? select = await CourseSemesterTask.selectSemesterDialog(allowSelectNull: true);
       if (select == null) {
         throw Exception();
       }
@@ -87,11 +85,10 @@ class CourseModel {
     CourseTableJson? courseTable;
     if (!refresh) {
       //是否要去找暫存的
-      courseTable =
-          Model.instance.getCourseTable(studentId, semesterSetting); //去取找是否已經暫存
+      courseTable = Model.instance.getCourseTable(studentId, semesterSetting); //去取找是否已經暫存
     }
     if (courseTable == null) {
-      //代表沒有暫存的需要爬蟲
+      // 代表沒有暫存的需要爬蟲
       TaskFlow taskFlow = TaskFlow();
       final task = CourseTableTask(studentId, semesterJson);
       taskFlow.addTask(task);

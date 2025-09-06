@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/entity/moodle_token_entity.dart';
 import 'package:flutter_app/src/util/web_view_utils.dart';
 import 'package:flutter_app/ui/other/my_progress_dialog.dart';
+import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 
@@ -31,22 +31,9 @@ class _LoginMoodlePageState extends State<LoginMoodlePage> {
   double progress = 0;
   Widget dialog = MyProgressDialog.dialog(R.current.loginMoodle);
 
-
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> moodleTokenCallback(InAppWebViewController controller, WebUri? url) async {
-    if(url.toString().startsWith("moodlemobile://") && url?.host.startsWith("token=") == true) {
-      final base64Token = url?.rawValue.split("token=")[1] ?? "";
-      final decodeToken = utf8.decode(base64Url.decode(base64Token)).split(":::");
-      Get.back(result: MoodleTokenEntity(
-          decodeToken[0],
-          decodeToken[1],
-          decodeToken.length == 3 ? decodeToken[2] : ""
-      ));
-    }
   }
 
   @override
@@ -63,26 +50,48 @@ class _LoginMoodlePageState extends State<LoginMoodlePage> {
               onWebViewCreated: (InAppWebViewController controller) {
                 webView = controller;
               },
-              onLoadStart: (InAppWebViewController controller, WebUri? url) async {
-                await moodleTokenCallback(controller, url);
+              shouldOverrideUrlLoading: (controller, navigationAction) async {
+                final uri = navigationAction.request.url;
+                if (uri != null && uri.scheme == "moodlemobile") {
+                  final base64Token = uri.rawValue.split("token=")[1];
+                  final decodeToken = utf8.decode(base64Url.decode(base64Token)).split(":::");
+                  final token = MoodleTokenEntity(
+                      decodeToken[0],
+                      decodeToken[1],
+                      decodeToken.length == 3 ? decodeToken[2] : ""
+                  );
+                  Get.back(result: token);
+
+                  return NavigationActionPolicy.CANCEL;
+                }
+
+                return NavigationActionPolicy.ALLOW;
               },
-              onReceivedError: (InAppWebViewController controller, request, error) async {
-                await moodleTokenCallback(controller, request.url);
-              },
-              onLoadStop: (InAppWebViewController controller, WebUri? url) async {
+              onLoadStop:
+                  (InAppWebViewController controller, WebUri? url) async {
                 if (url.toString().startsWith(loginPageUri)) {
-                  if(await controller.waitForElement(condition: 'document.getElementById("Username") != null')) {
-                    await controller.evaluateJavascript(source: 'document.getElementById("Username").value = "${widget.username}";');
-                    await controller.evaluateJavascript(source: 'document.getElementById("Password").value = "${widget.password}";');
+                  if (await controller.waitForElement(
+                      condition:
+                          'document.getElementById("Username") != null')) {
+                    await controller.evaluateJavascript(
+                        source:
+                            'document.getElementById("Username").value = "${widget.username}";');
+                    await controller.evaluateJavascript(
+                        source:
+                            'document.getElementById("Password").value = "${widget.password}";');
                   }
 
                   // 等待 Cloudflare Turnstile 驗證
-                  if(await controller.waitForElement(condition: 'document.querySelector(\'[name="cf-turnstile-response"]\') != null && document.querySelector(\'[name="cf-turnstile-response"]\').value !== ""')) {
-                    await controller.evaluateJavascript(source: 'document.getElementById("loginButton").click();');
+                  if (await controller.waitForElement(
+                      condition:
+                          'document.querySelector(\'[name="cf-turnstile-response"]\') != null && document.querySelector(\'[name="cf-turnstile-response"]\').value !== ""')) {
+                    await controller.evaluateJavascript(
+                        source:
+                            'document.getElementById("loginButton").click();');
+                  } else {
+                    MyToast.show(R.current.needValidateCaptcha);
                   }
                 }
-
-                await moodleTokenCallback(controller, url);
               },
               onProgressChanged:
                   (InAppWebViewController controller, int progress) {
@@ -91,7 +100,6 @@ class _LoginMoodlePageState extends State<LoginMoodlePage> {
                 });
               },
             ),
-
             dialog
           ],
         ),

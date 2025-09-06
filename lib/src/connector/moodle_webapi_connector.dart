@@ -28,8 +28,7 @@ class MoodleWebApiConnector {
   static const String host = "https://moodle2.ntust.edu.tw";
   static const String _webAPIUrl = "$host/webservice/rest/server.php";
   static const String _webAPILoginUrl = "$host/login/token.php";
-  static String moodleLoginUrl =
-      "$host/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=${Random.secure().nextInt(500)}&urlscheme=moodlemobile&lang=zh_tw";
+  static String moodleLoginUrl = "$host/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=${Random.secure().nextInt(500)}&urlscheme=moodlemobile&lang=zh_tw";
 
   static String? wsToken;
   static String? privateToken;
@@ -53,6 +52,27 @@ class MoodleWebApiConnector {
     }
 
     return MoodleWebApiConnectorStatus.loginFail;
+  }
+
+  static Future<bool> isMoodleTokenAvailable() async {
+    if(wsToken == null) {
+      return false;
+    }
+
+    final parameter = ConnectorParameter(_webAPIUrl);
+    parameter.data = {
+      "moodlewsrestformat": "json",
+      "wsfunction": "core_webservice_get_site_info",
+      "wstoken": wsToken
+    };
+
+    final result = await Connector.getJsonByPost(parameter);
+    Log.d(result);
+    if((result as Map<String, dynamic>).containsKey("errorcode")) {
+      return false;
+    }
+
+    return true;
   }
 
   static Future<String?> getCourseUrl(String courseId) async {
@@ -299,9 +319,6 @@ class MoodleWebApiConnector {
   }
 
   static Future<MoodleProfileEntity?> getProfile({isRetry = false}) async {
-    if (wsToken == null) {
-      await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
-    }
     try {
       var parameter = ConnectorParameter(_webAPIUrl);
       parameter.data = {
@@ -309,18 +326,8 @@ class MoodleWebApiConnector {
         "wsfunction": "core_webservice_get_site_info",
         "wstoken": wsToken
       };
-      var result = await Connector.getDataByPostResponse(parameter);
-      if((result.data as Map<String, dynamic>).containsKey("errorcode")) {
-        if(isRetry) {
-          Model.instance.clearMoodleToken();
-          MyToast.show(R.current.loginMoodleWebApiError);
-          return null;
-        }
-
-        await MoodleWebApiConnector.login(Model.instance.getAccount(), Model.instance.getPassword());
-        return getProfile(isRetry: true);
-      }
-      return MoodleProfileEntity.fromJson(result.data);
+      var result = await Connector.getJsonByPost(parameter);
+      return MoodleProfileEntity.fromJson(result);
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
       return null;

@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/task/ntust/ntust_calendar_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
@@ -33,6 +35,10 @@ class CalendarController extends GetxController {
       final icsLines = await File(savePath).readAsLines();
       final iCalendar = ICalendar.fromLines(icsLines);
       for (var i in iCalendar.data) {
+        if(!i.containsKey("dtstart") || !i.containsKey("summary")) {
+          continue;
+        }
+
         IcsDateTime timeStart = i["dtstart"];
         DateTime dt = DateTime.parse(timeStart.dt);
         var time = DateTime.utc(dt.year, dt.month, dt.day);
@@ -40,12 +46,11 @@ class CalendarController extends GetxController {
         for (var i in event.split("  ")) {
           i = i.replaceAll(" ", "");
           if (i != "") {
-            try {
-              int.parse(i[0]);
+            final isInt = int.tryParse(i[0]) != null;
+            if(isInt) {
               i = i.substring(2, i.length);
-            } catch (e) {
-              Log.d(e.toString());
             }
+
             if (events.containsKey(time)) {
               events[time]!.add(i);
             } else {
@@ -68,7 +73,7 @@ class CalendarController extends GetxController {
     if (!isSameDay(this.focusedDay.value, focusedDay)) {
       this.selectedDay.value = selectedDay;
       this.focusedDay.value = focusedDay;
-      rangeStart.value = null; // Important to clean those
+      rangeStart.value = null;
       rangeEnd.value = null;
       rangeSelectionMode.value = RangeSelectionMode.toggledOff;
       selectedEvents.value = events[focusedDay] ?? [];

@@ -23,15 +23,11 @@ class CourseSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(8)),
-      color: Get.theme.cardColor,
+          borderRadius: BorderRadius.circular(14)),
+      color: Get.theme.colorScheme.surfaceContainer,
       clipBehavior: Clip.antiAlias,
-      shadowColor: Colors.grey.shade500,
-      elevation: 8,
       child: Container(
-          height: 48,
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           child: Row(
             children: [
               searchButton(),
@@ -60,14 +56,14 @@ class CourseSearchBar extends StatelessWidget {
   Widget searchButton() {
     var icon = Icon(
       CupertinoIcons.search,
-      color: Get.theme.iconTheme.color,
+      color: Get.theme.colorScheme.onSurface,
     );
 
     if (isBack) {
       icon = Icon(
         Icons.arrow_back_ios_new,
         size: 18,
-        color: Get.theme.iconTheme.color,
+        color: Get.theme.colorScheme.onSurface,
       );
     }
 
