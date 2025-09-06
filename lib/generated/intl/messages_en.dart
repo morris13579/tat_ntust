@@ -133,6 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "folderNameAlreadyExists": MessageLookupByLibrary.simpleMessage(
             "A Folder with that name already exists!"),
         "fullRange": MessageLookupByLibrary.simpleMessage("fullRange"),
+        "general_dimension": MessageLookupByLibrary.simpleMessage("Dimension"),
         "getCourse": MessageLookupByLibrary.simpleMessage("Get schedule..."),
         "getCourseDetail":
             MessageLookupByLibrary.simpleMessage("Reading course materials..."),

@@ -209,5 +209,6 @@
   "activities": "Activities",
   "resources": "Resources",
   "moodle_setting": "Moodle setting",
-  "moodle_setting_description": "Sync NTUST Moodle website settings"
+  "moodle_setting_description": "Sync NTUST Moodle website settings",
+  "general_dimension": "Dimension"
 }

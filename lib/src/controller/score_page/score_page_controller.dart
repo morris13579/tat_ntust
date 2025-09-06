@@ -5,6 +5,8 @@ import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/task/score/score_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/src/util/score_utils.dart';
+import 'package:flutter_app/ui/components/tile/score_item_tile.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
@@ -72,8 +74,14 @@ class ScorePageController extends GetxController
 
     for (int i = 0; i < semesterScoreList.length; i++) {
       var semester = semesterScoreList[i].semester;
+      var courseScoreItems = semesterScoreList[i].item;
+
+      courseScoreItems.sort((a,b) {
+        return a.score.compareTo(b.score);
+      });
+
       tabLabelList.add(_buildTabLabel("${semester.year}-${semester.semester}"));
-      tabChildList.add(_buildSemesterScores(semesterScoreList[i].item));
+      tabChildList.add(_buildSemesterScores(courseScoreItems));
     }
     tabController = TabController(vsync: this, length: tabLabelList.length);
 
@@ -97,8 +105,8 @@ class ScorePageController extends GetxController
   }
 
   Widget _buildSemesterScores(List<ScoreItemJson> courseScore) {
-    return Container(
-      padding: const EdgeInsets.all(24.0),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
       child: AnimationLimiter(
         child: Column(
           children: AnimationConfiguration.toStaggeredList(
@@ -108,9 +116,7 @@ class ScorePageController extends GetxController
                 child: widget,
               ),
             ),
-            children: <Widget>[
-              ..._buildCourseScores(courseScore),
-            ],
+            children: _buildCourseScores(courseScore),
           ),
         ),
       ),
@@ -119,56 +125,44 @@ class ScorePageController extends GetxController
 
   List<Widget> _buildCourseScores(List<ScoreItemJson> courseScore) {
     return [
-      _buildTitle(R.current.resultsOfVariousSubjects),
-      for (var score in courseScore) _buildScoreItem(score),
+      _buildTitle(courseScore),
+      const SizedBox(height: 12),
+      for (var score in courseScore) ...{
+        _buildScoreItem(score),
+        const SizedBox(height: 8)
+      }
     ];
   }
 
   Widget _buildScoreItem(ScoreItemJson score) {
-    return Column(
-      children: <Widget>[
-        SizedBox(
-          height: 25,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: AutoSizeText(
-                  score.name,
-                  style: const TextStyle(fontSize: 16.0),
-                ),
-              ),
-              const SizedBox(width: 24),
-              GestureDetector(
-                child: Text(
-                  score.score,
-                  style: const TextStyle(fontSize: 16.0),
-                  textAlign: TextAlign.end,
-                ),
-                onTap: () {
-                  MyToast.show(score.score);
-                },
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 8.0,
-        ),
-      ],
-    );
+    return ScoreItemTile(score: score);
   }
 
-  Widget _buildTitle(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
+  Widget _buildTitle(List<ScoreItemJson> courseList) {
+    final totalCredit = courseList
+        .where((x) => x.isPassScore)
+        .map((c) => int.tryParse(c.credit) ?? 0)
+        .reduce((a,b) => a + b);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "GPA ${ScoreUtils.calculateGPA(courseList)}",
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
+
+        Text(
+          "$totalCredit ${R.current.credit}",
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }

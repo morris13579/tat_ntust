@@ -210,5 +210,6 @@
   "activities": "活動資訊",
   "resources": "校園資訊",
   "moodle_setting": "Moodle 設定",
-  "moodle_setting_description": "同步台科Moodle設定"
+  "moodle_setting_description": "同步台科Moodle設定",
+  "general_dimension": "向度"
 }

@@ -117,6 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "folderNameAlreadyExists":
             MessageLookupByLibrary.simpleMessage("資料夾名稱已經存在!"),
         "fullRange": MessageLookupByLibrary.simpleMessage("全距"),
+        "general_dimension": MessageLookupByLibrary.simpleMessage("向度"),
         "getCourse": MessageLookupByLibrary.simpleMessage("取得課表..."),
         "getCourseDetail": MessageLookupByLibrary.simpleMessage("課程資料讀取中..."),
         "getCourseDetailError":

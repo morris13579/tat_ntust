@@ -2149,6 +2149,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Dimension`
+  String get general_dimension {
+    return Intl.message(
+      'Dimension',
+      name: 'general_dimension',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
