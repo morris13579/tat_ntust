@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_app/ui/pages/log_console/log_console.dart';
 import 'package:flutter_app/ui/pages/other/components/user_profile.dart';
 import 'package:flutter_app/ui/pages/password/check_password_dialog.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 enum OnListViewPress {
@@ -45,53 +47,40 @@ class OtherPage extends StatefulWidget {
 class _OtherPageState extends State<OtherPage> {
   List<Map> optionList = [
     {
-      "icon": EvaIcons.settings2Outline,
-      "color": Colors.orange,
+      "icon": "img_setting.svg",
       "title": R.current.setting,
       "onPress": OnListViewPress.setting
     },
     {
-      "icon": EvaIcons.downloadOutline,
-      "color": Colors.yellow[700],
+      "icon": "img_download.svg",
       "title": R.current.fileViewer,
       "onPress": OnListViewPress.fileViewer
     },
-    if (Model.instance
-        .getPassword()
-        .isNotEmpty)
+    if (Model.instance.getPassword().isNotEmpty)
       {
-        "icon": EvaIcons.syncOutline,
-        "color": Colors.lightGreen,
+        "icon": "img_refresh.svg",
         "title": R.current.changePassword,
         "onPress": OnListViewPress.changePassword
       },
-    if (Model.instance
-        .getPassword()
-        .isNotEmpty)
+    if (Model.instance.getPassword().isNotEmpty)
       {
-        "icon": EvaIcons.undoOutline,
-        "color": Colors.teal[400],
+        "icon": "img_logout.svg",
         "title": R.current.logout,
         "onPress": OnListViewPress.logout
       },
-    if (Model.instance
-        .getPassword()
-        .isEmpty)
+    if (Model.instance.getPassword().isEmpty)
       {
-        "icon": EvaIcons.logIn,
-        "color": Colors.teal[400],
+        "icon": "img_login.svg",
         "title": R.current.login,
         "onPress": OnListViewPress.login
       },
     {
-      "icon": EvaIcons.messageSquareOutline,
-      "color": Colors.cyan,
+      "icon": "img_message.svg",
       "title": R.current.feedback,
       "onPress": OnListViewPress.report
     },
     {
-      "icon": EvaIcons.infoOutline,
-      "color": Colors.lightBlue,
+      "icon": "img_info.svg",
       "title": R.current.about,
       "onPress": OnListViewPress.about
     }
@@ -110,10 +99,7 @@ class _OtherPageState extends State<OtherPage> {
               Get.back();
               TaskFlow.resetLoginStatus();
               await Model.instance.logout();
-              Get
-                  .find<MainController>()
-                  .pageController
-                  .jumpToPage(0);
+              Get.find<MainController>().pageController.jumpToPage(0);
             });
         ErrorDialog(parameter).show();
         break;
@@ -132,19 +118,17 @@ class _OtherPageState extends State<OtherPage> {
               "https://stuinfosys.ntust.edu.tw/NTUSTSSOServ/SSO/ChangePWD";
           RouteUtils.toWebViewPage(R.current.changePassword, changePasswordUrl,
               loadDone: (webView) async {
-                if (!first) {
-                  return;
-                }
-                first = false;
-                await webView.evaluateJavascript(
-                    source:
-                    'document.getElementsByName("userName")[0].value = "${Model
-                        .instance.getAccount()}";');
-                await webView.evaluateJavascript(
-                    source:
-                    'document.getElementsByName("pwd")[0].value = "${Model
-                        .instance.getPassword()}";');
-              });
+            if (!first) {
+              return;
+            }
+            first = false;
+            await webView.evaluateJavascript(
+                source:
+                    'document.getElementsByName("userName")[0].value = "${Model.instance.getAccount()}";');
+            await webView.evaluateJavascript(
+                source:
+                    'document.getElementsByName("pwd")[0].value = "${Model.instance.getPassword()}";');
+          });
         }
         break;
       case OnListViewPress.about:
@@ -162,9 +146,6 @@ class _OtherPageState extends State<OtherPage> {
           Log.d(e);
         }
         RouteUtils.toWebViewPage(R.current.feedback, link);
-        break;
-      case OnListViewPress.changePassword:
-        MyToast.show(R.current.noFunction);
         break;
       default:
         MyToast.show(R.current.noFunction);
@@ -187,7 +168,7 @@ class _OtherPageState extends State<OtherPage> {
               child: _buildAccountTile(),
             ),
             const SizedBox(
-              height: 12,
+              height: 18,
             ),
             Expanded(
               child: AnimationLimiter(
@@ -214,26 +195,40 @@ class _OtherPageState extends State<OtherPage> {
   }
 
   Widget _buildSetting(Map data) {
-    return ListTile(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      onTap: () {
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: () {
         _onListViewPress(data['onPress']);
       },
-      title: Text(
-        data['title'],
-        style: const TextStyle(fontSize: 18),
-      ),
-      leading: Icon(
-        data['icon'],
-        color: data['color'],
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: Get.theme.colorScheme.surfaceContainer,
+            borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(999),
+                  color: Get.theme.colorScheme.surface),
+              padding: const EdgeInsets.all(8),
+              child: SvgPicture.asset("assets/image/${data['icon']}", color: Get.theme.colorScheme.onSurface),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              data['title'],
+              style: TextStyle(
+                  color: Get.theme.colorScheme.onSurface, fontSize: 15),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildAccountTile() {
-    if (Model.instance
-        .getAccount()
-        .isEmpty) {
+    if (Model.instance.getAccount().isEmpty) {
       return Text(R.current.pleaseLogin);
     }
 

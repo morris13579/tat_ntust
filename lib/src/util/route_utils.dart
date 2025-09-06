@@ -12,7 +12,7 @@ import 'package:flutter_app/ui/pages/course_detail/course_detail_page.dart';
 import 'package:flutter_app/ui/pages/file_viewer/file_viewer_page.dart';
 import 'package:flutter_app/ui/pages/log_console/log_console.dart';
 import 'package:flutter_app/ui/pages/other/page/about_page.dart';
-import 'package:flutter_app/ui/pages/other/page/agree_privacy_policy_screen.dart';
+import 'package:flutter_app/ui/pages/other/page/privacy_policy_page.dart';
 import 'package:flutter_app/ui/pages/other/page/contributors_page.dart';
 import 'package:flutter_app/ui/pages/other/page/dev_page.dart';
 import 'package:flutter_app/ui/pages/other/page/setting/setting_page.dart';
