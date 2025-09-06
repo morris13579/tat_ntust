@@ -1,4 +1,8 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
+import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'score_json.g.dart';
@@ -124,4 +128,12 @@ class ScoreItemJson {
 
   factory ScoreItemJson.fromJson(Map<String, dynamic> srcJson) =>
       _$ScoreItemJsonFromJson(srcJson);
+
+  bool get isPassScore {
+    return score.contains("A") || score.contains("B") || score.contains("C");
+  }
+
+  bool get isValidScore {
+    return isPassScore || score.contains("D") || score.contains("E") || score.contains("X");
+  }
 }

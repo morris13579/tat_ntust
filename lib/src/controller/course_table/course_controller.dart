@@ -155,7 +155,7 @@ class CourseController extends GetxController {
       return;
     }
 
-    RouteUtils.toCourseDataPage(courseInfo, 0);
+    RouteUtils.toCourseDataPage(courseInfo);
   }
 
   void _showCourseDetail(CourseInfoJson courseInfo) {
@@ -167,7 +167,7 @@ class CourseController extends GetxController {
     }
 
     RouteUtils.toCourseDetailPage(
-        courseTableData!.courseSemester, courseInfo, 0);
+        courseTableData!.courseSemester, courseInfo);
   }
 
   /* Course Table */

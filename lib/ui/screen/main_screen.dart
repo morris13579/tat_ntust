@@ -47,7 +47,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   Widget _buildPageView() {
     return Obx(() {
       if(controller.pageList.isEmpty) {
-        return const LoadingPage(isLoading: true);
+        return const LoadingPage(isLoading: true, isShowBackground: false,);
       }
       return PageView(
           controller: controller.pageController,
@@ -85,22 +85,21 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     return Obx(() {
       var currentIndex = controller.currentIndex.value;
 
-      return BottomNavigationBar(
-        currentIndex: currentIndex,
-        type: BottomNavigationBarType.fixed,
-        onTap: controller.onBottomNavigationTap,
-        items: items.map((item) {
+      return NavigationBar(
+        selectedIndex: currentIndex,
+        onDestinationSelected: controller.onBottomNavigationTap,
+        destinations: items.map((item) {
           final index = items.indexOf(item);
-          return BottomNavigationBarItem(
+          return NavigationDestination(
             icon: SvgPicture.asset(
               "assets/image/${item["icon"]}",
               color: currentIndex == index
-                  ? Get.theme.bottomNavigationBarTheme.selectedItemColor
-                  : Get.theme.bottomNavigationBarTheme.unselectedItemColor,
+                  ? Get.theme.colorScheme.onSecondaryContainer
+                  : Get.theme.colorScheme.onSurfaceVariant,
             ),
-            label: item["name"],
+            label: item["name"]!,
           );
-        }).toList()
+        }).toList(),
       );
     });
   }

@@ -6,6 +6,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_d
 import 'package:flutter_app/src/task/moodle_webapi/moodle_course_message_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,6 @@ class CourseAnnouncementPage extends StatefulWidget {
 
 class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
     with AutomaticKeepAliveClientMixin {
-
   Future<List<Discussions>?> initTask() async {
     String courseId = widget.courseInfo.main.course.id;
     TaskFlow taskFlow = TaskFlow();
@@ -35,12 +35,6 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
       AdManager.showDownloadAD();
     }
     return task.result.discussions;
-  }
-
-  Color getColor(int index) {
-    return (index % 2 == 1)
-        ? Theme.of(context).scaffoldBackgroundColor
-        : Theme.of(context).dividerColor;
   }
 
   @override
@@ -67,12 +61,13 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
   }
 
   Widget buildTree(List<Discussions> discussions) {
-    if(discussions.isEmpty) {
+    if (discussions.isEmpty) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset("assets/image/img_open_folder.svg", color: Get.iconColor, height: 72),
+            SvgPicture.asset("assets/image/img_open_folder.svg",
+                color: Get.theme.colorScheme.onSurface, height: 72),
             const SizedBox(height: 24),
             Text(R.current.announcementEmpty)
           ],
@@ -92,7 +87,7 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
 
         return InkWell(
           child: Container(
-            color: getColor(index),
+            color: UIUtils.getListColor(index),
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             child: Row(
               children: [
@@ -100,10 +95,18 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: SvgPicture.asset(
                     "assets/image/img_message.svg",
-                    color: Get.iconColor,
+                    color: Get.theme.colorScheme.onSurface,
                   ),
                 ),
-                Expanded(child: Text(ap.name, style: const TextStyle(height: 1.2, overflow: TextOverflow.fade), maxLines: 2,)),
+                Expanded(
+                    child: Text(
+                  ap.name,
+                  style: TextStyle(
+                      height: 1.2,
+                      color: Get.theme.colorScheme.onSurface,
+                      overflow: TextOverflow.fade),
+                  maxLines: 2,
+                )),
                 const SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,

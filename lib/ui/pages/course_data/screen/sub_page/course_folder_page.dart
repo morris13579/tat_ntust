@@ -6,6 +6,7 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_course_folder_detail_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/pages/error/error_page.dart';
 
 class CourseFolderPage extends StatefulWidget {
@@ -61,12 +62,6 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
     );
   }
 
-  Color getColor(int index) {
-    return (index % 2 == 1)
-        ? Theme.of(context).scaffoldBackgroundColor
-        : Theme.of(context).dividerColor;
-  }
-
   Widget buildTree(Modules modules) {
     return ListView.builder(
       shrinkWrap: true,
@@ -75,7 +70,7 @@ class _CourseFolderPageState extends State<CourseFolderPage> {
         var ap = modules.contents[index];
         return InkWell(
           child: Container(
-            color: getColor(index),
+            color: UIUtils.getListColor(index),
             height: 50,
             child: Row(
               children: [

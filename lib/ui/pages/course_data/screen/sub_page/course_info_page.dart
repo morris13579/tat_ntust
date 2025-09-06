@@ -9,6 +9,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_conte
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
 import 'package:flutter_app/src/util/route_utils.dart';
+import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_html_page.dart';
@@ -88,7 +89,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
       case "label":
         break;
       case "url":
-        if(ap.contents.isNotEmpty) {
+        if (ap.contents.isNotEmpty) {
           OpenUtils.launchURL(ap.contents.first.fileurl);
         }
         break;
@@ -123,9 +124,8 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
       default:
         if (ap.description.isNotEmpty) {
           return ExpansionTileCard(
-            expandedTextColor: Theme.of(context).textTheme.bodyMedium!.color,
-            expandedColor: getColor(index),
-            baseColor: getColor(index),
+            expandedColor: UIUtils.getListColor(index),
+            baseColor: UIUtils.getListColor(index),
             title: Text(
               ap.name,
               style: titleTextStyle,
@@ -144,7 +144,8 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
                   children: [
                     Expanded(
                       child: InkWell(
-                        child: SvgPicture.asset("assets/image/img_download.svg", color: Get.iconColor),
+                        child: SvgPicture.asset("assets/image/img_download.svg",
+                            color: Get.iconColor),
                         onTap: () {
                           handleTap(ap);
                         },
@@ -175,12 +176,6 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
     }
   }
 
-  Color getColor(int index) {
-    return (index % 2 == 1)
-        ? Theme.of(context).scaffoldBackgroundColor
-        : Theme.of(context).dividerColor;
-  }
-
   Widget buildTree() {
     return ListView.builder(
       shrinkWrap: true,
@@ -190,12 +185,15 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
 
         return InkWell(
           child: Container(
-            color: getColor(index),
+            color: UIUtils.getListColor(index),
             child: Row(
               children: [
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: SvgPicture.asset("assets/image/${getIcon(ap.modname)}.svg", color: Get.iconColor,)),
+                    child: SvgPicture.asset(
+                      "assets/image/${getIcon(ap.modname)}.svg",
+                      color: Get.iconColor,
+                    )),
                 Expanded(
                   child: buildItem(ap, index),
                 ),

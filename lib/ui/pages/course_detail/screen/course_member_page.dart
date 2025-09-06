@@ -7,7 +7,9 @@ import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_enrol_get_users.dart';
 import 'package:flutter_app/src/task/moodle_webapi/moodle_member_task.dart';
 import 'package:flutter_app/src/task/task_flow.dart';
+import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/page/error_page.dart';
+import 'package:flutter_app/ui/components/page/loading_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class CourseMemberPage extends StatefulWidget {
@@ -24,8 +26,7 @@ class CourseMemberPage extends StatefulWidget {
   State<StatefulWidget> createState() => _CourseMemberPageState();
 }
 
-class _CourseMemberPageState extends State<CourseMemberPage>
-    with AutomaticKeepAliveClientMixin {
+class _CourseMemberPageState extends State<CourseMemberPage> with AutomaticKeepAliveClientMixin {
   final List<Widget> listItem = [];
 
   Future<List<MoodleCoreEnrolGetUsers>?> initTask() async {
@@ -47,7 +48,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
+    super.build(context);
     return Container(
       padding: const EdgeInsets.only(top: 10),
       child: FutureBuilder<List<MoodleCoreEnrolGetUsers>?>(
@@ -60,6 +61,8 @@ class _CourseMemberPageState extends State<CourseMemberPage>
             } else {
               return getAnimationList();
             }
+          } else if(snapshot.connectionState == ConnectionState.waiting) {
+            return const LoadingPage(isLoading: true, isShowBackground: false);
           } else {
             return const Text("");
           }
@@ -79,10 +82,7 @@ class _CourseMemberPageState extends State<CourseMemberPage>
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: listItem[index],
-                ),
+                child: listItem[index],
               ),
             ),
           );
@@ -92,12 +92,9 @@ class _CourseMemberPageState extends State<CourseMemberPage>
   }
 
   Widget _buildClassmateNumber(int index, int number) {
-    Color color = (index % 2 == 1)
-        ? Theme.of(context).scaffoldBackgroundColor
-        : Theme.of(context).dividerColor;
     return Container(
       padding: const EdgeInsets.all(8),
-      color: color,
+      color: UIUtils.getListColor(index),
       child: Text(
         "${S.current.totalMember} $number",
         textAlign: TextAlign.center,
@@ -106,13 +103,9 @@ class _CourseMemberPageState extends State<CourseMemberPage>
   }
 
   Widget _buildClassmateInfo(int index, MoodleCoreEnrolGetUsers member) {
-    Color color;
-    color = (index % 2 == 1)
-        ? Theme.of(context).scaffoldBackgroundColor
-        : Theme.of(context).dividerColor;
     return Container(
       padding: const EdgeInsets.all(8),
-      color: color,
+      color: UIUtils.getListColor(index),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

@@ -1,97 +1,94 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_colors.dart';
 import 'package:flutter_app/src/controller/score_page/score_page_controller.dart';
+import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:get/get.dart';
 
-class ScoreViewerPage extends StatefulWidget {
+class ScoreViewerPage extends GetView<ScorePageController> {
   const ScoreViewerPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _ScoreViewerPageState();
-}
-
-class _ScoreViewerPageState extends State<ScoreViewerPage> {
-  final ScorePageController controller = Get.put(ScorePageController());
-
-  @override
-  void dispose() {
-    Get.delete<ScorePageController>();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Get.put(ScorePageController());
+
     return Obx(
       () {
         switch (controller.state.value) {
           case ScoreUIState.success:
-            return DefaultTabController(
-              length: controller.tabLabelList.length,
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text(R.current.searchScore),
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        controller.initTask(refresh: true);
-                      },
-                      icon: const Icon(Icons.refresh),
-                    ),
-                  ],
-                  bottom: TabBar(
-                    controller: controller.tabController,
-                    labelColor: AppColors.mainColor,
-                    unselectedLabelColor: Colors.white,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicator: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      ),
-                      color: Colors.white,
-                    ),
-                    isScrollable: true,
-                    tabs: controller.tabLabelList,
-                    onTap: (int index) {
-                      controller.toIndex(index);
-                    },
-                  ),
-                ),
-                body: TabBarView(
-                  controller: controller.tabController,
-                  children: controller.tabChildList,
-                ),
-              ),
-            );
+            return _buildContentPage();
           case ScoreUIState.loading:
-            return Scaffold(
-              appBar: AppBar(title: Text(R.current.searchScore)),
-              body: const Text(""),
-            );
+            return _buildLoadingPage();
           case ScoreUIState.fail:
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(R.current.searchScore),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      controller.initTask(refresh: true);
-                    },
-                    icon: const Icon(Icons.refresh),
-                  ),
-                ],
-              ),
-              body: const ErrorPage(),
-            );
+            return _buildErrorPage();
           case ScoreUIState.notLogin:
-            return Scaffold(
-              appBar: AppBar(title: Text(R.current.searchScore)),
-              body: const ErrorPage(),
-            );
+            return _buildNotLoginPage();
         }
       },
+    );
+  }
+
+  Widget _buildContentPage() {
+    return DefaultTabController(
+      length: controller.tabLabelList.length,
+      child: Scaffold(
+        appBar: mainAppbar(
+            title: R.current.searchScore,
+            action: [
+              IconButton(
+                icon: const Icon(CupertinoIcons.refresh),
+                splashRadius: 18,
+                iconSize: 24,
+                onPressed: () async {
+                  controller.initTask(refresh: true);
+                },
+                tooltip: R.current.update,
+              ),
+            ],
+            bottom: TabBar(
+              controller: controller.tabController,
+              isScrollable: true,
+              tabs: controller.tabLabelList,
+              onTap: controller.toIndex,
+            )),
+        body: TabBarView(
+          controller: controller.tabController,
+          children: controller.tabChildList,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorPage() {
+    return Scaffold(
+      appBar: mainAppbar(title: R.current.searchScore, action: [
+        IconButton(
+          icon: const Icon(CupertinoIcons.refresh),
+          splashRadius: 18,
+          iconSize: 24,
+          onPressed: () async {
+            controller.initTask(refresh: true);
+          },
+          tooltip: R.current.update,
+        ),
+      ]),
+      body: const ErrorPage(),
+    );
+  }
+
+  Widget _buildLoadingPage() {
+    return Scaffold(
+      appBar: mainAppbar(title: R.current.searchScore),
+      body: const Text(""),
+    );
+  }
+
+  Widget _buildNotLoginPage() {
+    return Scaffold(
+      appBar: mainAppbar(title: R.current.searchScore),
+      body: const ErrorPage(),
     );
   }
 }

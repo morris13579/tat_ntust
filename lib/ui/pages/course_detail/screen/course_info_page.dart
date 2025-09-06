@@ -11,6 +11,7 @@ import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:sprintf/sprintf.dart';
 
 class CourseInfoPage extends StatefulWidget {
@@ -27,8 +28,7 @@ class CourseInfoPage extends StatefulWidget {
   State<StatefulWidget> createState() => _CourseInfoPageState();
 }
 
-class _CourseInfoPageState extends State<CourseInfoPage>
-    with AutomaticKeepAliveClientMixin {
+class _CourseInfoPageState extends State<CourseInfoPage> with AutomaticKeepAliveClientMixin {
   final List<Widget> courseData = [];
   final List<Widget?> listItem = [];
 
@@ -105,7 +105,7 @@ class _CourseInfoPageState extends State<CourseInfoPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); //如果使用AutomaticKeepAliveClientMixin需要呼叫
+    super.build(context);
     return Container(
       padding: const EdgeInsets.only(top: 10),
       child: FutureBuilder<CourseExtraInfoJson?>(
@@ -163,9 +163,21 @@ class _CourseInfoPageState extends State<CourseInfoPage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+              Text(
+                text,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Get.theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 6),
-              Text(info, style: const TextStyle(height: 1.2),),
+              Text(
+                info,
+                style: TextStyle(
+                  height: 1.2,
+                  color: Get.theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
             ],
           ),
         ),

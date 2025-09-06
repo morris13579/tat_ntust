@@ -1,4 +1,5 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:flutter_app/ui/other/my_toast.dart';
 import 'package:flutter_app/ui/pages/password/check_password_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 enum OnListViewPress { appUpdate, contribution, privacyPolicy, version, dev }
@@ -34,26 +36,22 @@ class _AboutPageState extends State<AboutPage> {
   void initList() {
     listViewData = [
       {
-        "icon": EvaIcons.refreshOutline,
+        "icon": "img_update.svg",
         "title": R.current.checkVersion,
-        "color": Colors.orange,
         "onPress": OnListViewPress.appUpdate
       },
       {
-        "icon": EvaIcons.awardOutline,
+        "icon": "img_award.svg",
         "title": R.current.Contribution,
-        "color": Colors.lightGreen,
         "onPress": OnListViewPress.contribution
       },
       {
-        "icon": EvaIcons.shieldOffOutline,
-        "color": Colors.blueGrey,
+        "icon": "img_privacy.svg",
         "title": R.current.PrivacyPolicy,
         "onPress": OnListViewPress.privacyPolicy
       },
       {
-        "icon": EvaIcons.infoOutline,
-        "color": Colors.blue,
+        "icon": "img_info.svg",
         "title": R.current.versionInfo,
         "onPress": OnListViewPress.version
       }
@@ -65,8 +63,7 @@ class _AboutPageState extends State<AboutPage> {
     if (inDevMode) {
       setState(() {
         listViewData.add({
-          "icon": EvaIcons.options,
-          "color": Colors.amberAccent,
+          "icon": "img_dev.svg",
           "title": R.current.developerMode,
           "onPress": OnListViewPress.dev
         });
@@ -124,14 +121,7 @@ class _AboutPageState extends State<AboutPage> {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         itemCount: listViewData.length,
         itemBuilder: (context, index) {
-          Widget widget;
-          widget = _buildAbout(listViewData[index]);
-          return InkWell(
-            child: WidgetAnimator(widget),
-            onTap: () {
-              _onListViewPress(listViewData[index]['onPress']);
-            },
-          );
+          return WidgetAnimator(_buildAbout(listViewData[index]));
         },
         separatorBuilder: (context, index) {
           return const SizedBox(height: 4);
@@ -141,18 +131,34 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   Widget _buildAbout(Map data) {
-    return ListTile(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      onTap: () {
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: () {
         _onListViewPress(data['onPress']);
       },
-      title: Text(
-        data['title'],
-        style: const TextStyle(fontSize: 18),
-      ),
-      leading: Icon(
-        data['icon'],
-        color: data['color'],
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: Get.theme.colorScheme.surfaceContainer,
+            borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(999),
+                  color: Get.theme.colorScheme.surface),
+              padding: const EdgeInsets.all(8),
+              child: SvgPicture.asset("assets/image/${data['icon']}", color: Get.theme.colorScheme.onSurface),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              data['title'],
+              style: TextStyle(
+                  color: Get.theme.colorScheme.onSurface, fontSize: 15),
+            ),
+          ],
+        ),
       ),
     );
   }

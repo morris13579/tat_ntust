@@ -47,24 +47,20 @@ class NTUSTCalendarTask extends CacheTask<String> {
             title: Text(R.current.selectSemester),
             content: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: selects.keys
-                    .map(
-                      (key) => InkWell(
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.only(
-                                  top: 10, bottom: 10, left: 5, right: 5),
-                              child: Text(key),
-                            )
-                          ],
+                children: selects.keys.map((key) {
+                  return TextButton(
+                      onPressed: () {
+                        Get.back<String>(result: selects[key]!);
+                      },
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          key,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Get.theme.colorScheme.onSurface),
                         ),
-                        onTap: () {
-                          Get.back<String>(result: selects[key]!);
-                        },
-                      ),
-                    )
-                    .toList()),
+                      ));
+                }).toList()),
           );
         },
       ),

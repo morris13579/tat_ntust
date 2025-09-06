@@ -117,6 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "folderNameAlreadyExists":
             MessageLookupByLibrary.simpleMessage("資料夾名稱已經存在!"),
         "fullRange": MessageLookupByLibrary.simpleMessage("全距"),
+        "general_dimension": MessageLookupByLibrary.simpleMessage("向度"),
         "getCourse": MessageLookupByLibrary.simpleMessage("取得課表..."),
         "getCourseDetail": MessageLookupByLibrary.simpleMessage("課程資料讀取中..."),
         "getCourseDetailError":
@@ -186,7 +187,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("使用Moodle WebAPI"),
         "moodle_setting": MessageLookupByLibrary.simpleMessage("Moodle 設定"),
         "moodle_setting_description":
-            MessageLookupByLibrary.simpleMessage("同步台科Moodle設定"),
+            MessageLookupByLibrary.simpleMessage("同步臺科Moodle設定"),
         "needValidateCaptcha":
             MessageLookupByLibrary.simpleMessage("如果出現驗證碼，請手動通過驗證碼"),
         "networkError": MessageLookupByLibrary.simpleMessage("網路發生錯誤"),
@@ -256,6 +257,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "sure": MessageLookupByLibrary.simpleMessage("確定"),
         "testMoodleApi":
             MessageLookupByLibrary.simpleMessage("測試moodle api..."),
+        "theme_dark": MessageLookupByLibrary.simpleMessage("夜間模式"),
+        "theme_light": MessageLookupByLibrary.simpleMessage("日間模式"),
+        "theme_setting": MessageLookupByLibrary.simpleMessage("主題設定"),
+        "theme_setting_description":
+            MessageLookupByLibrary.simpleMessage("切換TAT的主題樣式"),
+        "theme_system": MessageLookupByLibrary.simpleMessage("跟隨系統"),
         "time": MessageLookupByLibrary.simpleMessage("時間"),
         "titleCourse": MessageLookupByLibrary.simpleMessage("課表"),
         "titleNotification": MessageLookupByLibrary.simpleMessage("訊息"),

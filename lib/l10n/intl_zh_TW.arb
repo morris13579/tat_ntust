@@ -210,5 +210,11 @@
   "activities": "活動資訊",
   "resources": "校園資訊",
   "moodle_setting": "Moodle 設定",
-  "moodle_setting_description": "同步台科Moodle設定"
+  "moodle_setting_description": "同步臺科Moodle設定",
+  "general_dimension": "向度",
+  "theme_setting": "主題設定",
+  "theme_setting_description": "切換TAT的主題樣式",
+  "theme_system": "跟隨系統",
+  "theme_light": "日間模式",
+  "theme_dark": "夜間模式"
 }
