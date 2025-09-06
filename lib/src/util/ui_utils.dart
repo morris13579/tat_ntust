@@ -36,4 +36,26 @@ class UIUtils {
     }
     return colors;
   }
+
+  static BorderRadius? getBorderRadius(int index, int length) {
+    const baseRadius = 14.0;
+    const subRadius = 4.0;
+    BorderRadius? borderRadius;
+
+    if (length == 1) {
+      borderRadius = BorderRadius.circular(baseRadius);
+    } else if (index == 0) {
+      borderRadius = const BorderRadius.vertical(
+          top: Radius.circular(baseRadius),
+          bottom: Radius.circular(subRadius));
+    } else if (index == length - 1) {
+      borderRadius = const BorderRadius.vertical(
+          top: Radius.circular(subRadius),
+          bottom: Radius.circular(baseRadius));
+    } else {
+      borderRadius = BorderRadius.circular(subRadius);
+    }
+
+    return borderRadius;
+  }
 }

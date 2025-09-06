@@ -11,6 +11,7 @@ import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/other/listview_animator.dart';
 import 'package:flutter_app/ui/pages/other/page/setting/moodle_setting_page.dart';
+import 'package:flutter_app/ui/pages/other/page/setting/theme_setting_page.dart';
 import 'package:get/get.dart';
 
 class SettingPage extends StatefulWidget {
@@ -45,6 +46,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     List<Widget> listViewData = [
       _buildLanguageSetting(),
+      _buildThemeSetting(),
       _buildMoodleSetting(),
       _buildFolderPathSetting()
     ];
@@ -145,6 +147,39 @@ class _SettingPageState extends State<SettingPage> {
         () {});
   }
 
+  Widget _buildThemeSetting() {
+    return _buildItemWrapper(
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    R.current.theme_setting,
+                    style: TextStyle(color: Get.theme.colorScheme.onSurface),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    R.current.theme_setting_description,
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Get.theme.colorScheme.onSurfaceVariant),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Icon(
+              Icons.chevron_right,
+              size: 20,
+            ),
+          ],
+        ), () {
+      Get.to(() => const ThemeSettingPage());
+    });
+  }
+
   Widget _buildMoodleSetting() {
     return _buildItemWrapper(
         Row(
@@ -214,6 +249,7 @@ class _SettingPageState extends State<SettingPage> {
       onPressed: onClick,
       child: Container(
           width: double.infinity,
+          constraints: const BoxConstraints(minHeight: 80),
           decoration: BoxDecoration(
               color: Get.theme.colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(12)),

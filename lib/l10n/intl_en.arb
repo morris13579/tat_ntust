@@ -210,5 +210,10 @@
   "resources": "Resources",
   "moodle_setting": "Moodle setting",
   "moodle_setting_description": "Sync NTUST Moodle website settings",
-  "general_dimension": "Dimension"
+  "general_dimension": "Dimension",
+  "theme_setting": "Theme setting",
+  "theme_setting_description": "Change TAT Theme Style",
+  "theme_system": "System",
+  "theme_light": "Light",
+  "theme_dark": "Dark"
 }

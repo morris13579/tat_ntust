@@ -305,6 +305,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "sure": MessageLookupByLibrary.simpleMessage("Sure"),
         "testMoodleApi":
             MessageLookupByLibrary.simpleMessage("test moodle api..."),
+        "theme_dark": MessageLookupByLibrary.simpleMessage("Dark"),
+        "theme_light": MessageLookupByLibrary.simpleMessage("Light"),
+        "theme_setting": MessageLookupByLibrary.simpleMessage("Theme setting"),
+        "theme_setting_description":
+            MessageLookupByLibrary.simpleMessage("Change TAT Theme Style"),
+        "theme_system": MessageLookupByLibrary.simpleMessage("System"),
         "time": MessageLookupByLibrary.simpleMessage("Time"),
         "titleCourse": MessageLookupByLibrary.simpleMessage("Course"),
         "titleNotification":

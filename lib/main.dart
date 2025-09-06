@@ -14,12 +14,12 @@ import 'package:flutter_app/src/config/app_themes.dart';
 import 'package:flutter_app/src/providers/app_provider.dart';
 import 'package:flutter_app/src/providers/category_provider.dart';
 import 'package:flutter_app/src/service/app_service.dart';
+import 'package:flutter_app/src/service/theme_service.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/cloud_messaging_utils.dart';
 import 'package:flutter_app/ui/screen/login/login_screen.dart';
 import 'package:flutter_app/ui/screen/main_screen.dart';
-import 'package:flutter_app/ui/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
@@ -40,6 +40,7 @@ Future<void> main() async {
 
     // Init App
     await Model.instance.getInstance();
+    await ThemeService.instance.init();
     final initialRoute = await getInitialRoute;
 
     await SystemChrome.setPreferredOrientations(
@@ -82,7 +83,7 @@ class MyApp extends StatelessWidget {
               FlutterNativeSplash.remove();
               await Get.find<AppService>().init();
             },
-            themeMode: ThemeMode.light,
+            themeMode: ThemeService.instance.theme,
             theme: AppThemes.lightTheme(lightDynamic),
             darkTheme: AppThemes.darkTheme(darkDynamic),
             localizationsDelegates: const [
