@@ -5,6 +5,7 @@ import 'package:flutter_app/src/config/app_colors.dart';
 import 'package:flutter_app/src/controller/calendar/calendar_controller.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
+import 'package:flutter_app/ui/components/page/loading_page.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -56,32 +57,9 @@ class CalendarPage extends GetView<CalendarController> {
               calendarFormat: controller.calendarFormat.value,
               rangeSelectionMode: controller.rangeSelectionMode.value,
               eventLoader: (day) => controller.events[day] ?? [],
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              daysOfWeekStyle: const DaysOfWeekStyle(
-                weekdayStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                weekendStyle: TextStyle(
-                  color: Colors.deepOrange,
-                ),
-              ),
-              calendarStyle: CalendarStyle(
-                // Use `CalendarStyle` to customize the UI
+              startingDayOfWeek: StartingDayOfWeek.sunday,
+              calendarStyle: const CalendarStyle(
                 outsideDaysVisible: false,
-                weekendTextStyle: const TextStyle(
-                  color: Colors.deepOrange,
-                ),
-                markerDecoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                selectedDecoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(width: 1.2, color: Colors.deepOrange)),
-                todayDecoration: BoxDecoration(
-                  color: Colors.deepOrange[200],
-                  shape: BoxShape.circle,
-                ),
               ),
               onDaySelected: controller.onDaySelected,
               onFormatChanged: controller.onFormatChanged,
@@ -96,25 +74,46 @@ class CalendarPage extends GetView<CalendarController> {
   }
 
   Widget _buildEventList() {
-    return ListView(
-      children: controller.selectedEvents
-          .map((event) => Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 0.8, color: Get.iconColor ?? Colors.grey),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                child: ListTile(
-                    title: Text(
-                      event,
-                      style: const TextStyle(height: 1.2),
-                    ),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-                    onTap: () {}),
-              ))
-          .toList(),
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      itemBuilder: (BuildContext context, int index) {
+        final event = controller.selectedEvents[index];
+        const baseRadius = 14.0;
+        const subRadius = 4.0;
+        BorderRadius? borderRadius;
+
+        if (controller.selectedEvents.length == 1) {
+          borderRadius = BorderRadius.circular(baseRadius);
+        } else if (index == 0) {
+          borderRadius = const BorderRadius.vertical(
+              top: Radius.circular(baseRadius),
+              bottom: Radius.circular(subRadius)
+          );
+        } else if (index == controller.selectedEvents.length - 1) {
+          borderRadius = const BorderRadius.vertical(
+              top: Radius.circular(subRadius),
+              bottom: Radius.circular(baseRadius)
+          );
+        } else {
+          borderRadius = BorderRadius.circular(subRadius);
+        }
+
+        return Container(
+          decoration: BoxDecoration(
+              color: Get.theme.colorScheme.surfaceContainer,
+              borderRadius: borderRadius),
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 14),
+          child: Text(
+            event,
+            style: TextStyle(
+                color: Get.theme.colorScheme.onSurface, fontSize: 15),
+          ),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const SizedBox(height: 2);
+      },
+      itemCount: controller.selectedEvents.length,
     );
   }
 }

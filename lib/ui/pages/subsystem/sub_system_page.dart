@@ -12,6 +12,7 @@ import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_app/ui/pages/password/webmail_password_dialog.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class SubSystemPage extends StatefulWidget {
@@ -189,7 +190,7 @@ class _SubSystemPageState extends State<SubSystemPage> {
                       Get.dialog(const WebMailPasswordDialog(),
                           barrierDismissible: false);
                     },
-                    icon: const Icon(EvaIcons.syncOutline))
+                    icon: SvgPicture.asset("assets/image/img_refresh.svg"))
             ],
           ),
         ),
