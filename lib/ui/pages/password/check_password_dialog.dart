@@ -1,14 +1,15 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/store/model.dart';
+import 'package:flutter_app/ui/other/tat_dialog.dart';
+import 'package:flutter_app/ui/pages/password/password_field.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 
 class CheckPasswordDialog extends StatefulWidget {
-  const CheckPasswordDialog({Key? key}) : super(key: key);
+  const CheckPasswordDialog({super.key});
 
   @override
   State<StatefulWidget> createState() => _CheckPasswordDialogState();
@@ -28,6 +29,16 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // TextEditingController 會一路持有使用者剛剛輸入的 NTUST 明文密碼，
+    // 對話框關掉之後若不 dispose，它會跟著 State 一起留在記憶體裡；
+    // FocusNode 沒 dispose 也會留在 focus tree 上並持續發通知。
+    _originPasswordController.dispose();
+    _originPasswordFocus.dispose();
+    super.dispose();
+  }
+
   void checkAuth() async {
     LocalAuthentication localAuthentication = LocalAuthentication();
     try {
@@ -43,95 +54,34 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Center(
-        child: Text(
-          R.current.checkIdentity,
-          textAlign: TextAlign.center,
-        ),
-      ),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20))),
+    return TatDialog(
+      title: R.current.checkIdentity,
+      body: R.current.originPassword,
+      kind: TatDialogKind.info,
       content: Form(
         key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Material(
-              elevation: 2,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _originPasswordController,
-                      cursorColor: Colors.blue[800],
-                      textInputAction: TextInputAction.done,
-                      focusNode: _originPasswordFocus,
-                      onEditingComplete: () {
-                        _originPasswordFocus.unfocus();
-                      },
-                      obscureText: !passwordShow,
-                      validator: (value) => _validatorOriginPassword(value!),
-                      decoration: InputDecoration(
-                        hintText: R.current.originPassword,
-                        errorStyle: const TextStyle(
-                          height: 0,
-                          fontSize: 0,
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: (!passwordShow)
-                        ? const Icon(EvaIcons.eyeOffOutline)
-                        : const Icon(EvaIcons.eyeOutline),
-                    onPressed: () {
-                      setState(() {
-                        passwordShow = !passwordShow;
-                      });
-                    },
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            if (_originPasswordErrorMessage.isNotEmpty)
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _originPasswordErrorMessage,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            const SizedBox(
-              height: 20,
-            ),
-          ],
+        child: PasswordField(
+          controller: _originPasswordController,
+          focusNode: _originPasswordFocus,
+          obscured: !passwordShow,
+          onToggleObscured: () => setState(() => passwordShow = !passwordShow),
+          hintText: R.current.password,
+          validator: (value) => _validatorOriginPassword(value ?? ""),
+          errorMessage: _originPasswordErrorMessage,
         ),
       ),
-      actions: [
-        TextButton(
-          child: Text(R.current.cancel),
-          onPressed: () => Get.back<bool>(result: false),
-        ),
-        TextButton(
-          child: Text(R.current.sure),
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              Get.back<bool>(result: true);
-            }
-          },
-        )
-      ],
+      secondary: TatDialogAction(
+        label: R.current.cancel,
+        onPressed: () => Get.back<bool>(result: false),
+      ),
+      primary: TatDialogAction(
+        label: R.current.sure,
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            Get.back<bool>(result: true);
+          }
+        },
+      ),
     );
   }
 

@@ -8,7 +8,7 @@ part of 'announcement_json.dart';
 
 AnnouncementJson _$AnnouncementJsonFromJson(Map<String, dynamic> json) =>
     AnnouncementJson(
-      countDown: json['count_down'] as int,
+      countDown: (json['count_down'] as num).toInt(),
       list: (json['list'] as List<dynamic>)
           .map((e) => AnnouncementInfoJson.fromJson(e as Map<String, dynamic>))
           .toList(),

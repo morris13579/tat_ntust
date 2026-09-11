@@ -1,19 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/store/model.dart';
-import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:get/get.dart';
-import 'package:flutter_app/src/file/my_downloader.dart';
-import 'package:flutter_app/src/notifications/notifications.dart';
+import 'package:flutter_app/src/service/notifications.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/remote_config_utils.dart';
 import 'package:flutter_app/src/version/app_version.dart';
 
-
 class AppService extends GetxService {
+  /// 是否還沒同意隱私政策。導航交給呼叫端（main.dart），
+  /// 這一層不 import lib/ui。
+  Future<bool> get needsPrivacyAgreement async =>
+      !(await Model.instance.getAgreeContributor());
+
   Future<void> init() async {
-    await _checkAgreeContributor();
     await _appInit();
-    await _checkAppVersion();
+    try {
+      await APPVersion.migrateIfUpdated();
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
+    }
   }
 
   Future<void> _appInit() async {
@@ -25,25 +32,11 @@ class AppService extends GetxService {
     try {
       await LanguageUtils.init(context);
       await RemoteConfigUtils.init();
-      await MyDownloader.init();
       await Notifications.instance.init();
       Log.init();
-      Get.forceAppUpdate();
+      unawaited(Get.forceAppUpdate());
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
-    }
-  }
-
-  Future<void> _checkAgreeContributor() async {
-    if (!(await Model.instance.getAgreeContributor())) {
-      await RouteUtils.toAgreePrivacyPolicyScreen();
-    }
-  }
-
-  Future<void> _checkAppVersion() async {
-    final isNeedUpdate = await APPVersion.initAndCheck();
-    if (!isNeedUpdate) {
-      RemoteConfigUtils.showAnnouncementDialog();
     }
   }
 }

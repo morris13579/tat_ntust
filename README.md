@@ -10,8 +10,9 @@
 </p>
 
 ## 應用程式截圖
-|  ![](https://i.imgur.com/4XG6xLQ.png)  | ![](https://i.imgur.com/3CsDEZ0.png) |![](https://i.imgur.com/xbwfSk6.png) | ![](https://i.imgur.com/Hag21i5.png)   |
-|:--------------------------------------:| ------------------------------------ |:-----------------------------------:| -------------------------------------- |
+| ![課表](docs/screenshots/course-table.png) | ![模擬排課](docs/screenshots/simulation.png) | ![行事曆](docs/screenshots/calendar.png) | ![成績](docs/screenshots/score.png) |
+|:-----------------------------------------:|:--------------------------------------------:|:----------------------------------------:|:-----------------------------------:|
+| 課表 | 模擬排課 | 行事曆 | 成績 |
 
 --------------------------------
 ## 安裝指南
@@ -30,21 +31,37 @@
 </a>
 <br><br>
 
-也可以點擊[此處](https://drive.google.com/drive/folders/1GDBc_coOp9jR_JzmgEgtOBcka0AkE9cL?usp=sharing)下載IPA安裝檔，第三方安裝的方式請參考下方。
-#### 使用AltStore安裝(推薦)
-利用[此工具](https://altstore.io/)為App簽名後，即可安裝在自己的裝置上。
-
-使用方式請參考
-https://www.gdaily.org/26293/altstore-ipa
-
-#### 其他安裝方式
-亦可使用超級簽名等其他方式安裝。
-若有意願贊助開發者帳號費用，協助我們上架App Store，歡迎聯繫我們。
-
 --------------------------------
 ## 聯絡我們
 - [seielika064@icloud.com](mailto:seielika064@icloud.com)
   
+
+--------------------------------
+## 開發
+
+### 環境
+Flutter SDK 版本鎖定在 `.fvmrc`（目前 3.38.5）。可用 [fvm](https://fvm.app/) 或
+[Puro](https://puro.dev/) 管理，兩者都會讀到同一個版本號。
+
+Firebase 設定檔不在版控，建置前需自行放置：
+- `android/app/google-services.json`
+- `ios/Runner/GoogleService-Info.plist`
+
+在 git worktree 內開發時，這兩個檔案不會被帶過去（worktree 只取得被追蹤的
+檔案），需要從主 checkout 手動複製。
+
+### 常用指令
+```bash
+flutter pub get --enforce-lockfile   # 安裝依賴，並確認 pubspec.lock 未被更動
+dart analyze --fatal-infos           # 靜態分析（CI 門檻：零 error、零 warning、零 info）
+flutter test                         # 單元測試（跑測試前必須先 pub get）
+python3 tool/deps.py                 # 分層與匯入環度量
+python3 tool/deps.py --check         # CI 模式，超過棘輪門檻時失敗
+```
+
+### 文件
+- [架構地圖](docs/ARCHITECTURE.md) — 五層堆疊、請求路徑、登入策略、外部系統
+
 ## 貢獻者
 - [morris13579](https://github.com/morris13579)
 

@@ -1,0 +1,59 @@
+{
+  "posts": [
+    {
+      "id": 910,
+      "subject": "作業繳交說明",
+      "message": "<p>作業請上傳 PDF。</p>",
+      "messageformat": 1,
+      "author": {
+        "id": 3021,
+        "fullname": "王老師",
+        "isdeleted": false,
+        "groups": [],
+        "urls": {}
+      },
+      "discussionid": 7710,
+      "hasparent": false,
+      "timecreated": 1756800000,
+      "timemodified": 1756800000,
+      "isdeleted": false,
+      "isprivatereply": false,
+      "haswordcount": false,
+      "capabilities": {},
+      "attachments": []
+    },
+    {
+      "id": 912,
+      "subject": "Re: 作業繳交說明",
+      "message": "<p>了解，謝謝老師。</p>",
+      "messageformat": 1,
+      "author": {
+        "id": 5011,
+        "fullname": "陳同學",
+        "isdeleted": false,
+        "groups": [],
+        "urls": {}
+      },
+      "discussionid": 7710,
+      "hasparent": true,
+      "parentid": 911,
+      "timecreated": 1756810000,
+      "timemodified": 1756810000,
+      "isdeleted": false,
+      "isprivatereply": false,
+      "haswordcount": false,
+      "capabilities": {},
+      "attachments": []
+    }
+  ],
+  "forumid": 5501,
+  "courseid": 1234,
+  "ratinginfo": {
+    "contextid": 123,
+    "component": "mod_forum",
+    "ratingarea": "post",
+    "scales": [],
+    "ratings": []
+  },
+  "warnings": []
+}

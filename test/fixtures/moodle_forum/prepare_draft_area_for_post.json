@@ -1,0 +1,43 @@
+{
+  "draftitemid": 884411,
+  "files": [
+    {
+      "filename": "slides.pdf",
+      "filepath": "/",
+      "filesize": 204800,
+      "fileurl": "https://moodle2.ntust.edu.tw/webservice/draftfile.php/123/user/draft/884411/slides.pdf",
+      "timemodified": 1756900000,
+      "mimetype": "application/pdf",
+      "isexternalfile": false
+    },
+    {
+      "filename": "exam_scope.png",
+      "filepath": "/",
+      "filesize": 51200,
+      "fileurl": "https://moodle2.ntust.edu.tw/webservice/draftfile.php/123/user/draft/884411/exam_scope.png",
+      "timemodified": 1756900001,
+      "mimetype": "image/png",
+      "isexternalfile": false
+    }
+  ],
+  "areaoptions": [
+    {
+      "name": "subdirs",
+      "value": "0"
+    },
+    {
+      "name": "maxbytes",
+      "value": "262144"
+    },
+    {
+      "name": "maxfiles",
+      "value": "3"
+    },
+    {
+      "name": "accepted_types",
+      "value": "*"
+    }
+  ],
+  "messagetext": null,
+  "warnings": []
+}

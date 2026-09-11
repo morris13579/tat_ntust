@@ -1,0 +1,46 @@
+{
+  "postid": 951,
+  "warnings": [],
+  "post": {
+    "id": 951,
+    "subject": "Re: 期中考 &amp; 補考公告",
+    "replysubject": "Re: 期中考 &amp; 補考公告",
+    "label": "",
+    "message": "老師好，\n請問 a < b 的那一題\n也在範圍內嗎？",
+    "messageformat": 2,
+    "author": {
+      "id": 5011,
+      "fullname": "陳同學",
+      "isdeleted": false,
+      "groups": [],
+      "urls": {}
+    },
+    "discussionid": 7701,
+    "hasparent": true,
+    "parentid": 900,
+    "timecreated": 1756950000,
+    "timemodified": 1756950000,
+    "isdeleted": false,
+    "isprivatereply": false,
+    "haswordcount": false,
+    "capabilities": {
+      "view": true,
+      "edit": true,
+      "delete": true,
+      "split": false,
+      "reply": true,
+      "selfenrol": false,
+      "export": false,
+      "controlreadstatus": false,
+      "canreplyprivately": false
+    },
+    "attachments": [],
+    "tags": []
+  },
+  "messages": [
+    {
+      "type": "success",
+      "message": "您的貼文已成功新增。"
+    }
+  ]
+}

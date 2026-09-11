@@ -1,101 +1,62 @@
 //  error_dialog.dart
-//  北科課程助手
 //  用於顯示錯誤視窗
 //  Created by morris13579 on 2020/02/12.
 //  Copyright © 2020 morris13579 All rights reserved.
 //
 
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/service/error_dialog_parameter.dart';
+import 'package:flutter_app/ui/other/tat_dialog.dart';
 import 'package:get/get.dart';
 
-class ErrorDialogParameter {
-  BuildContext? context;
-  late String? title;
-  String desc;
-  late String? btnOkText;
-  late String? btnCancelText;
-  late DialogType? dialogType;
-  late AnimType? animType;
-  late dynamic Function()? btnOkOnPress;
-  late dynamic Function()? btnCancelOnPress;
-  bool offOkBtn;
-  bool offCancelBtn;
-  bool okResult;
-  bool cancelResult;
+export 'package:flutter_app/src/service/error_dialog_parameter.dart';
 
-  ErrorDialogParameter(
-      {this.context,
-      required this.desc,
-      this.title,
-      this.btnOkText,
-      this.btnCancelText,
-      this.animType,
-      this.dialogType,
-      this.btnCancelOnPress,
-      this.btnOkOnPress,
-      this.okResult = true,
-      this.cancelResult = false,
-      this.offOkBtn = false,
-      this.offCancelBtn = false}) {
-    title = title ?? R.current.alertError;
-    btnOkText = btnOkText ?? R.current.restart;
-    btnCancelText = btnCancelText ?? R.current.cancel;
-    animType = animType ?? AnimType.bottomSlide;
-    dialogType = dialogType ?? DialogType.error;
-    btnCancelOnPress = btnCancelOnPress ??
-        () {
-          Get.back<bool>(result: cancelResult);
-        };
-    btnOkOnPress = btnOkOnPress ??
-        () {
-          Get.back<bool>(result: okResult);
-        };
-    if (offOkBtn) {
-      btnOkOnPress = null;
-    }
-    if (offCancelBtn) {
-      btnCancelOnPress = null;
-    }
-  }
-}
-
+/// [ErrorDialogParameter] 的顯示端。骨架是 [TatDialog]，這裡只負責把參數翻成
+/// 它的欄位，並在這一刻才補上 `R.current` 的預設值——參數類別是在其他語言環境
+/// 建的，提早取字串會取到舊語系。
 class ErrorDialog {
   ErrorDialogParameter parameter;
 
   ErrorDialog(this.parameter);
 
   Future<bool> show() async {
-    DismissType? dismissType;
-    var dialog = AwesomeDialog(
-        context: Get.key.currentState!.context,
-        dialogType: parameter.dialogType!,
-        animType: parameter.animType!,
-        title: parameter.title!,
-        desc: parameter.desc,
-        btnOkText: parameter.btnOkText!,
-        btnCancelText: parameter.btnCancelText!,
-        useRootNavigator: false,
-        dismissOnTouchOutside: false,
-        autoDismiss: false,
-        btnCancelOnPress: parameter.btnCancelOnPress,
-        btnOkOnPress: parameter.btnOkOnPress,
-        onDismissCallback: (DismissType type) {
-          dismissType = type;
-        });
-    await dialog.show();
-    bool result;
-    switch (dismissType) {
-      case DismissType.btnOk:
-        result = parameter.okResult;
-        break;
-      case DismissType.btnCancel:
-        result = parameter.cancelResult;
-        break;
-      default:
-        result = parameter.cancelResult;
-    }
-    return result;
+    final title = parameter.title ?? R.current.alertError;
+    final btnOkText = parameter.btnOkText ?? R.current.restart;
+    final btnCancelText = parameter.btnCancelText ?? R.current.cancel;
+
+    final result = await showTatDialog<bool>(
+      dialog: TatDialog(
+        title: title,
+        body: parameter.desc,
+        kind: parameter.kind ?? TatDialogKind.error,
+        destructive: parameter.destructive,
+        primary: parameter.offOkBtn
+            ? null
+            : TatDialogAction(
+                label: btnOkText,
+                onPressed: _press(parameter.btnOkOnPress, parameter.okResult),
+              ),
+        secondary: parameter.offCancelBtn
+            ? null
+            : TatDialogAction(
+                label: btnCancelText,
+                onPressed:
+                    _press(parameter.btnCancelOnPress, parameter.cancelResult),
+              ),
+      ),
+    );
+    // 不是 `?? false`：只有一顆按鈕的對話框會把 okResult 設成 false，
+    // 「沒有回傳值」該退回呼叫端指定的 cancelResult。
+    return result ?? parameter.cancelResult;
+  }
+
+  /// 呼叫端沒給按法時，預設就是關掉並回報自己那一邊的結果。
+  FutureOr<void> Function() _press(dynamic Function()? custom, bool result) {
+    final action = custom ?? () => Get.back<bool>(result: result);
+    return () {
+      action();
+    };
   }
 }

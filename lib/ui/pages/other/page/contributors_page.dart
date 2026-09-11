@@ -1,19 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/config/app_colors.dart';
 import 'package:flutter_app/src/config/app_link.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
+import 'package:flutter_app/src/util/ui_utils.dart';
+import 'package:flutter_app/ui/components/card/section_card.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
-import 'package:flutter_app/ui/other/listview_animator.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/get.dart';
+import 'package:flutter_app/ui/components/page/section_empty_state.dart';
+import 'package:flutter_app/ui/components/shimmer/list_skeleton.dart';
+import 'package:flutter_app/ui/other/lucide_icons.dart';
+import 'package:flutter_app/ui/other/theme_context.dart';
 import 'package:github/github.dart';
 
 class ContributorsPage extends StatelessWidget {
   final github = GitHub();
   final repositorySlug =
-  RepositorySlug(AppLink.githubOwner, AppLink.githubName);
+      RepositorySlug(AppLink.githubOwner, AppLink.githubName);
 
   ContributorsPage({super.key});
 
@@ -21,127 +23,135 @@ class ContributorsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: baseAppbar(title: R.current.Contribution),
-      body: Column(
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  R.current.projectLink,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  height: 50,
-                  child: InkWell(
-                    onTap: () {
-                      const url = AppLink.gitHub;
-                      OpenUtils.launchURL(url);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 20),
+          SectionHeader(
+              icon: LucideIcons.link,
+              title: R.current.projectLink,
+              first: true),
+          Material(
+            color: context.tokens.card,
+            borderRadius: UIUtils.getBorderRadius(0, 1),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () => OpenUtils.launchURL(AppLink.gitHub),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 13, 14, 13),
+                child: Row(
+                  children: [
+                    Expanded(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                R.current.github,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600),
-                              )
-                            ],
-                          ),
-                          const Row(
-                            children: [Text(AppLink.gitHub)],
+                          Text(R.current.github, style: context.text.bodyLarge),
+                          const SizedBox(height: 2),
+                          Text(
+                            AppLink.gitHub,
+                            style: context.text.bodySmall?.copyWith(
+                                color: context.scheme.onSurfaceVariant),
                           ),
                         ],
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 12),
+                    Icon(LucideIcons.externalLink,
+                        size: 16, color: context.scheme.onSurfaceVariant),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  R.current.Contributors,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            ],
-          ),
+          SectionHeader(icon: LucideIcons.users, title: R.current.Contributors),
           FutureBuilder<List<Contributor>>(
-            future: github.repositories.listContributors(repositorySlug).toList(),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<Contributor>> snapshot) {
-              if (snapshot.hasData) {
-                List<Contributor> contributorList = snapshot.data!;
-                return ListView.builder(
-                  itemCount: contributorList.length,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    Contributor contributor = contributorList[index];
-                    return InkWell(
-                      onTap: () {
-                        OpenUtils.launchURL(contributor.htmlUrl!);
-                      },
-                      child: WidgetAnimator(
-                        Container(
-                          padding: const EdgeInsets.only(
-                              top: 5, bottom: 5, left: 10),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: CachedNetworkImage(
-                                  imageUrl: contributor.avatarUrl!,
-                                  imageBuilder: (context, imageProvider) =>
-                                      CircleAvatar(
-                                    radius: 15.0,
-                                    backgroundImage: imageProvider,
-                                  ),
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 10),
-                              ),
-                              Text(contributor.login!)
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Icon(Icons.error),
+            future:
+                github.repositories.listContributors(repositorySlug).toList(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return SectionEmptyState(
+                  icon: LucideIcons.circleAlert,
+                  message: R.current.somethingError,
                 );
               }
-
-              return Center(
-                child: SpinKitDoubleBounce(
-                  color: Get.theme.colorScheme.primary,
-                ),
+              if (!snapshot.hasData) {
+                return const ListSkeleton(rows: 6);
+              }
+              final contributorList = snapshot.data!;
+              // 一列一塊 Material 加 2px 間隙，跟 App 裡其他清單同一套；
+              // 不是一張卡片配分隔線。
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (final (i, contributor) in contributorList.indexed) ...[
+                    if (i > 0) const SizedBox(height: 2),
+                    _ContributorRow(
+                      contributor: contributor,
+                      index: i,
+                      length: contributorList.length,
+                    ),
+                  ],
+                ],
               );
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ContributorRow extends StatelessWidget {
+  const _ContributorRow({
+    required this.contributor,
+    required this.index,
+    required this.length,
+  });
+
+  final Contributor contributor;
+  final int index;
+  final int length;
+
+  @override
+  Widget build(BuildContext context) {
+    final url = contributor.htmlUrl;
+    return Material(
+      color: context.tokens.card,
+      borderRadius: UIUtils.getBorderRadius(index, length),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: url == null ? null : () => OpenUtils.launchURL(url),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+          child: Row(
+            children: [
+              SizedBox(
+                height: 32,
+                width: 32,
+                child: CachedNetworkImage(
+                  imageUrl: contributor.avatarUrl ?? '',
+                  imageBuilder: (context, imageProvider) =>
+                      CircleAvatar(radius: 16, backgroundImage: imageProvider),
+                  errorWidget: (context, url, error) => CircleAvatar(
+                    radius: 16,
+                    backgroundColor: context.scheme.surfaceContainerHighest,
+                    child: Icon(LucideIcons.user,
+                        size: 16, color: context.scheme.onSurfaceVariant),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(contributor.login ?? '',
+                    style: context.text.bodyLarge),
+              ),
+              if (url != null) ...[
+                const SizedBox(width: 12),
+                Icon(LucideIcons.externalLink,
+                    size: 16, color: context.scheme.onSurfaceVariant),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

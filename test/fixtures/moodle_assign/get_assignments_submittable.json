@@ -1,0 +1,92 @@
+{
+  "courses": [
+    {
+      "id": 28914,
+      "fullname": "作業系統",
+      "shortname": "1141CS3001",
+      "timemodified": 1756000000,
+      "assignments": [
+        {
+          "id": 4201,
+          "cmid": 93201,
+          "course": 28914,
+          "name": "HW2 可以在 App 內交",
+          "nosubmissions": 0,
+          "submissiondrafts": 1,
+          "duedate": 1757548800,
+          "allowsubmissionsfromdate": 1756339200,
+          "grade": 100,
+          "timemodified": 1756400000,
+          "cutoffdate": 0,
+          "gradingduedate": 0,
+          "teamsubmission": 0,
+          "requireallteammemberssubmit": 0,
+          "blindmarking": 0,
+          "attemptreopenmethod": "none",
+          "maxattempts": -1,
+          "markingworkflow": 0,
+          "requiresubmissionstatement": 1,
+          "submissionstatement": "<p>本作業為本人獨力完成</p>",
+          "submissionstatementformat": 1,
+          "preventsubmissionnotingroup": 0,
+          "timelimit": 0,
+          "configs": [
+            {
+              "plugin": "file",
+              "subtype": "assignsubmission",
+              "name": "enabled",
+              "value": "1"
+            },
+            {
+              "plugin": "file",
+              "subtype": "assignsubmission",
+              "name": "maxfilesubmissions",
+              "value": "3"
+            },
+            {
+              "plugin": "file",
+              "subtype": "assignsubmission",
+              "name": "maxsubmissionsizebytes",
+              "value": "2097152"
+            },
+            {
+              "plugin": "file",
+              "subtype": "assignsubmission",
+              "name": "filetypeslist",
+              "value": ".pdf,.docx"
+            },
+            {
+              "plugin": "onlinetext",
+              "subtype": "assignsubmission",
+              "name": "enabled",
+              "value": "1"
+            },
+            {
+              "plugin": "onlinetext",
+              "subtype": "assignsubmission",
+              "name": "wordlimitenabled",
+              "value": "1"
+            },
+            {
+              "plugin": "onlinetext",
+              "subtype": "assignsubmission",
+              "name": "wordlimit",
+              "value": "500"
+            },
+            {
+              "plugin": "file",
+              "subtype": "assignfeedback",
+              "name": "enabled",
+              "value": "1"
+            }
+          ],
+          "intro": "<p>請上傳報告。</p>",
+          "introformat": 1,
+          "introfiles": [],
+          "introattachments": []
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}

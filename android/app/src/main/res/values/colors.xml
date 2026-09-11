@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 與 pubspec 的 flutter_native_splash.color 同一個值，也是亮色主題的
+         ColorScheme.surface：啟動圖收掉到 Flutter 畫出第一幀之間不會換色。 -->
+    <color name="splash_background">#F8F9FF</color>
+</resources>

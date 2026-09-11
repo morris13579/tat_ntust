@@ -1,0 +1,4 @@
+/* 見 en.lproj/InfoPlist.strings。 */
+"NSCameraUsageDescription" = "掃描同學的課表 QR，或拍照更換 Moodle 個人頭貼";
+"NSPhotoLibraryUsageDescription" = "從相簿選課表 QR 圖片，或選擇 Moodle 個人頭貼";
+"NSFaceIDUsageDescription" = "驗證身分後才顯示或修改已儲存的密碼";

@@ -1,7 +1,5 @@
-import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/util/language_utils.dart';
+import 'package:flutter_app/src/model/course_table/course_time.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:quiver/core.dart';
 import 'package:sprintf/sprintf.dart';
 
 part 'course_class_json.g.dart';
@@ -170,13 +168,17 @@ class TeacherJson {
   Map<String, dynamic> toJson() => _$TeacherJsonToJson(this);
 }
 
+/// 一個學期。只有 year 與 semester 兩個欄位。
+///
+/// 不要加回 `urlPath`（選課系統課表網頁的相對路徑）：它會跟著課表存進硬碟，
+/// 舊版留下的值會在重新整理時被讀回來，送進已經對不上學校新版 HTML 的
+/// 解析路徑。
 @JsonSerializable()
 class SemesterJson {
   String year;
   String semester;
-  String urlPath;
 
-  SemesterJson({this.year = "", this.semester = "", this.urlPath = ""});
+  SemesterJson({this.year = "", this.semester = ""});
 
   factory SemesterJson.fromJson(Map<String, dynamic> json) =>
       _$SemesterJsonFromJson(json);
@@ -202,21 +204,26 @@ class SemesterJson {
     return sprintf("year     : %s \n" "semester : %s \n", [year, semester]);
   }
 
+  /// 學期字串正規化：能當成整數看的就用整數的字面值，
+  /// 讓 "1" 與 "01" 視為同一個學期；暑期的 "H" 這種就照原樣比。
+  static String _normalize(String v) => int.tryParse(v)?.toString() ?? v;
+
+  /// 相等性以「數值意義」為準：學校的頁面有時送 "1" 有時送 "01"，
+  /// 兩者指的是同一個學期。
+  ///
+  /// 型別檢查必須擺在最前面，否則跟別的型別比較時會先存取 `other.semester`
+  /// 而讓 NoSuchMethodError 從 `==` 逸出。
   @override
-  bool operator ==(dynamic other) {
-    try {
-      return (int.parse(other.semester) == int.parse(semester) &&
-          int.parse(other.year) == int.parse(year) &&
-          other is SemesterJson);
-    } catch (e) {
-      return other.semester == semester &&
-          other.year == year &&
-          other is SemesterJson;
-    }
+  bool operator ==(Object other) {
+    if (other is! SemesterJson) return false;
+    return _normalize(other.semester) == _normalize(semester) &&
+        _normalize(other.year) == _normalize(year);
   }
 
+  /// 必須與 [operator ==] 用同一套正規化，否則 "1" 與 "01" 相等卻雜湊不同，
+  /// 違反 Dart 的雜湊契約。
   @override
-  int get hashCode => hash2(semester.hashCode, year.hashCode);
+  int get hashCode => Object.hash(_normalize(semester), _normalize(year));
 }
 
 @JsonSerializable()
@@ -261,16 +268,6 @@ class ClassmateJson {
           href,
           isSelect.toString()
         ]);
-  }
-
-  String getName() {
-    String? name;
-    if (LanguageUtils.getLangIndex() == LangEnum.en) {
-      name = studentEnglishName;
-    }
-    name = name ?? studentName;
-    name = (name.contains(RegExp(r"\w"))) ? name : studentName;
-    return name;
   }
 
   factory ClassmateJson.fromJson(Map<String, dynamic> json) =>

@@ -1,0 +1,11 @@
+{
+  "status": false,
+  "warnings": [
+    {
+      "item": "作業",
+      "itemid": 4102,
+      "warningcode": "submissionnotfoundtoremove",
+      "message": "Submission not found for the user, it could not be removed."
+    }
+  ]
+}

@@ -1,3 +1,1 @@
-enum CourseTableUIState {
-  loading, fail, success
-}
+enum CourseTableUIState { loading, fail, success }

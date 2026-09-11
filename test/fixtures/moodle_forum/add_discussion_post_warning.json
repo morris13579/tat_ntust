@@ -1,0 +1,12 @@
+{
+  "postid": 0,
+  "warnings": [
+    {
+      "item": "post",
+      "itemid": 900,
+      "warningcode": "nopostforum",
+      "message": "Sorry, you cannot post to this forum."
+    }
+  ],
+  "messages": []
+}

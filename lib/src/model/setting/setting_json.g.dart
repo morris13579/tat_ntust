@@ -36,7 +36,6 @@ Map<String, dynamic> _$CourseSettingJsonToJson(CourseSettingJson instance) =>
 OtherSettingJson _$OtherSettingJsonFromJson(Map<String, dynamic> json) =>
     OtherSettingJson(
       lang: json['lang'] as String? ?? "",
-      autoCheckAppUpdate: json['autoCheckAppUpdate'] as bool? ?? true,
       useExternalVideoPlayer: json['useExternalVideoPlayer'] as bool? ?? false,
       useMoodleWebApi: json['useMoodleWebApi'] as bool? ?? true,
     );
@@ -44,7 +43,6 @@ OtherSettingJson _$OtherSettingJsonFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$OtherSettingJsonToJson(OtherSettingJson instance) =>
     <String, dynamic>{
       'lang': instance.lang,
-      'autoCheckAppUpdate': instance.autoCheckAppUpdate,
       'useExternalVideoPlayer': instance.useExternalVideoPlayer,
       'useMoodleWebApi': instance.useMoodleWebApi,
     };

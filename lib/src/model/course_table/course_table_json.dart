@@ -1,38 +1,12 @@
 import 'package:flutter_app/src/model/course/course_class_json.dart';
+import 'package:flutter_app/src/model/course_table/course_time.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:sprintf/sprintf.dart';
 
+export 'package:flutter_app/src/model/course_table/course_time.dart';
+
 part 'course_table_json.g.dart';
-
-enum Day {
-  monday,
-  tuesday,
-  wednesday,
-  thursday,
-  friday,
-  saturday,
-  sunday,
-  unKnown
-}
-
-enum SectionNumber {
-  t_1,
-  t_2,
-  t_3,
-  t_4,
-  t_N,
-  t_5,
-  t_6,
-  t_7,
-  t_8,
-  t_9,
-  t_A,
-  t_B,
-  t_C,
-  t_D,
-  t_UnKnown
-}
 
 @JsonSerializable()
 class CourseTableJson {
@@ -73,7 +47,6 @@ class CourseTableJson {
         if (courseDetail != null) {
           if (courseDetail.main.course.id == courseId) {
             String creditString = courseDetail.main.course.credits;
-            print("${courseDetail.main.course.name} ${creditString}");
             try {
               return double.parse(creditString).toInt();
             } catch (e) {
@@ -151,7 +124,8 @@ class CourseTableJson {
         }
       }
     } else if (courseInfoMap[day]?.containsKey(sectionNumber) == true) {
-      if(courseInfo.main.course.name.contains("實習") || courseInfo.main.course.name.contains("Lab for")) {
+      if (courseInfo.main.course.name.contains("實習") ||
+          courseInfo.main.course.name.contains("Lab for")) {
         courseInfoMap[day]?[sectionNumber] = courseInfo;
       }
     } else {
@@ -234,20 +208,6 @@ class CourseTableJson {
         if (courseDetail != null) {
           if (courseDetail.main.course.id == courseId) {
             return courseDetail.main.course.name;
-          }
-        }
-      }
-    }
-    return null;
-  }
-
-  CourseInfoJson? getCourseInfoByCourseName(String courseName) {
-    for (Day day in Day.values) {
-      for (SectionNumber number in SectionNumber.values) {
-        CourseInfoJson? courseDetail = courseInfoMap[day]![number];
-        if (courseDetail != null) {
-          if (courseDetail.main.course.name == courseName) {
-            return courseDetail;
           }
         }
       }

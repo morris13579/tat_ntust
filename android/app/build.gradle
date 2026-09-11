@@ -42,7 +42,23 @@ android {
 
     packagingOptions {
         jniLibs {
-            useLegacyPackaging = true
+            // 16 KB page size 要求 .so 以未壓縮、對齊的形式放進 APK，直接從
+            // APK mmap 進來。legacy packaging 是壓縮後安裝時才解開，兩者互斥。
+            useLegacyPackaging = false
+        }
+    }
+
+    // mobile_scanner 5.2.3 綁的是 CameraX 1.3.3 與 ML Kit barcode 17.2.0，
+    // 這兩包的預編 .so（libimage_processing_util_jni.so、libbarhopper_v3.so）
+    // 只有 4 KB 對齊。Android 15 起裝置以 16 KB page 執行，Play 也已要求。
+    // 外掛本身還沒更新，先在這裡把版本頂上去。
+    configurations.configureEach {
+        resolutionStrategy {
+            force 'androidx.camera:camera-core:1.4.2'
+            force 'androidx.camera:camera-camera2:1.4.2'
+            force 'androidx.camera:camera-lifecycle:1.4.2'
+            force 'androidx.camera:camera-view:1.4.2'
+            force 'com.google.mlkit:barcode-scanning:17.3.0'
         }
     }
 
@@ -77,20 +93,29 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
-            shrinkResources false   // To enable code shrinking with ProGuard
-            minifyEnabled false     // remove unused code
-            proguardFiles getDefaultProguardFile(
-                    'proguard-android.txt'
-            ), 'proguard-rules.pro'
+            // 這裡**沒有** minifyEnabled / shrinkResources，這是刻意的。
+            //
+            // Flutter 自己的 Gradle plugin 已經把兩者都設成 true
+            // （FlutterPlugin.apply()）。先前這裡各寫了一行 false 把它蓋回去
+            // ——因為 plugins 區塊在檔案最上面、buildTypes 在下面，後者跑得晚。
+            // 所以這個專案不是「忘了開壓縮」，是主動把它關掉。刪掉那兩行就是
+            // 開啟壓縮的全部工作，不需要加任何東西。
+            proguardFiles 'proguard-rules.pro'
         }
     }
     lint {
-        abortOnError false
-        checkReleaseBuilds false
+        // 先前是 abortOnError false，等於 lint 完全靜音：Kotlin 與 Java 的
+        // 問題（例如 PendingIntent 少了 mutability flag）永遠不會擋下任何一次
+        // 合併。改成以 baseline 當棘輪——既有問題記錄在 lint-baseline.xml，
+        // 新的問題會讓建置失敗。baseline 不存在時 lint 會自己產生一份並通過，
+        // 所以第一次跑不會擋人。
+        abortOnError true
+        baseline file('lint-baseline.xml')
+        // Flutter 的 plugin 註冊碼會 import 不存在於此變體的套件，這是既有豁免。
         disable 'InvalidPackage'
+        // release 的 lint 需要簽章設定，CI 只跑 debug。
+        checkReleaseBuilds false
     }
 }
 
@@ -102,15 +127,14 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.23"
-    testImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation "androidx.media:media:1.5.0"
-    implementation 'com.google.firebase:firebase-analytics:20.1.0'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.8'
-    implementation 'com.google.firebase:firebase-messaging:23.0.0'
-    implementation "androidx.multidex:multidex:2.0.1"
+    // 沒有 androidTest 也沒有 test 原始碼目錄（android/app/src 底下只有
+    // main、debug、profile），junit / androidx.test / espresso 三個相依
+    // 沒有任何東西在用，卻會把 byte-buddy 拖進 lint 的 classpath。
+    // Firebase 的三個 SDK 先前在這裡手動 pin 成 analytics 20.1.0 /
+    // crashlytics 18.2.8 / messaging 23.0.0（多年前的版本）。沒有人知道當初
+    // 為什麼鎖，而 firebase_core / firebase_analytics / firebase_crashlytics /
+    // firebase_messaging 這幾個 Flutter plugin 本來就會帶進自己相容的版本，
+    // 手動宣告只會蓋掉它們、讓 plugin 與 SDK 版本可以漂到不相容為止。
+    // 移除之後由 plugin 決定版本。
     implementation "com.anggrayudi:storage:0.5.2"
 }

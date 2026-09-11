@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter/rendering.dart';
 
 class WidgetSizeRenderObject extends RenderProxyBox {
-
   final Function(Size) onSizeChange;
   Size? currentSize;
 
@@ -22,21 +22,19 @@ class WidgetSizeRenderObject extends RenderProxyBox {
         });
       }
     } catch (e) {
-      print(e);
+      Log.e(e.toString());
     }
   }
 }
 
-
 class WidgetSizeOffsetWrapper extends SingleChildRenderObjectWidget {
-
   final Function(Size size) onSizeChange;
 
   const WidgetSizeOffsetWrapper({
-    Key? key,
+    super.key,
     required this.onSizeChange,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required Widget super.child,
+  });
 
   @override
   RenderObject createRenderObject(BuildContext context) {

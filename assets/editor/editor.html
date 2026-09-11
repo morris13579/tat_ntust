@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!--
+  這一頁的安全性完全靠這一行。三件事不可以改：
+
+  1. script-src 'self' 而且沒有 'unsafe-inline'／'unsafe-eval'。貼文 HTML 是
+     別人寫的，注入進 contenteditable 之後 <script>、onerror=、SVG 的
+     <image onerror> 全部會被擋掉（WKWebView 與 Chromium 上都實測過）。
+     'self' 在 file:// 上解得開同目錄的 ./editor.js，所以橋接照樣能跑。
+  2. style-src 要留 'unsafe-inline'：Moodle 貼文帶 style="…"，少了它排版會
+     整個掉。它在兩個引擎上都執行不了程式（expression() 早就死了）。
+  3. img-src 只認學校站台。內嵌圖的網址帶著憑證，不釘死來源的話一則惡意貼文
+     可以用一個 <img> 把它送到別人的伺服器。referrer 也一併關掉。
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src https://moodle2.ntust.edu.tw; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; media-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>editor</title>
+<link rel="stylesheet" href="./editor.css">
+</head>
+<body>
+<div id="ed" contenteditable="true" spellcheck="false"></div>
+<script src="./editor.js"></script>
+</body>
+</html>

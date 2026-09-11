@@ -1,24 +1,98 @@
-import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/connector/core/connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
-import 'package:flutter_app/src/file/file_download.dart';
+import 'package:flutter_app/ui/service/file_download.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
-import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/open_utils.dart';
-import 'package:flutter_app/src/util/route_utils.dart';
-import 'package:flutter_app/src/util/ui_utils.dart';
+import 'package:flutter_app/ui/routes/route_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
-import 'package:flutter_app/ui/other/my_toast.dart';
+import 'package:flutter_app/ui/components/page/error_page.dart';
+import 'package:flutter_app/src/util/my_toast.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_assignment_detail_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_forum_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_html_page.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_quiz_detail_page.dart';
+import 'package:flutter_app/ui/pages/course_data/screen/widgets/course_section_list.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
-class CourseInfoPage extends StatefulWidget {
+/// 課程模組被點到時要做什麼。檔案分頁的就地展開與這一頁共用同一份，
+/// 兩邊的行為才不會走鐘；路由與 ErrorPage 只在這裡出現一次。
+class CourseModuleActions {
+  const CourseModuleActions(this.courseInfo);
+
+  final CourseInfoJson courseInfo;
+
+  void handle(BuildContext context, Modules ap) {
+    switch (ap.modname) {
+      case "forum":
+        // Modules.instance 就是 forum id；ErrorPage 與 RouteUtils 由這裡注入。
+        unawaited(Get.to(() => CourseForumPage(
+              courseInfo,
+              forumId: ap.instance,
+              forumName: ap.name,
+              forumUrl: ap.url,
+              errorBuilder: (message) => ErrorPage(errorMsg: message),
+              openWebView: RouteUtils.toWebViewPage,
+            )));
+        break;
+      case "assign":
+        // Modules.instance 就是 assign id；ErrorPage 與 RouteUtils 由這裡注入。
+        unawaited(Get.to(() => CourseAssignmentDetailPage(
+              courseInfo,
+              assignId: ap.instance,
+              errorBuilder: (message) => ErrorPage(errorMsg: message),
+              openWebView: RouteUtils.toWebViewPage,
+            )));
+        break;
+      case "quiz":
+        // Modules.instance 就是 quiz id；ErrorPage 與 RouteUtils 由這裡注入。
+        unawaited(Get.to(() => CourseQuizDetailPage(
+              courseInfo,
+              quizId: ap.instance,
+              errorBuilder: (message) => ErrorPage(errorMsg: message),
+              openWebView: RouteUtils.toWebViewPage,
+            )));
+        break;
+      case "folder":
+        // 空資料夾也進得去：資料夾頁自己畫空狀態，比一句 toast 清楚。
+        unawaited(RouteUtils.toCourseFolderPage(courseInfo, ap));
+        break;
+      case "label":
+        break;
+      case "url":
+        if (ap.contents.isEmpty) {
+          MyToast.show(R.current.nothingHere);
+          return;
+        }
+        unawaited(OpenUtils.launchURL(ap.contents.first.fileurl));
+        break;
+      case "page":
+        unawaited(Get.to(() => CourseHtmlPage(ap: ap)));
+        break;
+      case "resource":
+      default:
+        // contents 可能是空的（模組沒有檔案或看不到），先前這裡直接取 first，
+        // 例外被 fire-and-forget 吃掉，使用者只看到點了沒反應。
+        final file = ap.contents.isEmpty ? null : ap.contents.first;
+        if (file == null) {
+          MyToast.show(R.current.nothingHere);
+          return;
+        }
+        String dirName = courseInfo.main.course.name;
+        // 下載自己有通知列進度，這裡不等它結束才不會卡住 handler。
+        unawaited(FileDownload.download(context,
+            MoodleWebApiConnector.fileUrlWithToken(file.fileurl), dirName,
+            name: file.filename));
+    }
+  }
+}
+
+/// 單一段（週次／主題）的全頁版本。檔案分頁現在就地展開，這一頁留給
+/// 「從別的地方直接開一整段」的入口。
+class CourseInfoPage extends StatelessWidget {
   final CourseInfoJson courseInfo;
   final MoodleCoreCourseGetContents contents;
 
@@ -29,182 +103,21 @@ class CourseInfoPage extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => _CourseInfoPageState();
-}
-
-class _CourseInfoPageState extends State<CourseInfoPage> {
-  @override
   Widget build(BuildContext context) {
+    final actions = CourseModuleActions(courseInfo);
+    final modules = contents.modules;
     return Scaffold(
-        appBar: baseAppbar(
-          title: widget.contents.name,
+      appBar: baseAppbar(title: contents.name),
+      body: ListView.builder(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 32),
+        itemCount: modules.length,
+        itemBuilder: (context, index) => CourseModuleRow(
+          module: modules[index],
+          index: index,
+          length: modules.length,
+          onTap: (module) => actions.handle(context, module),
         ),
-        body: buildTree());
-  }
-
-  String getIcon(String type) {
-    switch (type) {
-      case "forum":
-        return "img_message";
-      case "assign":
-        return "img_clipboard";
-      case "folder":
-        return "img_folder";
-      case "label":
-        return "img_tag";
-      case "url":
-        return "img_link";
-      default:
-        return "img_copy";
-    }
-  }
-
-  void openWebView(Modules ap, {openWithExternalWebView = false}) async {
-    RouteUtils.toWebViewPage(
-        ap.name,
-        Connector.uriAddQuery(
-          ap.url,
-          (LanguageUtils.getLangIndex() == LangEnum.zh)
-              ? {"lang": "zh_tw"}
-              : {"lang": "en"},
-        ),
-        openWithExternalWebView: openWithExternalWebView);
-  }
-
-  void handleTap(Modules ap) async {
-    switch (ap.modname) {
-      case "forum":
-        openWebView(ap);
-        break;
-      case "assign":
-        openWebView(ap);
-        break;
-      case "folder":
-        if (ap.contents.isNotEmpty || ap.folderIsNone) {
-          RouteUtils.toCourseFolderPage(widget.courseInfo, ap);
-        } else {
-          MyToast.show(R.current.nothingHere);
-        }
-        break;
-      case "label":
-        break;
-      case "url":
-        if (ap.contents.isNotEmpty) {
-          OpenUtils.launchURL(ap.contents.first.fileurl);
-        }
-        break;
-      case "page":
-        Get.to(() => CourseHtmlPage(ap: ap));
-        break;
-      case "resource":
-      default:
-        String dirName = widget.courseInfo.main.course.name;
-        FileDownload.download(
-            context,
-            Connector.uriAddQuery(
-              ap.contents.first.fileurl,
-              {"token": MoodleWebApiConnector.wsToken},
-            ),
-            dirName,
-            name: ap.contents.first.filename);
-    }
-  }
-
-  final titleTextStyle = const TextStyle(fontSize: 14, height: 1.2);
-
-  Widget buildItem(Modules ap, int index) {
-    switch (ap.modname) {
-      case "label":
-        return Container(
-            padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-            child: HtmlWidget(
-              ap.description,
-              renderMode: RenderMode.column,
-            ));
-      default:
-        if (ap.description.isNotEmpty) {
-          return ExpansionTileCard(
-            expandedColor: UIUtils.getListColor(index),
-            baseColor: UIUtils.getListColor(index),
-            title: Text(
-              ap.name,
-              style: titleTextStyle,
-            ),
-            children: [
-              Container(
-                padding: const EdgeInsets.only(left: 20),
-                child: HtmlWidget(
-                  ap.description,
-                  renderMode: RenderMode.column,
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        child: SvgPicture.asset("assets/image/img_download.svg",
-                            color: Get.iconColor),
-                        onTap: () {
-                          handleTap(ap);
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          );
-        }
-        return Container(
-          height: 50,
-          padding: const EdgeInsets.only(left: 20),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  ap.name,
-                  style: titleTextStyle,
-                  overflow: TextOverflow.fade,
-                  maxLines: 2,
-                ),
-              )
-            ],
-          ),
-        );
-    }
-  }
-
-  Widget buildTree() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: widget.contents.modules.length,
-      itemBuilder: (BuildContext context, int index) {
-        var ap = widget.contents.modules[index];
-
-        return InkWell(
-          child: Container(
-            color: UIUtils.getListColor(index),
-            child: Row(
-              children: [
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: SvgPicture.asset(
-                      "assets/image/${getIcon(ap.modname)}.svg",
-                      color: Get.iconColor,
-                    )),
-                Expanded(
-                  child: buildItem(ap, index),
-                ),
-              ],
-            ),
-          ),
-          onTap: () async {
-            handleTap(ap);
-          },
-        );
-      },
+      ),
     );
   }
 }

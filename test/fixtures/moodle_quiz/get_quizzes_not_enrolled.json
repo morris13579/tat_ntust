@@ -1,0 +1,11 @@
+{
+  "quizzes": [],
+  "warnings": [
+    {
+      "item": "course",
+      "itemid": 28914,
+      "warningcode": "1",
+      "message": "No access rights in course context"
+    }
+  ]
+}

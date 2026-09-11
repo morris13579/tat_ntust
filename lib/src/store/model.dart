@@ -1,22 +1,26 @@
 import 'dart:convert';
 
-import 'package:flutter_app/src/connector/core/dio_connector.dart';
-import 'package:flutter_app/src/connector/moodle_connector.dart';
-import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
-import 'package:flutter_app/src/entity/moodle_token_entity.dart';
+import 'package:flutter_app/debug/log/log.dart';
+import 'package:flutter_app/src/model/moodle_token_entity.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/model/setting/setting_json.dart';
-import 'package:flutter_app/src/model/userdata/user_data_json.dart';
-import 'package:flutter_app/src/task/moodle_webapi/moodle_task.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_app/src/store/course_table_store.dart';
+import 'package:flutter_app/src/store/credentials_store.dart';
+import 'package:flutter_app/src/store/extra_table_store.dart';
+import 'package:flutter_app/src/store/moodle_session_store.dart';
+import 'package:flutter_app/src/store/key_value_store.dart';
+import 'package:flutter_app/src/store/score_store.dart';
 
 //flutter packages pub run build_runner build 創建Json
 //flutter packages pub run build_runner build --delete-conflicting-outputs
 class Model {
   static final Model instance = Model();
+
+  /// 所有本機讀寫的唯一出口。測試可換成 [InMemoryKeyValueStore]。
+  KeyValueStore store = SharedPrefsKeyValueStore();
   static String userDataJsonKey = "user_data";
 
   //----------List----------//
@@ -28,28 +32,15 @@ class Model {
   static String settingJsonKey = "setting";
 
   static String agreeContributorKey = "agree_privacy_policy";
-  UserDataJson _userData = UserDataJson();
-  List<CourseTableJson> _courseTableList = [];
-  List<SemesterJson> _courseSemesterList = [];
-  ScoreRankJson _score = ScoreRankJson();
   SettingJson _setting = SettingJson();
   final Map<String, bool> _firstRun = {};
-  static String appCheckUpdate = "app_check_update";
-  DefaultCacheManager cacheManager = DefaultCacheManager();
+  late final DefaultCacheManager cacheManager = DefaultCacheManager();
 
-  bool get autoCheckAppUpdate {
-    return _setting.other.autoCheckAppUpdate;
-  }
+  Future<bool> getAgreeContributor() async =>
+      await store.readBool(agreeContributorKey) ?? false;
 
-  Future<bool> getAgreeContributor() async {
-    var pref = await SharedPreferences.getInstance();
-    return pref.getBool(agreeContributorKey) ?? false;
-  }
-
-  Future<void> setAgreeContributor(bool value) async {
-    var pref = await SharedPreferences.getInstance();
-    pref.setBool(agreeContributorKey, value);
-  }
+  Future<void> setAgreeContributor(bool value) =>
+      store.writeBool(agreeContributorKey, value);
 
   //timeOut seconds
   Future<bool> getFirstUse(String key, {int? timeOut}) async {
@@ -75,178 +66,105 @@ class Model {
     _firstRun[key] = false;
   }
 
-  void setFirstUse(String key, bool value) {
-    String wKey = "firstUse$key";
-    _writeInt(wKey, 0);
-    _firstRun[key] = value;
-  }
-
   //--------------------UserDataJson--------------------//
-  Future<void> saveUserData() async {
-    await _save(userDataJsonKey, _userData);
-  }
+  // 實作在 CredentialsStore（底層是 Keystore / Keychain）。
 
-  Future<void> clearUserData() async {
-    _userData = UserDataJson();
-    await saveUserData();
-  }
+  Future<void> saveUserData() => CredentialsStore.instance.save();
+
+  Future<void> clearUserData() => CredentialsStore.instance.clear();
 
   Future<void> loadUserData() async {
-    String? readJson;
-    readJson = (await _readString(userDataJsonKey));
-    _userData = (readJson != null)
-        ? UserDataJson.fromJson(json.decode(readJson))
-        : UserDataJson();
+    await CredentialsStore.instance.load();
   }
 
-  void setAccount(String account) {
-    _userData.account = account;
-  }
+  void setAccount(String account) =>
+      CredentialsStore.instance.setAccount(account);
 
-  String getAccount() {
-    return _userData.account;
-  }
+  String getAccount() => CredentialsStore.instance.account;
 
-  String getWebMailPassword() {
-    return _userData.webMailPassword;
-  }
+  void setPassword(String password) =>
+      CredentialsStore.instance.setPassword(password);
 
-  void setWebMailPassword(String password) {
-    _userData.webMailPassword = password;
-  }
-
-  void setPassword(String password) {
-    _userData.password = password;
-  }
-
-  String getPassword() {
-    return _userData.password;
-  }
-
-  UserDataJson getUserData() {
-    return _userData;
-  }
+  String getPassword() => CredentialsStore.instance.password;
 
   //--------------------List<CourseTableJson>--------------------//
-  Future<void> saveCourseTableList() async {
-    await _save(courseTableJsonKey, _courseTableList);
-  }
+  // 實作在 CourseTableStore 與 ScoreStore，這裡只剩轉呼叫。
 
-  Future<void> clearCourseTableList() async {
-    _courseTableList = [];
-    await saveCourseTableList();
-  }
+  Future<void> saveCourseTableList() => CourseTableStore.instance.save();
 
-  Future<void> loadCourseTableList() async {
-    List<String>? readJsonList = [];
-    readJsonList = (await _readStringList(courseTableJsonKey));
-    _courseTableList = [];
-    if (readJsonList != null) {
-      for (String readJson in readJsonList) {
-        _courseTableList.add(CourseTableJson.fromJson(json.decode(readJson)));
-      }
-    }
-  }
+  Future<void> clearCourseTableList() => CourseTableStore.instance.clear();
 
-  String? getCourseNameByCourseId(String courseId) {
-    //利用課程id取得課程資訊
-    String? name;
-    for (CourseTableJson courseDetail in _courseTableList) {
-      name = courseDetail.getCourseNameByCourseId(courseId);
-      if (name != null) {
-        return name;
-      }
-    }
-    return null;
-  }
+  Future<void> loadCourseTableList() => CourseTableStore.instance.load();
 
-  void removeCourseTable(CourseTableJson addCourseTable) {
-    List<CourseTableJson> tableList = _courseTableList;
-    for (int i = 0; i < tableList.length; i++) {
-      CourseTableJson table = tableList[i];
-      if (table.courseSemester == addCourseTable.courseSemester &&
-          table.studentId == addCourseTable.studentId) {
-        tableList.removeAt(i);
-      }
-    }
-  }
+  void removeCourseTable(CourseTableJson table) =>
+      CourseTableStore.instance.remove(table);
 
-  void addCourseTable(CourseTableJson addCourseTable) {
-    List<CourseTableJson> tableList = _courseTableList;
-    removeCourseTable(addCourseTable);
-    tableList.add(addCourseTable);
-  }
+  void addCourseTable(CourseTableJson table) =>
+      CourseTableStore.instance.upsert(table);
 
-  List<CourseTableJson> getCourseTableList() {
-    _courseTableList.sort((a, b) {
-      if (a.studentId == b.studentId) {
-        return b.courseSemester
-            .toString()
-            .compareTo(a.courseSemester.toString());
-      }
-      return a.studentId.compareTo(b.studentId);
-    });
-    return _courseTableList;
-  }
+  List<CourseTableJson> getCourseTableList() =>
+      CourseTableStore.instance.tables;
 
-  CourseTableJson? getCourseTable(
-      String studentId, SemesterJson? courseSemester) {
-    List<CourseTableJson> tableList = _courseTableList;
-    if (courseSemester == null || studentId.isEmpty) {
-      return null;
-    }
-    for (int i = 0; i < tableList.length; i++) {
-      CourseTableJson table = tableList[i];
-      if (table.courseSemester == courseSemester &&
-          table.studentId == studentId) {
-        return table;
-      }
-    }
-    return null;
-  }
+  CourseTableJson? getCourseTable(String studentId, SemesterJson? semester) =>
+      CourseTableStore.instance.find(studentId, semester);
 
   //--------------------ScoreJson--------------------//
-  Future<void> saveScore() async {
-    await _save(scoreCreditJsonKey, _score);
-  }
+  Future<void> saveScore() => ScoreStore.instance.save();
 
-  void setScore(ScoreRankJson value) {
-    _score = value;
-  }
+  void setScore(ScoreRankJson value) => ScoreStore.instance.score = value;
 
-  Future<void> clearScore() async {
-    _score = ScoreRankJson();
-    await saveScore();
-  }
+  Future<void> clearScore() => ScoreStore.instance.clear();
 
-  ScoreRankJson getScore() {
-    return _score;
-  }
+  ScoreRankJson getScore() => ScoreStore.instance.score;
 
-  Future<void> loadScore() async {
-    String? readJson;
-    readJson = await _readString(scoreCreditJsonKey);
-    _score = (readJson != null)
-        ? ScoreRankJson.fromJson(json.decode(readJson))
-        : ScoreRankJson();
-  }
+  Future<void> loadScore() => ScoreStore.instance.load();
 
   //--------------------SettingJson--------------------//
   Future<void> saveSetting() async {
-    await _save(settingJsonKey, _setting);
-  }
-
-  Future<void> clearSetting() async {
-    _setting = SettingJson();
-    await saveSetting();
+    // setting 存成單一 JSON 物件，不是 StringList。
+    await store.writeJson(settingJsonKey, _setting);
   }
 
   Future<void> loadSetting() async {
-    String? readJson;
-    readJson = await _readString(settingJsonKey);
-    _setting = (readJson != null)
-        ? SettingJson.fromJson(json.decode(readJson))
-        : SettingJson();
+    final readJson = await _readString(settingJsonKey);
+    _setting = (readJson != null) ? _decodeSetting(readJson) : SettingJson();
+  }
+
+  /// 解析 setting blob；整包解不出來時改成逐段搶救。
+  ///
+  /// setting 是唯一沒有伺服器副本的純本地資料。[SettingJson.fromJson] 是
+  /// 全有全無的——`course` 裡任何一個欄位型別不對，`other` 的 `lang` 與
+  /// `useMoodleWebApi` 就一起陪葬，所以整包失敗時逐段解，只讓壞掉的
+  /// 那一段退回預設。
+  ///
+  /// 只有連 json.decode 都過不了才會拋出去，由 [_loadOrLog] 記錄；
+  /// 磁碟上的原始位元組不會被動到。
+  SettingJson _decodeSetting(String readJson) {
+    final decoded = json.decode(readJson);
+    if (decoded is! Map<String, dynamic>) {
+      // 拋出去而不是靜默吃掉，才會在 log 裡留下紀錄。訊息刻意不帶 blob 內容。
+      throw const FormatException('setting blob 不是 JSON 物件');
+    }
+    try {
+      return SettingJson.fromJson(decoded);
+    } catch (e, stack) {
+      Log.eWithStack('setting 整包解析失敗，改為逐段搶救: $e', stack);
+      return SettingJson(
+        course: _decodeSection(decoded['course'], CourseSettingJson.fromJson),
+        other: _decodeSection(decoded['other'], OtherSettingJson.fromJson),
+      );
+    }
+  }
+
+  /// 解析 setting 的其中一段，失敗回 null 讓 [SettingJson] 自己補預設值。
+  T? _decodeSection<T>(dynamic raw, T Function(Map<String, dynamic>) fromJson) {
+    if (raw is! Map<String, dynamic>) return null;
+    try {
+      return fromJson(raw);
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
+      return null;
+    }
   }
 
   //--------------------CourseSettingJson--------------------//
@@ -259,10 +177,6 @@ class Model {
     await saveCourseSetting();
   }
 
-  void setCourseSetting(CourseSettingJson value) {
-    _setting.course = value;
-  }
-
   CourseSettingJson getCourseSetting() {
     return _setting.course;
   }
@@ -270,11 +184,6 @@ class Model {
   //--------------------OtherSettingJson--------------------//
   Future<void> saveOtherSetting() async {
     await saveSetting();
-  }
-
-  Future<void> clearOtherSetting() async {
-    _setting.other = OtherSettingJson();
-    await saveOtherSetting();
   }
 
   void setOtherSetting(OtherSettingJson value) {
@@ -286,48 +195,26 @@ class Model {
   }
 
   //--------------------List<SemesterJson>--------------------//
-  Future<void> clearSemesterJsonList() async {
-    _courseSemesterList = [];
+  Future<void> clearSemesterJsonList() async =>
+      CourseTableStore.instance.clearSemesters();
+
+  /// 學期清單不落地，載入等於清空記憶體清單。
+  Future<void> loadSemesterJsonList() async =>
+      CourseTableStore.instance.clearSemesters();
+
+  /// [complete] 為 false 代表這份清單只有當前學期，歷年來源沒有貢獻。
+  /// 見 [CourseTableStore.semestersComplete]。
+  void setSemesterJsonList(List<SemesterJson> value, {bool complete = true}) {
+    CourseTableStore.instance.semesters = value;
+    CourseTableStore.instance.semestersComplete = complete;
   }
 
-  Future<void> saveSemesterJsonList() async {
-    _save(courseSemesterJsonKey, _courseSemesterList);
-  }
+  bool isSemesterListComplete() => CourseTableStore.instance.semestersComplete;
 
-  Future<void> loadSemesterJsonList() async {
-    List<String>? readJsonList = [];
-    readJsonList = await _readStringList(courseSemesterJsonKey);
-    _courseSemesterList = [];
-    if (readJsonList != null) {
-      for (String readJson in readJsonList) {
-        _courseSemesterList.add(SemesterJson.fromJson(json.decode(readJson)));
-      }
-    }
-  }
+  SemesterJson? getSemesterJsonItem(int index) =>
+      CourseTableStore.instance.semesterAt(index);
 
-  void setSemesterJsonList(List<SemesterJson> value) {
-    _courseSemesterList = value;
-  }
-
-  SemesterJson? getSemesterJsonItem(int index) {
-    if (_courseSemesterList.length > index) {
-      return _courseSemesterList[index];
-    } else {
-      return null;
-    }
-  }
-
-  List<SemesterJson> getSemesterList() {
-    return _courseSemesterList;
-  }
-
-  List<String> getSemesterListString() {
-    List<String> stringList = [];
-    for (SemesterJson value in _courseSemesterList) {
-      stringList.add("${value.year}-${value.semester}");
-    }
-    return stringList;
-  }
+  List<SemesterJson> getSemesterList() => CourseTableStore.instance.semesters;
 
   //--------------------App Version--------------------//
   Future<String> getVersion() async {
@@ -339,165 +226,100 @@ class Model {
   }
 
   //--------------------Moodle Token--------------------//
-  Future<MoodleTokenEntity?> getMoodleToken() async {
-    var json = await _readString("moodle_token");
-    if(json == null) {
-      return null;
-    }
+  Future<MoodleTokenEntity?> getMoodleToken() async =>
+      MoodleSessionStore.instance.token ??
+      await MoodleSessionStore.instance.load();
 
-    return MoodleTokenEntity.fromJson(jsonDecode(json));
-  }
+  Future<void> setMoodleToken(MoodleTokenEntity token) =>
+      MoodleSessionStore.instance.save(token);
 
-  Future<void> setMoodleToken(MoodleTokenEntity token) async {
-    await _writeString("moodle_token", jsonEncode(token));
-  }
-
-  Future<void> loadMoodleToken() async {
-    var token = await getMoodleToken();
-    if(token == null) {
-      return;
-    }
-
-    MoodleTask.isLogin = true;
-    MoodleWebApiConnector.wsToken = token.token;
-    MoodleWebApiConnector.privateToken = token.privateToken;
-  }
-
-  Future<void> clearMoodleToken() async {
-    var pref = await SharedPreferences.getInstance();
-    await pref.remove("moodle_token");
-  }
-
-
-  Future<bool> clearAll() async {
-    var pref = await SharedPreferences.getInstance();
-    return pref.clear();
-  }
+  Future<void> clearMoodleToken() => MoodleSessionStore.instance.clear();
 
   Future<bool> getInstance() async {
     bool catchError = false;
-    try {
-      await DioConnector.instance.init();
-      await loadUserData();
-    } catch (e) {
+
+    // 憑證這一條腿的失敗語意與其他不同：讀不到可能只是 Keystore 暫時
+    // 不可用（Android 備份還原、iOS 鎖定狀態下被背景推播喚醒），
+    // 這時清掉會讓使用者白白被登出且無法回退。
+    final credentials = await CredentialsStore.instance.load();
+    if (credentials == CredentialsLoadResult.unavailable) {
       catchError = true;
-      await clearUserData();
     }
-    try {
-      await loadCourseTableList();
-    } catch (e) {
-      catchError = true;
-      await clearCourseTableList();
+
+    // 舊版 moodle_token 存在 SharedPreferences；讀回比對成功之後
+    // MoodleSessionStore 才會把明文那份刪掉。
+    if (MoodleSessionStore.instance.token == null) {
+      try {
+        if (await MoodleSessionStore.instance.load() == null) {
+          final legacy = await store.readString(MoodleSessionStore.legacyKey);
+          await MoodleSessionStore.instance.migrateFrom(legacy);
+        }
+      } catch (e, stack) {
+        catchError = true;
+        Log.eWithStack(e.toString(), stack);
+      }
     }
-    try {
-      await loadSetting();
-    } catch (e) {
-      catchError = true;
-      await clearSetting();
-    }
-    try {
-      await loadSemesterJsonList();
-    } catch (e) {
-      catchError = true;
-      await clearSemesterJsonList();
-    }
-    try {
-      await loadScore();
-    } catch (e) {
-      catchError = true;
-      await clearScore();
-    }
-    try {
-      await loadScore();
-    } catch (e) {
-      catchError = true;
-      await clearScore();
-    }
-    try {
-      await loadMoodleToken();
-    } catch (e) {
-      catchError = true;
-      await clearMoodleToken();
-    }
+
+    catchError |= await _loadOrLog(loadCourseTableList);
+    catchError |= await _loadOrLog(loadSetting);
+    catchError |= await _loadOrLog(loadSemesterJsonList);
+    catchError |= await _loadOrLog(loadScore);
     return catchError;
+  }
+
+  /// 載入失敗只記錄並回報，**絕對不回寫**。
+  ///
+  /// 不要在 catch 裡呼叫 clearX()：那會把空物件存回磁碟，一個位元組壞掉
+  /// 原始 blob 就在開機當下被永久覆蓋。setting（語言、自動更新、目前顯示
+  /// 的課表）在伺服器上沒有副本，蓋掉就真的沒了。clearX 自己也會寫磁碟、
+  /// 也會拋，例外逃出 getInstance 會讓 runApp 不被呼叫，使用者卡在 splash。
+  ///
+  /// 記憶體退回預設值讓 App 照常開起來，磁碟原封不動；使用者下次改設定、
+  /// 重抓課表或成績時正常的 saveX 就會覆蓋掉，等於自己痊癒。
+  ///
+  /// 四條腿在 load 拋出後的記憶體狀態都已經是安全的，這是前提，不要拿掉：
+  /// - loadSetting 例外時 _setting 保留上一份可用值，而且它自己還會先逐段
+  ///   搶救，見 [_decodeSetting]。
+  /// - ScoreStore.load 是單一指派，拋出時 score 維持原值。
+  /// - CourseTableStore.load 先清成空清單再逐行解析，拋出時留下已成功解析
+  ///   的前綴；注意之後的 saveCourseTableList 會把沒解析到的那幾行寫掉。
+  /// - loadSemesterJsonList 只清記憶體清單，本來就不會拋。
+  Future<bool> _loadOrLog(Future<void> Function() load) async {
+    try {
+      await load();
+      return false;
+    } catch (e, stack) {
+      Log.eWithStack(e.toString(), stack);
+      return true;
+    }
   }
 
   Future<void> logout() async {
     await clearUserData();
     await clearSemesterJsonList();
     await clearCourseTableList();
+    // 草稿與掃進來的他人課表也是這位使用者的，換人登入不該看得到。
+    await ExtraTableStore.instance.clear();
     await clearCourseSetting();
     await clearScore();
     await clearMoodleToken();
-    DioConnector.instance.deleteCookies();
     await cacheManager.emptyCache(); //clears all data in cache.
     await getInstance();
-    var pref = await SharedPreferences.getInstance();
-    for (var i in pref.getKeys()) {
-      if (i.contains("cache")) {
-        pref.remove(i);
+    // 以 cache_ 前綴比對，不要用 contains("cache")：後者會誤刪任何含該
+    // 子字串的 key。
+    for (final k in await store.keys()) {
+      if (k.startsWith("cache_")) {
+        await store.remove(k);
       }
     }
   }
 
-  Future<void> _save(String key, dynamic saveObj) async {
-    try {
-      await _saveJsonList(key, saveObj);
-    } catch (e) {
-      await _saveJson(key, saveObj);
-    }
-  }
+  Future<void> _writeString(String key, String value) =>
+      store.writeString(key, value);
 
-  Future<void> _saveJson(String key, dynamic saveObj) async {
-    await _writeString(key, json.encode(saveObj));
-  }
+  Future<void> _writeInt(String key, int value) => store.writeInt(key, value);
 
-  Future<void> _saveJsonList(String key, dynamic saveObj) async {
-    List<String> jsonList = [];
-    for (dynamic obj in saveObj) {
-      jsonList.add(json.encode(obj));
-    }
-    await _writeStringList(key, jsonList);
-  }
+  Future<int?> _readInt(String key) => store.readInt(key);
 
-  Future<void> _clear(String key) async {
-    await _clearSetting(key);
-  }
-
-  //基本讀寫
-
-  Future<void> _writeString(String key, String value) async {
-    var pref = await SharedPreferences.getInstance();
-    await pref.setString(key, value);
-  }
-
-  Future<void> _writeInt(String key, int value) async {
-    var pref = await SharedPreferences.getInstance();
-    await pref.setInt(key, value);
-  }
-
-  Future<int?> _readInt(String key) async {
-    var pref = await SharedPreferences.getInstance();
-    return pref.getInt(key);
-  }
-
-  Future<void> _writeStringList(String key, List<String> value) async {
-    var pref = await SharedPreferences.getInstance();
-    await pref.setStringList(key, value);
-  }
-
-  Future<String?> _readString(String key) async {
-    var pref = await SharedPreferences.getInstance();
-    return pref.getString(key);
-  }
-
-  Future<List<String>?> _readStringList(String key) async {
-    var pref = await SharedPreferences.getInstance();
-    return pref.getStringList(key);
-  }
-
-  Future<void> _clearSetting(String key) async {
-    var pref = await SharedPreferences.getInstance();
-    await pref.remove(key);
-  }
+  Future<String?> _readString(String key) => store.readString(key);
 }

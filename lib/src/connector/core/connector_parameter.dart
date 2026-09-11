@@ -13,7 +13,7 @@ class ConnectorParameter {
 
   String url;
   dynamic data;
-  String charsetName = presetCharsetName; //設定編碼預設utf-8 可以設定big5
+  String charsetName = presetCharsetName; //可設 'big5'
   String userAgent = presetUserAgent;
   String? referer;
   Map<String, dynamic>? headers;

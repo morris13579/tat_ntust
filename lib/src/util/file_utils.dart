@@ -1,115 +1,23 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus/flag.dart';
 import 'package:intl/intl.dart';
 import 'package:mime_type/mime_type.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
+/// 檔案總管用得到的工具。
 class FileUtils {
-  static String waPath = "/storage/emulated/0/WhatsApp/Media/.Statuses";
-
-  /// Convert Byte to KB, MB, .......
   static String formatBytes(bytes, decimals) {
     if (bytes == 0) return "0.0 KB";
     var k = 1024,
         dm = decimals <= 0 ? 0 : decimals,
         sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
         i = (log(bytes) / log(k)).floor();
-    return (((bytes / pow(k, i)).toStringAsFixed(dm)) + ' ' + sizes[i]);
-  }
-
-  /// Get mime information of a file
-  static String getMime(String path) {
-    File file = File(path);
-    String? mimeType = mime(file.path);
-    return mimeType!;
-  }
-
-  /// Return all available Storage path
-  static Future<List<Directory>> getStorageList() async {
-    List<Directory>? paths = await getExternalStorageDirectories();
-    List<Directory> filteredPaths = [];
-    for (Directory dir in paths!) {
-      filteredPaths.add(removeDataDirectory(dir.path));
-    }
-    return filteredPaths;
-  }
-
-  static Directory removeDataDirectory(String path) {
-    return Directory(path.split("Android")[0]);
-  }
-
-  static Future<List<FileSystemEntity>> getFilesInPath(String path) async {
-    Directory dir = Directory(path);
-    return dir.listSync();
-  }
-
-  static Future<List<FileSystemEntity>> getAllFiles({bool? showHidden}) async {
-    List<Directory> storages = await getStorageList();
-    List<FileSystemEntity> files = [];
-    for (Directory dir in storages) {
-      files.addAll(await getAllFilesInPath(dir.path, showHidden: showHidden));
-    }
-    return files;
-  }
-
-  static Future<List<FileSystemEntity>> getRecentFiles(
-      {bool? showHidden}) async {
-    List<FileSystemEntity> files = await getAllFiles(showHidden: showHidden);
-    files.sort((a, b) => File(a.path)
-        .lastAccessedSync()
-        .compareTo(File(b.path).lastAccessedSync()));
-    return files.reversed.toList();
-  }
-
-  static Future<List<FileSystemEntity>> searchFiles(String query,
-      {bool? showHidden}) async {
-    List<Directory> storage = await getStorageList();
-    List<FileSystemEntity> files = [];
-    for (Directory dir in storage) {
-      List fs = await getAllFilesInPath(dir.path, showHidden: showHidden);
-      for (FileSystemEntity fs in fs) {
-        if (p.basename(fs.path).toLowerCase().contains(query.toLowerCase())) {
-          files.add(fs);
-        }
-      }
-    }
-    return files;
-  }
-
-  /// Get all files
-  static Future<List<FileSystemEntity>> getAllFilesInPath(String path,
-      {bool? showHidden = false}) async {
-    List<FileSystemEntity> files = [];
-    Directory d = Directory(path);
-    List<FileSystemEntity> l = d.listSync();
-    for (FileSystemEntity file in l) {
-      if (FileSystemEntity.isFileSync(file.path)) {
-        if (!showHidden!) {
-          if (!p.basename(file.path).startsWith(".")) {
-            files.add(file);
-          }
-        } else {
-          files.add(file);
-        }
-      } else {
-        if (!file.path.contains("/storage/emulated/0/Android")) {
-//          print(file.path);
-          if (!showHidden!) {
-            if (!p.basename(file.path).startsWith(".")) {
-              files.addAll(
-                  await getAllFilesInPath(file.path, showHidden: showHidden));
-            }
-          } else {
-            files.addAll(
-                await getAllFilesInPath(file.path, showHidden: showHidden));
-          }
-        }
-      }
-    }
-//    print(files);
-    return files;
+    return '${(bytes / pow(k, i)).toStringAsFixed(dm)} ${sizes[i]}';
   }
 
   static String formatTime(String iso) {
@@ -204,5 +112,35 @@ class FileUtils {
       default:
         return list..sort();
     }
+  }
+
+  static Future<void> openFile(String path) async {
+    final originFile = File(path);
+    if (!await originFile.exists()) {
+      throw Exception("File not found");
+    }
+
+    if (Platform.isAndroid) {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String packageName = packageInfo.packageName;
+      String fileName = path.split("/").last;
+      String contentUri =
+          "content://$packageName.fileProvider/internal_files/$fileName";
+
+      final intent = AndroidIntent(
+        action: 'action_view',
+        data: contentUri,
+        type: mime(fileName),
+        flags: <int>[
+          Flag.FLAG_GRANT_READ_URI_PERMISSION,
+          Flag.FLAG_ACTIVITY_NEW_TASK,
+        ],
+      );
+
+      await intent.launch();
+      return;
+    }
+
+    await OpenFilex.open(originFile.path);
   }
 }

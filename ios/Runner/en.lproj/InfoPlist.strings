@@ -1,0 +1,5 @@
+/* 系統權限對話框的用途字串。iOS 挑的是**系統語言**對應的 .lproj，跟 App 內
+   的語言切換無關；Info.plist 裡那一份是 developmentRegion（en）的退路。 */
+"NSCameraUsageDescription" = "Scan a classmate's course-table QR code, or take a photo for your Moodle profile picture";
+"NSPhotoLibraryUsageDescription" = "Pick a course-table QR image, or choose a Moodle profile picture";
+"NSFaceIDUsageDescription" = "Check change password";

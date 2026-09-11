@@ -1,0 +1,5 @@
+{
+  "exception": "moodle_exception",
+  "errorcode": "cannotupdatepost",
+  "message": "You can not update this post"
+}

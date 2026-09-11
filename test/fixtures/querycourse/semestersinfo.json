@@ -1,0 +1,490 @@
+[
+  {
+    "Semester": "1151",
+    "EngSemester": "2026 Fall",
+    "Static": false,
+    "LoginEnable": true,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "114H",
+    "EngSemester": "2026 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1142",
+    "EngSemester": "2026 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1141",
+    "EngSemester": "2025 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "113H",
+    "EngSemester": "2025 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1132",
+    "EngSemester": "2025 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1131",
+    "EngSemester": "2024 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "112H",
+    "EngSemester": "2024 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1122",
+    "EngSemester": "2024 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1121",
+    "EngSemester": "2023 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "111H",
+    "EngSemester": "2023 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1112",
+    "EngSemester": "2023 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1111",
+    "EngSemester": "2022 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "110H",
+    "EngSemester": "2022 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1102",
+    "EngSemester": "2022 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1101",
+    "EngSemester": "2021 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "109H",
+    "EngSemester": "2021 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1092",
+    "EngSemester": "2021 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1091",
+    "EngSemester": "2020 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "108H",
+    "EngSemester": "2020 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1082",
+    "EngSemester": "2020 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1081",
+    "EngSemester": "2019 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": true,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "107H",
+    "EngSemester": "2019 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1072",
+    "EngSemester": "2019 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "1071",
+    "EngSemester": "2018 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": true
+  },
+  {
+    "Semester": "106H",
+    "EngSemester": "2018 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1062",
+    "EngSemester": "2018 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1061",
+    "EngSemester": "2017 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "105H",
+    "EngSemester": "2017 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1052",
+    "EngSemester": "2017 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1051",
+    "EngSemester": "2016 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "104H",
+    "EngSemester": "2016 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1042",
+    "EngSemester": "2016 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1041",
+    "EngSemester": "2015 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "103H",
+    "EngSemester": "2015 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1032",
+    "EngSemester": "2015 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1031",
+    "EngSemester": "2014 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "102H",
+    "EngSemester": "2014 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1022",
+    "EngSemester": "2014 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1021",
+    "EngSemester": "2013 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "101H",
+    "EngSemester": "2013 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1012",
+    "EngSemester": "2013 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1011",
+    "EngSemester": "2012 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "100H",
+    "EngSemester": "2012 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1002",
+    "EngSemester": "2012 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "1001",
+    "EngSemester": "2011 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "99 H",
+    "EngSemester": "2011 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "99 2",
+    "EngSemester": "2011 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "99 1",
+    "EngSemester": "2010 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "98 H",
+    "EngSemester": "2010 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "98 2",
+    "EngSemester": "2010 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "98 1",
+    "EngSemester": "2009 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "97 H",
+    "EngSemester": "2009 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "97 2",
+    "EngSemester": "2009 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "97 1",
+    "EngSemester": "2008 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "96 H",
+    "EngSemester": "2008 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "96 2",
+    "EngSemester": "2008 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "96 1",
+    "EngSemester": "2007 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "95 H",
+    "EngSemester": "2007 Summer",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "95 2",
+    "EngSemester": "2007 Spring",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  },
+  {
+    "Semester": "95 1",
+    "EngSemester": "2006 Fall",
+    "Static": false,
+    "LoginEnable": false,
+    "ShowRemind": false,
+    "CurrentSemester": false
+  }
+]

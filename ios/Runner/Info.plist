@@ -22,59 +22,58 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-7649352174867436~3290345570</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
     <false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSAllowsArbitraryLoads</key>
-	<true/>
-	<key>NSAllowsArbitraryLoadsInWebContent</key>
-	<true/>
+	<!-- App Transport Security。
+	     先前這一段有兩個問題，兩個都讓它等於沒有設定：
+	     1. NSAllowsArbitraryLoads 與 NSAllowsArbitraryLoadsInWebContent 放在
+	        plist 的最上層。這兩個 key 只有在 NSAppTransportSecurity 這個 dict
+	        「裡面」才有意義，放在外面 iOS 直接忽略。
+	     2. 唯一的例外網域寫成 ntut.edu.tw（臺北科大）。整份專案只有這裡出現
+	        這個網域，是從上游那個臺北科大版本抄過來忘了改，所以針對
+	        ntust.edu.tw 的例外從來沒有生效過。
+
+	     現在只留 NSAllowsArbitraryLoadsInWebContent，理由：
+	     - ATS 管不到 Dio。dart:io 的 HttpClient 用自己的 BoringSSL，不走
+	       NSURLSession，所以 App 自己發的請求本來就不受這裡影響。ATS 實際
+	       管的是 WKWebView（flutter_inappwebview / webview_flutter）與原生外掛。
+	     - 需要放寬的正是 WebView 裡的內容：Moodle 的課程 HTML 帶著 http:// 的
+	       圖片與連結（見 moodle_core_course_get_contents.dart 的樣本），
+	       嚴格 ATS 會讓那些圖片載不出來。
+	     - 不需要 NSAllowsArbitraryLoads（全域放行）：lib/ 裡沒有任何明文 http
+	       端點，學校六台主機全是 HTTPS。
+	     - 也不需要 NSExceptionDomains：例外網域是用來放行明文或降低 TLS 版本的，
+	       而 ntust.edu.tw 底下沒有需要這兩者的主機。
+
+	     這是 Android 那個 usesCleartextTraffic="true"（維護者決定保留）在 iOS
+	     上範圍最窄的對應：只放行 WebView 內容，App 自己的連線維持嚴格。 -->
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>ntut.edu.tw</key>
-			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSTemporaryExceptionMinimumTLSVersion</key>
-				<string>TLSv1.2</string>
-			</dict>
-		</dict>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
 	</dict>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問媒體資料庫</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問日曆</string>
-	<key>NSContactsUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問通信錄</string>
+	<!-- NSCameraUsageDescription 是必填：mobile_scanner（掃課表 QR）與
+	     FLTImagePickerPlugin 都會呼叫 AVCaptureDevice
+	     requestAccessForMediaType，缺這個 key 系統直接終止程序。
+	     NSPhotoLibraryUsageDescription 是防禦性的：部署目標 >= 14，相簿走的是
+	     PHPicker、執行期不會要求授權，但 Photos API 仍然連進 binary，
+	     App Review 會抓缺少用途字串。不加 NSPhotoLibraryAddUsageDescription：
+	     這個功能不會寫入相簿。
+	     這裡三句是 developmentRegion（en）的退路，實際顯示的是
+	     `*.lproj/InfoPlist.strings`——iOS 挑的是**系統語言**，跟 App 內的
+	     語言切換無關，所以中文不能寫在這個檔案裡。 -->
+	<key>NSCameraUsageDescription</key>
+	<string>Scan a classmate's course-table QR code, or take a photo for your Moodle profile picture</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Check change password</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>App 需要您的同意, 才能使用麥克風</string>
-	<key>NSMotionUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問運動與健身</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問相簿</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>App 需要您的同意, 才能訪問語音識別</string>
-	<key>SKAdNetworkItems</key>
-	<array>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>cstr6suwn9.skadnetwork</string>
-		</dict>
-	</array>
+	<string>Pick a course-table QR image, or choose a Moodle profile picture</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

@@ -2,18 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="club.ntust.tat">
 
-    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" tools:node="remove" />
 
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="TAT"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         tools:targetApi="m">
@@ -39,16 +39,21 @@
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme" />
-            <meta-data
-                android:name="io.flutter.embedding.android.SplashScreenDrawable"
-                android:resource="@drawable/splash" />
         </activity>
 
         <receiver
             android:name="widget.CourseWidgetProvider"
             android:exported="true">
+            <!-- 這裡只留 APPWIDGET_UPDATE。點擊小工具用的 ACTION_ONCLICK
+                 （club.ntust.tat.coursetable.widget.onclick）走的是
+                 CourseWidgetProvider 裡 new Intent(context, CourseWidgetProvider.class)
+                 的顯示意圖，系統直接派送到指定元件、根本不會查 intent-filter，
+                 所以不需要在這裡替它開一個對外的 action。
+                 原本這行是 club.ntut.npc.tat.weight.onclick——舊 package 名（ntut.npc）
+                 加上 weight/widget 拼錯，跟 CourseWidgetProvider.ACTION_ONCLICK
+                 對不起來，是誰都收不到的死設定，看起來有效其實從沒生效過。
+                 要加回任何自訂 action 前，先確認真的有隱式廣播在送它。 -->
             <intent-filter>
-                <action android:name="club.ntut.npc.tat.weight.onclick" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
@@ -73,16 +78,6 @@
                 android:resource="@xml/filepaths"
                 tools:replace="android:resource" />
         </provider>
-
-        <provider
-            android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
-            android:authorities="${applicationId}.flutter_downloader.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
         <provider
             android:name="com.pichillilorenzo.flutter_inappwebview_android.InAppWebViewFileProvider"
             android:authorities="${applicationId}.flutter_inappwebview_android.fileprovider"
@@ -92,10 +87,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7649352174867436~2995231487"/>
         <!--
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

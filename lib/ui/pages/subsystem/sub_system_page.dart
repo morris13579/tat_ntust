@@ -1,201 +1,183 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/controller/subsystem/sub_system_controller.dart';
 import 'package:flutter_app/src/model/ntust/ap_tree_json.dart';
-import 'package:flutter_app/src/store/model.dart';
-import 'package:flutter_app/src/task/ntust/ntust_sub_system_task.dart';
-import 'package:flutter_app/src/task/task_flow.dart';
-import 'package:flutter_app/src/util/route_utils.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
-import 'package:flutter_app/ui/components/page/error_page.dart';
-import 'package:flutter_app/ui/pages/password/webmail_password_dialog.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_app/ui/components/page/result_view.dart';
+import 'package:flutter_app/ui/components/page/section_empty_state.dart';
+import 'package:flutter_app/ui/components/page/web_view_opener.dart';
+import 'package:flutter_app/ui/other/lucide_icons.dart';
+import 'package:flutter_app/ui/other/theme_context.dart';
+import 'package:flutter_app/ui/pages/subsystem/components/service_row.dart';
+import 'package:flutter_app/ui/pages/subsystem/components/sub_system_search_field.dart';
+import 'package:flutter_app/ui/pages/subsystem/sub_system_category.dart';
 import 'package:get/get.dart';
+import 'package:sprintf/sprintf.dart';
 
+/// 資訊系統：可搜尋的分段清單。
+///
+/// 錯誤畫面與 WebView 開啟器由呼叫端注入，見 docs/ARCHITECTURE.md「UI 慣例」。
 class SubSystemPage extends StatefulWidget {
   const SubSystemPage({
     super.key,
+    required this.errorBuilder,
+    required this.openWebView,
+    this.serviceId,
   });
+
+  /// 只看單一分類時帶它的代號；null 代表全部服務。
+  final String? serviceId;
+
+  final Widget Function(String message) errorBuilder;
+  final WebViewOpener openWebView;
 
   @override
   State<StatefulWidget> createState() => _SubSystemPageState();
 }
 
 class _SubSystemPageState extends State<SubSystemPage> {
-  Future<List<APTreeJson>> initTask() async {
-    TaskFlow taskFlow = TaskFlow();
-    var task = NTUSTSubSystemTask();
-    taskFlow.addTask(task);
-    await taskFlow.start();
-    return task.result;
+  final _controller = SubSystemController();
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_controller.load());
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppbar(title: R.current.informationSystem),
-      body: FutureBuilder<List<APTreeJson>>(
-        future: initTask(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<APTreeJson>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == null) {
-              return const ErrorPage();
-            }
-            return Column(
+      // 從分類卡進來時標題就是那一類，不要再叫「資訊系統」——使用者是從
+      // 「課程資訊」點進來的。
+      appBar: baseAppbar(
+        title: (widget.serviceId == null
+                ? null
+                : subSystemCategoryName(widget.serviceId!)) ??
+            R.current.informationSystem,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+            child: SubSystemSearchField(onChanged: _controller.search),
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+              physics: const BouncingScrollPhysics(),
               children: [
-                buildMail(APListJson(
-                    name: R.current.webMail,
-                    type: 'webMail_link',
-                    url: "https://mail.ntust.edu.tw")),
-                Expanded(child: getAnimationList(snapshot.data!)),
+                ResultView<List<APTreeJson>>(
+                  state: _controller.tree,
+                  shrinkWrap: true,
+                  onRetry: _controller.load,
+                  errorBuilder: widget.errorBuilder,
+                  builder: (tree) => Obx(() => _buildCategories(context, tree)),
+                ),
               ],
-            );
-          } else {
-            return const Text("");
-          }
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget getAnimationList(List<APTreeJson> apTree) {
-    return AnimationLimiter(
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        physics: const BouncingScrollPhysics(),
-        itemCount: apTree.length,
-        itemBuilder: (BuildContext context, int index) {
-          return AnimationConfiguration.staggeredList(
-            position: index,
-            duration: const Duration(milliseconds: 375),
-            child: SlideAnimation(
-              verticalOffset: 50.0,
-              child: FadeInAnimation(
-                child: buildTree(apTree[index]),
+  Widget _buildCategories(BuildContext context, List<APTreeJson> tree) {
+    // 先讀一次關鍵字：底下的迴圈有可能一個分類都不進去（例如只看單一分類
+    // 時），那樣 Obx 會因為沒有登記到任何 observable 而丟例外。
+    final keyword = _controller.keyword.value;
+    final sections = <Widget>[];
+    // 從「更多」的分類卡進來時只看那一類，標題也已經是分類名，所以不再重複
+    // 畫一次分段標題。
+    final single = widget.serviceId != null;
+    for (final category in tree) {
+      if (single && category.serviceId != widget.serviceId) continue;
+      final items = _controller.visibleItems(category);
+      if (items.isEmpty) continue;
+
+      sections.add(_Section(
+        title: single ? null : subSystemCategoryName(category.serviceId),
+        trailing: single ? null : sprintf(R.current.itemCount, [items.length]),
+        children: [
+          for (final ap in items)
+            ServiceRow(
+              name: ap.name,
+              onTap: () => widget.openWebView(ap.name, ap.url),
+            ),
+        ],
+      ));
+    }
+
+    if (sections.isEmpty) {
+      // 關鍵字是空的時候不套這張空畫面：那代表學校端回了一份空清單，
+      // 說「未搜尋到任何服務」會把責任推給沒有搜尋的使用者。
+      if (keyword.isEmpty) return const SizedBox.shrink();
+      return SectionEmptyState(
+        icon: LucideIcons.searchX,
+        message: R.current.subSystemSearchEmpty,
+      );
+    }
+    return Column(children: sections);
+  }
+}
+
+/// 一段服務清單：標題列在外，列本身裝在同一塊 surface 裡，以髮線分隔。
+class _Section extends StatelessWidget {
+  const _Section({required this.children, this.title, this.trailing});
+
+  /// null 代表對不到的分類代號——照樣畫出底下的服務，只是沒有標題。
+  final String? title;
+
+  /// 標題右邊的項數。
+  final String? trailing;
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = context.scheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (title != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(title!, style: context.text.titleSmall),
+                  ),
+                  if (trailing != null)
+                    Text(
+                      trailing!,
+                      style: context.text.bodySmall
+                          ?.copyWith(color: scheme.onSurfaceVariant),
+                    ),
+                ],
               ),
             ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget buildTree(APTreeJson ap) {
-    var serviceMap = {
-      "service-1": R.current.curriculum,
-      "service-2": R.current.person_info,
-      "service-3": R.current.campus_life,
-      "service-4": R.current.financial_support,
-      "service-5": R.current.activities,
-      "service-6": R.current.resources
-    };
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          serviceMap[ap.serviceId] ?? "",
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Get.theme.colorScheme.onSurface),
-        ),
-        const SizedBox(height: 8),
-        GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: (Get.width - 12 * 2) / 100,
-              crossAxisSpacing: 6,
-              mainAxisSpacing: 6),
-          itemBuilder: (context, index) {
-            return buildItem(index, ap.apList.length, ap.apList[index]);
-          },
-          itemCount: ap.apList.length,
-        ),
-        const SizedBox(height: 12),
-      ],
-    );
-  }
-
-  Widget buildItem(int index, int length, APListJson ap) {
-    return FilledButton(
-      style: FilledButton.styleFrom(
-          backgroundColor: Get.theme.colorScheme.surfaceContainer,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12)
-          ),
-          minimumSize: const Size(0, 120)),
-      onPressed: () {
-        RouteUtils.toWebViewPage(ap.name, ap.url,
-            openWithExternalWebView: false);
-      },
-      child: Text(
-        ap.name,
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Get.theme.colorScheme.onSurfaceVariant),
-      ),
-    );
-  }
-
-  Widget buildMail(APListJson ap) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: GestureDetector(
-        onTap: () async {
-          if (Model.instance.getWebMailPassword().isEmpty) {
-            await Get.dialog(const WebMailPasswordDialog(),
-                barrierDismissible: false);
-          }
-
-          if (Model.instance.getWebMailPassword().isNotEmpty) {
-            RouteUtils.toWebViewPage(
-              ap.name,
-              ap.url,
-              openWithExternalWebView: false,
-              loadDone: (webView) async {
-                Uri? uri = await webView.getUrl();
-                if (uri!.host == "login.ntust.edu.tw") {
-                  await webView.evaluateJavascript(
-                      source:
-                          'document.getElementById("loginForm").kendoBindingTarget.target.obsCtrl.obsData.username = "${Model.instance.getAccount()}"');
-                  await webView.evaluateJavascript(
-                      source:
-                          'document.getElementById("loginForm").kendoBindingTarget.target.obsCtrl.obsData.password = "${Model.instance.getWebMailPassword()}"');
-                  await webView.evaluateJavascript(
-                      source:
-                          'document.getElementsByName("username")[0].value = "${Model.instance.getAccount()}"');
-                  await webView.evaluateJavascript(
-                      source:
-                          'document.getElementsByName("password")[0].value = "${Model.instance.getWebMailPassword()}"');
-                }
-              },
-            );
-          }
-        },
-        child: SizedBox(
-          height: 50,
-          child: Row(
-            children: [
-              Text(ap.name),
-              if (ap.type == "webMail_link")
-                IconButton(
-                    onPressed: () {
-                      Get.dialog(const WebMailPasswordDialog(),
-                          barrierDismissible: false);
-                    },
-                    icon: SvgPicture.asset(
-                      "assets/image/img_refresh.svg",
-                      color: Get.theme.colorScheme.onSurface,
-                    ))
-            ],
-          ),
-        ),
+          // 全 App 的清單都是這個形狀：每一列是自己的圓角塊、頭尾收大圓角、
+          // 中間留 2px 的縫，不用分隔線。
+          for (var i = 0; i < children.length; i++) ...[
+            if (i > 0) const SizedBox(height: 2),
+            Material(
+              color: context.tokens.card,
+              borderRadius: UIUtils.getBorderRadius(i, children.length),
+              clipBehavior: Clip.antiAlias,
+              child: children[i],
+            ),
+          ],
+        ],
       ),
     );
   }

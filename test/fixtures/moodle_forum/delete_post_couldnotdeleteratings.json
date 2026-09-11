@@ -1,0 +1,5 @@
+{
+  "exception": "moodle_exception",
+  "errorcode": "couldnotdeleteratings",
+  "message": "Sorry, but that cannot be deleted as people have already rated it"
+}

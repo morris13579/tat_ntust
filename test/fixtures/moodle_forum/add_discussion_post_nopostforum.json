@@ -1,0 +1,5 @@
+{
+  "exception": "moodle_exception",
+  "errorcode": "nopostforum",
+  "message": "Sorry, but you can not post in this forum."
+}

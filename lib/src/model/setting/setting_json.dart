@@ -62,13 +62,11 @@ class CourseSettingJson {
 @JsonSerializable()
 class OtherSettingJson {
   String lang;
-  bool autoCheckAppUpdate;
   bool useExternalVideoPlayer;
   bool useMoodleWebApi;
 
   OtherSettingJson(
       {this.lang = "",
-      this.autoCheckAppUpdate = true,
       this.useExternalVideoPlayer = false,
       this.useMoodleWebApi = true});
 

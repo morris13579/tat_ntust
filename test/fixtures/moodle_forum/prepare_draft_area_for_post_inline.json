@@ -1,0 +1,34 @@
+{
+  "draftitemid": 990011,
+  "files": [
+    {
+      "filename": "scope.png",
+      "filepath": "/",
+      "filesize": 51200,
+      "fileurl": "https://moodle2.ntust.edu.tw/webservice/draftfile.php/123/user/draft/990011/scope.png",
+      "timemodified": 1756900001,
+      "mimetype": "image/png",
+      "isexternalfile": false
+    }
+  ],
+  "areaoptions": [
+    {
+      "name": "subdirs",
+      "value": "1"
+    },
+    {
+      "name": "maxbytes",
+      "value": "262144"
+    },
+    {
+      "name": "maxfiles",
+      "value": "-1"
+    },
+    {
+      "name": "trusttext",
+      "value": "0"
+    }
+  ],
+  "messagetext": "<p>期中考範圍如圖 <b>重要</b></p><p><img src=\"https://moodle2.ntust.edu.tw/draftfile.php/123/user/draft/990011/scope.png\"></p>",
+  "warnings": []
+}

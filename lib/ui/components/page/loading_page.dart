@@ -1,9 +1,6 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_utils/src/platform/platform.dart';
+import 'package:flutter_app/ui/components/tat_progress.dart';
+import 'package:flutter_app/ui/other/theme_context.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage(
@@ -22,8 +19,11 @@ class LoadingPage extends StatelessWidget {
         visible: isLoading,
         child: Stack(
           children: [
+            // 一律透明：全螢幕變暗的載入畫面整個 App 都不用了。這一層留著是
+            // 因為它擋得住點擊——底下的 WebView 在載入中本來就不該被點到。
             Positioned.fill(
-                child: Container(color: Colors.black.withOpacity(isShowBackground ? 0.4 : 0))),
+                child: Container(
+                    color: context.scheme.scrim.withValues(alpha: 0))),
             Center(
                 child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -33,7 +33,8 @@ class LoadingPage extends StatelessWidget {
                     visible: message != null,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 16.0),
-                      child: Text(message ?? ""),
+                      child:
+                          Text(message ?? "", style: context.text.bodyMedium),
                     )),
               ],
             ))
@@ -41,12 +42,5 @@ class LoadingPage extends StatelessWidget {
         ));
   }
 
-  Widget indicator() {
-    if (GetPlatform.isIOS) {
-      return const CupertinoActivityIndicator();
-    } else {
-      return const CircularProgressIndicator(
-          strokeCap: StrokeCap.round, strokeWidth: 4.5);
-    }
-  }
+  Widget indicator() => const TatProgress(size: 28);
 }

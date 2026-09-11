@@ -1,0 +1,81 @@
+{
+  "postid": 950,
+  "warnings": [],
+  "post": {
+    "id": 950,
+    "subject": "Re: 期中考 &amp; 補考公告",
+    "replysubject": "Re: 期中考 &amp; 補考公告",
+    "label": "",
+    "message": "<p>謝謝老師！<br>我會準時到。</p><p><img src=\"@@PLUGINFILE@@/inline%20image.png\" alt=\"scope\"></p>",
+    "messageformat": 1,
+    "author": {
+      "id": 5011,
+      "fullname": "陳同學",
+      "isdeleted": false,
+      "groups": [],
+      "urls": {
+        "profile": "https://moodle2.ntust.edu.tw/user/view.php?id=5011&course=1234",
+        "profileimage": "https://moodle2.ntust.edu.tw/theme/image.php/boost/core/1/u/f1"
+      }
+    },
+    "discussionid": 7701,
+    "hasparent": true,
+    "parentid": 900,
+    "timecreated": 1756940000,
+    "timemodified": 1756940000,
+    "unread": false,
+    "isdeleted": false,
+    "isprivatereply": false,
+    "haswordcount": false,
+    "capabilities": {
+      "view": true,
+      "edit": true,
+      "delete": true,
+      "split": false,
+      "reply": true,
+      "selfenrol": false,
+      "export": false,
+      "controlreadstatus": false,
+      "canreplyprivately": false
+    },
+    "urls": {
+      "view": "https://moodle2.ntust.edu.tw/mod/forum/discuss.php?d=7701#p950",
+      "reply": "https://moodle2.ntust.edu.tw/mod/forum/post.php?reply=950"
+    },
+    "attachments": [],
+    "messageinlinefiles": [
+      {
+        "contextid": 123,
+        "component": "mod_forum",
+        "filearea": "post",
+        "itemid": 950,
+        "filepath": "/",
+        "filename": "inline image.png",
+        "isdir": false,
+        "isimage": true,
+        "timemodified": 1756940000,
+        "timecreated": 1756940000,
+        "filesize": 4096,
+        "author": "陳同學",
+        "license": "allrightsreserved",
+        "url": "https://moodle2.ntust.edu.tw/pluginfile.php/123/mod_forum/post/950/inline%20image.png?forcedownload=1"
+      }
+    ],
+    "tags": [],
+    "html": {
+      "rating": null,
+      "taglist": null,
+      "authorsubheading": "<p>陳同學</p>"
+    }
+  },
+  "messages": [
+    {
+      "type": "success",
+      "message": "您的貼文已成功新增。"
+    },
+    {
+      "type": "success",
+      "message": "如果要進行更改，您還有 30 分鐘的時間。"
+    }
+  ]
+}

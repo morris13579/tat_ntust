@@ -1,0 +1,5 @@
+{
+  "exception": "moodle_exception",
+  "errorcode": "couldnotdeletereplies",
+  "message": "Sorry, but that cannot be deleted as people have already responded to it"
+}

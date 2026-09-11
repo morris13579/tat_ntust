@@ -1,0 +1,49 @@
+{
+  "lastattempt": {
+    "submissionsenabled": true,
+    "locked": false,
+    "graded": false,
+    "canedit": true,
+    "caneditowner": true,
+    "cansubmit": true,
+    "extensionduedate": 0,
+    "blindmarking": false,
+    "gradingstatus": "notgraded",
+    "timelimit": 3600,
+    "usergroups": [],
+    "submission": {
+      "id": 8810,
+      "userid": 5252,
+      "attemptnumber": 0,
+      "timecreated": 1756500000,
+      "timemodified": 1756600000,
+      "timestarted": 1756600000,
+      "status": "draft",
+      "groupid": 0,
+      "assignment": 4102,
+      "latest": 1,
+      "gradingstatus": "notgraded",
+      "plugins": [
+        {
+          "type": "onlinetext",
+          "name": "線上文字",
+          "fileareas": [
+            {
+              "area": "submissions_onlinetext"
+            }
+          ],
+          "editorfields": [
+            {
+              "name": "onlinetext",
+              "description": "線上文字繳交",
+              "text": "<p>寫到一半</p>",
+              "format": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "assignmentdata": {},
+  "warnings": []
+}

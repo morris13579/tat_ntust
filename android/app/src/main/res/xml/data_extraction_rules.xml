@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 12 (API 31) 以上的備份與換機傳輸規則。
+
+  這個 App 在 shared_prefs 內存有明文的帳號、密碼、WebMail 密碼與 Moodle
+  wsToken，files/.cookies/ 內存有已登入的 SSO cookie。這些憑證不應該離開
+  裝置，也不該在換機還原後未經重新驗證就直接可用。
+
+  憑證已在 flutter_secure_storage，這份規則仍然需要保留：
+  secure storage 的檔案同樣在 App 的資料目錄下。
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+    </device-transfer>
+</data-extraction-rules>

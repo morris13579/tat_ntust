@@ -1,0 +1,28 @@
+{
+  "lastattempt": {
+    "submissionsenabled": true,
+    "locked": false,
+    "graded": false,
+    "canedit": false,
+    "caneditowner": false,
+    "cansubmit": false,
+    "extensionduedate": 0,
+    "blindmarking": false,
+    "gradingstatus": "notgraded",
+    "usergroups": [],
+    "teamsubmission": {
+      "id": 8830,
+      "userid": 0,
+      "attemptnumber": 0,
+      "timecreated": 0,
+      "timemodified": 0,
+      "status": "new",
+      "groupid": 0,
+      "assignment": 4102,
+      "latest": 1,
+      "plugins": []
+    }
+  },
+  "assignmentdata": {},
+  "warnings": []
+}

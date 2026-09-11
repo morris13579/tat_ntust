@@ -41,7 +41,12 @@ class MainActivity : FlutterFragmentActivity() {
                     }
                 }
                 "restart_app" -> {
+                    // doRestart 成功時最後會呼叫 exitProcess(0)，程式不會回到這一行；
+                    // 也就是說「doRestart 有回來」本身就代表重啟失敗。
+                    // 一定要回覆，否則 Dart 端的 Future 會永遠 pending，
+                    // 使用者只會看到「按了沒反應」，連錯誤都收不到。
                     doRestart(this)
+                    result.success(false)
                 }
                 else -> {
                     result.notImplemented()
@@ -58,13 +63,26 @@ class MainActivity : FlutterFragmentActivity() {
                     pendingPickResult = result
                 }
                 "get_path" -> {
-                    val list = contentResolver.persistedUriPermissions.takeWhile { it.isReadPermission && it.isWritePermission }
-                    if (list.isEmpty()) {
+                    // 一定要用 firstOrNull（或 filter），千萬不要換回 takeWhile：
+                    // takeWhile 碰到第一個不符合條件的元素就整串停住，所以只要清單第 0 筆是
+                    // 「只有讀取權限」的殘留授權，後面真正 read+write 的授權就被一起丟掉，
+                    // 症狀是使用者明明選過資料夾卻抓不到路徑。
+                    // 而 onActivityResult 只釋放「read+write 且 uri 不同」的授權，
+                    // 唯讀的殘留授權不會被清掉，所以這個狀態會一直留著。
+                    //
+                    // 用 firstOrNull 而不是 filter{}.first() 還順便擋掉舊版的另一個問題：
+                    // 舊版在 list 為空時呼叫了 result.success(null) 卻沒有 return，
+                    // 會繼續執行 list.first() 丟 NoSuchElementException，
+                    // 而且 result 被回覆兩次（MethodChannel 只允許回覆一次）。
+                    val granted = contentResolver.persistedUriPermissions
+                            .firstOrNull { it.isReadPermission && it.isWritePermission }
+                    if (granted == null) {
                         result.success(null)
+                    } else {
+                        val file = DocumentFileCompat.fromUri(this, granted.uri)
+                        Log.i(logTag, file?.absolutePath.toString())
+                        result.success(file?.absolutePath.toString())
                     }
-                    val file = DocumentFileCompat.fromUri(this, list.first().uri);
-                    Log.i(logTag, file?.absolutePath.toString())
-                    result.success(file?.absolutePath.toString())
                 }
                 else -> {
                     result.notImplemented()
@@ -120,9 +138,16 @@ class MainActivity : FlutterFragmentActivity() {
                     //create a pending intent so the application is restarted after System.exit(0) was called.
                     // We use an AlarmManager to call this intent in 100ms
                     val mPendingIntentId = 223344
+                    // FLAG_IMMUTABLE 是必要的，不要拿掉：Android 12（API 31）起，
+                    // 建立 PendingIntent 若沒有指明 FLAG_IMMUTABLE / FLAG_MUTABLE 會直接丟
+                    // IllegalArgumentException，而 targetSdkVersion 已經是 36。
+                    // 這個例外會被下面的 catch 吞掉，所以症狀只是「App 就是不重啟、也沒有錯誤」。
+                    // 這個 PendingIntent 只負責重新叫起 launcher activity，不需要別人填 extras，
+                    // 用 IMMUTABLE 即可，和 CourseWidgetProvider 的作法一致。
+                    // minSdkVersion 是 24（> FLAG_IMMUTABLE 的 API 23），不需要再做版本判斷。
                     val mPendingIntent: PendingIntent = PendingIntent
                             .getActivity(c, mPendingIntentId, mStartActivity,
-                                    PendingIntent.FLAG_CANCEL_CURRENT)
+                                    PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                     val mgr: AlarmManager = c.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
                     //kill the application

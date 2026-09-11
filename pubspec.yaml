@@ -5,7 +5,8 @@ description: NTUST Life TAT, convenient, concise, fast, powerful, enrich your NT
 # flutter clean && flutter build ios --split-debug-info=build/app/outputs/symbols --obfuscate && flutter build appbundle --split-debug-info=build/app/outputs/symbols --obfuscate --shrink
 # follow the google play new policy in 2021, do not build apk but aab.
 # CHECK THE BUILD CODE BEFORE DISTRIBUTION!!
-version: 1.6.5+117
+version: 2.0.1+123
+publish_to: none
 
 environment:
   flutter: ">=3.3.0 <4.0.0"
@@ -17,10 +18,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_plugin_android_lifecycle: ^2.0.33
-  path: ^1.8.1
-  provider: ^6.0.5
+  # 直接被 5 個 lib/ 檔案 import（file_utils、file_viewer 那一組）。先前是靠
+  # 原本是 provider 帶進來的傳遞相依，provider 移除之後要自己宣告。
+  path: ^1.9.0
   path_provider: ^2.1.5
-  quiver: ^3.2.1
   url_launcher: ^6.3.2
   url_launcher_ios: ^6.3.6
   url_launcher_android: ^6.3.28
@@ -31,8 +32,6 @@ dependencies:
   sprintf: ^7.0.0
   flutter_local_notifications: ^19.4.1
   #通知欄  需修改android原始碼
-  rxdart: ^0.27.7
-  #通知欄有使用到
   android_intent_plus: ^6.0.0
   device_info_plus: ^9.1.2
   html_unescape: ^2.0.0
@@ -41,10 +40,11 @@ dependencies:
   #驗證身分指紋
   version: ^3.0.2
   #版本比較
-  file_picker: ^10.3.8
   #選擇android資料夾
   #----------store data----------#
   shared_preferences: ^2.5.4
+  flutter_secure_storage: ^9.2.4
+  #帳密與 Moodle token 改存 Keystore / Keychain
   flutter_cache_manager: ^3.4.1
   #----------internet----------#
   dio: ^5.4.1
@@ -66,10 +66,8 @@ dependencies:
   flutter_inappwebview: ^6.1.0
   webview_flutter_android: ^4.10.11
   #---------icon----------#
-  eva_icons_flutter: ^3.1.0
-  #https://akveo.github.io/eva-icons/#/
-  fluttericon: ^2.0.0
-  #https://oblador.github.io/react-native-vector-icons/
+  #Lucide 圖示不裝套件，改自帶 assets/fonts/lucide.ttf，
+  #見 lib/ui/other/lucide_icons.dart。
   #---------json----------#
   json_annotation: ^4.8.0
   #----------other----------#
@@ -78,6 +76,10 @@ dependencies:
   #DateTime to String
   package_info_plus: ^8.3.0
   #檢測app版本用於檢查更新
+  upgrader: ^13.7.0
+  #iOS 查 App Store 有沒有新版
+  in_app_update: ^4.2.5
+  #Android 走 Play 的 in-app update
   #----------html viewer----------#
   #flutter_html: ^2.2.1
   flutter_widget_from_html: ^0.17.1
@@ -85,16 +87,24 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   #listView or gridView動畫
   #----------download----------#
-  flutter_downloader: ^1.12.0
-  #下載app更新
   open_filex: ^4.7.0
   permission_handler: ^12.0.1
   mime_type: ^1.0.0
+  image_picker: ^1.2.3
+  # 直接宣告 android 實作，才拿得到 ImagePickerAndroid.useAndroidPhotoPicker：
+  # 那個旗標預設 false，而 AndroidManifest 用 tools:node="remove" 拿掉了
+  # READ_MEDIA_IMAGES，不切到系統相片挑選器就得靠 ACTION_GET_CONTENT。
+  # 卡在 +17：+18 起要求 Dart SDK 3.12，本專案的 Flutter 3.38.5 帶的是 3.10.4。
+  image_picker_android: ^0.8.13+17
+  # 只為了 ImagePickerPlatform.instance：image_picker 的 export 清單裡沒有它，
+  # 不明確宣告就會被 depend_on_referenced_packages 擋下。
+  image_picker_platform_interface: ^2.11.1
+  # 交作業要挑 PDF / docx，image_picker 只挑得到圖。
+  # 卡在 ^11：12.x 要求更新的 Dart SDK，同 image_picker_android 的理由。
+  file_picker: ^11.0.3
   github: ^9.11.0
   #----------Widget----------#
   get: ^4.6.5
-  bot_toast: ^4.0.3
-  #提供ListView可下拉式更新並且可動態加載
   cached_network_image: ^3.2.3
   #用url顯示圖片
   auto_size_text: ^3.0.0
@@ -102,19 +112,13 @@ dependencies:
   table_calendar: ^3.0.9
   #顯示行事曆
   expansion_tile_card: ^3.0.0
-  fluttertoast: ^9.0.0
   #Toast
-  awesome_dialog: ^3.3.0
-  #顯示Error時用到
   flutter_slidable: ^3.0.1
   #email使用可左右滑抽屜
-  flutter_spinkit: ^5.1.0
   #等待動畫
   card_swiper: ^3.0.1
   #公告
   flutter_markdown: ^0.6.14
-  numberpicker: ^2.1.1
-  #選擇學期
   alice_lightweight: ^3.1.0
   pretty_json: ^2.0.0
   icalendar_parser: ^2.0.0
@@ -132,11 +136,28 @@ dependencies:
   shimmer: ^3.0.0
   flutter_native_splash: ^2.4.0
   dynamic_color: 1.7.0
+  intl: ^0.18.0
+  crypto: ^3.0.3
+  google_fonts: ^8.2.1
+  # 產生分享用的 QR。純 Dart，沒有平台相依。
+  qr_flutter: ^4.1.0
+  # 掃描 QR。**卡在 ^5**：6.x 與 7.x 的 podspec 要求 iOS 15.5，而本專案的
+  # Podfile 是 13.0（Xcode 專案裡還混著 14.0 與 15.0）。5.2.3 只要 iOS 12，
+  # 換句話說它是唯一不必動平台設定的版本。
+  mobile_scanner: ^5.0.0
+  # 匯出圖片與存成 QR 圖片：交給系統的分享面板，不寫進相簿——寫相簿要
+  # NSPhotoLibraryAddUsageDescription，那是本專案刻意沒有的權限。
+  share_plus: ^11.1.0
+  in_app_review: ^2.0.12
+  # 驗證 Moodle launch.php 回傳的 signature（md5）。
+  # 直接相依：l10n 產生的程式碼、file_utils 與課程公告頁都直接 import intl。
+  # 先前只寫在 dependency_overrides，於是 analyzer 一路報
+  # depend_on_referenced_packages。
 
 
 dependency_overrides:
+  # flutter_localizations 綁定的 intl 版本比 0.18 舊，需要蓋掉。
   intl: ^0.18.0
-  wakelock_plus: 1.3.1
 
 
 dev_dependencies:
@@ -145,32 +166,57 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   #flutter pub run flutter_launcher_icons:main -f pubspec.yaml
   #利用以下的flutter_icons設定icon位置
-  flutter_native_splash: ^2.2.19
-  #flutter pub run flutter_native_splash:create
   #---------json----------#
   build_runner: ^2.3.3
   json_serializable: ^6.6.1
   flutter_lints: ^3.0.1
+  rive_native: ^0.1.3
 
 
 flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/image/
+    # 子目錄不會被 `- assets/` 涵蓋，漏掉這一行的話編輯器在真機上 404，
+    # 而所有測試照樣是綠的。
+    - assets/editor/
+    - assets/image/files/
     - assets/launcher/
+    # 隱私政策的離線備援。宣告 repo 根目錄那一份而不是複本：GitHub raw 服務
+    # 的就是同一個檔案。見 PrivacyPolicyController.load。
+    - privacy-policy.md
 
+  # 只有 Lucide 一組圖示字體，但收三種筆畫粗細。
+  #
+  # MyFont（源泉圓體，三個 TTC 共 45 MB）改成用 google_fonts 在執行期抓
+  # Noto Sans TC，見 lib/src/config/app_themes.dart。
+  #
+  # MyIcon（assets/fonts/MyIcon.ttf，5.7 KB）一併刪除：整個 repo 沒有任何
+  # 一處用到那個 family，是一份只宣告沒使用的設定。
+  #
+  # 兩份字體都取自 lucide_icons_flutter 3.1.18 的 LucideVariable-w{200,300}
+  # （Lucide 本體為 ISC 授權），碼位完全相同，只差筆畫粗細：
+  #   Lucide     = w300 = 1.5px  App 預設
+  #   LucideThin = w200 = 1.0px  和 assets/image/files 的檔案類型圖示同粗，
+  #                              用在兩者會並排的地方（課程內容清單、檔案列）
+  # 不直接裝那個套件，是因為它一口氣宣告 6 組字重共 2.78 MB。
+  #
+  # 多一份粗細幾乎不佔空間，但**有條件**：icon tree-shaking 是逐 family 依
+  # const IconData 的碼位裁切的，所以
+  #   1. 碼位必須寫在 const IconData 裡（執行期才決定 fontFamily 的話，那份
+  #      字體會被裁成空的、圖示變豆腐）；
+  #   2. 一個 family 若一個 const 都沒指到，它不會被裁成空的，而是**原封不動
+  #      整份打包**。實測 lucide-thin 用到 8 個字時只留 19 KB，沒人用時是
+  #      474 KB。所以這裡只宣告真的有人用的粗細。
+  # 要加 w400（LucideThick，2.0px）就把 assets/fonts/lucide-regular.ttf 加回來
+  # 並補一段 family。tool/gen_lucide_icons.py 會擋住「有用到卻沒宣告」的情況。
   fonts:
-    - family: MyIcon
+    - family: Lucide
       fonts:
-        - asset: assets/fonts/MyIcon.ttf
-    - family: MyFont
+        - asset: assets/fonts/lucide-light.ttf
+    - family: LucideThin
       fonts:
-        - asset: assets/fonts/GenSenRounded-R.ttc
-        - asset: assets/fonts/GenSenRounded-B.ttc
-          weight: 600
-        - asset: assets/fonts/GenSenRounded-EL.ttc
-          weight: 200
+        - asset: assets/fonts/lucide-thin.ttf
 
 flutter_intl:
   enabled: true
@@ -183,6 +229,18 @@ flutter_icons:
   adaptive_icon_background: "assets/launcher/background.png"
   adaptive_icon_foreground: "assets/launcher/foreground.png"
 
+# 兩個平台共用同一組資產：中央是和 launcher icon 同款的黑色圓形徽章（128dp），
+# 亮暗只差背景色（取自 ColorScheme.surface）。圓底畫在圖裡而不是交給 Android 12 的
+# icon_background_color，因為那個圓固定 240dp、縮不了，三邊就湊不到同一個大小。
+# 改這裡之後要重跑 `dart run flutter_native_splash:create`，並把 values*/styles.xml
+# 的 LaunchTheme parent 改回 Theme.AppCompat.NoActionBar（local_auth 需要）。
 flutter_native_splash:
-  color: "#ffffff"
-  image: assets/splash/splash.png
+  color: "#f8f9ff"
+  color_dark: "#111418"
+  # 徽章亮暗共用，image_dark 指向同一張才會連 drawable-night 也一起產生。
+  image: assets/splash/splash_badge.png
+  image_dark: assets/splash/splash_badge.png
+  android_12:
+    # Android 12 起啟動圖由系統畫，圖必須是 1152x1152、內容落在內圈 768 圓內。
+    image: assets/splash/splash_badge_android12.png
+    image_dark: assets/splash/splash_badge_android12.png

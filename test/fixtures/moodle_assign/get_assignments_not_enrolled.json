@@ -1,0 +1,11 @@
+{
+  "courses": [],
+  "warnings": [
+    {
+      "item": "course",
+      "itemid": 28914,
+      "warningcode": "2",
+      "message": "User is not enrolled or does not have requested capability"
+    }
+  ]
+}

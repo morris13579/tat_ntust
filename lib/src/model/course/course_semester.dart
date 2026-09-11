@@ -2,14 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'course_semester.g.dart';
 
-List<CourseSemesterJson> getCourseSemesterList(List<dynamic> list) {
-  List<CourseSemesterJson> result = [];
-  for (var item in list) {
-    result.add(CourseSemesterJson.fromJson(item));
-  }
-  return result;
-}
-
 @JsonSerializable()
 class CourseSemesterJson extends Object {
   @JsonKey(name: 'Semester')

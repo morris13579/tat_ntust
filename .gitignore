@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 /build/
+**/build/
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -37,9 +38,39 @@ lib/generated_plugin_registrant.dart
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
+# fvm / puro (SDK 版本以 .fvmrc 為準，本機 SDK 路徑不進版控)
+.fvm/flutter_sdk
+.fvm/versions
+.puro.json
+
+# 建置產物
+android/app/release/
+
 # Firebase
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 
 # release build
 *.symbols
+
+.env
+# python 執行 tool/ 底下腳本產生的
+__pycache__/
+
+# Kotlin 2.x 的建置快取，Gradle 產生的。
+android/.kotlin/
+
+# docs/ 只公開架構說明與 README 用的截圖，其餘是自己的調查筆記，留在本機
+docs/*
+!docs/ARCHITECTURE.md
+!docs/screenshots/
+docs/screenshots/*
+!docs/screenshots/*.png
+
+# 從設計稿抽出來的暫存畫面。裡面是真的截圖內容（含學號），不進版控。
+.design-notes-tmp/
+
+# release.sh 的產出，不進版控。
+dist/
+
+TAT-商店圖/

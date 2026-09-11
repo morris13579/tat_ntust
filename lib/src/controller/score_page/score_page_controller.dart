@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/auth/auth_session.dart';
+import 'package:flutter_app/src/repository/ntust_repository.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
 import 'package:flutter_app/src/store/model.dart';
-import 'package:flutter_app/src/task/score/score_task.dart';
-import 'package:flutter_app/src/task/task_flow.dart';
 import 'package:flutter_app/src/util/score_utils.dart';
-import 'package:flutter_app/ui/components/tile/score_item_tile.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 
 enum ScoreUIState { loading, success, fail, notLogin }
@@ -16,9 +13,12 @@ class ScorePageController extends GetxController
   var state = ScoreUIState.loading.obs;
   var semesterScoreList = <SemesterScoreJson>[].obs;
   var currentTabIndex = 0.obs;
-  var tabLabelList = <Widget>[];
-  var tabChildList = <Widget>[];
-  late TabController tabController;
+
+  /// 只在 initTask 成功走到最後才會有值，所以是可空而不是 late：initTask 有
+  /// 兩條 early return，late 的 LateInitializationError 會從 GetX 那個沒有
+  /// try/catch 的 _removeDependencyByRoute 迴圈中間拋出，同一條 route 上排在
+  /// 後面的 controller 全部收不到 onDelete。
+  TabController? tabController;
 
   @override
   Future<void> onInit() async {
@@ -28,12 +28,21 @@ class ScorePageController extends GetxController
 
   @override
   void onClose() {
-    tabController.dispose();
+    tabController?.dispose();
     super.onClose();
   }
 
+  /// 登出時重設畫面狀態。由 SessionCleaner 的呼叫端觸發。
+  void reset() {
+    semesterScoreList.clear();
+    currentTabIndex.value = 0;
+    tabController?.dispose();
+    tabController = null;
+    state(ScoreUIState.notLogin);
+  }
+
   Future<void> initTask({refresh = false}) async {
-    if (Model.instance.getAccount().isEmpty) {
+    if (!AuthSession.instance.isSignedIn) {
       state(ScoreUIState.notLogin);
       return;
     }
@@ -41,20 +50,18 @@ class ScorePageController extends GetxController
     await Model.instance.loadScore();
     semesterScoreList = Model.instance.getScore().info.obs;
     if (semesterScoreList.isEmpty || refresh) {
-      TaskFlow taskFlow = TaskFlow();
-      var scoreTask = ScoreTask();
-      taskFlow.addTask(scoreTask);
-      if (await taskFlow.start()) {
-        semesterScoreList = scoreTask.result.info.obs;
-        Model.instance.setScore(scoreTask.result);
-        await Model.instance.saveScore();
-      } else {
+      final result = await NtustRepository.instance.getScoreRank();
+      // getScoreRank 不帶快取（成績的持久化由 store 的 ScoreStore 負責，
+      // 兩份會漂移），所以這裡只有 Ok 與 Failed 兩種。
+      final data = result.dataOrNull;
+      if (data == null) {
         state(ScoreUIState.fail);
         return;
       }
+      semesterScoreList = data.info.obs;
+      Model.instance.setScore(data);
+      await Model.instance.saveScore();
     }
-    tabLabelList.clear();
-    tabChildList.clear();
 
     semesterScoreList.sort((a, b) {
       final yearA = int.tryParse(a.semester.year) ?? 0;
@@ -70,103 +77,23 @@ class ScorePageController extends GetxController
       }
     });
 
-    for (int i = 0; i < semesterScoreList.length; i++) {
-      var semester = semesterScoreList[i].semester;
-      var courseScoreItems = semesterScoreList[i].item;
-
-      courseScoreItems.sort((a, b) {
+    // 排序在這裡做（資料的事），畫面由 ScoreViewerPage 依這份清單產生。
+    for (final semesterScore in semesterScoreList) {
+      semesterScore.item.sort((a, b) {
         return ScoreUtils.gradeToGP[b.score]
                 ?.compareTo(ScoreUtils.gradeToGP[a.score] ?? 0) ??
             0;
       });
-
-      tabLabelList.add(_buildTabLabel("${semester.year}-${semester.semester}"));
-      tabChildList.add(_buildSemesterScores(courseScoreItems));
     }
-    tabController = TabController(vsync: this, length: tabLabelList.length);
+    // 每次 refresh 都會建一顆新的，舊的要先釋放，否則每按一次重新整理就漏一顆。
+    tabController?.dispose();
+    tabController =
+        TabController(vsync: this, length: semesterScoreList.length);
 
     state(ScoreUIState.success);
   }
 
   void toIndex(int index) {
     currentTabIndex(index);
-  }
-
-  Widget _buildTabLabel(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 12,
-        right: 12,
-      ),
-      child: Tab(
-        text: title,
-      ),
-    );
-  }
-
-  Widget _buildSemesterScores(List<ScoreItemJson> courseScore) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
-      child: AnimationLimiter(
-        child: Column(
-          children: AnimationConfiguration.toStaggeredList(
-            childAnimationBuilder: (widget) => SlideAnimation(
-              verticalOffset: 50.0,
-              child: FadeInAnimation(
-                child: widget,
-              ),
-            ),
-            children: _buildCourseScores(courseScore),
-          ),
-        ),
-      ),
-    );
-  }
-
-  List<Widget> _buildCourseScores(List<ScoreItemJson> courseScore) {
-    return [
-      _buildTitle(courseScore),
-      const SizedBox(height: 12),
-      for (var score in courseScore) ...{
-        _buildScoreItem(score),
-        const SizedBox(height: 8)
-      }
-    ];
-  }
-
-  Widget _buildScoreItem(ScoreItemJson score) {
-    return ScoreItemTile(score: score);
-  }
-
-  Widget _buildTitle(List<ScoreItemJson> courseList) {
-    final totalCredit = courseList
-        .where((x) => x.isPassScore)
-        .map((c) => int.tryParse(c.credit) ?? 0)
-        .fold(0, (a, b) => a + b);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          "GPA ${ScoreUtils.calculateGPA(courseList)}",
-          style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Get.theme.colorScheme.onSurface),
-        ),
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(999),
-              color: Get.theme.colorScheme.secondaryContainer),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          child: Text(
-            "$totalCredit ${R.current.credit}",
-            style: TextStyle(
-                fontSize: 16,
-                color: Get.theme.colorScheme.onSecondaryContainer),
-          ),
-        ),
-      ],
-    );
   }
 }

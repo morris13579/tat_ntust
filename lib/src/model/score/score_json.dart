@@ -1,8 +1,4 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
-import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'score_json.g.dart';
@@ -33,11 +29,16 @@ class ScoreRankJson {
     }
   }
 
+  /// 該學期修過的課號。**排除二次退選**：那些課不在課表上，成績單留著它們只是
+  /// 為了記錄退選這件事，照抄進去會讓歷年課表多出幾門實際上沒在上的課。
+  ///
+  /// 唯一的呼叫端是「用成績還原歷年課表」（`NtustRepository._courseIdsFor`）。
   Future<List<String>> getCourseIdBySemester(SemesterJson semester) async {
     List<String> value = [];
     for (var i in info) {
       if (i.semester == semester) {
         for (var j in i.item) {
+          if (j.isWithdrawn) continue;
           value.add(j.courseId);
         }
         break;
@@ -129,11 +130,24 @@ class ScoreItemJson {
   factory ScoreItemJson.fromJson(Map<String, dynamic> srcJson) =>
       _$ScoreItemJsonFromJson(srcJson);
 
+  /// 二次退選。實測成績單上 `remark` 與 `score` 兩欄都是這四個字。
+  static const String withdrawnRemark = '二次退選';
+
+  bool get isWithdrawn =>
+      remark.trim() == withdrawnRemark || score.trim() == withdrawnRemark;
+
   bool get isPassScore {
     return score.contains("A") || score.contains("B") || score.contains("C");
   }
 
   bool get isValidScore {
-    return isPassScore || score.contains("D") || score.contains("E") || score.contains("X");
+    return isPassScore ||
+        score.contains("D") ||
+        score.contains("E") ||
+        score.contains("X");
   }
+
+  /// 不及格＝已經有成績但沒過。「成績未到」與不在等第表上的成績（通過、抵免）
+  /// 都不算，摘要上的門數才不會把還沒評分的課當成當掉。
+  bool get isFailScore => isValidScore && !isPassScore;
 }

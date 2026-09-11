@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/ui/other/theme_context.dart';
 
 class TextShimmer extends StatelessWidget {
   const TextShimmer(
@@ -14,8 +15,10 @@ class TextShimmer extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius),
-          color: Colors.white),
+        borderRadius: BorderRadius.circular(borderRadius),
+        // 原本寫死白色，在亮色主題下等於整條看不見。
+        color: context.scheme.surfaceContainerHighest,
+      ),
     );
   }
 }

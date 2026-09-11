@@ -22,8 +22,14 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # 「宣告成 Future 卻沒有 await」是這個專案反覆出現的一整類 bug：
+    # 快取寫入沒等就回傳、cookie 清除沒等就往下走、設定寫入失敗無人知曉。
+    # flutter_lints 沒有帶這條，而 CI 已經是 --fatal-infos，開起來等於
+    # 讓編譯器幫忙守住整類問題。
+    #
+    # 刻意 fire-and-forget 的地方用 `unawaited(...)`（dart:async）明確標示，
+    # 那是這條規則認可的寫法，同時也讓「這裡是故意的」對讀者可見。
+    unawaited_futures: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

@@ -1,0 +1,17 @@
+{
+  "lastattempt": {
+    "submissionsenabled": true,
+    "locked": false,
+    "graded": false,
+    "canedit": true,
+    "caneditowner": true,
+    "cansubmit": false,
+    "extensionduedate": 0,
+    "blindmarking": false,
+    "gradingstatus": "notgraded",
+    "timelimit": 3600,
+    "usergroups": []
+  },
+  "assignmentdata": {},
+  "warnings": []
+}

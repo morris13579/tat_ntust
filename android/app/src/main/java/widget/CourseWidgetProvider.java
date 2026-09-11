@@ -69,7 +69,7 @@ public class CourseWidgetProvider extends AppWidgetProvider {
             //actionIntent.setPackage(context.getPackageName());//隱式意圖必須設置Package，實際測試發現，如果使用隱式意圖，在應用被殺掉時不響應廣播
             PendingIntent pIntent = PendingIntent.getBroadcast(context, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             remoteViews.setOnClickPendingIntent(R.id.course_widget_table, pIntent);
-            String path = context.getFilesDir().getPath() + "/course_weight.png";
+            String path = context.getFilesDir().getPath() + "/course_widget.png";
             Log.i(TAG, path);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.RGB_565;

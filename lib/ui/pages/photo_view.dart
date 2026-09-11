@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
-import 'package:photo_view/photo_view.dart' as PhView;
+import 'package:photo_view/photo_view.dart' as ph_view;
 
 class PhotoView extends StatelessWidget {
   const PhotoView({super.key, required this.imageData});
@@ -12,6 +12,6 @@ class PhotoView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: baseAppbar(),
-        body: PhView.PhotoView(imageProvider: MemoryImage(imageData)));
+        body: ph_view.PhotoView(imageProvider: MemoryImage(imageData)));
   }
 }

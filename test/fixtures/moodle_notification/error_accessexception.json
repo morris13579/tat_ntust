@@ -1,0 +1,5 @@
+{
+  "exception": "webservice_access_exception",
+  "errorcode": "accessexception",
+  "message": "存取控制例外"
+}

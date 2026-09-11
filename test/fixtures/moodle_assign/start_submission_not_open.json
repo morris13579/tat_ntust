@@ -1,0 +1,11 @@
+{
+  "submissionid": 0,
+  "warnings": [
+    {
+      "item": "作業",
+      "itemid": 4102,
+      "warningcode": "submissionnotopen",
+      "message": "This assignment is not open for submissions."
+    }
+  ]
+}

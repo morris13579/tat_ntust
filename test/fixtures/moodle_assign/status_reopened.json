@@ -1,0 +1,87 @@
+{
+  "lastattempt": {
+    "submissionsenabled": true,
+    "locked": false,
+    "graded": false,
+    "canedit": true,
+    "caneditowner": true,
+    "cansubmit": false,
+    "extensionduedate": 0,
+    "blindmarking": false,
+    "gradingstatus": "notgraded",
+    "usergroups": [],
+    "submission": {
+      "id": 8821,
+      "userid": 5252,
+      "attemptnumber": 1,
+      "timecreated": 1756700000,
+      "timemodified": 1756700000,
+      "status": "reopened",
+      "groupid": 0,
+      "assignment": 4102,
+      "latest": 1,
+      "gradingstatus": "notgraded",
+      "plugins": [
+        {
+          "type": "file",
+          "name": "檔案繳交",
+          "fileareas": [
+            {
+              "area": "submission_files",
+              "files": []
+            }
+          ]
+        },
+        {
+          "type": "onlinetext",
+          "name": "線上文字",
+          "fileareas": [
+            {
+              "area": "submissions_onlinetext"
+            }
+          ],
+          "editorfields": [
+            {
+              "name": "onlinetext",
+              "description": "線上文字繳交",
+              "text": "",
+              "format": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "previousattempts": [
+    {
+      "attemptnumber": 0,
+      "submission": {
+        "id": 8820,
+        "userid": 5252,
+        "attemptnumber": 0,
+        "timecreated": 1756400000,
+        "timemodified": 1756500000,
+        "status": "submitted",
+        "groupid": 0,
+        "assignment": 4102,
+        "latest": 0,
+        "gradingstatus": "graded",
+        "plugins": []
+      },
+      "grade": {
+        "id": 991,
+        "assignment": 4102,
+        "userid": 5252,
+        "attemptnumber": 0,
+        "timecreated": 1756500000,
+        "timemodified": 1756500000,
+        "grader": 77,
+        "grade": "52.00000",
+        "gradefordisplay": "52.00&nbsp;/&nbsp;100.00"
+      },
+      "feedbackplugins": []
+    }
+  ],
+  "assignmentdata": {},
+  "warnings": []
+}

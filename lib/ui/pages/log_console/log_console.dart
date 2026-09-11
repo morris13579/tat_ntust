@@ -1,67 +1,18 @@
 import 'dart:collection';
 
+import 'package:flutter_app/debug/log/console_output.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:flutter_app/ui/other/lucide_icons.dart';
 
 import 'ansi_parser.dart';
-
-ListQueue<OutputEvent> _outputEventBuffer = ListQueue();
-int _bufferSize = 50;
-bool _initialized = false;
-
-class MyConsoleOutput extends LogOutput {
-  @override
-  void output(OutputEvent event) {
-    event.lines.forEach(print);
-    if (_outputEventBuffer.length == _bufferSize) {
-      _outputEventBuffer.removeFirst();
-    }
-    _outputEventBuffer.add(event);
-  }
-}
 
 class LogConsole extends StatefulWidget {
   final bool dark;
 
-  LogConsole({Key? key, this.dark = false})
-      : assert(_initialized, "Please call LogConsole.init() first."),
-        super(key: key);
-
-  static void init({int bufferSize = 50}) {
-    if (_initialized) return;
-    _bufferSize = bufferSize;
-    _initialized = true;
-  }
-
-  static String getLog() {
-    bool error = false;
-    List<OutputEvent> events = [];
-    for (OutputEvent event in _outputEventBuffer) {
-      events.add(event);
-    }
-    String log = "";
-    for (int i = 0; i < events.length; i++) {
-      OutputEvent event = events[i];
-      if (event.level == Level.error) {
-        error = true;
-        log += event.lines.join("\n");
-      }
-    }
-    if (error) {
-      log = log.replaceAll(
-          "┌───────────────────────────────────────────────────────────", "");
-      log = log.replaceAll(
-          "└───────────────────────────────────────────────────────────", "");
-      log = log.replaceAll(
-          "├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄", "");
-      log = log.replaceAll("├", "");
-      log = log.replaceAll("│", "");
-      return log.substring(0, (log.length > 2000) ? 2000 : log.length);
-    } else {
-      return "沒有任何錯誤";
-    }
-  }
+  LogConsole({super.key, this.dark = false})
+      : assert(LogBuffer.isInitialized, "Please call LogBuffer.init() first.");
 
   @override
   State<StatefulWidget> createState() => _LogConsoleState();
@@ -83,7 +34,7 @@ class _LogConsoleState extends State<LogConsole> {
   final _scrollController = ScrollController();
   final _filterController = TextEditingController();
 
-  Level _filterLevel = Level.verbose;
+  Level _filterLevel = Level.trace;
   double _logFontSize = 14;
 
   var _currentId = 0;
@@ -108,7 +59,7 @@ class _LogConsoleState extends State<LogConsole> {
     super.didChangeDependencies();
 
     _renderedBuffer.clear();
-    for (var event in _outputEventBuffer) {
+    for (var event in LogBuffer.events) {
       _renderedBuffer.add(_renderEvent(event));
     }
     _refreshFilter();
@@ -148,21 +99,33 @@ class _LogConsoleState extends State<LogConsole> {
             ),
       home: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Get.back(),
+          // Builder 不能拿掉：這一頁自己起了一個 MaterialApp，build 參數裡的
+          // context 在那個 MaterialApp 之上，直接拿去呼叫
+          // MaterialLocalizations.of() 會往外找 App 的 localizations，讓這個自成
+          // 一格的頁面多出一個祖先需求（沒有 Material 祖先時直接 assert 失敗）。
+          // 包一層 Builder 取到的是 DefaultMaterialLocalizations 的英文 "Back"。
+          leading: Builder(
+            builder: (context) => IconButton(
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              icon: const Icon(LucideIcons.arrowLeft),
+              onPressed: () => Get.back(),
+            ),
           ),
           title: const Text("Log Console"),
           actions: [
+            // 以下三顆刻意寫死英文，不走 R.current：這是 vendor 進來的 debug log
+            // console，整頁沒有一個字翻譯過。整頁要在地化時這三個字串一起處理。
             IconButton(
-              icon: const Icon(Icons.clear),
+              tooltip: "Clear log",
+              icon: const Icon(LucideIcons.x),
               onPressed: () {
-                _outputEventBuffer.clear();
+                LogBuffer.clear();
                 didChangeDependencies();
               },
             ),
             IconButton(
-              icon: const Icon(Icons.add),
+              tooltip: "Increase font size",
+              icon: const Icon(LucideIcons.plus),
               onPressed: () {
                 setState(() {
                   _logFontSize++;
@@ -170,7 +133,8 @@ class _LogConsoleState extends State<LogConsole> {
               },
             ),
             IconButton(
-              icon: const Icon(Icons.remove),
+              tooltip: "Decrease font size",
+              icon: const Icon(LucideIcons.minus),
               onPressed: () {
                 setState(() {
                   _logFontSize--;
@@ -196,11 +160,13 @@ class _LogConsoleState extends State<LogConsole> {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 60),
             child: FloatingActionButton(
+              // 同上，刻意保持英文。
+              tooltip: "Scroll to bottom",
               mini: true,
               clipBehavior: Clip.antiAlias,
               onPressed: _scrollToBottom,
               child: Icon(
-                Icons.arrow_downward,
+                LucideIcons.arrowDown,
                 color: widget.dark ? Colors.white : Colors.lightBlue[900],
               ),
             ),
@@ -255,10 +221,13 @@ class _LogConsoleState extends State<LogConsole> {
           const SizedBox(width: 20),
           DropdownButton<Level>(
             value: _filterLevel,
+            // 預設的下拉箭頭是 Material 的 arrow_drop_down，整包 App 裡唯一
+            // 一顆非 Lucide 的圖示。
+            icon: const Icon(LucideIcons.chevronDown),
             items: const [
               DropdownMenuItem(
-                value: Level.verbose,
-                child: Text("Verbose"),
+                value: Level.trace,
+                child: Text("Trace"),
               ),
               DropdownMenuItem(
                 value: Level.debug,
@@ -277,12 +246,12 @@ class _LogConsoleState extends State<LogConsole> {
                 child: Text("Error"),
               ),
               DropdownMenuItem(
-                value: Level.wtf,
-                child: Text("WTF"),
+                value: Level.fatal,
+                child: Text("Fatal"),
               ),
               DropdownMenuItem(
-                value: Level.nothing,
-                child: Text("Nothing"),
+                value: Level.off,
+                child: Text("Off"),
               )
             ],
             onChanged: (value) {
@@ -326,6 +295,9 @@ class _LogConsoleState extends State<LogConsole> {
 
   @override
   void dispose() {
+    // log console 可以反覆開關，不 dispose 的話每開一次就漏一組。
+    _scrollController.dispose();
+    _filterController.dispose();
     super.dispose();
   }
 }
@@ -337,8 +309,8 @@ class LogBar extends StatelessWidget {
   const LogBar({
     required this.dark,
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

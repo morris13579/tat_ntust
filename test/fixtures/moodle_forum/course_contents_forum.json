@@ -1,0 +1,56 @@
+[
+  {
+    "id": 4001,
+    "name": "一般",
+    "visible": 1,
+    "summary": "",
+    "summaryformat": 1,
+    "section": 0,
+    "hiddenbynumsections": 0,
+    "uservisible": true,
+    "modules": [
+      {
+        "id": 91000,
+        "url": "https://moodle2.ntust.edu.tw/mod/forum/view.php?id=91000",
+        "name": "課程公佈欄",
+        "instance": 5500,
+        "contextid": 123,
+        "description": "",
+        "visible": 1,
+        "uservisible": true,
+        "visibleoncoursepage": 1,
+        "modicon": "https://moodle2.ntust.edu.tw/theme/image.php/boost/forum/1/monologo",
+        "modname": "forum",
+        "modplural": "討論區",
+        "indent": 0,
+        "contents": []
+      },
+      {
+        "id": 91002,
+        "url": "https://moodle2.ntust.edu.tw/mod/forum/view.php?id=91002",
+        "name": "課程討論區",
+        "instance": 5499,
+        "contextid": 124,
+        "description": "",
+        "visible": 1,
+        "uservisible": true,
+        "visibleoncoursepage": 1,
+        "modicon": "https://moodle2.ntust.edu.tw/theme/image.php/boost/forum/1/monologo",
+        "modname": "forum",
+        "modplural": "討論區",
+        "indent": 0,
+        "contents": []
+      }
+    ]
+  },
+  {
+    "id": 4002,
+    "name": "第一週",
+    "visible": 1,
+    "summary": "",
+    "summaryformat": 1,
+    "section": 1,
+    "uservisible": true,
+    "modules": []
+  }
+]

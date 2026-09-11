@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 class UIUtils {
   UIUtils._();
 
+  /// 全 App 只剩這裡還在讀 `Get.theme`：這是 lib/src，不能 import lib/ui 的
+  /// theme_context（tool/deps.py 的上行邊是 0），呼叫端也沒有 context 可傳。
   static Color getListColor(int index) {
     return ((index % 2 == 1)
             ? Get.theme.colorScheme.surfaceContainer
@@ -12,6 +14,8 @@ class UIUtils {
         .withAlpha(CourseConfig.courseTableWithAlpha);
   }
 
+  /// 課表色塊的字色。這裡的黑與白是**依底色算出來的對比色**，不是色票，
+  /// 所以不該換成 scheme 或 token——換了會在某些隨機底色上看不見。
   static Color getOnColor(Color backgroundColor) {
     return ThemeData.estimateBrightnessForColor(backgroundColor) ==
             Brightness.dark
@@ -31,7 +35,8 @@ class UIUtils {
     for (int i = 0; i < count; i++) {
       final double currentHue = (hslSeed.hue + i * rotation) % 360.0;
 
-      final HSLColor derivedColor = HSLColor.fromAHSL(1.0, currentHue, 0.4, lightness);
+      final HSLColor derivedColor =
+          HSLColor.fromAHSL(1.0, currentHue, 0.4, lightness);
       colors.add(derivedColor.toColor());
     }
     return colors;
@@ -46,12 +51,10 @@ class UIUtils {
       borderRadius = BorderRadius.circular(baseRadius);
     } else if (index == 0) {
       borderRadius = const BorderRadius.vertical(
-          top: Radius.circular(baseRadius),
-          bottom: Radius.circular(subRadius));
+          top: Radius.circular(baseRadius), bottom: Radius.circular(subRadius));
     } else if (index == length - 1) {
       borderRadius = const BorderRadius.vertical(
-          top: Radius.circular(subRadius),
-          bottom: Radius.circular(baseRadius));
+          top: Radius.circular(subRadius), bottom: Radius.circular(baseRadius));
     } else {
       borderRadius = BorderRadius.circular(subRadius);
     }

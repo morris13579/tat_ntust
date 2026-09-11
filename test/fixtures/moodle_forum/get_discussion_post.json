@@ -1,0 +1,43 @@
+{
+  "post": {
+    "id": 950,
+    "subject": "Re: 期中考 &amp; 補考公告",
+    "replysubject": "Re: 期中考 &amp; 補考公告",
+    "message": "謝謝老師！<br>我會準時到。",
+    "messageformat": 1,
+    "author": {
+      "id": 5011,
+      "fullname": "陳同學",
+      "isdeleted": false,
+      "groups": [],
+      "urls": {}
+    },
+    "discussionid": 7701,
+    "hasparent": true,
+    "parentid": 900,
+    "timecreated": 1756940000,
+    "timemodified": 1756941000,
+    "unread": false,
+    "isdeleted": false,
+    "isprivatereply": false,
+    "haswordcount": false,
+    "capabilities": {
+      "view": true,
+      "edit": true,
+      "delete": true,
+      "split": false,
+      "reply": true,
+      "selfenrol": false,
+      "export": false,
+      "controlreadstatus": false,
+      "canreplyprivately": false
+    },
+    "urls": {
+      "view": "https://moodle2.ntust.edu.tw/mod/forum/discuss.php?d=7701#p950"
+    },
+    "attachments": [],
+    "messageinlinefiles": [],
+    "tags": []
+  },
+  "warnings": []
+}

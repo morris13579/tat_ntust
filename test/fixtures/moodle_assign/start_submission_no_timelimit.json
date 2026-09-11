@@ -1,0 +1,11 @@
+{
+  "submissionid": 0,
+  "warnings": [
+    {
+      "item": "作業",
+      "itemid": 4102,
+      "warningcode": "timelimitnotenabled",
+      "message": "Time limit is not enabled for this assignment."
+    }
+  ]
+}

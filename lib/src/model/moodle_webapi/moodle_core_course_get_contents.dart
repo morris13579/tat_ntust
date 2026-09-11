@@ -1,19 +1,8 @@
-/// id : 450596
-/// name : "一般"
-/// visible : 1
-/// summary : ""
-/// summaryformat : 1
-/// modules : [{"id":392288,"url":"https://moodle.ntust.edu.tw/mod/forum/view.php?id=392288","name":"公佈欄 Bulletin Board","instance":57664,"description":"<div class=\"no-overflow\"><img src=\"https://moodle.ntust.edu.tw/pluginfile.php/826652/mod_label/intro/message_outline.png\" alt=\"\" width=\"26\" height=\"26\" style=\"vertical-align:text-bottom;margin:0 .5em;\" class=\"img-responsive\" /><a href=\"http://moodle.ntust.edu.tw/user/index.php?roleid=3&amp;&amp;id=28914\" target=\"_blank\" rel=\"noreferrer\"> 送訊息連絡老師</a><sup></sup><a href=\"http://moodle.ntust.edu.tw/mod/forum/discuss.php?d=1798#p2260\" target=\"_blank\" rel=\"noreferrer\"><sup>(操作說明)</sup></a></div>","visible":1,"modicon":"https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1631171023/icon","modname":"forum","modplural":"討論區","indent":0,"contents":[{"type":"file","filename":"VLSIout21f.pdf","filepath":"/","filesize":118837,"fileurl":"https://moodle.ntust.edu.tw/webservice/pluginfile.php/843265/mod_resource/content/1/VLSIout21f.pdf?forcedownload=1","timecreated":1629592425,"timemodified":1629592428,"sortorder":1,"userid":5252,"author":"老師@ 林銘波","license":"allrightsreserved"}]},null]
+library;
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'moodle_core_course_get_contents.g.dart';
-
-/// id : 450596
-/// name : "一般"
-/// visible : 1
-/// summary : ""
-/// summaryformat : 1
-/// modules : [{"id":392288,"url":"https://moodle.ntust.edu.tw/mod/forum/view.php?id=392288","name":"公佈欄 Bulletin Board","instance":57664,"description":"<div class=\"no-overflow\"><img src=\"https://moodle.ntust.edu.tw/pluginfile.php/826652/mod_label/intro/message_outline.png\" alt=\"\" width=\"26\" height=\"26\" style=\"vertical-align:text-bottom;margin:0 .5em;\" class=\"img-responsive\" /><a href=\"http://moodle.ntust.edu.tw/user/index.php?roleid=3&amp;&amp;id=28914\" target=\"_blank\" rel=\"noreferrer\"> 送訊息連絡老師</a><sup></sup><a href=\"http://moodle.ntust.edu.tw/mod/forum/discuss.php?d=1798#p2260\" target=\"_blank\" rel=\"noreferrer\"><sup>(操作說明)</sup></a></div>","visible":1,"modicon":"https://moodle.ntust.edu.tw/theme/image.php/essential/forum/1631171023/icon","modname":"forum","modplural":"討論區","indent":0,"contents":[{"type":"file","filename":"VLSIout21f.pdf","filepath":"/","filesize":118837,"fileurl":"https://moodle.ntust.edu.tw/webservice/pluginfile.php/843265/mod_resource/content/1/VLSIout21f.pdf?forcedownload=1","timecreated":1629592425,"timemodified":1629592428,"sortorder":1,"userid":5252,"author":"老師@ 林銘波","license":"allrightsreserved"}]},null]
 
 @JsonSerializable()
 class MoodleCoreCourseGetContents {
@@ -86,8 +75,6 @@ class Modules extends Object {
   @JsonKey(name: 'contents')
   late List<Contents> contents;
 
-  bool folderIsNone;
-
   Modules({
     this.id = 0,
     this.url = "",
@@ -99,7 +86,6 @@ class Modules extends Object {
     this.modname = "",
     this.modplural = "",
     this.indent = 0,
-    this.folderIsNone = false,
     List<Contents>? contents,
   }) {
     this.contents = contents ?? [];
@@ -111,17 +97,6 @@ class Modules extends Object {
   Map<String, dynamic> toJson() => _$ModulesToJson(this);
 }
 
-/// type : "file"
-/// filename : "VLSIout21f.pdf"
-/// filepath : "/"
-/// filesize : 118837
-/// fileurl : "https://moodle.ntust.edu.tw/webservice/pluginfile.php/843265/mod_resource/content/1/VLSIout21f.pdf?forcedownload=1"
-/// timecreated : 1629592425
-/// timemodified : 1629592428
-/// sortorder : 1
-/// userid : 5252
-/// author : "老師@ 林銘波"
-/// license : "allrightsreserved"
 @JsonSerializable()
 class Contents extends Object {
   @JsonKey(name: 'type')
@@ -138,6 +113,9 @@ class Contents extends Object {
 
   @JsonKey(name: 'fileurl')
   String fileurl;
+
+  @JsonKey(name: 'mimetype')
+  String mimetype;
 
   @JsonKey(name: 'timecreated')
   int timecreated;
@@ -163,6 +141,7 @@ class Contents extends Object {
     this.filepath = "",
     this.filesize = 0,
     this.fileurl = "",
+    this.mimetype = "",
     this.timecreated = 0,
     this.timemodified = 0,
     this.sortorder = 0,

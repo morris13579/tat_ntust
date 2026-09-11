@@ -1,0 +1,122 @@
+/* 沒有 @import、沒有指向遠端的 url()：font-src 是 'none'，載不到也不該載。
+   深色由宿主用 evaluateJavascript 設 data-theme，跟著 Theme.brightness 走。 */
+:root {
+  --fg: #1b1b1f;
+  --muted: #45464f;
+  --rule: #c5c6d0;
+  /* 底色現在是宿主的卡片色（動態取色下算出來的），寫死的灰在它上面會看不見，
+     所以程式碼區塊改用疊在底色上的透明黑／白。 */
+  --code-bg: rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="dark"] {
+  --fg: #e4e2e6;
+  --muted: #c6c6d0;
+  --rule: #46464f;
+  --code-bg: rgba(255, 255, 255, 0.09);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  /* 底色由 Flutter 的卡片畫在後面（transparentBackground 已經開著）。
+     這裡自己畫一層的話，動態取色與深色永遠會差一階。
+     代價是底色會跟著系統換深色即時重畫，所以 --fg 也一定要跟著重推——見
+     moodle_rich_editor.dart 的 didChangeDependencies，只推一次就會同色。 */
+  background: transparent;
+  color: var(--fg);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-text-size-adjust: 100%;
+}
+
+#ed {
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 12px 14px 96px;   /* 對齊 SectionCard 的 14/12；96 是游標避開鍵盤的餘裕 */
+  outline: none;
+  /* 長網址與程式碼不可以把整頁撐寬：橫向捲動會讓工具列對不到內容。 */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+#ed:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+#ed p { margin: 0 0 0.9em; }
+
+#ed h3 { font-size: 1.25em; }
+#ed h4 { font-size: 1.1em; }
+#ed h5 { font-size: 1em; }
+#ed h3, #ed h4, #ed h5 {
+  margin: 1.2em 0 0.5em;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+#ed ul, #ed ol { margin: 0 0 0.9em; padding-left: 1.6em; }
+#ed li { margin: 0.2em 0; }
+
+#ed a { color: inherit; }
+
+#ed img {
+  max-width: 100%;
+  height: auto;
+}
+
+#ed blockquote {
+  margin: 0 0 0.9em;
+  padding-left: 12px;
+  border-left: 3px solid var(--rule);
+  color: var(--muted);
+}
+
+#ed pre, #ed code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  background: var(--code-bg);
+}
+
+#ed pre {
+  padding: 10px 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+#ed table {
+  border-collapse: collapse;
+  /* 表格是「原樣保留」的主要目標之一。原本的 display:block 讓它變成會縮的
+     區塊盒，欄位一路壓到一個字寬也永遠塞得進去，overflow-x 因此從來沒有作用；
+     改成 min-width 把欄寬釘回內容本來的寬度，撐出去的部分由頁面橫捲。
+     不能用 width：那會蓋掉貼文自己寫的 width="700"。 */
+  min-width: max-content;
+}
+
+#ed th, #ed td {
+  border: 1px solid var(--rule);
+  padding: 6px 8px;
+  /* 一格塞進一整段話時，max-content 會把表格撐到螢幕的三四倍寬。 */
+  max-width: 20em;
+}
+
+#ed hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 1.2em 0;
+}
+
+/* 原始碼模式：同一個 #ed，只是內容換成逃脫過的純文字。 */
+#ed.source {
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}

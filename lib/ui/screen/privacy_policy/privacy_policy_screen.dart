@@ -1,20 +1,38 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/config/app_colors.dart';
+import 'package:flutter_app/src/config/app_tokens.dart';
 import 'package:flutter_app/ui/components/adaptive_button.dart';
 import 'package:flutter_app/ui/components/page/base_page.dart';
+import 'package:flutter_app/ui/other/theme_context.dart';
+import 'package:flutter_app/ui/pages/other/page/privacy_policy_view.dart';
 import 'package:flutter_app/ui/screen/privacy_policy/privacy_policy_controller.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 
-class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
+/// 首次啟動的同意閘門，也是 `Model.setAgreeContributor(true)` 唯一的寫入點。
+class PrivacyPolicyScreen extends StatefulWidget {
   const PrivacyPolicyScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Get.put(PrivacyPolicyController());
+  State<PrivacyPolicyScreen> createState() => _PrivacyPolicyScreenState();
+}
 
+class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
+  late final PrivacyPolicyController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(PrivacyPolicyController());
+  }
+
+  @override
+  void dispose() {
+    Get.delete<PrivacyPolicyController>();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() {
       return PopScope(
         canPop: false,
@@ -26,17 +44,21 @@ class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
             child: Column(
               children: [
                 Expanded(
-                  child: contentBody(),
-                ),
-                const SizedBox(
-                  height: 15,
+                    child: PrivacyPolicyView(policy: controller.content.value)),
+                // 同意鈕一直可按：不做倒數、也不要求捲到底。強迫閱讀不會讓人
+                // 真的讀，只會讓人更快按掉。
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                  child: _agreeButton(context),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: agreeButton(),
-                ),
-                const SizedBox(
-                  height: 15,
+                  padding: const EdgeInsets.fromLTRB(24, 10, 24, 16),
+                  child: Text(
+                    R.current.privacyAgreeRequired,
+                    textAlign: TextAlign.center,
+                    style: context.text.bodySmall
+                        ?.copyWith(color: context.scheme.onSurfaceVariant),
+                  ),
                 ),
               ],
             )),
@@ -44,27 +66,18 @@ class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
     });
   }
 
-  Widget contentBody() {
-    return Markdown(
-        selectable: true,
-        data: controller.content.value,
-        styleSheet: MarkdownStyleSheet.fromTheme(Get.theme.copyWith(
-            textTheme: Get.textTheme.copyWith(
-                bodyMedium: Get.textTheme.bodyMedium?.copyWith(height: 1.2)))));
-  }
-
-  Widget agreeButton() {
-    return AdaptiveButton(
-      onPressed: controller.onAgreePrivacyPolicy,
-      borderRadius: BorderRadius.circular(999.0),
-      backgroundColor: AppColors.mainColor,
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        R.current.agree,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.white
+  Widget _agreeButton(BuildContext context) {
+    return SizedBox(
+      height: TatTokens.heightButton,
+      child: AdaptiveButton(
+        onPressed: controller.onAgreePrivacyPolicy,
+        borderRadius: BorderRadius.circular(TatTokens.radiusButton),
+        backgroundColor: context.scheme.primary,
+        width: double.infinity,
+        child: Text(
+          R.current.privacyAgreeContinue,
+          style: context.text.titleSmall
+              ?.copyWith(color: context.scheme.onPrimary),
         ),
       ),
     );

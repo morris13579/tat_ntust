@@ -1,0 +1,29 @@
+{
+  "attempts": [
+    {
+      "id": 71010,
+      "quiz": 5101,
+      "userid": 999,
+      "attempt": 1,
+      "uniqueid": 880010,
+      "preview": 1,
+      "state": "finished",
+      "timestart": 1757540000,
+      "timefinish": 1757540600,
+      "sumgrades": 20
+    },
+    {
+      "id": 71011,
+      "quiz": 5101,
+      "userid": 999,
+      "attempt": 2,
+      "uniqueid": 880011,
+      "preview": 0,
+      "state": "finished",
+      "timestart": 1757548900,
+      "timefinish": 1757550100,
+      "sumgrades": 18
+    }
+  ],
+  "warnings": []
+}

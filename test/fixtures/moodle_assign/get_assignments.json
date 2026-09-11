@@ -1,0 +1,113 @@
+{
+  "courses": [
+    {
+      "id": 28914,
+      "fullname": "作業系統",
+      "shortname": "1141CS3001",
+      "timemodified": 1756000000,
+      "assignments": [
+        {
+          "id": 4101,
+          "cmid": 93001,
+          "course": 28914,
+          "name": "HW1 &amp; Report",
+          "nosubmissions": 0,
+          "submissiondrafts": 1,
+          "sendnotifications": 0,
+          "sendlatenotifications": 0,
+          "sendstudentnotifications": 1,
+          "duedate": 1757548800,
+          "allowsubmissionsfromdate": 1756339200,
+          "grade": 100,
+          "timemodified": 1756400000,
+          "completionsubmit": 0,
+          "cutoffdate": 1757635200,
+          "gradingduedate": 1758153600,
+          "teamsubmission": 0,
+          "requireallteammemberssubmit": 0,
+          "teamsubmissiongroupingid": 0,
+          "blindmarking": 0,
+          "hidegrader": 0,
+          "revealidentities": 0,
+          "attemptreopenmethod": "none",
+          "maxattempts": -1,
+          "markingworkflow": 0,
+          "markingallocation": 0,
+          "markinganonymous": 0,
+          "requiresubmissionstatement": 0,
+          "preventsubmissionnotingroup": 0,
+          "configs": [
+            {
+              "plugin": "file",
+              "subtype": "assignsubmission",
+              "name": "enabled",
+              "value": "1"
+            },
+            {
+              "plugin": "file",
+              "subtype": "assignsubmission",
+              "name": "maxfilesubmissions",
+              "value": "3"
+            },
+            {
+              "plugin": "comments",
+              "subtype": "assignfeedback",
+              "name": "enabled",
+              "value": "1"
+            }
+          ],
+          "intro": "<p>請上傳 <b>PDF</b>。</p>",
+          "introformat": 1,
+          "introfiles": [],
+          "introattachments": [
+            {
+              "filename": "hw1.pdf",
+              "filepath": "/",
+              "filesize": 10240,
+              "fileurl": "https://moodle2.ntust.edu.tw/webservice/pluginfile.php/555/mod_assign/introattachment/0/hw1.pdf",
+              "timemodified": 1756300000,
+              "mimetype": "application/pdf",
+              "isexternalfile": false
+            }
+          ],
+          "timelimit": 0,
+          "submissionattachments": 0
+        },
+        {
+          "id": 4102,
+          "cmid": 93002,
+          "course": 28914,
+          "name": "期末專題",
+          "nosubmissions": 0,
+          "submissiondrafts": 0,
+          "sendnotifications": 0,
+          "sendlatenotifications": 0,
+          "sendstudentnotifications": 1,
+          "duedate": 0,
+          "allowsubmissionsfromdate": 1767225600,
+          "grade": -3,
+          "timemodified": 1756400000,
+          "completionsubmit": 0,
+          "cutoffdate": 0,
+          "gradingduedate": 0,
+          "teamsubmission": 1,
+          "requireallteammemberssubmit": 0,
+          "teamsubmissiongroupingid": 0,
+          "blindmarking": 0,
+          "hidegrader": 1,
+          "revealidentities": 0,
+          "attemptreopenmethod": "manual",
+          "maxattempts": 3,
+          "markingworkflow": 1,
+          "markingallocation": 0,
+          "markinganonymous": 0,
+          "requiresubmissionstatement": 1,
+          "submissionstatement": "<p>本作業為本人完成</p>",
+          "submissionstatementformat": 1,
+          "configs": []
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}

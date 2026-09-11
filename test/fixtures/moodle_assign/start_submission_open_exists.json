@@ -1,0 +1,11 @@
+{
+  "submissionid": 0,
+  "warnings": [
+    {
+      "item": "作業",
+      "itemid": 4102,
+      "warningcode": "opensubmissionexists",
+      "message": "There is already an open submission for this assignment."
+    }
+  ]
+}

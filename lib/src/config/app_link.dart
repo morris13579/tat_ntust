@@ -1,15 +1,16 @@
 import 'dart:io';
 
 class AppLink {
-  static const androidAppPackageName = "club.ntust.tat";
-  static const _playStore =
-      "https://play.google.com/store/apps/details?id=$androidAppPackageName";
-  static const _appleStore = "https://apps.apple.com/tw/app/id1513875597";
   static const githubOwner = "morris13579";
   static const githubName = "tat_ntust";
   static const gitHub = "https://github.com/$githubOwner/$githubName";
   static const feedbackBaseUrl =
       "https://docs.google.com/forms/d/e/1FAIpQLSfHdgBnYpc7plIH2GBYeYcStwPIgZRB_oKL3guMXWX87svryA/viewform";
+
+  /// 條款的修改紀錄。條款本身是 repo 裡的一個檔案，GitHub 的 commits 頁就是
+  /// 它完整的版本歷史。
+  static const privacyPolicyHistory =
+      "$gitHub/commits/master/privacy-policy.md";
 
   static const privacyPolicyUrl =
       "https://raw.githubusercontent.com/$githubOwner/$githubName/master/privacy-policy.md";
@@ -22,9 +23,5 @@ class AppLink {
       "entry.991226144": log
     });
     return url.toString();
-  }
-
-  static String get storeLink {
-    return (Platform.isAndroid) ? _playStore : _appleStore;
   }
 }

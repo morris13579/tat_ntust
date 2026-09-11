@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '12.0'
+platform :ios, '13.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -40,49 +40,37 @@ post_install do |installer|
     target.build_configurations.each do |config|
       config.build_settings['SWIFT_VERSION'] = '5.0'  # required by simple_permission
       config.build_settings['ENABLE_BITCODE'] = 'NO'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
       
+      # permission_handler 會依這些巨集決定要不要把對應的 iOS 框架編進來。
+      # 這個 App 只用到 Permission.notification 與 Permission.storage
+      # （後者在 iOS 恆為 granted），其餘一律關掉，否則送審時會被判定
+      # 「宣告了用不到的隱私權限」。
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
               '$(inherited)',
-
-              ## dart: PermissionGroup.calendar
-              # 'PERMISSION_EVENTS=0',
-
-              ## dart: PermissionGroup.reminders
+              'PERMISSION_EVENTS=0',
+              'PERMISSION_EVENTS_FULL_ACCESS=0',
               'PERMISSION_REMINDERS=0',
-
-              ## dart: PermissionGroup.contacts
-              # 'PERMISSION_CONTACTS=0',
-
-              ## dart: PermissionGroup.camera
+              'PERMISSION_CONTACTS=0',
               'PERMISSION_CAMERA=0',
-
-              ## dart: PermissionGroup.microphone
               'PERMISSION_MICROPHONE=0',
-
-              ## dart: PermissionGroup.speech
-              # 'PERMISSION_SPEECH_RECOGNIZER=0',
-
-              ## dart: PermissionGroup.photos
-              # 'PERMISSION_PHOTOS=0',
-
-              ## dart: [PermissionGroup.location, PermissionGroup.locationAlways, PermissionGroup.locationWhenInUse]
+              'PERMISSION_SPEECH_RECOGNIZER=0',
+              'PERMISSION_PHOTOS=0',
               'PERMISSION_LOCATION=0',
-
-              ## dart: PermissionGroup.notification
-              # 'PERMISSION_NOTIFICATIONS=0',
-
-              ## dart: PermissionGroup.mediaLibrary
-              # 'PERMISSION_MEDIA_LIBRARY=0',
-
-              ## dart: PermissionGroup.sensors
-              # 'PERMISSION_SENSORS=0'
+              'PERMISSION_MEDIA_LIBRARY=0',
+              'PERMISSION_SENSORS=0',
+              'PERMISSION_BLUETOOTH=0',
+              'PERMISSION_APP_TRACKING_TRANSPARENCY=0',
+              'PERMISSION_CRITICAL_ALERTS=0',
+              'PERMISSION_ASSISTANT=0',
+              ## PERMISSION_NOTIFICATIONS 刻意保留（Permission.notification 有在用）
             ]
     end
   end
 end
 
-# Add the pod for Firebase Crashlytics
-pod 'Firebase/Crashlytics'
-
-# Recommended: Add the Firebase pod for Google Analytics
-pod 'Firebase/Analytics'
+# # Add the pod for Firebase Crashlytics
+# pod 'Firebase/Crashlytics'
+#
+# # Recommended: Add the Firebase pod for Google Analytics
+# pod 'Firebase/Analytics'

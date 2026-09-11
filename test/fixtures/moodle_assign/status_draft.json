@@ -1,0 +1,65 @@
+{
+  "lastattempt": {
+    "submissionsenabled": true,
+    "locked": false,
+    "graded": false,
+    "canedit": true,
+    "caneditowner": true,
+    "cansubmit": true,
+    "extensionduedate": 0,
+    "blindmarking": false,
+    "gradingstatus": "notgraded",
+    "usergroups": [],
+    "submission": {
+      "id": 8801,
+      "userid": 5252,
+      "attemptnumber": 0,
+      "timecreated": 1756500000,
+      "timemodified": 1756510000,
+      "status": "draft",
+      "groupid": 0,
+      "assignment": 4101,
+      "latest": 1,
+      "plugins": [
+        {
+          "type": "file",
+          "name": "檔案繳交",
+          "fileareas": [
+            {
+              "area": "submission_files",
+              "files": [
+                {
+                  "filename": "hw1_b10000000.pdf",
+                  "filepath": "/",
+                  "filesize": 204800,
+                  "fileurl": "https://moodle2.ntust.edu.tw/webservice/pluginfile.php/555/assignsubmission_file/submission_files/8801/hw1_b10000000.pdf",
+                  "timemodified": 1756510000,
+                  "mimetype": "application/pdf"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "onlinetext",
+          "name": "線上文字",
+          "fileareas": [
+            {
+              "area": "submissions_onlinetext"
+            }
+          ],
+          "editorfields": [
+            {
+              "name": "onlinetext",
+              "description": "線上文字繳交",
+              "text": "<p>已附上報告</p>",
+              "format": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "assignmentdata": {},
+  "warnings": []
+}

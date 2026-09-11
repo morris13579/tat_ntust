@@ -1,0 +1,58 @@
+{
+  "post": {
+    "id": 950,
+    "subject": "Re: 期中考 &amp; 補考公告",
+    "replysubject": "Re: 期中考 &amp; 補考公告",
+    "message": "改好了",
+    "messageformat": 1,
+    "author": {
+      "id": 5011,
+      "fullname": "陳同學",
+      "isdeleted": false,
+      "groups": [],
+      "urls": {}
+    },
+    "discussionid": 7701,
+    "hasparent": true,
+    "parentid": 900,
+    "timecreated": 1756940000,
+    "timemodified": 1756941000,
+    "unread": false,
+    "isdeleted": false,
+    "isprivatereply": false,
+    "haswordcount": false,
+    "capabilities": {
+      "view": true,
+      "edit": true,
+      "delete": true,
+      "split": false,
+      "reply": true,
+      "selfenrol": false,
+      "export": false,
+      "controlreadstatus": false,
+      "canreplyprivately": false
+    },
+    "urls": {
+      "view": "https://moodle2.ntust.edu.tw/mod/forum/discuss.php?d=7701#p950"
+    },
+    "attachments": [
+      {
+        "filename": "slides.pdf",
+        "filepath": "/",
+        "filesize": 204800,
+        "isimage": false,
+        "url": "https://moodle2.ntust.edu.tw/pluginfile.php/123/mod_forum/attachment/950/slides.pdf?forcedownload=1"
+      },
+      {
+        "filename": "note.txt",
+        "filepath": "/",
+        "filesize": 42,
+        "isimage": false,
+        "url": "https://moodle2.ntust.edu.tw/pluginfile.php/123/mod_forum/attachment/950/note.txt?forcedownload=1"
+      }
+    ],
+    "messageinlinefiles": [],
+    "tags": []
+  },
+  "warnings": []
+}

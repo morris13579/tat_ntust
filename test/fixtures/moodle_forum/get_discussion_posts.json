@@ -1,0 +1,235 @@
+{
+  "posts": [
+    {
+      "id": 900,
+      "subject": "期中考 &amp; 補考公告",
+      "replysubject": "Re: 期中考 &amp; 補考公告",
+      "label": "",
+      "message": "<p>期中考範圍如圖：</p><p><img src=\"@@PLUGINFILE@@/inline%20image.png\" alt=\"scope\" width=\"320\"></p>",
+      "messageformat": 1,
+      "author": {
+        "id": 3021,
+        "fullname": "王老師",
+        "isdeleted": false,
+        "groups": [],
+        "urls": {
+          "profile": "https://moodle2.ntust.edu.tw/user/view.php?id=3021&course=1234",
+          "profileimage": "https://moodle2.ntust.edu.tw/theme/image.php/boost/core/1/u/f1"
+        }
+      },
+      "discussionid": 7701,
+      "hasparent": false,
+      "timecreated": 1756900000,
+      "timemodified": 1756900000,
+      "unread": false,
+      "isdeleted": false,
+      "isprivatereply": false,
+      "haswordcount": false,
+      "capabilities": {
+        "view": true,
+        "edit": false,
+        "delete": false,
+        "split": false,
+        "reply": true,
+        "selfenrol": false,
+        "export": false,
+        "controlreadstatus": false,
+        "canreplyprivately": false
+      },
+      "urls": {
+        "view": "https://moodle2.ntust.edu.tw/mod/forum/discuss.php?d=7701#p900",
+        "viewisolated": "https://moodle2.ntust.edu.tw/mod/forum/discuss.php?d=7701&parent=900",
+        "reply": "https://moodle2.ntust.edu.tw/mod/forum/post.php?reply=900",
+        "discuss": "https://moodle2.ntust.edu.tw/mod/forum/discuss.php?d=7701"
+      },
+      "attachments": [
+        {
+          "contextid": 123,
+          "component": "mod_forum",
+          "filearea": "attachment",
+          "itemid": 900,
+          "filepath": "/",
+          "filename": "slides.pdf",
+          "isdir": false,
+          "isimage": false,
+          "timemodified": 1756900000,
+          "timecreated": 1756900000,
+          "filesize": 88888,
+          "author": "王老師",
+          "license": "allrightsreserved",
+          "filenameshort": "slides.pdf",
+          "filesizeformatted": "86.8 KB",
+          "icon": "pdf",
+          "timecreatedformatted": "2025/09/03",
+          "timemodifiedformatted": "2025/09/03",
+          "url": "https://moodle2.ntust.edu.tw/pluginfile.php/123/mod_forum/attachment/900/slides.pdf?forcedownload=1",
+          "urls": {
+            "export": null
+          },
+          "html": {
+            "plagiarism": null
+          }
+        }
+      ],
+      "messageinlinefiles": [
+        {
+          "contextid": 123,
+          "component": "mod_forum",
+          "filearea": "post",
+          "itemid": 900,
+          "filepath": "/",
+          "filename": "inline image.png",
+          "isdir": false,
+          "isimage": true,
+          "timemodified": 1756900000,
+          "timecreated": 1756900000,
+          "filesize": 4096,
+          "author": "王老師",
+          "license": "allrightsreserved",
+          "filenameshort": "inline image.png",
+          "filesizeformatted": "4.0 KB",
+          "icon": "image",
+          "timecreatedformatted": "2025/09/03",
+          "timemodifiedformatted": "2025/09/03",
+          "url": "https://moodle2.ntust.edu.tw/pluginfile.php/123/mod_forum/post/900/inline%20image.png?forcedownload=1"
+        }
+      ],
+      "tags": [],
+      "html": {
+        "rating": null,
+        "taglist": null,
+        "authorsubheading": "<p>王老師</p>"
+      }
+    },
+    {
+      "id": 901,
+      "subject": "Re: 期中考 &amp; 補考公告",
+      "replysubject": "Re: 期中考 &amp; 補考公告",
+      "label": "",
+      "message": "<p>請問可以帶計算機嗎？</p>",
+      "messageformat": 1,
+      "author": {
+        "id": 5011,
+        "fullname": "陳同學",
+        "isdeleted": false,
+        "groups": [],
+        "urls": {
+          "profile": "https://moodle2.ntust.edu.tw/user/view.php?id=5011&course=1234",
+          "profileimage": "https://moodle2.ntust.edu.tw/theme/image.php/boost/core/1/u/f1"
+        }
+      },
+      "discussionid": 7701,
+      "hasparent": true,
+      "parentid": 900,
+      "timecreated": 1756910000,
+      "timemodified": 1756910000,
+      "unread": true,
+      "isdeleted": false,
+      "isprivatereply": false,
+      "haswordcount": false,
+      "capabilities": {
+        "view": true,
+        "edit": false,
+        "delete": false,
+        "split": false,
+        "reply": true,
+        "selfenrol": false,
+        "export": false,
+        "controlreadstatus": false,
+        "canreplyprivately": false
+      },
+      "attachments": [],
+      "tags": []
+    },
+    {
+      "id": 902,
+      "subject": "Re: 期中考 &amp; 補考公告",
+      "replysubject": "Re: 期中考 &amp; 補考公告",
+      "label": "",
+      "message": "<p>可以，但不能用可程式化的。</p>",
+      "messageformat": 1,
+      "author": {
+        "id": 3021,
+        "fullname": "王老師",
+        "isdeleted": false,
+        "groups": [],
+        "urls": {
+          "profile": "https://moodle2.ntust.edu.tw/user/view.php?id=3021&course=1234",
+          "profileimage": "https://moodle2.ntust.edu.tw/theme/image.php/boost/core/1/u/f1"
+        }
+      },
+      "discussionid": 7701,
+      "hasparent": true,
+      "parentid": 901,
+      "timecreated": 1756920000,
+      "timemodified": 1756920000,
+      "isdeleted": false,
+      "isprivatereply": false,
+      "haswordcount": false,
+      "capabilities": {
+        "view": true,
+        "edit": false,
+        "delete": false,
+        "split": false,
+        "reply": true,
+        "selfenrol": false,
+        "export": false,
+        "controlreadstatus": false,
+        "canreplyprivately": false
+      },
+      "attachments": [],
+      "tags": []
+    },
+    {
+      "id": 903,
+      "subject": "已刪除",
+      "replysubject": "Re: 期中考 &amp; 補考公告",
+      "label": "已刪除",
+      "message": "此貼文已被刪除",
+      "messageformat": 1,
+      "author": {
+        "id": null,
+        "fullname": null,
+        "isdeleted": true,
+        "groups": [],
+        "urls": {
+          "profile": null,
+          "profileimage": null
+        }
+      },
+      "discussionid": 7701,
+      "hasparent": true,
+      "parentid": 900,
+      "timecreated": null,
+      "timemodified": 1756930000,
+      "isdeleted": true,
+      "isprivatereply": false,
+      "haswordcount": false,
+      "capabilities": {
+        "view": true,
+        "edit": false,
+        "delete": false,
+        "split": false,
+        "reply": false,
+        "selfenrol": false,
+        "export": false,
+        "controlreadstatus": false,
+        "canreplyprivately": false
+      },
+      "attachments": [],
+      "tags": []
+    }
+  ],
+  "forumid": 5501,
+  "courseid": 1234,
+  "ratinginfo": {
+    "contextid": 123,
+    "component": "mod_forum",
+    "ratingarea": "post",
+    "canviewall": null,
+    "canviewany": null,
+    "scales": [],
+    "ratings": []
+  },
+  "warnings": []
+}
