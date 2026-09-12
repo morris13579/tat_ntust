@@ -33,6 +33,8 @@ import 'package:flutter_app/src/controller/announcement/notification_badge_contr
 import 'package:flutter_app/src/controller/course_table/course_controller.dart';
 import 'package:flutter_app/src/enum/course_table_ui_state.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
+import 'package:flutter_app/src/util/classroom_availability.dart';
+import 'package:flutter_app/ui/pages/course_table/modal/empty_cell_sheet.dart';
 import 'package:flutter_app/ui/routes/route_utils.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/page/base_page.dart';
@@ -282,7 +284,7 @@ class CourseTablePage extends GetView<CourseController> {
       widgetList.add(
         Expanded(
           child: courseInfo.isEmpty
-              ? const SizedBox()
+              ? _emptyCell(context, day, section)
               : Container(
                   padding: const EdgeInsets.all(1),
                   child: ElevatedButton(
@@ -337,6 +339,33 @@ class CourseTablePage extends GetView<CourseController> {
     );
     if (selected == null) return;
     await controller.getCourseTable(semesterSetting: selected);
+  }
+
+  /// 空堂格。點下去問「要不要找這個時段的空教室」。
+  ///
+  /// `Day.unKnown`（索引 7）那一欄不給點：它收的是查不到星期的課，對不到
+  /// 任何一天，查出來的會是一個與那一格無關的日期。
+  Widget _emptyCell(BuildContext context, int day, int section) {
+    if (ClassroomAvailability.dateForWeekday(day) == null) {
+      return const SizedBox();
+    }
+    return InkWell(
+      onTap: () => unawaited(_showEmptyCell(context, day, section)),
+      child: const SizedBox.expand(),
+    );
+  }
+
+  Future<void> _showEmptyCell(
+      BuildContext context, int day, int section) async {
+    final date = ClassroomAvailability.dateForWeekday(day);
+    if (date == null) return;
+    final go = await showEmptyCellSheet(
+      context: context,
+      date: date,
+      section: section,
+    );
+    if (!go) return;
+    await RouteUtils.toClassroomPage(date: date, section: section);
   }
 
   Future<void> _showCourseDetailDialog(

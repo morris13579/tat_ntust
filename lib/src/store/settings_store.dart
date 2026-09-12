@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/src/enum/classroom_view.dart';
 import 'package:flutter_app/src/store/key_value_store.dart';
 
 /// 使用者偏好的單一出口。
@@ -43,6 +44,29 @@ class SettingsStore {
 
   Future<void> setDownloadPath(String value) =>
       _store.writeString(downloadPathKey, value);
+
+  // ---- 空教室 --------------------------------------------------------------
+  static const classroomViewKey = 'classroom_view';
+  static const classroomBuildingKey = 'classroom_building';
+
+  /// 上次用的檢視。索引超出範圍（降版、手改）一律退回清單。
+  Future<ClassroomView> get classroomView async {
+    final index = await _store.readInt(classroomViewKey) ?? 0;
+    if (index < 0 || index >= ClassroomView.values.length) {
+      return ClassroomView.list;
+    }
+    return ClassroomView.values[index];
+  }
+
+  Future<void> setClassroomView(ClassroomView value) =>
+      _store.writeInt(classroomViewKey, value.index);
+
+  /// 上次查的大樓代號。開場直接是它，不必每次重選。
+  Future<String?> get classroomBuilding async =>
+      _store.readString(classroomBuildingKey);
+
+  Future<void> setClassroomBuilding(String code) =>
+      _store.writeString(classroomBuildingKey, code);
 
   // ---- 公告已讀時間 --------------------------------------------------------
   static const announcementLastReadKey = 'announcement_last_read_time';

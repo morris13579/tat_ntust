@@ -30,8 +30,7 @@ class _CourseSlotPickerPageState extends State<CourseSlotPickerPage> {
   late final Set<CourseSlot> _selected = {...widget.selected};
 
   List<Day> get _days => CourseTableConflict.days.toList();
-  List<SectionNumber> get _sections =>
-      CourseTableConflict.sections.toList();
+  List<SectionNumber> get _sections => CourseTableConflict.sections.toList();
 
   @override
   Widget build(BuildContext context) {
@@ -104,15 +103,16 @@ class _CourseSlotPickerPageState extends State<CourseSlotPickerPage> {
     final all = _sections.map((s) => (day, s)).toList();
     final full = all.every(_selected.contains);
     return InkWell(
-      onTap: () => setState(() =>
-          full ? _selected.removeAll(all) : _selected.addAll(all)),
+      onTap: () => setState(
+          () => full ? _selected.removeAll(all) : _selected.addAll(all)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Center(
           child: Text(
             _control.getDayString(day.index),
             style: context.text.labelMedium?.copyWith(
-                color: full ? context.scheme.primary : context.scheme.onSurface),
+                color:
+                    full ? context.scheme.primary : context.scheme.onSurface),
           ),
         ),
       ),
@@ -124,8 +124,8 @@ class _CourseSlotPickerPageState extends State<CourseSlotPickerPage> {
     final all = _days.map((d) => (d, section)).toList();
     final full = all.every(_selected.contains);
     return InkWell(
-      onTap: () => setState(() =>
-          full ? _selected.removeAll(all) : _selected.addAll(all)),
+      onTap: () => setState(
+          () => full ? _selected.removeAll(all) : _selected.addAll(all)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Center(
@@ -151,14 +151,13 @@ class _CourseSlotPickerPageState extends State<CourseSlotPickerPage> {
         borderRadius: BorderRadius.circular(6),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: () => setState(
-              () => on ? _selected.remove(slot) : _selected.add(slot)),
+          onTap: () =>
+              setState(() => on ? _selected.remove(slot) : _selected.add(slot)),
           child: SizedBox(
             height: 34,
             child: Center(
               child: on
-                  ? Icon(Icons.check,
-                      size: 16, color: context.scheme.primary)
+                  ? Icon(Icons.check, size: 16, color: context.scheme.primary)
                   : const SizedBox.shrink(),
             ),
           ),

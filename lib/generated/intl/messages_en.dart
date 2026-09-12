@@ -535,6 +535,95 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "classRoomNo": MessageLookupByLibrary.simpleMessage("Classroom no"),
     "classroom": MessageLookupByLibrary.simpleMessage("Classroom"),
+    "classroomApplyTime": MessageLookupByLibrary.simpleMessage(
+      "Search this period",
+    ),
+    "classroomBackToNow": MessageLookupByLibrary.simpleMessage("Back to now"),
+    "classroomBookedFrom": MessageLookupByLibrary.simpleMessage(
+      "Booked from %s",
+    ),
+    "classroomBusyGroup": MessageLookupByLibrary.simpleMessage(
+      "In use now · %s",
+    ),
+    "classroomChangeBuilding": MessageLookupByLibrary.simpleMessage(
+      "Change building",
+    ),
+    "classroomChangeTime": MessageLookupByLibrary.simpleMessage("Change"),
+    "classroomClosedBody": MessageLookupByLibrary.simpleMessage(
+      "The booking system only covers teaching days, so weekends and holidays return no data.",
+    ),
+    "classroomClosedTitle": MessageLookupByLibrary.simpleMessage(
+      "No data for %s on this date",
+    ),
+    "classroomDate": MessageLookupByLibrary.simpleMessage("Date"),
+    "classroomDayFetchedAt": MessageLookupByLibrary.simpleMessage(
+      "As of %s · tap a room for its schedule",
+    ),
+    "classroomEntryDescription": MessageLookupByLibrary.simpleMessage(
+      "Check which classrooms are currently available",
+    ),
+    "classroomFetchFailed": MessageLookupByLibrary.simpleMessage(
+      "Could not load %s (%s). The university system may be temporarily unavailable; please try again later.",
+    ),
+    "classroomFetchedAt": MessageLookupByLibrary.simpleMessage("%s as of %s"),
+    "classroomFetching": MessageLookupByLibrary.simpleMessage("Loading…"),
+    "classroomFloor": MessageLookupByLibrary.simpleMessage("Floor %s"),
+    "classroomFreeAllDay": MessageLookupByLibrary.simpleMessage("Free all day"),
+    "classroomFreeCell": MessageLookupByLibrary.simpleMessage("Free period"),
+    "classroomFreeGroup": MessageLookupByLibrary.simpleMessage("Free now · %s"),
+    "classroomFreeSummary": MessageLookupByLibrary.simpleMessage(
+      "%s of %s rooms are free now",
+    ),
+    "classroomFreeUntil": MessageLookupByLibrary.simpleMessage("Free until %s"),
+    "classroomFromCourseTable": MessageLookupByLibrary.simpleMessage(
+      "Find free rooms for this period",
+    ),
+    "classroomFullBody": MessageLookupByLibrary.simpleMessage(
+      "All %s classrooms are scheduled or booked.",
+    ),
+    "classroomFullTitle": MessageLookupByLibrary.simpleMessage(
+      "%s is full this period",
+    ),
+    "classroomInApp": MessageLookupByLibrary.simpleMessage("In app"),
+    "classroomLastFetched": MessageLookupByLibrary.simpleMessage("%s"),
+    "classroomLegendBooked": MessageLookupByLibrary.simpleMessage("Booked"),
+    "classroomLegendClass": MessageLookupByLibrary.simpleMessage("Class"),
+    "classroomLegendFree": MessageLookupByLibrary.simpleMessage("Free"),
+    "classroomNextClass": MessageLookupByLibrary.simpleMessage("Next %s %s"),
+    "classroomNoClassToday": MessageLookupByLibrary.simpleMessage(
+      "No class scheduled",
+    ),
+    "classroomNoMoreClass": MessageLookupByLibrary.simpleMessage(
+      "Nothing scheduled after this",
+    ),
+    "classroomOtherBuildings": MessageLookupByLibrary.simpleMessage(
+      "Other buildings",
+    ),
+    "classroomOtherBuildingsHint": MessageLookupByLibrary.simpleMessage(
+      "The system serves one building at a time; tap to query.",
+    ),
+    "classroomPickBuilding": MessageLookupByLibrary.simpleMessage(
+      "Pick a building",
+    ),
+    "classroomRefresh": MessageLookupByLibrary.simpleMessage("Refresh"),
+    "classroomRunAllDay": MessageLookupByLibrary.simpleMessage("All day"),
+    "classroomRunAny": MessageLookupByLibrary.simpleMessage("Any"),
+    "classroomRunThree": MessageLookupByLibrary.simpleMessage("≥3 periods"),
+    "classroomRunTwo": MessageLookupByLibrary.simpleMessage("≥2 periods"),
+    "classroomSection": MessageLookupByLibrary.simpleMessage("Period"),
+    "classroomSectionAt": MessageLookupByLibrary.simpleMessage(
+      "Period %s · %s",
+    ),
+    "classroomSectionLabel": MessageLookupByLibrary.simpleMessage("Period %s"),
+    "classroomSeeSection": MessageLookupByLibrary.simpleMessage(
+      "See period %s",
+    ),
+    "classroomSubSystemHint": MessageLookupByLibrary.simpleMessage(
+      "From the classroom booking system",
+    ),
+    "classroomTitle": MessageLookupByLibrary.simpleMessage("Free classrooms"),
+    "classroomViewDay": MessageLookupByLibrary.simpleMessage("Whole day"),
+    "classroomViewList": MessageLookupByLibrary.simpleMessage("List"),
     "collapse": MessageLookupByLibrary.simpleMessage("Collapse"),
     "contactInfo": MessageLookupByLibrary.simpleMessage("Contact"),
     "continueMeansAgree": MessageLookupByLibrary.simpleMessage(
@@ -960,6 +1049,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "gpaLabel": MessageLookupByLibrary.simpleMessage("GPA"),
     "gradeFeedbackTag": MessageLookupByLibrary.simpleMessage("Feedback"),
     "groupAboutTat": MessageLookupByLibrary.simpleMessage("About TAT"),
+    "hideEmptyFolders": MessageLookupByLibrary.simpleMessage(
+      "Hide empty folders",
+    ),
     "hideEmptyWeeks": MessageLookupByLibrary.simpleMessage(
       "Hide the empty weeks",
     ),
@@ -1024,6 +1116,127 @@ class MessageLookup extends MessageLookupByLibrary {
       "This clears all data, including the account and password saved on this device and the cached timetable.",
     ),
     "logoutConfirmTitle": MessageLookupByLibrary.simpleMessage("Log out?"),
+    "mailActionFailed": MessageLookupByLibrary.simpleMessage(
+      "Action failed, please try again",
+    ),
+    "mailArchived": MessageLookupByLibrary.simpleMessage("Archived"),
+    "mailAttach": MessageLookupByLibrary.simpleMessage("Attachment"),
+    "mailAttachTooLarge": MessageLookupByLibrary.simpleMessage(
+      "Attachment is too large, one message cannot exceed 35 MB in total",
+    ),
+    "mailAttachments": MessageLookupByLibrary.simpleMessage("Attachments"),
+    "mailBcc": MessageLookupByLibrary.simpleMessage("Bcc"),
+    "mailBodyHint": MessageLookupByLibrary.simpleMessage("Message"),
+    "mailBodyLoadFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to load the message body",
+    ),
+    "mailCc": MessageLookupByLibrary.simpleMessage("Cc"),
+    "mailCompose": MessageLookupByLibrary.simpleMessage("Compose"),
+    "mailDiscard": MessageLookupByLibrary.simpleMessage("Discard"),
+    "mailDownload": MessageLookupByLibrary.simpleMessage("Download"),
+    "mailDownloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
+    "mailDraftDiscard": MessageLookupByLibrary.simpleMessage(
+      "Discard this message?",
+    ),
+    "mailDraftDiscardBody": MessageLookupByLibrary.simpleMessage(
+      "What you have written will be lost.",
+    ),
+    "mailEmpty": MessageLookupByLibrary.simpleMessage(
+      "No messages in this mailbox",
+    ),
+    "mailFolderArchive": MessageLookupByLibrary.simpleMessage("Archive"),
+    "mailFolderDrafts": MessageLookupByLibrary.simpleMessage("Drafts"),
+    "mailFolderInbox": MessageLookupByLibrary.simpleMessage("Inbox"),
+    "mailFolderJunk": MessageLookupByLibrary.simpleMessage("Junk"),
+    "mailFolderSent": MessageLookupByLibrary.simpleMessage("Sent"),
+    "mailFolderTrash": MessageLookupByLibrary.simpleMessage("Trash"),
+    "mailFolders": MessageLookupByLibrary.simpleMessage("Folders"),
+    "mailForward": MessageLookupByLibrary.simpleMessage("Forward"),
+    "mailInvalidRecipient": MessageLookupByLibrary.simpleMessage(
+      "Recipient address is not a valid email",
+    ),
+    "mailKeepEditing": MessageLookupByLibrary.simpleMessage("Keep editing"),
+    "mailLoadFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to load messages",
+    ),
+    "mailLoadMore": MessageLookupByLibrary.simpleMessage("Load more"),
+    "mailLogin": MessageLookupByLibrary.simpleMessage("Sign in to mailbox"),
+    "mailMarkRead": MessageLookupByLibrary.simpleMessage("Mark as read"),
+    "mailMarkUnread": MessageLookupByLibrary.simpleMessage("Mark as unread"),
+    "mailMarkedUnread": MessageLookupByLibrary.simpleMessage(
+      "Marked as unread",
+    ),
+    "mailMessageCount": MessageLookupByLibrary.simpleMessage("messages"),
+    "mailMoveToFolder": MessageLookupByLibrary.simpleMessage("Move to folder"),
+    "mailMoved": MessageLookupByLibrary.simpleMessage("Moved"),
+    "mailMovedToTrash": MessageLookupByLibrary.simpleMessage("Moved to trash"),
+    "mailNewMessages": MessageLookupByLibrary.simpleMessage("%s new messages"),
+    "mailNoMore": MessageLookupByLibrary.simpleMessage("No older messages"),
+    "mailNoSubject": MessageLookupByLibrary.simpleMessage("(No subject)"),
+    "mailOutbox": MessageLookupByLibrary.simpleMessage("Outbox"),
+    "mailOutboxFailed": MessageLookupByLibrary.simpleMessage("Send failed"),
+    "mailOutboxSending": MessageLookupByLibrary.simpleMessage("Sending"),
+    "mailOutboxWaiting": MessageLookupByLibrary.simpleMessage("Sending in %ss"),
+    "mailPasswordRejected": MessageLookupByLibrary.simpleMessage(
+      "Incorrect mailbox password",
+    ),
+    "mailPasswordUnreachable": MessageLookupByLibrary.simpleMessage(
+      "Cannot reach the mail server, please check your network",
+    ),
+    "mailRecall": MessageLookupByLibrary.simpleMessage("Undo"),
+    "mailRecalled": MessageLookupByLibrary.simpleMessage("Send undone"),
+    "mailRecipientCount": MessageLookupByLibrary.simpleMessage("%s recipients"),
+    "mailRecipientRequired": MessageLookupByLibrary.simpleMessage(
+      "Enter at least one recipient",
+    ),
+    "mailRecipientTo": MessageLookupByLibrary.simpleMessage("To"),
+    "mailRemoteImagesBlocked": MessageLookupByLibrary.simpleMessage(
+      "Remote images are blocked so the sender cannot tell that you opened this message",
+    ),
+    "mailReply": MessageLookupByLibrary.simpleMessage("Reply"),
+    "mailReplyAll": MessageLookupByLibrary.simpleMessage("Reply all"),
+    "mailRetry": MessageLookupByLibrary.simpleMessage("Retry"),
+    "mailSearchAllFolders": MessageLookupByLibrary.simpleMessage(
+      "Search all folders instead",
+    ),
+    "mailSearchEmpty": MessageLookupByLibrary.simpleMessage(
+      "No matching messages",
+    ),
+    "mailSearchHint": MessageLookupByLibrary.simpleMessage(
+      "Search by subject or sender",
+    ),
+    "mailSearchResultCount": MessageLookupByLibrary.simpleMessage("%s results"),
+    "mailSearchScopeAll": MessageLookupByLibrary.simpleMessage("All folders"),
+    "mailSeenShort": MessageLookupByLibrary.simpleMessage("Read"),
+    "mailSelfMarker": MessageLookupByLibrary.simpleMessage("(me)"),
+    "mailSend": MessageLookupByLibrary.simpleMessage("Send"),
+    "mailSendFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to send, please try again",
+    ),
+    "mailSendingUndo": MessageLookupByLibrary.simpleMessage("Sending"),
+    "mailSent": MessageLookupByLibrary.simpleMessage("Sent"),
+    "mailSetupBenefitAttachment": MessageLookupByLibrary.simpleMessage(
+      "Save attachments straight to your phone",
+    ),
+    "mailSetupBenefitRead": MessageLookupByLibrary.simpleMessage(
+      "Read, reply and forward without opening a browser",
+    ),
+    "mailSetupBenefitSearch": MessageLookupByLibrary.simpleMessage(
+      "Search by subject or sender instead of paging through",
+    ),
+    "mailSetupDesc": MessageLookupByLibrary.simpleMessage(
+      "Once set up, you can read and send NTUST mailbox messages in TAT.",
+    ),
+    "mailSetupTitle": MessageLookupByLibrary.simpleMessage(
+      "Set up campus mail",
+    ),
+    "mailShowImages": MessageLookupByLibrary.simpleMessage("Show images"),
+    "mailSubject": MessageLookupByLibrary.simpleMessage("Subject"),
+    "mailTab": MessageLookupByLibrary.simpleMessage("Mail"),
+    "mailTitle": MessageLookupByLibrary.simpleMessage("Campus Mail"),
+    "mailTo": MessageLookupByLibrary.simpleMessage("To"),
+    "mailUnread": MessageLookupByLibrary.simpleMessage("unread"),
+    "mailUnseenShort": MessageLookupByLibrary.simpleMessage("Unread"),
     "manageTablesCurrent": MessageLookupByLibrary.simpleMessage("Current"),
     "manageTablesDrafts": MessageLookupByLibrary.simpleMessage(
       "Simulations · your drafts",
@@ -1340,6 +1553,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "shareTableTitle": MessageLookupByLibrary.simpleMessage("Share table"),
     "sharedTableBadge": MessageLookupByLibrary.simpleMessage("Shared"),
+    "showEmptyFolders": MessageLookupByLibrary.simpleMessage(
+      "Show %s empty folders",
+    ),
     "showEmptyWeeks": MessageLookupByLibrary.simpleMessage(
       "Show the %s empty week(s)",
     ),

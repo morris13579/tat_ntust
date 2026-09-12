@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/config/section_time.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/util/course_table_conflict.dart';
@@ -50,22 +51,12 @@ class CourseTableControl {
   /// getter 而不是欄位：這個物件是 CourseController 的欄位，而 GetX 的
   /// controller 不會被 forceAppUpdate 重建，存成欄位會凍在建立時的語言。
   List<String> get dayStringList => courseDayNames();
-  List<String> timeList = [
-    "08:10 - 09:00",
-    "09:10 - 10:00",
-    "10:20 - 11:10",
-    "11:20 - 12:10",
-    "12:20 - 13:10",
-    "13:20 - 14:10",
-    "14:20 - 15:10",
-    "15:30 - 16:20",
-    "16:30 - 17:20",
-    "17:30 - 18:20",
-    "18:25 - 19:15",
-    "19:20 - 20:10",
-    "20:15 - 21:05",
-    "21:00 - 22:00"
-  ];
+  /// 節次的顯示時間，與 [sectionStringList] 逐格對位。
+  ///
+  /// 時刻本身在 `lib/src/config/section_time.dart`，那是全 App 唯一一份
+  /// ——空教室要算「空到幾點」，需要分開的起訖，不能只有這串顯示字串。
+  List<String> get timeList =>
+      sectionTimes.map((t) => "${t.start} - ${t.end}").toList();
 
   /// 畫面上顯示的節次名稱，與 [timeList] 逐格對位。
   ///
@@ -75,22 +66,8 @@ class CourseTableControl {
   /// 那格在內部叫 `N`。但臺科自己不是這樣叫的：中午 12:20–13:10 就是**第五
   /// 節**，之後依序往下，17:30 那格是第十節——與 querycourse 前端那張
   /// `1…10 A…D` 的表一致。兩套不會相等，別再把它們斷言成同一個列表。
-  List<String> sectionStringList = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "A",
-    "B",
-    "C",
-    "D"
-  ];
+  List<String> get sectionStringList => sectionLabels;
+
   static int dayLength = 8;
   static int sectionLength = 14;
   late Map<String, Color> colorMap;
@@ -100,8 +77,7 @@ class CourseTableControl {
     isHideSaturday = !courseTable!.isDayInCourseTable(Day.saturday);
     isHideSunday = !courseTable!.isDayInCourseTable(Day.sunday);
     isHideUnKnown = !courseTable!.isDayInCourseTable(Day.unKnown);
-    isHideNoon =
-        !courseTable!.isSectionNumberInCourseTable(SectionNumber.t_N);
+    isHideNoon = !courseTable!.isSectionNumberInCourseTable(SectionNumber.t_N);
     isHideA = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.t_A));
     isHideB = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.t_B));
     isHideC = (!courseTable!.isSectionNumberInCourseTable(SectionNumber.t_C));
@@ -188,8 +164,7 @@ class CourseTableControl {
     for (final day in CourseTableConflict.days) {
       final sections = CourseTableConflict.sectionsOf(course.course.time[day]);
       if (sections.isEmpty) continue;
-      final labels =
-          sections.map((s) => getSectionString(s.index)).join('·');
+      final labels = sections.map((s) => getSectionString(s.index)).join('·');
       days.add('${getDayString(day.index)} $labels');
     }
     return days.join('　');

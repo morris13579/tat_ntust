@@ -28,22 +28,32 @@ void main() {
         .toList();
   }
 
-  test('只有四個分頁，而且順序固定', () {
+  test('只有五個分頁，而且順序固定', () {
     final pages = listItems('static const _pages', '[', '];');
     expect(pages, [
       'CourseTablePage()',
+      'MailPage()',
       'CalendarPage(openInApp: RouteUtils.tryOpenUpcomingEvent)',
       'ScoreViewerPage()',
       'OtherPage()',
     ]);
   });
 
+  test('五格是 M3 的上限，不能再多', () {
+    // NavigationBar 超過五格之後標籤會擠成兩行甚至被截掉。要加第六個入口，
+    // 該做的是把某一格搬進「更多」，不是再塞一格。
+    final pages = listItems('static const _pages', '[', '];');
+    expect(pages.length, lessThanOrEqualTo(5));
+  });
+
   test('MainTab 的個數與順序要跟分頁清單一致', () {
     final pages = listItems('static const _pages', '[', '];');
     expect(MainTab.values.length, pages.length);
     // 名稱會直接送進 Analytics 當 screen name，改名等於改掉既有的報表維度。
+    // 既有四個的拼法一個都沒動——送出去的是 `.name` 不是索引，所以在中間插
+    // 一個新值不會讓歷史報表錯位。
     expect(MainTab.values.map((e) => e.name).toList(),
-        ['courseTable', 'calendar', 'score', 'other']);
+        ['courseTable', 'mail', 'calendar', 'score', 'other']);
   });
 
   test('導覽列的圖示與標籤照同一個順序排', () {
@@ -56,6 +66,7 @@ void main() {
     }
     expect(labels, [
       'R.current.titleCourse',
+      'R.current.mailTab',
       'R.current.calendar',
       'R.current.titleScore',
       'R.current.titleMore',

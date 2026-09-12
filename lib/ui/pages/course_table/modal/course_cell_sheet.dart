@@ -115,19 +115,23 @@ class _CourseCellContent extends StatelessWidget {
               if (classroomName.isNotEmpty || time.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 7),
+                  // 兩個字級不同，靠 `end` 對齊的是**行框**的底而不是基線：
+                  // 內文的行高是 1.6，行框底下留了一段空白，時間的字看起來
+                  // 就會比教室高一截。行高壓回 1.2 讓行框貼著字，再置中。
                   child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.end,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: 12,
                     children: [
                       if (classroomName.isNotEmpty)
                         Text(classroomName,
                             style: context.text.titleMedium?.copyWith(
                                 color: band.foreground,
+                                height: 1.2,
                                 fontWeight: FontWeight.w600)),
                       if (time.isNotEmpty)
                         Text(time,
-                            style: context.text.bodyLarge
-                                ?.copyWith(color: band.foreground)),
+                            style: context.text.bodyLarge?.copyWith(
+                                color: band.foreground, height: 1.2)),
                     ],
                   ),
                 ),
@@ -249,6 +253,9 @@ class _DataRow extends StatelessWidget {
   final List<Widget> actions;
   final bool monospace;
 
+  /// 每一列的最小高度。動作鈕是 36，加上上下各 10 的內距剛好撐到這裡。
+  static const double _rowHeight = 56;
+
   @override
   Widget build(BuildContext context) {
     final scheme = context.scheme;
@@ -256,9 +263,12 @@ class _DataRow extends StatelessWidget {
       color: scheme.onSurface,
       fontFamily: monospace ? 'monospace' : null,
     );
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-          14, actions.isEmpty ? 13 : 11, 14, actions.isEmpty ? 13 : 11),
+    // 有沒有動作鈕都同一個高度。先前是靠上下內距各差 2 去湊，但那兩顆鈕是
+    // 36 高，差得比 4 多，兩列擺在一起看得出來不齊。
+    return Container(
+      constraints: const BoxConstraints(minHeight: _rowHeight),
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       child: Row(
         children: [
           Icon(icon, size: 19, color: scheme.onSurfaceVariant),

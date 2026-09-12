@@ -61,6 +61,10 @@ class CredentialsStore {
 
   String get password => _data.password;
 
+  String get mailPassword => _data.mailPassword;
+
+  /// 刻意**不**把 [mailPassword] 算進來：這個判準代表「登入 TAT」，而信箱是
+  /// 選用功能。沒設定信箱密碼的人仍然是已登入使用者。
   bool get hasCredentials =>
       _data.account.isNotEmpty && _data.password.isNotEmpty;
 
@@ -120,6 +124,8 @@ class CredentialsStore {
   void setAccount(String value) => _data.account = value;
 
   void setPassword(String value) => _data.password = value;
+
+  void setMailPassword(String value) => _data.mailPassword = value;
 
   /// 一次性遷移：舊位置有資料就搬過去，讀回比對一致才算成功。
   ///

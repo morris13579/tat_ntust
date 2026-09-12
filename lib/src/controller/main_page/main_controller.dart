@@ -18,7 +18,7 @@ import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:flutter_app/src/util/moodle_avatar_utils.dart';
 import 'package:get/get.dart';
 
-/// 四個分頁的身分。
+/// 五個分頁的身分。
 ///
 /// controller 不可以持有 Widget：那會讓 `lib/src/controller` 反向 import
 /// `lib/ui`，也就是 `tool/deps.py` 的 controller -> ui 上行邊。畫面由
@@ -28,7 +28,11 @@ import 'package:get/get.dart';
 /// 資訊系統搬進「更多」時是**刪掉** `subSystem` 這個值、而不是改名，其餘四個
 /// 的拼法才不會跟著位移，歷史報表也才接得起來；那一頁改由
 /// `AnalyticsUtils.observer` 以路由名記錄。
-enum MainTab { courseTable, calendar, score, other }
+///
+/// **在中間插一個值是安全的**：送出去的是 `.name` 不是索引，既有四個的拼法
+/// 沒動，歷史報表照樣接得起來。要小心的是順序必須與 [MainScreen] 的頁面清單
+/// 一致——導覽列與 `goToTab` 都是靠索引對應的。
+enum MainTab { courseTable, mail, calendar, score, other }
 
 class MainController extends GetxController {
   final pageController = PageController();

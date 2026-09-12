@@ -41,6 +41,14 @@ class RichEditorBridgeUtils {
   static String buildSetContentCall(String html) =>
       'window.__tatEditor.setContent(${jsStringLiteral(html)});';
 
+  /// 空編輯面的提示字。**用 dataset 而不是把字塞進 innerHTML**：後者一開始
+  /// 就會讓 `getContent()` 回一段使用者沒打過的內容，寄出去的信裡就會有它。
+  /// 頁面那一端靠 `#ed:empty::before { content: attr(data-placeholder) }` 畫，
+  /// 使用者一打字就自動消失，不必再推一次。
+  static String buildPlaceholderCall(String text) =>
+      'document.getElementById("ed").dataset.placeholder = '
+      '${jsStringLiteral(text)};';
+
   static String buildCommandCall(EditorCommand command) =>
       'window.__tatEditor.exec("${tokenOf(command)}");';
 

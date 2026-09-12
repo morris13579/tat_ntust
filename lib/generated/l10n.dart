@@ -6068,6 +6068,1061 @@ class S {
       args: [],
     );
   }
+
+  /// `Campus Mail`
+  String get mailTitle {
+    return Intl.message('Campus Mail', name: 'mailTitle', desc: '', args: []);
+  }
+
+  /// `Incorrect mailbox password`
+  String get mailPasswordRejected {
+    return Intl.message(
+      'Incorrect mailbox password',
+      name: 'mailPasswordRejected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cannot reach the mail server, please check your network`
+  String get mailPasswordUnreachable {
+    return Intl.message(
+      'Cannot reach the mail server, please check your network',
+      name: 'mailPasswordUnreachable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No messages in this mailbox`
+  String get mailEmpty {
+    return Intl.message(
+      'No messages in this mailbox',
+      name: 'mailEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load messages`
+  String get mailLoadFailed {
+    return Intl.message(
+      'Failed to load messages',
+      name: 'mailLoadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load the message body`
+  String get mailBodyLoadFailed {
+    return Intl.message(
+      'Failed to load the message body',
+      name: 'mailBodyLoadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `%s new messages`
+  String get mailNewMessages {
+    return Intl.message(
+      '%s new messages',
+      name: 'mailNewMessages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mark as unread`
+  String get mailMarkUnread {
+    return Intl.message(
+      'Mark as unread',
+      name: 'mailMarkUnread',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mark as read`
+  String get mailMarkRead {
+    return Intl.message(
+      'Mark as read',
+      name: 'mailMarkRead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Marked as unread`
+  String get mailMarkedUnread {
+    return Intl.message(
+      'Marked as unread',
+      name: 'mailMarkedUnread',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Move to folder`
+  String get mailMoveToFolder {
+    return Intl.message(
+      'Move to folder',
+      name: 'mailMoveToFolder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Moved`
+  String get mailMoved {
+    return Intl.message('Moved', name: 'mailMoved', desc: '', args: []);
+  }
+
+  /// `Load more`
+  String get mailLoadMore {
+    return Intl.message('Load more', name: 'mailLoadMore', desc: '', args: []);
+  }
+
+  /// `No older messages`
+  String get mailNoMore {
+    return Intl.message(
+      'No older messages',
+      name: 'mailNoMore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discard this message?`
+  String get mailDraftDiscard {
+    return Intl.message(
+      'Discard this message?',
+      name: 'mailDraftDiscard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `What you have written will be lost.`
+  String get mailDraftDiscardBody {
+    return Intl.message(
+      'What you have written will be lost.',
+      name: 'mailDraftDiscardBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discard`
+  String get mailDiscard {
+    return Intl.message('Discard', name: 'mailDiscard', desc: '', args: []);
+  }
+
+  /// `Keep editing`
+  String get mailKeepEditing {
+    return Intl.message(
+      'Keep editing',
+      name: 'mailKeepEditing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To`
+  String get mailRecipientTo {
+    return Intl.message('To', name: 'mailRecipientTo', desc: '', args: []);
+  }
+
+  /// `(me)`
+  String get mailSelfMarker {
+    return Intl.message('(me)', name: 'mailSelfMarker', desc: '', args: []);
+  }
+
+  /// `Outbox`
+  String get mailOutbox {
+    return Intl.message('Outbox', name: 'mailOutbox', desc: '', args: []);
+  }
+
+  /// `Sending in %ss`
+  String get mailOutboxWaiting {
+    return Intl.message(
+      'Sending in %ss',
+      name: 'mailOutboxWaiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sending`
+  String get mailOutboxSending {
+    return Intl.message(
+      'Sending',
+      name: 'mailOutboxSending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send failed`
+  String get mailOutboxFailed {
+    return Intl.message(
+      'Send failed',
+      name: 'mailOutboxFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Undo`
+  String get mailRecall {
+    return Intl.message('Undo', name: 'mailRecall', desc: '', args: []);
+  }
+
+  /// `Send undone`
+  String get mailRecalled {
+    return Intl.message(
+      'Send undone',
+      name: 'mailRecalled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get mailRetry {
+    return Intl.message('Retry', name: 'mailRetry', desc: '', args: []);
+  }
+
+  /// `Read`
+  String get mailSeenShort {
+    return Intl.message('Read', name: 'mailSeenShort', desc: '', args: []);
+  }
+
+  /// `Unread`
+  String get mailUnseenShort {
+    return Intl.message('Unread', name: 'mailUnseenShort', desc: '', args: []);
+  }
+
+  /// `Sending`
+  String get mailSendingUndo {
+    return Intl.message('Sending', name: 'mailSendingUndo', desc: '', args: []);
+  }
+
+  /// `(No subject)`
+  String get mailNoSubject {
+    return Intl.message(
+      '(No subject)',
+      name: 'mailNoSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Moved to trash`
+  String get mailMovedToTrash {
+    return Intl.message(
+      'Moved to trash',
+      name: 'mailMovedToTrash',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Action failed, please try again`
+  String get mailActionFailed {
+    return Intl.message(
+      'Action failed, please try again',
+      name: 'mailActionFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remote images are blocked so the sender cannot tell that you opened this message`
+  String get mailRemoteImagesBlocked {
+    return Intl.message(
+      'Remote images are blocked so the sender cannot tell that you opened this message',
+      name: 'mailRemoteImagesBlocked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show images`
+  String get mailShowImages {
+    return Intl.message(
+      'Show images',
+      name: 'mailShowImages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Compose`
+  String get mailCompose {
+    return Intl.message('Compose', name: 'mailCompose', desc: '', args: []);
+  }
+
+  /// `To`
+  String get mailTo {
+    return Intl.message('To', name: 'mailTo', desc: '', args: []);
+  }
+
+  /// `Cc`
+  String get mailCc {
+    return Intl.message('Cc', name: 'mailCc', desc: '', args: []);
+  }
+
+  /// `Subject`
+  String get mailSubject {
+    return Intl.message('Subject', name: 'mailSubject', desc: '', args: []);
+  }
+
+  /// `Send`
+  String get mailSend {
+    return Intl.message('Send', name: 'mailSend', desc: '', args: []);
+  }
+
+  /// `Sent`
+  String get mailSent {
+    return Intl.message('Sent', name: 'mailSent', desc: '', args: []);
+  }
+
+  /// `Failed to send, please try again`
+  String get mailSendFailed {
+    return Intl.message(
+      'Failed to send, please try again',
+      name: 'mailSendFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reply`
+  String get mailReply {
+    return Intl.message('Reply', name: 'mailReply', desc: '', args: []);
+  }
+
+  /// `Reply all`
+  String get mailReplyAll {
+    return Intl.message('Reply all', name: 'mailReplyAll', desc: '', args: []);
+  }
+
+  /// `Forward`
+  String get mailForward {
+    return Intl.message('Forward', name: 'mailForward', desc: '', args: []);
+  }
+
+  /// `Attachment`
+  String get mailAttach {
+    return Intl.message('Attachment', name: 'mailAttach', desc: '', args: []);
+  }
+
+  /// `Attachment is too large, one message cannot exceed 35 MB in total`
+  String get mailAttachTooLarge {
+    return Intl.message(
+      'Attachment is too large, one message cannot exceed 35 MB in total',
+      name: 'mailAttachTooLarge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter at least one recipient`
+  String get mailRecipientRequired {
+    return Intl.message(
+      'Enter at least one recipient',
+      name: 'mailRecipientRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recipient address is not a valid email`
+  String get mailInvalidRecipient {
+    return Intl.message(
+      'Recipient address is not a valid email',
+      name: 'mailInvalidRecipient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Folders`
+  String get mailFolders {
+    return Intl.message('Folders', name: 'mailFolders', desc: '', args: []);
+  }
+
+  /// `Inbox`
+  String get mailFolderInbox {
+    return Intl.message('Inbox', name: 'mailFolderInbox', desc: '', args: []);
+  }
+
+  /// `Sent`
+  String get mailFolderSent {
+    return Intl.message('Sent', name: 'mailFolderSent', desc: '', args: []);
+  }
+
+  /// `Drafts`
+  String get mailFolderDrafts {
+    return Intl.message('Drafts', name: 'mailFolderDrafts', desc: '', args: []);
+  }
+
+  /// `Trash`
+  String get mailFolderTrash {
+    return Intl.message('Trash', name: 'mailFolderTrash', desc: '', args: []);
+  }
+
+  /// `Junk`
+  String get mailFolderJunk {
+    return Intl.message('Junk', name: 'mailFolderJunk', desc: '', args: []);
+  }
+
+  /// `Archive`
+  String get mailFolderArchive {
+    return Intl.message(
+      'Archive',
+      name: 'mailFolderArchive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search by subject or sender`
+  String get mailSearchHint {
+    return Intl.message(
+      'Search by subject or sender',
+      name: 'mailSearchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No matching messages`
+  String get mailSearchEmpty {
+    return Intl.message(
+      'No matching messages',
+      name: 'mailSearchEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `unread`
+  String get mailUnread {
+    return Intl.message('unread', name: 'mailUnread', desc: '', args: []);
+  }
+
+  /// `messages`
+  String get mailMessageCount {
+    return Intl.message(
+      'messages',
+      name: 'mailMessageCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attachments`
+  String get mailAttachments {
+    return Intl.message(
+      'Attachments',
+      name: 'mailAttachments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download`
+  String get mailDownload {
+    return Intl.message('Download', name: 'mailDownload', desc: '', args: []);
+  }
+
+  /// `Downloaded`
+  String get mailDownloaded {
+    return Intl.message(
+      'Downloaded',
+      name: 'mailDownloaded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show %s empty folders`
+  String get showEmptyFolders {
+    return Intl.message(
+      'Show %s empty folders',
+      name: 'showEmptyFolders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide empty folders`
+  String get hideEmptyFolders {
+    return Intl.message(
+      'Hide empty folders',
+      name: 'hideEmptyFolders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mail`
+  String get mailTab {
+    return Intl.message('Mail', name: 'mailTab', desc: '', args: []);
+  }
+
+  /// `All folders`
+  String get mailSearchScopeAll {
+    return Intl.message(
+      'All folders',
+      name: 'mailSearchScopeAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `%s results`
+  String get mailSearchResultCount {
+    return Intl.message(
+      '%s results',
+      name: 'mailSearchResultCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search all folders instead`
+  String get mailSearchAllFolders {
+    return Intl.message(
+      'Search all folders instead',
+      name: 'mailSearchAllFolders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `%s recipients`
+  String get mailRecipientCount {
+    return Intl.message(
+      '%s recipients',
+      name: 'mailRecipientCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Archived`
+  String get mailArchived {
+    return Intl.message('Archived', name: 'mailArchived', desc: '', args: []);
+  }
+
+  /// `Bcc`
+  String get mailBcc {
+    return Intl.message('Bcc', name: 'mailBcc', desc: '', args: []);
+  }
+
+  /// `Message`
+  String get mailBodyHint {
+    return Intl.message('Message', name: 'mailBodyHint', desc: '', args: []);
+  }
+
+  /// `Set up campus mail`
+  String get mailSetupTitle {
+    return Intl.message(
+      'Set up campus mail',
+      name: 'mailSetupTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Once set up, you can read and send NTUST mailbox messages in TAT.`
+  String get mailSetupDesc {
+    return Intl.message(
+      'Once set up, you can read and send NTUST mailbox messages in TAT.',
+      name: 'mailSetupDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Read, reply and forward without opening a browser`
+  String get mailSetupBenefitRead {
+    return Intl.message(
+      'Read, reply and forward without opening a browser',
+      name: 'mailSetupBenefitRead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search by subject or sender instead of paging through`
+  String get mailSetupBenefitSearch {
+    return Intl.message(
+      'Search by subject or sender instead of paging through',
+      name: 'mailSetupBenefitSearch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save attachments straight to your phone`
+  String get mailSetupBenefitAttachment {
+    return Intl.message(
+      'Save attachments straight to your phone',
+      name: 'mailSetupBenefitAttachment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in to mailbox`
+  String get mailLogin {
+    return Intl.message(
+      'Sign in to mailbox',
+      name: 'mailLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free classrooms`
+  String get classroomTitle {
+    return Intl.message(
+      'Free classrooms',
+      name: 'classroomTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check which classrooms are currently available`
+  String get classroomEntryDescription {
+    return Intl.message(
+      'Check which classrooms are currently available',
+      name: 'classroomEntryDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `From the classroom booking system`
+  String get classroomSubSystemHint {
+    return Intl.message(
+      'From the classroom booking system',
+      name: 'classroomSubSystemHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In app`
+  String get classroomInApp {
+    return Intl.message('In app', name: 'classroomInApp', desc: '', args: []);
+  }
+
+  /// `List`
+  String get classroomViewList {
+    return Intl.message('List', name: 'classroomViewList', desc: '', args: []);
+  }
+
+  /// `Whole day`
+  String get classroomViewDay {
+    return Intl.message(
+      'Whole day',
+      name: 'classroomViewDay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change`
+  String get classroomChangeTime {
+    return Intl.message(
+      'Change',
+      name: 'classroomChangeTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to now`
+  String get classroomBackToNow {
+    return Intl.message(
+      'Back to now',
+      name: 'classroomBackToNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search this period`
+  String get classroomApplyTime {
+    return Intl.message(
+      'Search this period',
+      name: 'classroomApplyTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date`
+  String get classroomDate {
+    return Intl.message('Date', name: 'classroomDate', desc: '', args: []);
+  }
+
+  /// `Period`
+  String get classroomSection {
+    return Intl.message('Period', name: 'classroomSection', desc: '', args: []);
+  }
+
+  /// `Period %s · %s`
+  String get classroomSectionAt {
+    return Intl.message(
+      'Period %s · %s',
+      name: 'classroomSectionAt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Any`
+  String get classroomRunAny {
+    return Intl.message('Any', name: 'classroomRunAny', desc: '', args: []);
+  }
+
+  /// `≥2 periods`
+  String get classroomRunTwo {
+    return Intl.message(
+      '≥2 periods',
+      name: 'classroomRunTwo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `≥3 periods`
+  String get classroomRunThree {
+    return Intl.message(
+      '≥3 periods',
+      name: 'classroomRunThree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All day`
+  String get classroomRunAllDay {
+    return Intl.message(
+      'All day',
+      name: 'classroomRunAllDay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free until %s`
+  String get classroomFreeUntil {
+    return Intl.message(
+      'Free until %s',
+      name: 'classroomFreeUntil',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free all day`
+  String get classroomFreeAllDay {
+    return Intl.message(
+      'Free all day',
+      name: 'classroomFreeAllDay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No class scheduled`
+  String get classroomNoClassToday {
+    return Intl.message(
+      'No class scheduled',
+      name: 'classroomNoClassToday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nothing scheduled after this`
+  String get classroomNoMoreClass {
+    return Intl.message(
+      'Nothing scheduled after this',
+      name: 'classroomNoMoreClass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next %s %s`
+  String get classroomNextClass {
+    return Intl.message(
+      'Next %s %s',
+      name: 'classroomNextClass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Booked from %s`
+  String get classroomBookedFrom {
+    return Intl.message(
+      'Booked from %s',
+      name: 'classroomBookedFrom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `%s of %s rooms are free now`
+  String get classroomFreeSummary {
+    return Intl.message(
+      '%s of %s rooms are free now',
+      name: 'classroomFreeSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free now · %s`
+  String get classroomFreeGroup {
+    return Intl.message(
+      'Free now · %s',
+      name: 'classroomFreeGroup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In use now · %s`
+  String get classroomBusyGroup {
+    return Intl.message(
+      'In use now · %s',
+      name: 'classroomBusyGroup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free`
+  String get classroomLegendFree {
+    return Intl.message(
+      'Free',
+      name: 'classroomLegendFree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Class`
+  String get classroomLegendClass {
+    return Intl.message(
+      'Class',
+      name: 'classroomLegendClass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Booked`
+  String get classroomLegendBooked {
+    return Intl.message(
+      'Booked',
+      name: 'classroomLegendBooked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Floor %s`
+  String get classroomFloor {
+    return Intl.message('Floor %s', name: 'classroomFloor', desc: '', args: []);
+  }
+
+  /// `Other buildings`
+  String get classroomOtherBuildings {
+    return Intl.message(
+      'Other buildings',
+      name: 'classroomOtherBuildings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The system serves one building at a time; tap to query.`
+  String get classroomOtherBuildingsHint {
+    return Intl.message(
+      'The system serves one building at a time; tap to query.',
+      name: 'classroomOtherBuildingsHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `%s`
+  String get classroomLastFetched {
+    return Intl.message('%s', name: 'classroomLastFetched', desc: '', args: []);
+  }
+
+  /// `Loading…`
+  String get classroomFetching {
+    return Intl.message(
+      'Loading…',
+      name: 'classroomFetching',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `%s as of %s`
+  String get classroomFetchedAt {
+    return Intl.message(
+      '%s as of %s',
+      name: 'classroomFetchedAt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `As of %s · tap a room for its schedule`
+  String get classroomDayFetchedAt {
+    return Intl.message(
+      'As of %s · tap a room for its schedule',
+      name: 'classroomDayFetchedAt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refresh`
+  String get classroomRefresh {
+    return Intl.message(
+      'Refresh',
+      name: 'classroomRefresh',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `%s is full this period`
+  String get classroomFullTitle {
+    return Intl.message(
+      '%s is full this period',
+      name: 'classroomFullTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All %s classrooms are scheduled or booked.`
+  String get classroomFullBody {
+    return Intl.message(
+      'All %s classrooms are scheduled or booked.',
+      name: 'classroomFullBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `See period %s`
+  String get classroomSeeSection {
+    return Intl.message(
+      'See period %s',
+      name: 'classroomSeeSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change building`
+  String get classroomChangeBuilding {
+    return Intl.message(
+      'Change building',
+      name: 'classroomChangeBuilding',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not load %s (%s). The university system may be temporarily unavailable; please try again later.`
+  String get classroomFetchFailed {
+    return Intl.message(
+      'Could not load %s (%s). The university system may be temporarily unavailable; please try again later.',
+      name: 'classroomFetchFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No data for %s on this date`
+  String get classroomClosedTitle {
+    return Intl.message(
+      'No data for %s on this date',
+      name: 'classroomClosedTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The booking system only covers teaching days, so weekends and holidays return no data.`
+  String get classroomClosedBody {
+    return Intl.message(
+      'The booking system only covers teaching days, so weekends and holidays return no data.',
+      name: 'classroomClosedBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pick a building`
+  String get classroomPickBuilding {
+    return Intl.message(
+      'Pick a building',
+      name: 'classroomPickBuilding',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Find free rooms for this period`
+  String get classroomFromCourseTable {
+    return Intl.message(
+      'Find free rooms for this period',
+      name: 'classroomFromCourseTable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free period`
+  String get classroomFreeCell {
+    return Intl.message(
+      'Free period',
+      name: 'classroomFreeCell',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Period %s`
+  String get classroomSectionLabel {
+    return Intl.message(
+      'Period %s',
+      name: 'classroomSectionLabel',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

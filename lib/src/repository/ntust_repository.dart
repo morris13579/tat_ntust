@@ -3,7 +3,10 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/repository/retry.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/auth/auth_session.dart';
+import 'package:flutter_app/src/connector/classroom_connector.dart';
 import 'package:flutter_app/src/connector/course_connector.dart';
+import 'package:flutter_app/src/model/classroom/classroom_option.dart';
+import 'package:flutter_app/src/model/classroom/classroom_usage_json.dart';
 import 'package:flutter_app/src/model/course/course_query_filter.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
@@ -47,6 +50,66 @@ class NtustRepository {
         errorMessage: R.current.getScoreError,
         debugLabel: 'scoreRank',
       );
+
+  /// 教室查詢的校區與大樓選單。
+  ///
+  /// **沒有快取**，與 [getSubSystemTree] 同一個理由：這份清單很小、變動極少，
+  /// 加上去只是多一個會過期的副本。
+  ///
+  /// 特別不能用 `cacheFirst`：它命中就永遠不再打網路，而這份清單**是會變的**
+  /// ——課務組把一棟大樓納進借用系統時（`MA` 與 `RB` 現在就是有選項、沒教室
+  /// 的狀態），使用者會永遠看不到那一棟，而且只有登出才清得掉。
+  ///
+  /// 取得它要一次交握加上「每個校區各一次 postback」，大約三秒。那是一次
+  /// 冷啟動的成本，[ClassroomConnector] 留著的頁面狀態會讓同一輪的後續查詢
+  /// 只剩一個 postback。
+  Future<Result<List<ClassroomCampusJson>>> getClassroomCampuses() =>
+      run<List<ClassroomCampusJson>>(
+        requires: const {SystemId.ntustSso},
+        fetch: ClassroomConnector.getCampuses,
+        errorMessage: R.current.somethingError,
+        debugLabel: 'classroomCampuses',
+      );
+
+  /// 某一天、某個校區（[buildingCode] 為 null 就是整個校區）的教室使用情形。
+  ///
+  /// 快取的 id 帶齊三個查詢條件，不同的日期與大樓各自留一份，翻回去看過的
+  /// 那一天不必再打網路。
+  ///
+  /// 沒有 `progressMessage`：查詢頁自己用 `ResultView` 畫載入狀態，再疊一個
+  /// 全螢幕遮罩會變成兩個轉圈。
+  Future<Result<ClassroomUsageJson>> getClassroomUsage({
+    required String campusCode,
+    required DateTime date,
+    String? buildingCode,
+  }) =>
+      run<ClassroomUsageJson>(
+        requires: const {SystemId.ntustSso},
+        cache: classroomUsageCacheKey(
+            campusCode: campusCode, date: date, buildingCode: buildingCode),
+        fetch: () => ClassroomConnector.getUsage(
+            campusCode: campusCode,
+            date: date,
+            buildingCode: buildingCode),
+        errorMessage: R.current.somethingError,
+        debugLabel: 'classroomUsage',
+      );
+
+  @visibleForTesting
+  static CacheKey<ClassroomUsageJson> classroomUsageCacheKey({
+    required String campusCode,
+    required DateTime date,
+    String? buildingCode,
+  }) {
+    final day = "${date.year.toString().padLeft(4, '0')}"
+        "${date.month.toString().padLeft(2, '0')}"
+        "${date.day.toString().padLeft(2, '0')}";
+    return CacheKey<ClassroomUsageJson>(
+      "cache_classroom_usage",
+      "$campusCode-${buildingCode ?? 'all'}-$day",
+      decode: (json) => ClassroomUsageJson.fromJson(json),
+    );
+  }
 
   /// 資訊系統的功能樹。
   ///

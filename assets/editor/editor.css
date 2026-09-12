@@ -37,6 +37,7 @@ body {
 
 #ed {
   box-sizing: border-box;
+  position: relative;   /* 提示字要絕對定位，包含塊就是這裡的 padding box */
   min-height: 100vh;
   padding: 12px 14px 96px;   /* 對齊 SectionCard 的 14/12；96 是游標避開鍵盤的餘裕 */
   outline: none;
@@ -45,8 +46,18 @@ body {
   word-break: break-word;
 }
 
+/* 空編輯面的提示字。`content: attr()` 讓文字留在 dataset 上，所以它永遠不是
+   內容的一部分——`getContent()` 讀不到它，使用者一打字就自動消失。
+
+   **要絕對定位。** 當成行內內容的話它會自己佔一個 line box，把游標往下推，
+   於是提示字和游標對不齊（游標在下面一行）。脫離文件流之後兩者就重疊了。
+   top/left 要自己補回 #ed 的 padding，因為包含塊是 padding box。 */
 #ed:empty::before {
   content: attr(data-placeholder);
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  right: 14px;
   color: var(--muted);
   pointer-events: none;
 }
@@ -120,3 +131,4 @@ body {
   font-size: 14px;
   line-height: 1.5;
 }
+

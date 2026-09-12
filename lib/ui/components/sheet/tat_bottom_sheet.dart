@@ -28,11 +28,17 @@ class TatSheetOption<T> {
     required this.label,
     this.supporting,
     required this.value,
+    this.icon,
   });
 
   final String label;
   final String? supporting;
   final T value;
+
+  /// 左側圖示。null 就不佔那一欄——大多數單選清單（學期、語言）的選項是同
+  /// 一類東西，給每一列一個圖示只是重複。信箱的資料夾不一樣：收件匣與其餘
+  /// 資料夾是兩種東西。
+  final IconData? icon;
 }
 
 /// 動作清單。沒有標題、沒有分隔線、也沒有取消列——下滑與點遮罩都能關。
@@ -261,6 +267,16 @@ class TatSheetOptionRow<T> extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             child: Row(
               children: [
+                if (option.icon != null) ...[
+                  Icon(
+                    option.icon,
+                    size: 20,
+                    color: isSelected
+                        ? scheme.onPrimaryContainer
+                        : scheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 12),
+                ],
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -10,6 +10,8 @@ import 'package:flutter_app/src/auth/auth_session.dart';
 import 'package:flutter_app/src/auth/session_cleaner.dart';
 import 'package:flutter_app/src/config/app_link.dart';
 import 'package:flutter_app/src/controller/announcement/notification_badge_controller.dart';
+import 'package:flutter_app/src/controller/mail/mail_outbox_controller.dart';
+import 'package:flutter_app/src/controller/mail/mail_watch_controller.dart';
 import 'package:flutter_app/src/controller/course_table/course_controller.dart';
 import 'package:flutter_app/src/controller/main_page/main_controller.dart';
 import 'package:flutter_app/src/controller/score_page/score_page_controller.dart';
@@ -86,6 +88,18 @@ class _OtherPageState extends State<OtherPage> {
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         children: [
           _buildAccountTile(),
+          const SizedBox(height: 16),
+          // 空教室自己一組、在「資訊系統」上面，不塞進下面那六個分類裡：
+          // 那六個是校務網站的分類，空教室是 App 自己的頁面，混在一起會讓
+          // 人以為又要開瀏覽器。
+          _group([
+            _Row(
+              icon: LucideIcons.doorOpen,
+              title: R.current.classroomTitle,
+              subtitle: R.current.classroomEntryDescription,
+              onTap: () => unawaited(RouteUtils.toClassroomPage()),
+            ),
+          ]),
           SectionHeader(
             title: R.current.informationSystem,
             trailing: _HeaderLink(
@@ -292,6 +306,7 @@ class _OtherPageState extends State<OtherPage> {
         serviceId: serviceId,
         errorBuilder: (message) => ErrorPage(errorMsg: message),
         openWebView: (title, url) => RouteUtils.toWebViewPage(title, url),
+        openClassroom: () => unawaited(RouteUtils.toClassroomPage()),
       ),
       transition: RouteUtils.transition,
     ));
@@ -369,6 +384,12 @@ class _OtherPageState extends State<OtherPage> {
     // 紅點是 process 級狀態，重設由 SessionCleaner 的呼叫端觸發
     // （auth → controller 是 tool/deps.py 擋死的上行邊）。
     NotificationBadgeController.instance.reset();
+    // 同理：不清的話換帳號後第一輪會拿舊基準去比，把 B 信箱裡本來就有的信
+    // 整批當成新信彈出來。
+    MailWatchController.instance.reset();
+    // 寄件匣同理。佇列本身由 SessionCleaner 清掉（`MailStore.clear()`），這裡
+    // 只把那顆還在跑的 timer 收掉——不收的話它會拿 B 的帳密去寄 A 寫的信。
+    MailOutboxController.instance.reset();
     // 直接回登入頁。先前是 jumpToPage(0) 留在主畫面，靠課表頁的錯誤狀態顯示
     // 「請先登入」——等於登出後還站在一個沒有資料的殼裡。
     await RouteUtils.toLoginScreenAsRoot();

@@ -8,7 +8,14 @@ class UserDataJson {
   String account;
   String password;
 
-  UserDataJson({this.account = "", this.password = ""});
+  /// 校內信箱（Mail2000）的密碼。
+  ///
+  /// **與 [password] 是兩組不同的密碼**：[password] 是校務系統的 SSO 密碼，
+  /// 這一個是 IMAP / SMTP `AUTH=LOGIN` 認的那組。實測拿 SSO 密碼登 IMAP 會被
+  /// 拒，所以不能共用一格。見 docs/WEBMAIL_IMAP.md 的門檻 A。
+  String mailPassword;
+
+  UserDataJson({this.account = "", this.password = "", this.mailPassword = ""});
 
   factory UserDataJson.fromJson(Map<String, dynamic> json) =>
       _$UserDataJsonFromJson(json);

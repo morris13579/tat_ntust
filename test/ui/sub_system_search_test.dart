@@ -3,6 +3,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/ntust/ap_tree_json.dart';
 import 'package:flutter_app/src/repository/ntust_repository.dart';
 import 'package:flutter_app/src/repository/result.dart';
+import 'package:flutter_app/ui/pages/subsystem/sub_system_category.dart';
 import 'package:flutter_app/ui/pages/subsystem/sub_system_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -73,10 +74,18 @@ void main() {
         serviceId: serviceId,
         errorBuilder: (message) => Text('error:$message'),
         openWebView: (title, url) async {},
+        openClassroom: () {},
       ),
     ));
     await tester.pumpAndSettle();
   }
+
+  test('空教室釘在「校園資訊」底下，不是別的分類', () {
+    // 代號是 NTUST 那一側的不透明字串，靠 subSystemCategoryName 對照。
+    // 釘錯分類的話那一列會整個消失而且不會有任何錯誤。
+    expect(subSystemCategoryName(classroomPinnedCategory),
+        R.current.resources);
+  });
 
   testWidgets('搜尋只做本地過濾，不會再打一次 API', (tester) async {
     await pump(tester, tree());

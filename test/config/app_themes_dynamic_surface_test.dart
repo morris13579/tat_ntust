@@ -43,8 +43,7 @@ void main() {
             : AppThemes.darkTheme(_deviceScheme(brightness));
         final tokens = theme.extension<TatTokens>()!;
 
-        expect(tokens.card, isNot(tokens.page),
-            reason: '卡片與底色同色，畫面上每張卡片都會消失');
+        expect(tokens.card, isNot(tokens.page), reason: '卡片與底色同色，畫面上每張卡片都會消失');
         expect(theme.scaffoldBackgroundColor, tokens.page);
       });
 

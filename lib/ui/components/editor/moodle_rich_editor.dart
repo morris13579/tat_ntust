@@ -34,12 +34,17 @@ class MoodleRichEditor extends StatefulWidget {
   const MoodleRichEditor({
     super.key,
     required this.initialHtml,
+    this.placeholder,
     required this.controller,
     required this.onStateChanged,
     required this.onChanged,
     required this.onReady,
     required this.onLoadFailed,
   });
+
+  /// 編輯面空著時顯示的提示字。null 就不畫——論壇貼文那一頁上面已經有一列
+  /// 「內容」的標籤，再畫一次是重複。
+  final String? placeholder;
 
   /// 進到 contenteditable 的 HTML。內嵌圖片的網址必須已經是可以直接載入的
   /// 樣子——這一層不會替任何網址加憑證。
@@ -187,6 +192,10 @@ class _MoodleRichEditorState extends State<MoodleRichEditor> {
     // 貼文 HTML 進到頁面的唯一途徑：包成 JS 字串常值，絕不字串相接。
     await _webView?.evaluateJavascript(
         source: RichEditorBridgeUtils.buildSetContentCall(widget.initialHtml));
+    if (widget.placeholder case final hint?) {
+      await _webView?.evaluateJavascript(
+          source: RichEditorBridgeUtils.buildPlaceholderCall(hint));
+    }
     if (mounted) widget.onReady();
   }
 

@@ -160,7 +160,8 @@ class DioConnector {
       Map<String, String>? data = parameter.data;
       _handleCharsetName(parameter.charsetName);
       _handleHeaders(parameter);
-      response = await dio.get(url, queryParameters: data);
+      response = await dio.get(url,
+          queryParameters: data, options: _redirectOptions(parameter));
       return response;
     } catch (e) {
       rethrow;
@@ -187,7 +188,8 @@ class DioConnector {
       String url = parameter.url;
       _handleCharsetName(parameter.charsetName);
       _handleHeaders(parameter);
-      response = await dio.post(url, data: parameter.data);
+      response = await dio.post(url,
+          data: parameter.data, options: _redirectOptions(parameter));
       return response;
     } catch (e) {
       rethrow;
@@ -215,6 +217,13 @@ class DioConnector {
       options: Options(sendTimeout: sendTimeout),
     );
   }
+
+  /// `followRedirects` 是預設值時完全不送 [Options]，既有的呼叫端行為
+  /// 一個位元都不變。
+  static Options? _redirectOptions(ConnectorParameter parameter) =>
+      parameter.followRedirects
+          ? null
+          : Options(followRedirects: false, maxRedirects: 0);
 
   void _handleHeaders(ConnectorParameter parameter) {
     dio.options.headers[HttpHeaders.userAgentHeader] = parameter.userAgent;

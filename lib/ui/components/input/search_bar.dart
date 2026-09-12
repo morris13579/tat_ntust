@@ -17,7 +17,8 @@ class CourseSearchBar extends StatelessWidget {
       this.onSubmit,
       this.autofocus = true,
       this.hintText,
-      this.onLeadingTap});
+      this.onLeadingTap,
+      this.trailing});
 
   final TextEditingController? controller;
   final bool isBack;
@@ -35,6 +36,10 @@ class CourseSearchBar extends StatelessWidget {
   /// 左邊那顆鈕。null 時維持既有行為（離開這一頁）——當它是搜尋圖示而不是
   /// 返回箭頭時，那個行為並不合理，所以就地篩選的呼叫端一定要傳。
   final VoidCallback? onLeadingTap;
+
+  /// 欄位右邊的東西，通常是一顆清除鍵。null 就不佔位——大多數呼叫端的搜尋欄
+  /// 是版面裡的篩選器，清空只要把字刪掉。
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +74,8 @@ class CourseSearchBar extends StatelessWidget {
                       hintText: hintText ?? R.current.search),
                   onChanged: onChange,
                 ),
-              )
+              ),
+              if (trailing != null) trailing!,
             ],
           )),
     );

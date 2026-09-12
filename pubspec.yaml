@@ -5,7 +5,7 @@ description: NTUST Life TAT, convenient, concise, fast, powerful, enrich your NT
 # flutter clean && flutter build ios --split-debug-info=build/app/outputs/symbols --obfuscate && flutter build appbundle --split-debug-info=build/app/outputs/symbols --obfuscate --shrink
 # follow the google play new policy in 2021, do not build apk but aab.
 # CHECK THE BUILD CODE BEFORE DISTRIBUTION!!
-version: 2.0.1+123
+version: 2.1.0+124
 publish_to: none
 
 environment:
@@ -42,6 +42,9 @@ dependencies:
   #版本比較
   #選擇android資料夾
   #----------store data----------#
+  sqflite: ^2.4.1
+  #信件快取。原本走 SharedPreferences 的單一 JSON blob，整包讀寫在幾百封時
+  #就開始卡；改成一張表，見 lib/src/store/mail_store.dart。
   shared_preferences: ^2.5.4
   flutter_secure_storage: ^9.2.4
   #帳密與 Moodle token 改存 Keystore / Keychain
@@ -54,6 +57,9 @@ dependencies:
   cookie_jar: ^4.0.8
   #可儲存式cookies
   html: ^0.15.2
+  csslib: ^1.0.2
+  #把信件 <style> 區塊的 CSS 展開成行內樣式，見 lib/src/util/html_style_inliner.dart。
+  #flutter_widget_from_html 只吃行內的 style 屬性，不套用 <style> 裡的規則。
   #html解析器
   fk_user_agent:
     git:
@@ -104,6 +110,11 @@ dependencies:
   file_picker: ^11.0.3
   github: ^9.11.0
   #----------Widget----------#
+  # iOS 信件那種滑動選單：滑一半停住、露出幾顆可以按的按鈕。
+  # 內建的 Dismissible 做不到——它的 controller 只有「回原位」與「整列滑掉」
+  # 兩個落點，沒有中間的停留狀態，background 也只是一塊底圖、按不到。
+  # 純 Dart，沒有 podspec 也沒有 Gradle，不會卡平台版本。
+  flutter_slidable: ^3.1.2
   get: ^4.6.5
   cached_network_image: ^3.2.3
   #用url顯示圖片
@@ -113,8 +124,6 @@ dependencies:
   #顯示行事曆
   expansion_tile_card: ^3.0.0
   #Toast
-  flutter_slidable: ^3.0.1
-  #email使用可左右滑抽屜
   #等待動畫
   card_swiper: ^3.0.1
   #公告
@@ -123,6 +132,12 @@ dependencies:
   pretty_json: ^2.0.0
   icalendar_parser: ^2.0.0
   charset_converter: ^2.3.0
+  #----------mail----------#
+  enough_mail: ^2.1.7
+  #IMAP / SMTP 與 MIME 解析，見 docs/WEBMAIL_IMAP.md
+  enough_convert: ^1.6.0
+  #Big5 等 dart:convert 沒有的編碼。enough_mail 本來就會帶它進來，這裡直接
+  #宣告是因為 MailConnector 要自己拿 Big5Codec 繞過 enough_mail 的 QP 缺陷。
 
   # Firebase
   firebase_core: ^2.8.0
@@ -149,6 +164,7 @@ dependencies:
   # NSPhotoLibraryAddUsageDescription，那是本專案刻意沒有的權限。
   share_plus: ^11.1.0
   in_app_review: ^2.0.12
+  toastification: ^3.2.0
   # 驗證 Moodle launch.php 回傳的 signature（md5）。
   # 直接相依：l10n 產生的程式碼、file_utils 與課程公告頁都直接 import intl。
   # 先前只寫在 dependency_overrides，於是 analyzer 一路報

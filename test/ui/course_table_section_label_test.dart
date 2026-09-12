@@ -24,8 +24,7 @@ void main() {
     });
 
     test('中午 12:20 是第五節，不是 N', () {
-      final noon =
-          control.timeList.indexWhere((t) => t.startsWith('12:20'));
+      final noon = control.timeList.indexWhere((t) => t.startsWith('12:20'));
 
       expect(noon, isNot(-1));
       expect(control.getSectionString(noon), '5');
@@ -59,7 +58,8 @@ void main() {
       ]) {
         final i = control.timeList.indexWhere((t) => t.startsWith(time));
         expect(i, isNot(-1), reason: '找不到 $time');
-        expect(control.getSectionString(i), label, reason: '$time 應該是第 $label 節');
+        expect(control.getSectionString(i), label,
+            reason: '$time 應該是第 $label 節');
       }
     });
   });

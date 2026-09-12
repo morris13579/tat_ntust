@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
@@ -20,6 +22,7 @@ import 'package:flutter_app/ui/pages/course_data/course_data_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_folder_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_info_page.dart';
 import 'package:flutter_app/ui/pages/course_detail/course_detail_page.dart';
+import 'package:flutter_app/ui/pages/classroom/classroom_page.dart';
 import 'package:flutter_app/ui/pages/course_member/course_member_page.dart';
 import 'package:flutter_app/ui/pages/log_console/log_console.dart';
 import 'package:flutter_app/ui/pages/other/page/about_page.dart';
@@ -181,6 +184,23 @@ class RouteUtils {
     );
   }
 
+  /// 空教室。錯誤畫面由這裡注入，那一頁本身不 import 路由表
+  /// （見 docs/ARCHITECTURE.md「UI 慣例」）。
+  ///
+  /// [date] 與 [section] 是從課表的空堂進來時帶的時段，兩個都給才生效；
+  /// 都不給就開在「現在」。
+  static Future toClassroomPage({DateTime? date, int? section}) async {
+    return await Get.to(
+      () => ClassroomPage(
+        initialDate: date,
+        initialSection: section,
+        errorBuilder: (message, onRetry) =>
+            InlineErrorView(message: message, onRetry: onRetry),
+      ),
+      transition: transition,
+    );
+  }
+
   static Future toPrivacyPolicyPage() async {
     return await Get.to(
       () => const PrivacyPolicyPage(),
@@ -212,6 +232,7 @@ class RouteUtils {
         serviceId: serviceId,
         errorBuilder: (message) => ErrorPage(errorMsg: message),
         openWebView: (title, url) => toWebViewPage(title, url),
+        openClassroom: () => unawaited(toClassroomPage()),
       ),
       transition: transition,
     );

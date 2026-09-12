@@ -87,6 +87,11 @@ class Model {
 
   String getPassword() => CredentialsStore.instance.password;
 
+  void setMailPassword(String password) =>
+      CredentialsStore.instance.setMailPassword(password);
+
+  String getMailPassword() => CredentialsStore.instance.mailPassword;
+
   //--------------------List<CourseTableJson>--------------------//
   // 實作在 CourseTableStore 與 ScoreStore，這裡只剩轉呼叫。
 

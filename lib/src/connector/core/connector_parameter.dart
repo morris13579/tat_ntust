@@ -18,5 +18,20 @@ class ConnectorParameter {
   String? referer;
   Map<String, dynamic>? headers;
 
-  ConnectorParameter(this.url, {this.data, this.referer, this.headers});
+  /// 要不要讓底層自己跟著 302 跑。
+  ///
+  /// **需要 cookie 的轉址鏈一律要關掉。** Dio 的自動轉址是交給 dart:io 的
+  /// `HttpClient` 做的，而攔截器（含 `CookieManager`）只在最外層那一次請求
+  /// 跑一遍：中途每一站既不會被帶上該站的 cookie，回應裡的 `Set-Cookie`
+  /// 也不會被存起來。跨主機的登入交握會因此安靜地失敗——看起來就像「憑證
+  /// 過期」。關掉之後由呼叫端自己一站一站走，每一站都會經過攔截器。
+  bool followRedirects;
+
+  ConnectorParameter(
+    this.url, {
+    this.data,
+    this.referer,
+    this.headers,
+    this.followRedirects = true,
+  });
 }

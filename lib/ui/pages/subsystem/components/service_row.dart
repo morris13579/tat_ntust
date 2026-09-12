@@ -16,11 +16,16 @@ class ServiceRow extends StatelessWidget {
     required this.name,
     required this.onTap,
     this.description,
+    this.badge,
   });
 
   final String name;
   final VoidCallback onTap;
   final String? description;
+
+  /// 名稱右邊的小籤。目前只有空教室在用：它是 App 內的頁面，混在一串會開
+  /// 瀏覽器的服務裡需要講清楚。
+  final String? badge;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,29 @@ class ServiceRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(name, style: context.text.bodyLarge),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                          child: Text(name, style: context.text.bodyLarge)),
+                      if (badge != null) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 7, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: scheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(
+                                TatTokens.radiusButton),
+                          ),
+                          child: Text(badge!,
+                              style: context.text.labelSmall?.copyWith(
+                                  height: 1.3,
+                                  color: scheme.onPrimaryContainer)),
+                        ),
+                      ],
+                    ],
+                  ),
                   if (description != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 2),

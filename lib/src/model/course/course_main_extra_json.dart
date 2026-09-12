@@ -155,21 +155,20 @@ class CourseMainInfoJson {
     return name;
   }
 
-  String getTeacherName() {
-    String name = "";
-    for (TeacherJson value in teacher) {
-      name += '${value.name} ';
-    }
-    return name;
-  }
+  /// 多位老師以空白隔開。
+  ///
+  /// **結尾要 trim。** 一門課可能掛著一筆名字是空字串的老師（querycourse 沒給
+  /// 就是空的），那時候組出來的是單一個空白——`isNotEmpty` 會是真，畫面上卻
+  /// 什麼都沒有，於是多排一格空位出來。呼叫端本來各自補 `.trim()`，在來源
+  /// 收乾淨就不必每一處都記得。
+  String getTeacherName() => _joinNames(teacher.map((e) => e.name));
 
-  String getClassroomName() {
-    String name = "";
-    for (ClassroomJson value in classroom) {
-      name += '${value.name} ';
-    }
-    return name;
-  }
+  /// 多間教室以空白隔開。空字串的原因與 [getTeacherName] 同一個。
+  String getClassroomName() => _joinNames(classroom.map((e) => e.name));
+
+  /// 過濾掉空的，再以單一空白接起來。
+  static String _joinNames(Iterable<String> names) =>
+      names.map((e) => e.trim()).where((e) => e.isNotEmpty).join(' ');
 
   bool get isEmpty {
     return course.isEmpty &&

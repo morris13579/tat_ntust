@@ -61,12 +61,29 @@ void main() {
   Finder submitButton() => find.byWidgetPredicate((w) => w is FilledButton);
 
   /// 挑完檔案要 `File.length()`，那是真的 I/O：假時鐘不會讓它完成，
-  /// 得先把真的事件迴圈跑一輪再 pump（同 course_assign_submit_page_test）。
-  Future<void> tapAndFlush(WidgetTester tester, Finder finder) async {
-    await tester.tap(finder);
-    await tester.pump();
-    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+  /// 得先把真的事件迴圈讓出去再 pump（同 course_assign_submit_page_test）。
+  Future<void> tapAndFlush(WidgetTester tester, Finder finder,
+      {Finder? until}) async {
+    // **整個點擊要跑在真的時鐘裡。** 挑完檔案頁面會 `await File.length()`，
+    // 那是真的 I/O；在假時鐘下點下去，那個 future 沒有機會 resolve，接著的
+    // pump 就畫出一個還沒有檔案的畫面。先前用「讓出幾輪 Duration.zero」去賭
+    // 它會回來，整套測試平行跑、機器忙的時候就會賭輸——那正是這幾支偶發紅的
+    // 原因。改成把 tap 本身放進 runAsync，處理鏈整條都在真時鐘上跑完再 pump。
+    await tester.runAsync(() async {
+      await tester.tap(finder);
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
     await tester.pumpAndSettle();
+    if (until == null) return;
+    // 機器很忙的時候那 50ms 還是可能不夠。有 [until] 就等到東西真的出現為止
+    // ——這才是唯一不必猜時間的做法。逾時不自己丟，讓後面的斷言去報錯，訊息
+    // 才看得出是什麼沒出現。
+    final deadline = DateTime.now().add(const Duration(seconds: 5));
+    while (until.evaluate().isEmpty && DateTime.now().isBefore(deadline)) {
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 25)));
+      await tester.pumpAndSettle();
+    }
   }
 
   const offPolicy = ForumAttachPolicy.off();
@@ -324,7 +341,8 @@ void main() {
         picked: [pickable('a.pdf')],
       );
 
-      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment));
+      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment),
+          until: find.text('a.pdf'));
 
       expect(find.text('a.pdf'), findsOneWidget);
       expect(find.text('1/2'), findsOneWidget);
@@ -355,8 +373,10 @@ void main() {
         picked: [pickable('a.pdf')],
       );
 
-      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment));
-      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment));
+      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment),
+          until: find.text('a.pdf'));
+      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment),
+          until: find.text('a.pdf'));
 
       expect(ui.toasts, contains(R.current.forumAttachmentDuplicateName));
       expect(find.text('a.pdf'), findsOneWidget);
@@ -370,7 +390,8 @@ void main() {
         picked: [pickable('a.pdf')],
       );
 
-      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment));
+      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment),
+          until: find.text('a.pdf'));
 
       // 已經有內容在畫面上了，這時沉默等於讓人卡在一顆灰掉的鈕前面。
       expect(find.text(R.current.forumSubjectRequired), findsOneWidget);
@@ -385,7 +406,8 @@ void main() {
       );
 
       await tester.enterText(find.byType(TextField).first, '看這個');
-      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment));
+      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment),
+          until: find.text('a.pdf'));
 
       expect(tester.widget<ButtonStyleButton>(submitButton()).onPressed,
           isNotNull);
@@ -463,7 +485,8 @@ void main() {
         picked: [pickable('a.pdf')],
       );
 
-      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment));
+      await tapAndFlush(tester, find.byTooltip(R.current.forumAddAttachment),
+          until: find.text('a.pdf'));
 
       expect(ui.toasts, contains(R.current.forumAttachmentDuplicateName));
       expect(find.text('a.pdf'), findsOneWidget, reason: '既有的那一個而已');

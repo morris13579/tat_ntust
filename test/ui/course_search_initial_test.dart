@@ -98,7 +98,8 @@ void main() {
 
   testWidgets('只有數字開頭的課號不算系所，不拿它去查', (tester) async {
     // 通識與共同科目的課號長這樣，拿它當系所會查出一批不相干的課。
-    final calls = await pump(tester, table: tableOf([courseOf('1234567', '體育')]));
+    final calls =
+        await pump(tester, table: tableOf([courseOf('1234567', '體育')]));
 
     expect(calls, isEmpty);
   });

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/service/task_ui_delegate.dart';
-import 'package:flutter_app/ui/components/tat_progress.dart';
 import 'package:flutter_app/ui/components/sheet/tat_bottom_sheet.dart';
 import 'package:flutter_app/ui/components/toast/tat_toast.dart';
-import 'package:flutter_app/ui/other/theme_context.dart';
 import 'package:flutter_app/ui/other/error_dialog.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/manual_semester_dialog.dart';
 import 'package:flutter_app/ui/routes/route_utils.dart';
@@ -74,81 +72,37 @@ Future<String?> selectOneDialog(String title, Map<String, String> options) {
   );
 }
 
-/// 一個進度提示＝一個 [OverlayEntry]。關掉時只移除自己那一個，並行載入的
-/// 分頁不會互相收掉對方的提示。
+/// 進度提示 ＝ 一顆掛著的膠囊 ＋ 一層擋點擊的蓋板。
 ///
-/// 畫的是**底部一顆小膠囊**而不是全螢幕的載入畫面：整個 App 都不用全屏載入。
-/// 底下那層透明蓋板仍然留著——登入、下載這幾件事進行中不該被亂點，擋住點擊
-/// 的是它，不是視覺上的遮罩。
+/// **膠囊本身不在這裡畫。** 它和 toast 走同一條路（[TatToast.progress]），
+/// 那是全 App 唯一一處把膠囊放上畫面的地方——先前這裡自己插一個 OverlayEntry
+/// 手寫一顆，兩邊的圓角、內距與離底部的距離就各走各的，而且載入中又跳一句
+/// 提示時兩顆會疊在同一個座標上。
+///
+/// 留在這裡的只有蓋板：登入、下載這幾件事進行中不該被亂點。它刻意是透明的
+/// ——擋住點擊就夠了，不必把整個畫面壓暗。
 class _OverlayProgressHandle implements ProgressHandle {
   _OverlayProgressHandle(String message) {
+    _pill = TatToast.progress(message);
     final overlay = Get.key.currentState?.overlay;
     if (overlay == null) return;
     final entry = OverlayEntry(
-      builder: (context) => Positioned.fill(
-        child: Stack(
-          children: [
-            const Positioned.fill(child: AbsorbPointer()),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: SafeArea(
-                top: false,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  child: Center(child: _ProgressPill(message: message)),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      builder: (context) => const Positioned.fill(child: AbsorbPointer()),
     );
-    _entry = entry;
+    _blocker = entry;
     overlay.insert(entry);
   }
 
-  OverlayEntry? _entry;
+  TatToastHandle? _pill;
+  OverlayEntry? _blocker;
 
   @override
   void dismiss() {
     // 欄位先清空再移除：呼叫端多關一次是 no-op，不必自己記有沒有關過。
-    final entry = _entry;
-    _entry = null;
+    _pill?.dismiss();
+    _pill = null;
+    final entry = _blocker;
+    _blocker = null;
     if (entry != null && entry.mounted) entry.remove();
-  }
-}
-
-/// 底部那顆小膠囊。用 inverseSurface 撐出對比，不必靠變暗整個畫面。
-class _ProgressPill extends StatelessWidget {
-  const _ProgressPill({required this.message});
-
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = context.scheme;
-    return Material(
-      color: scheme.inverseSurface,
-      borderRadius: BorderRadius.circular(999),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TatProgress(size: 16, color: scheme.onInverseSurface),
-            const SizedBox(width: 12),
-            Flexible(
-              child: Text(
-                message,
-                style: context.text.bodyMedium
-                    ?.copyWith(color: scheme.onInverseSurface),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

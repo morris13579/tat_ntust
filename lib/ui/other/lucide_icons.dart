@@ -18,6 +18,9 @@ class LucideIcons {
 
   static const String _family = 'Lucide';
 
+  /// archive
+  static const IconData archive = IconData(0xe041, fontFamily: _family);
+
   /// arrow-down
   static const IconData arrowDown = IconData(0xe042, fontFamily: _family);
 
@@ -105,8 +108,14 @@ class LucideIcons {
   /// copy
   static const IconData copy = IconData(0xe09e, fontFamily: _family);
 
+  /// door-open
+  static const IconData doorOpen = IconData(0xe3d6, fontFamily: _family);
+
   /// download
   static const IconData download = IconData(0xe0b2, fontFamily: _family);
+
+  /// ellipsis
+  static const IconData ellipsis = IconData(0xe0b6, fontFamily: _family);
 
   /// ellipsis-vertical
   static const IconData ellipsisVertical =
@@ -145,6 +154,9 @@ class LucideIcons {
   /// folder
   static const IconData folder = IconData(0xe0d7, fontFamily: _family);
 
+  /// forward
+  static const IconData forward = IconData(0xe229, fontFamily: _family);
+
   /// graduation-cap
   static const IconData graduationCap = IconData(0xe234, fontFamily: _family);
 
@@ -177,6 +189,9 @@ class LucideIcons {
 
   /// images
   static const IconData images = IconData(0xe5c4, fontFamily: _family);
+
+  /// inbox
+  static const IconData inbox = IconData(0xe0f7, fontFamily: _family);
 
   /// info
   static const IconData info = IconData(0xe0f9, fontFamily: _family);
@@ -211,6 +226,12 @@ class LucideIcons {
   /// log-out
   static const IconData logOut = IconData(0xe10e, fontFamily: _family);
 
+  /// mail
+  static const IconData mail = IconData(0xe10f, fontFamily: _family);
+
+  /// mail-open
+  static const IconData mailOpen = IconData(0xe363, fontFamily: _family);
+
   /// megaphone
   static const IconData megaphone = IconData(0xe235, fontFamily: _family);
 
@@ -223,10 +244,6 @@ class LucideIcons {
   /// message-square
   static const IconData messageSquare = IconData(0xe117, fontFamily: _family);
 
-  /// message-square-plus
-  static const IconData messageSquarePlus =
-      IconData(0xe40c, fontFamily: _family);
-
   /// messages-square
   static const IconData messagesSquare = IconData(0xe40d, fontFamily: _family);
 
@@ -238,6 +255,9 @@ class LucideIcons {
 
   /// paperclip
   static const IconData paperclip = IconData(0xe12d, fontFamily: _family);
+
+  /// pen-line
+  static const IconData penLine = IconData(0xe4f0, fontFamily: _family);
 
   /// pencil
   static const IconData pencil = IconData(0xe1f9, fontFamily: _family);
@@ -266,6 +286,9 @@ class LucideIcons {
 
   /// reply
   static const IconData reply = IconData(0xe22a, fontFamily: _family);
+
+  /// reply-all
+  static const IconData replyAll = IconData(0xe22b, fontFamily: _family);
 
   /// scan-line
   static const IconData scanLine = IconData(0xe258, fontFamily: _family);
@@ -355,6 +378,9 @@ class LucideIconsThin {
 
   /// link
   static const IconData link = IconData(0xe102, fontFamily: _family);
+
+  /// mail
+  static const IconData mail = IconData(0xe10f, fontFamily: _family);
 
   /// message-square
   static const IconData messageSquare = IconData(0xe117, fontFamily: _family);

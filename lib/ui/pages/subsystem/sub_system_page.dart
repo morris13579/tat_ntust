@@ -25,6 +25,7 @@ class SubSystemPage extends StatefulWidget {
     super.key,
     required this.errorBuilder,
     required this.openWebView,
+    required this.openClassroom,
     this.serviceId,
   });
 
@@ -33,6 +34,10 @@ class SubSystemPage extends StatefulWidget {
 
   final Widget Function(String message) errorBuilder;
   final WebViewOpener openWebView;
+
+  /// 空教室。由呼叫端注入而不是 import 路由表——那會是 lib/ui 那個環的
+  /// 又一條邊（見 docs/ARCHITECTURE.md「UI 慣例」）。
+  final VoidCallback openClassroom;
 
   @override
   State<StatefulWidget> createState() => _SubSystemPageState();
@@ -101,12 +106,23 @@ class _SubSystemPageState extends State<SubSystemPage> {
     for (final category in tree) {
       if (single && category.serviceId != widget.serviceId) continue;
       final items = _controller.visibleItems(category);
-      if (items.isEmpty) continue;
+      // 空教室釘在「校園資訊」最上面：那是使用者原本會去翻的位置。它是
+      // App 自己的頁面，所以標一個籤，點了不開瀏覽器。
+      final pinned = category.serviceId == classroomPinnedCategory &&
+          _matchesKeyword(keyword, R.current.classroomTitle);
+      if (items.isEmpty && !pinned) continue;
 
       sections.add(_Section(
         title: single ? null : subSystemCategoryName(category.serviceId),
         trailing: single ? null : sprintf(R.current.itemCount, [items.length]),
         children: [
+          if (pinned)
+            ServiceRow(
+              name: R.current.classroomTitle,
+              description: R.current.classroomSubSystemHint,
+              badge: R.current.classroomInApp,
+              onTap: widget.openClassroom,
+            ),
           for (final ap in items)
             ServiceRow(
               name: ap.name,
@@ -128,6 +144,17 @@ class _SubSystemPageState extends State<SubSystemPage> {
     return Column(children: sections);
   }
 }
+
+/// 空教室釘在哪一類底下：`service-6`＝「校園資訊」，那是使用者原本會去翻
+/// 的位置。代號與名稱的對照只有 `subSystemCategoryName` 一份，改那裡就要
+/// 回來看這裡——守門測試在 test/ui/sub_system_search_test.dart。
+@visibleForTesting
+const String classroomPinnedCategory = 'service-6';
+
+/// 釘住的那一列也要吃搜尋：關鍵字不是空的時候，對不上就不畫。
+bool _matchesKeyword(String keyword, String name) =>
+    keyword.trim().isEmpty ||
+    name.toLowerCase().contains(keyword.trim().toLowerCase());
 
 /// 一段服務清單：標題列在外，列本身裝在同一塊 surface 裡，以髮線分隔。
 class _Section extends StatelessWidget {

@@ -318,9 +318,8 @@ class CourseConnector {
   /// 名稱直接寫死，不走 l10n：`DepartmentJson` 的 name/engName 本來就是
   /// 伺服器給的兩份資料，`displayName` 會依語言挑一份，這裡照同一個形狀補齊。
   static const _extraDepartments = [
-        DepartmentJson(
-            no: 'PE', name: '體育', engName: 'Physical Education'),
-      ];
+    DepartmentJson(no: 'PE', name: '體育', engName: 'Physical Education'),
+  ];
 
   /// 學院清單。系所篩選的第一層。
   static Future<List<CollegeJson>?> getColleges() async {

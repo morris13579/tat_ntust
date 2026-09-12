@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter_app/debug/log/log.dart';
+import 'package:flutter_app/src/connector/classroom_connector.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/auth/auth_session.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/store/cache_store.dart';
+import 'package:flutter_app/src/store/mail_store.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/store/moodle_session_store.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -80,6 +82,17 @@ class SessionCleaner {
       // siteInfo 裝著前一位使用者的 function 清單與 userprivateaccesskey。
       MoodleWebApiConnector.siteInfo = null;
       await MoodleSessionStore.instance.clear();
+    });
+    await _step('clearClassroomPages', () async {
+      // 留在記憶體裡的那份 ViewState 是上一位使用者的 cour01 session 上的
+      // 頁面狀態。它本身不含個人資料，但留著會讓下一位使用者的第一次查詢
+      // 帶著一份已經作廢的狀態出去，白跑一趟重試。
+      ClassroomConnector.clearCachedPages();
+    });
+    await _step('clearMailStore', () async {
+      // 信件不在 `cache_` 前綴那批裡，它有自己的 SQLite 檔。漏掉這一步，
+      // 換帳號之後 B 會看到 A 的信件標題與寄件者。
+      await MailStore.instance.clear();
     });
     await _step('clearCaches', () async {
       // 同時清掉 cache_moodle_support（courseId 對照表）與其他 cache_ 前綴的

@@ -61,6 +61,7 @@ python3 tool/deps.py --check         # CI 模式，超過棘輪門檻時失敗
 
 ### 文件
 - [架構地圖](docs/ARCHITECTURE.md) — 五層堆疊、請求路徑、登入策略、外部系統
+- [內建信箱 IMAP 化](docs/WEBMAIL_IMAP.md) — 通訊協定探測結果、分層設計、分階段開發流程
 
 ## 貢獻者
 - [morris13579](https://github.com/morris13579)

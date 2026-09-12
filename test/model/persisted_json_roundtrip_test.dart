@@ -51,24 +51,26 @@ CourseTableJson sampleCourseTable() {
 
 void main() {
   group('UserDataJson（SharedPreferences key: user_data）', () {
-    test('round-trip 後兩個欄位逐一相等', () {
+    test('round-trip 後三個欄位逐一相等', () {
       final origin = UserDataJson(
         account: 'B11000000',
         password: 'p@ss w0rd',
+        mailPassword: 'mail p@ss',
       );
 
       final decoded = UserDataJson.fromJson(encodeDecode(origin));
 
       expect(decoded.account, origin.account);
       expect(decoded.password, origin.password);
+      expect(decoded.mailPassword, origin.mailPassword);
       expect(decoded.isEmpty, isFalse);
     });
 
-    test('最上層 key 名稱固定為 account / password', () {
-      // 這兩個名字寫在已安裝使用者的 prefs 裡，改名等同資料遺失。
+    test('最上層 key 名稱固定為 account / password / mailPassword', () {
+      // 這些名字寫在已安裝使用者的 prefs 裡，改名等同資料遺失。
       expect(
         encodeDecode(UserDataJson()).keys.toSet(),
-        {'account', 'password'},
+        {'account', 'password', 'mailPassword'},
       );
       // prefs 的 key 本身也一併釘住。
       expect(Model.userDataJsonKey, 'user_data');
@@ -79,20 +81,33 @@ void main() {
 
       expect(decoded.account, '');
       expect(decoded.password, '');
+      expect(decoded.mailPassword, '');
       expect(decoded.isEmpty, isTrue);
+    });
+
+    test('mailPassword 不算進 isEmpty', () {
+      // isEmpty 代表「沒有登入 TAT」。信箱密碼是選用的，只有它有值不能讓
+      // 這個帳號看起來像已登入。
+      final onlyMail = UserDataJson(mailPassword: 'mail p@ss');
+
+      expect(onlyMail.isEmpty, isTrue);
     });
 
     test('舊 blob 殘留的 webMailPassword 不會讓解碼失敗', () {
       // WebMail 功能移除後欄位跟著刪了，但已安裝使用者的 Keychain 裡還留著
       // 這個 key；解不開就等於把人登出。多出來的 key 要被忽略。
+      //
+      // 它**不會**被當成 mailPassword 撿回來用：那格裝的是 SSO 密碼，
+      // 拿去登 IMAP 一定被拒（docs/WEBMAIL_IMAP.md 門檻 A）。
       final decoded = UserDataJson.fromJson(<String, dynamic>{
         'account': 'B11000000',
         'password': 'p@ss w0rd',
-        'webMailPassword': 'mail-pw',
+        'webMailPassword': 'sso-pw',
       });
 
       expect(decoded.account, 'B11000000');
       expect(decoded.password, 'p@ss w0rd');
+      expect(decoded.mailPassword, '');
     });
   });
 

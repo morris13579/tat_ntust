@@ -117,12 +117,29 @@ void main() {
       tester.widget<ButtonStyleButton>(finder).onPressed != null;
 
   /// 挑完檔案要 `File.length()`，那是真的 I/O：假時鐘不會讓它完成，
-  /// 得先把真的事件迴圈跑一輪再 pump。
-  Future<void> tapAndFlush(WidgetTester tester, Finder finder) async {
-    await tester.tap(finder);
-    await tester.pump();
-    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+  /// 得先把真的事件迴圈讓出去再 pump。
+  Future<void> tapAndFlush(WidgetTester tester, Finder finder,
+      {Finder? until}) async {
+    // **整個點擊要跑在真的時鐘裡。** 挑完檔案頁面會 `await File.length()`，
+    // 那是真的 I/O；在假時鐘下點下去，那個 future 沒有機會 resolve，接著的
+    // pump 就畫出一個還沒有檔案的畫面。先前用「讓出幾輪 Duration.zero」去賭
+    // 它會回來，整套測試平行跑、機器忙的時候就會賭輸——那正是這幾支偶發紅的
+    // 原因。改成把 tap 本身放進 runAsync，處理鏈整條都在真時鐘上跑完再 pump。
+    await tester.runAsync(() async {
+      await tester.tap(finder);
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
     await tester.pumpAndSettle();
+    if (until == null) return;
+    // 機器很忙的時候那 50ms 還是可能不夠。有 [until] 就等到東西真的出現為止
+    // ——這才是唯一不必猜時間的做法。逾時不自己丟，讓後面的斷言去報錯，訊息
+    // 才看得出是什麼沒出現。
+    final deadline = DateTime.now().add(const Duration(seconds: 5));
+    while (until.evaluate().isEmpty && DateTime.now().isBefore(deadline)) {
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 25)));
+      await tester.pumpAndSettle();
+    }
   }
 
   Finder saveButton(String label) => buttonWithText(label);
@@ -219,7 +236,8 @@ void main() {
       FilePickService.instance = _FakePickService([makeFile('report.pdf')]);
       await pump(tester, submittable(), fixtureStatus('status_draft'));
 
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
 
       expect(find.text(R.current.assignFileOnServer), findsOneWidget);
       expect(find.textContaining('這次新增'), findsOneWidget);
@@ -305,7 +323,8 @@ void main() {
       await pump(tester, submittable(), fixtureStatus('status_draft'));
 
       expect(pickerEnabled(tester), isTrue);
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
 
       // maxfilesubmissions 3，已經有 1 個。
       expect(pick.lastLimit, 2);
@@ -322,7 +341,8 @@ void main() {
       expect(find.text(R.current.assignSubmissionStatement), findsOneWidget);
       expect(find.byType(CheckboxListTile), findsOneWidget);
 
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
       expect(find.text('report.pdf'), findsOneWidget);
       // 有變更了，但還沒同意聲明——而且動作列說得出是這個原因。
       expect(enabled(tester, saveButton(R.current.assignSubmit)), isFalse);
@@ -382,7 +402,8 @@ void main() {
           _FakePickService([makeFile('huge.pdf', bytes: 1048577)]);
       await pump(tester, noDrafts(), fixtureStatus('status_can_edit'));
 
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
 
       expect(find.text('huge.pdf'), findsNothing);
       expect(find.byType(MoodleFileTile), findsNothing);
@@ -393,7 +414,8 @@ void main() {
       FilePickService.instance = _FakePickService([makeFile('note.txt')]);
       await pump(tester, submittable(), fixtureStatus('status_can_edit'));
 
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
 
       expect(find.text('note.txt'), findsNothing);
       expect(ui.toasts.single, contains('note.txt'));
@@ -403,7 +425,8 @@ void main() {
       FilePickService.instance = _ThrowingPickService();
       await pump(tester, submittable(), fixtureStatus('status_can_edit'));
 
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
 
       expect(ui.toasts.single, R.current.assignFilePickerUnavailable);
       expect(find.byType(MoodleFileTile), findsNothing);
@@ -480,7 +503,8 @@ void main() {
       FilePickService.instance = _FakePickService([makeFile('extra.pdf')]);
       await pump(tester, submittable(), fixtureStatus('status_draft'));
 
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
       await tester.tap(saveButton(R.current.assignSaveDraft));
       await tester.pump();
 
@@ -498,7 +522,8 @@ void main() {
       FilePickService.instance = _FakePickService([makeFile('new.pdf')]);
       await pump(tester, submittable(), statusWithEmbeddedImage());
 
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
       expect(find.text('new.pdf'), findsOneWidget);
       // 這一顆按不下去，就等於「文字裡有一張圖」＝這份作業在 App 內交不了。
       expect(enabled(tester, saveButton(R.current.assignSaveDraft)), isTrue);
@@ -548,7 +573,8 @@ void main() {
       FilePickService.instance = _FakePickService([makeFile('new.pdf')]);
       await pump(tester, submittable(), statusWithUnresolvableImage());
 
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
       // 擋的不是按鈕：那一趟重試就好，鈕停用了就沒有第二次機會。
       expect(enabled(tester, saveButton(R.current.assignSaveDraft)), isTrue);
 
@@ -645,7 +671,8 @@ void main() {
       FilePickService.instance = _FakePickService([makeFile('report.pdf')]);
       await pump(tester, noDrafts(), fixtureStatus('status_can_edit'));
 
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
 
       final tile = tester.widget<MoodleFileTile>(find.byType(MoodleFileTile));
       expect(tile.onTap, isNull);
@@ -694,7 +721,8 @@ void main() {
       FilePickService.instance = _FakePickService([makeFile('extra.pdf')]);
       // 有草稿階段的作業本來不跳確認框，這一趟跳是因為儲存會真的刪掉檔案。
       await pump(tester, submittable(), fixtureStatus('status_draft'));
-      await tapAndFlush(tester, addFilesButton());
+      await tapAndFlush(tester, addFilesButton(),
+          until: find.textContaining('這次新增'));
 
       await tester.tap(find.byTooltip(R.current.assignRemoveFile).first);
       await tester.pumpAndSettle();

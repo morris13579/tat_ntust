@@ -167,6 +167,7 @@ void main() {
       () => SubSystemPage(
         errorBuilder: (message) => Text(message),
         openWebView: (title, url) async {},
+        openClassroom: () {},
       ),
     );
     await tester.pumpAndSettle();

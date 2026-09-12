@@ -276,7 +276,9 @@ void main() {
           tester,
           base: tableOf([]),
           draft: tableOf([]),
-          results: [courseOf('AA0000003', '別的時間', {Day.tuesday: '5'})],
+          results: [
+            courseOf('AA0000003', '別的時間', {Day.tuesday: '5'})
+          ],
         );
 
         await tester.tap(find.text(R.current.courseSearchSlot));
@@ -293,7 +295,9 @@ void main() {
     // 課名在背後的格子裡也會出現（而且跨幾節就出現幾次），所以一律用課號認：
     // 只有 sheet 的副標會印課號。
     testWidgets('摘要那一列點下去，攤開目前選的課', (tester) async {
-      final base = tableOf([courseOf('CS1001', '線性代數', {Day.monday: '3 4'})]);
+      final base = tableOf([
+        courseOf('CS1001', '線性代數', {Day.monday: '3 4'})
+      ]);
       final draft = tableOf([
         courseOf('CS2002', '編譯器設計', {Day.wednesday: '6 7'}),
         courseOf('CS2003', '機器學習', {Day.thursday: '3'}),
@@ -312,8 +316,9 @@ void main() {
     });
 
     testWidgets('一門課跨好幾節只列一次', (tester) async {
-      final draft =
-          tableOf([courseOf('CS2002', '編譯器設計', {Day.wednesday: '6 7 8'})]);
+      final draft = tableOf([
+        courseOf('CS2002', '編譯器設計', {Day.wednesday: '6 7 8'})
+      ]);
       await pumpSimulation(tester, base: tableOf([]), draft: draft);
 
       await tester.tap(find.textContaining(RegExp(r'^草稿')));
@@ -323,8 +328,9 @@ void main() {
     });
 
     testWidgets('在清單裡移除，格子上那一門就跟著消失', (tester) async {
-      final draft =
-          tableOf([courseOf('CS2002', '編譯器設計', {Day.wednesday: '6 7'})]);
+      final draft = tableOf([
+        courseOf('CS2002', '編譯器設計', {Day.wednesday: '6 7'})
+      ]);
       await pumpSimulation(tester, base: tableOf([]), draft: draft);
 
       await tester.tap(find.textContaining(RegExp(r'^草稿')));
@@ -349,5 +355,4 @@ void main() {
       expect(find.text(R.current.simulationEmptyHint), findsWidgets);
     });
   });
-
 }

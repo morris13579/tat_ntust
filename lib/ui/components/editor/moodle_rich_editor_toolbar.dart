@@ -26,6 +26,7 @@ class MoodleRichEditorToolbar extends StatefulWidget {
     this.enabled = true,
     this.trailing = const <Widget>[],
     this.dense = false,
+    this.commands = EditorCommand.values,
   });
 
   /// 目前游標處生效的格式，值是 [RichEditorBridgeUtils.tokenOf] 的字面值。
@@ -47,6 +48,12 @@ class MoodleRichEditorToolbar extends StatefulWidget {
   /// 卡片上下的內距讓出 16。給「鍵盤把高度壓到連編輯面都守不住」的版面用，
   /// **按鈕本身一點都沒縮**：40 的觸控範圍原封不動，讓開的只有留白。
   final bool dense;
+
+  /// 這一排要放哪些鈕。預設全部，論壇貼文照官方 App 的那一排。
+  ///
+  /// 寫信不放 h3 / h4 / h5：那三顆是論壇貼文用的（貼文需要分節），一封信不
+  /// 需要三級標題，而它們佔掉的正是會被捲出畫面的那幾格。
+  final List<EditorCommand> commands;
 
   /// 這一列的高度是固定的，量得到也算得出來，所以版面那一邊可以直接拿它去
   /// 分高度，不必等 layout 回報。
@@ -153,7 +160,7 @@ class _MoodleRichEditorToolbarState extends State<MoodleRichEditorToolbar> {
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.zero,
                 children: [
-                  for (final command in EditorCommand.values)
+                  for (final command in widget.commands)
                     _button(
                       icon: MoodleRichEditorToolbar._iconOf(command),
                       tooltip: MoodleRichEditorToolbar.labelOf(command),

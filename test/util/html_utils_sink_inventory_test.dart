@@ -98,12 +98,19 @@ clean() 是 escape 的反向操作：它會把 `&lt;script&gt;` 還原成 `<scri
     //   course_info_page，檔案分頁改成就地展開時整段搬過來，來源欄位沒變
     // - course_html_page：遠端 HTML 教材原文
     // - course_score_page：成績項目的老師回饋（gradeitems[].feedback，帶 <img>）
+    // - mail_detail_page：信件內文。上游追到底是
+    //   MailRepository.getBody → MailConnector.fetchBody →
+    //   MimeMessage.decodeTextHtmlPart()，也就是 IMAP 拿回來的原始 MIME
+    //   內文；只有 text/plain 的信會走 MailConnector.plainTextToHtml，
+    //   那個函式是**跳脫**（& < > → 實體）而不是還原，方向與 clean() 相反。
+    //   整條路徑沒有經過 HtmlUtils。
     // 沒有任何一個吃 clean() 的輸出。
     const expected = {
       'lib/ui/components/html/moodle_html_view.dart',
       'lib/ui/pages/course_data/screen/course_score_page.dart',
       'lib/ui/pages/course_data/screen/sub_page/course_html_page.dart',
       'lib/ui/pages/course_data/screen/widgets/course_section_list.dart',
+      'lib/ui/pages/mail/mail_detail_page.dart',
     };
 
     final actual = <String>{

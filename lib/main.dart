@@ -30,6 +30,7 @@ import 'package:flutter_app/ui/screen/main_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
+import 'package:toastification/toastification.dart';
 
 import 'debug/log/log.dart';
 import 'generated/l10n.dart';
@@ -112,9 +113,14 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
           GlobalMaterialLocalizations.delegate
         ],
-        builder: (context, child) => UpdatePrompt(
-          navigatorKey: Get.key,
-          child: child ?? const SizedBox.shrink(),
+        // ToastificationWrapper 要包在 MaterialApp 的 builder 裡（也就是
+        // Navigator 之下），[InAppBanner] 才浮在頁面之上而不是被頁面蓋住。
+        // 底部的提示膠囊（[TatToast]）走的是自己的 overlay，不經過這一層。
+        builder: (context, child) => ToastificationWrapper(
+          child: UpdatePrompt(
+            navigatorKey: Get.key,
+            child: child ?? const SizedBox.shrink(),
+          ),
         ),
         navigatorObservers: [AnalyticsUtils.observer],
         supportedLocales: S.delegate.supportedLocales,

@@ -63,8 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '935354808798',
     projectId: 'ntust-tat',
     storageBucket: 'ntust-tat.appspot.com',
-    androidClientId: '935354808798-p6r0fn8gutcenvscena9u8tjmhslg5mh.apps.googleusercontent.com',
-    iosClientId: '935354808798-1ernito5j3naqm6iga1koc9cp3qkk8mm.apps.googleusercontent.com',
+    androidClientId:
+        '935354808798-p6r0fn8gutcenvscena9u8tjmhslg5mh.apps.googleusercontent.com',
+    iosClientId:
+        '935354808798-1ernito5j3naqm6iga1koc9cp3qkk8mm.apps.googleusercontent.com',
     iosBundleId: 'club.ntust.tat',
   );
 }
