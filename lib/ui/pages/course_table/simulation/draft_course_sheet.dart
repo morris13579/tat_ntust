@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sprintf/sprintf.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_typography.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/util/course_table_control.dart';
+import 'package:flutter_app/src/util/simulation_draft.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/page/section_empty_state.dart';
 import 'package:flutter_app/ui/components/sheet/tat_bottom_sheet.dart';
@@ -59,20 +59,10 @@ class _DraftCourseListState extends State<_DraftCourseList> {
   /// 呼叫端的 setState 推不動它，所以自己記一份。
   final Set<String> _removed = {};
 
-  List<CourseMainInfoJson> get _courses {
-    final seen = <String>{};
-    final courses = <CourseMainInfoJson>[];
-    for (final day in Day.values) {
-      final row = widget.draft.courseInfoMap[day];
-      if (row == null) continue;
-      for (final course in row.values) {
-        final id = course.main.course.id;
-        if (id.isEmpty || _removed.contains(id) || !seen.add(id)) continue;
-        courses.add(course.main);
-      }
-    }
-    return courses;
-  }
+  List<CourseMainInfoJson> get _courses => [
+        for (final course in SimulationDraft.coursesOf(widget.draft))
+          if (!_removed.contains(course.course.id)) course,
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -100,13 +90,7 @@ class _DraftCourseListState extends State<_DraftCourseList> {
     final text = context.text;
     final id = course.course.id;
     final clashes = widget.conflictIds.contains(id);
-    final slots = widget.control.slotLabel(course);
-    final supporting = [
-      if (id.isNotEmpty) id,
-      if (course.course.credits.trim().isNotEmpty)
-        sprintf(R.current.creditCount, [course.course.credits]),
-      if (slots.isNotEmpty) slots,
-    ].join(' · ');
+    final supporting = SimulationDraft.courseSupporting(widget.control, course);
 
     return Material(
       color: context.tokens.card,

@@ -5,7 +5,6 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_typography.dart';
 import 'package:flutter_app/src/model/course/course_class_json.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
-import 'package:flutter_app/src/model/course_table/course_time.dart';
 import 'package:flutter_app/src/repository/ntust_repository.dart';
 import 'package:flutter_app/src/util/course_table_control.dart';
 import 'package:flutter_app/src/util/course_table_share_codec.dart';
@@ -222,7 +221,7 @@ class _CoursePreviewRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = context.scheme;
     final text = context.text;
-    final time = _slotsLabel(course.slots);
+    final time = CourseTableControl().sharedSlotsLabel(course.slots);
     final name = found?.course.name.trim() ?? '';
     final classroom = found?.getClassroomName().trim() ?? '';
     final trailing = [time, classroom].where((e) => e.isNotEmpty).join(' · ');
@@ -295,24 +294,4 @@ class _SheetButton extends StatelessWidget {
       ),
     );
   }
-}
-
-/// 把格子組成「一 2·3　三 4」。同一天的節次併在一起，天與天之間用全形空白
-/// 分開，中間點才不會被誤讀成跨天。
-String _slotsLabel(List<SharedSlot> slots) {
-  final names = courseDayNames();
-  final control = CourseTableControl();
-  final byDay = <Day, List<String>>{};
-  for (final slot in slots) {
-    // sectionStringList 只有 14 格，沒有 t_UnKnown；QR 解不出這一格，但這裡
-    // 收的是外部資料，越界會直接炸掉整張選單。
-    if (slot.section.index >= CourseTableControl.sectionLength) continue;
-    byDay
-        .putIfAbsent(slot.day, () => [])
-        .add(control.getSectionString(slot.section.index));
-  }
-  return [
-    for (final entry in byDay.entries)
-      '${names[entry.key.index]} ${entry.value.join('·')}',
-  ].join('　');
 }

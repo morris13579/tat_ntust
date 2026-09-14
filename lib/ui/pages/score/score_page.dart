@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/config/app_tokens.dart';
 import 'package:flutter_app/ui/components/page/loading_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_app/src/util/score_utils.dart';
@@ -12,11 +11,12 @@ import 'package:flutter_app/ui/components/tat_tab_bar.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
 import 'package:flutter_app/ui/pages/score/widget/score_row.dart';
 import 'package:flutter_app/ui/pages/score/widget/score_summary_strip.dart';
-import 'package:flutter_app/ui/routes/route_utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:sprintf/sprintf.dart';
 
+/// 成績查詢。Moodle 目前成績暫時不放入口：成績列不能點、底下的入口拿掉，
+/// 頁面與 `RouteUtils.toMoodleCourseGrades` 留著。
 class ScoreViewerPage extends GetView<ScorePageController> {
   const ScoreViewerPage({super.key});
 
@@ -75,9 +75,8 @@ class ScoreViewerPage extends GetView<ScorePageController> {
           body: TabBarView(
             controller: controller.tabController,
             children: [
-              for (final (index, s) in controller.semesterScoreList.indexed)
-                _buildSemesterScores(context, s.item,
-                    isCurrentSemester: index == 0)
+              for (final s in controller.semesterScoreList)
+                _buildSemesterScores(context, s.item)
             ],
           ),
         ),
@@ -124,8 +123,7 @@ class ScoreViewerPage extends GetView<ScorePageController> {
   }
 
   Widget _buildSemesterScores(
-      BuildContext context, List<ScoreItemJson> courseScore,
-      {required bool isCurrentSemester}) {
+      BuildContext context, List<ScoreItemJson> courseScore) {
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       child: AnimationLimiter(
@@ -137,8 +135,7 @@ class ScoreViewerPage extends GetView<ScorePageController> {
                 child: widget,
               ),
             ),
-            children: _buildCourseScores(context, courseScore,
-                isCurrentSemester: isCurrentSemester),
+            children: _buildCourseScores(context, courseScore),
           ),
         ),
       ),
@@ -146,8 +143,7 @@ class ScoreViewerPage extends GetView<ScorePageController> {
   }
 
   List<Widget> _buildCourseScores(
-      BuildContext context, List<ScoreItemJson> courseScore,
-      {required bool isCurrentSemester}) {
+      BuildContext context, List<ScoreItemJson> courseScore) {
     final gpa = ScoreUtils.calculateGPA(courseScore);
     return [
       ScoreSummaryStrip(
@@ -164,12 +160,7 @@ class ScoreViewerPage extends GetView<ScorePageController> {
           score: courseScore[i],
           index: i,
           length: courseScore.length,
-          onTap: RouteUtils.toMoodleCourseGrades,
         ),
-      ],
-      if (isCurrentSemester) ...[
-        const SizedBox(height: 16),
-        _buildMoodleEntry(context),
       ],
     ];
   }
@@ -183,49 +174,6 @@ class ScoreViewerPage extends GetView<ScorePageController> {
           sprintf(R.current.courseCount, [count]),
           style: context.text.titleSmall
               ?.copyWith(color: context.scheme.onSurfaceVariant),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMoodleEntry(BuildContext context) {
-    final scheme = context.scheme;
-    final borderRadius = BorderRadius.circular(TatTokens.radiusCard);
-    return InkWell(
-      borderRadius: borderRadius,
-      onTap: RouteUtils.toMoodleCourseGrades,
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.tokens.card,
-          borderRadius: borderRadius,
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-        child: Row(
-          children: [
-            Icon(LucideIcons.chartColumn,
-                size: 20, color: scheme.onSurfaceVariant),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    R.current.moodleCourseGrades,
-                    style: context.text.titleSmall
-                        ?.copyWith(color: scheme.onSurface),
-                  ),
-                  Text(
-                    R.current.moodleCourseGradesSubtitle,
-                    style: context.text.bodySmall
-                        ?.copyWith(color: scheme.onSurfaceVariant),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            Icon(LucideIcons.chevronRight,
-                size: 18, color: scheme.onSurfaceVariant),
-          ],
         ),
       ),
     );

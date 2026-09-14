@@ -1,0 +1,4 @@
+/* 系統權限對話框的用途字串，與 ios/Runner 的同一份。iOS 挑的是系統語言對應的 .lproj。 */
+"NSCameraUsageDescription" = "Scan a classmate's course-table QR code, or take a photo for your Moodle profile picture";
+"NSFaceIDUsageDescription" = "Check change password";
+"NSPhotoLibraryUsageDescription" = "Pick a course-table QR image, or choose a Moodle profile picture";

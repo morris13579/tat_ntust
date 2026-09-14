@@ -63,28 +63,8 @@ class ScorePageController extends GetxController
       await Model.instance.saveScore();
     }
 
-    semesterScoreList.sort((a, b) {
-      final yearA = int.tryParse(a.semester.year) ?? 0;
-      final yearB = int.tryParse(b.semester.year) ?? 0;
-      final semesterA = int.tryParse(a.semester.semester) ?? 0;
-      final semesterB = int.tryParse(b.semester.semester) ?? 0;
-
-      int yearCompare = yearB.compareTo(yearA);
-      if (yearCompare != 0) {
-        return yearCompare;
-      } else {
-        return semesterB.compareTo(semesterA);
-      }
-    });
-
     // 排序在這裡做（資料的事），畫面由 ScoreViewerPage 依這份清單產生。
-    for (final semesterScore in semesterScoreList) {
-      semesterScore.item.sort((a, b) {
-        return ScoreUtils.gradeToGP[b.score]
-                ?.compareTo(ScoreUtils.gradeToGP[a.score] ?? 0) ??
-            0;
-      });
-    }
+    ScoreUtils.sortForDisplay(semesterScoreList);
     // 每次 refresh 都會建一顆新的，舊的要先釋放，否則每按一次重新整理就漏一顆。
     tabController?.dispose();
     tabController =

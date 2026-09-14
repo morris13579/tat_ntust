@@ -11,6 +11,7 @@ import 'package:flutter_app/src/model/mail/mail_folder_json.dart';
 import 'package:flutter_app/src/model/mail/mail_message_json.dart';
 import 'package:flutter_app/src/model/mail/mail_outbox_item.dart';
 import 'package:flutter_app/src/model/mail/mail_page.dart';
+import 'package:flutter_app/src/model/mail/mail_search_hit.dart';
 import 'package:flutter_app/src/repository/result.dart';
 import 'package:flutter_app/src/repository/run.dart';
 import 'package:flutter_app/src/store/mail_store.dart';
@@ -52,7 +53,7 @@ class MailRepository {
   @visibleForTesting
 
   /// 跨資料夾搜尋。可覆寫給測試用，和 [searchMessages] 同一個角色。
-  Future<List<MailMessageJson>?> searchAllMessages(
+  Future<List<MailSearchHit>?> searchAllMessages(
           List<String> paths, String keyword) =>
       MailConnector.searchFolders(paths, keyword);
 
@@ -222,21 +223,25 @@ class MailRepository {
 
   /// 搜尋。**刻意不快取**：關鍵字是無限多的，每一組各存一包只會把
   /// SharedPreferences 撐爆，而且搜尋結果過期得比清單還快。
-  Future<Result<List<MailMessageJson>>> search(
+  ///
+  /// 每一筆帶著自己的資料夾；只找一個資料夾時就是 [folderPath]。
+  Future<Result<List<MailSearchHit>>> search(
     String keyword, {
     String folderPath = inboxPath,
     List<String>? allFolderPaths,
   }) =>
-      run<List<MailMessageJson>>(
+      run<List<MailSearchHit>>(
         requires: const {},
         errorMessage: R.current.mailLoadFailed,
         debugLabel: 'mail.search',
-        fetch: () {
+        fetch: () async {
           if (!hasMailPassword) throw const TaskFailure(NotSignedIn());
           // 給了全部路徑就是「在全部資料夾再找一次」，否則只找目前這一個。
-          return allFolderPaths == null
-              ? searchMessages(folderPath, keyword)
-              : searchAllMessages(allFolderPaths, keyword);
+          if (allFolderPaths != null) {
+            return searchAllMessages(allFolderPaths, keyword);
+          }
+          final found = await searchMessages(folderPath, keyword);
+          return found?.map((m) => MailSearchHit(folderPath, m)).toList();
         },
       );
 

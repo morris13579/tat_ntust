@@ -34,21 +34,39 @@ class LanguageUtils {
       // 會把上一行設好的 Intl.defaultLocale 蓋回去；而且已經建好的畫面不會重畫。
       // Get.updateLocale 同時設定 Get.locale 並 forceAppUpdate。
       await Get.updateLocale(locale);
-      String lang = locale2String(locale);
-      OtherSettingJson otherSetting = Model.instance.getOtherSetting();
-      if (otherSetting.lang != lang) {
-        //只有不相同時可以載入
-        otherSetting.lang = lang;
-        Model.instance.setOtherSetting(otherSetting);
-        await Model.instance.saveOtherSetting();
-        await Model.instance.clearCourseTableList();
-        await Model.instance.clearCourseSetting();
-      }
+      await _save(locale);
     } else {
       Log.e("no any locale load");
       return;
     }
   }
+
+  /// 原生版用：沒有 GetX 的畫面要重畫，其餘與 [load] 相同。
+  static Future<void> loadWithoutUi(Locale locale) async {
+    if (!getSupportLocale.contains(locale)) {
+      Log.e("no any locale load");
+      return;
+    }
+    await R.load(locale);
+    await _save(locale);
+  }
+
+  static Future<void> _save(Locale locale) async {
+    String lang = locale2String(locale);
+    OtherSettingJson otherSetting = Model.instance.getOtherSetting();
+    if (otherSetting.lang != lang) {
+      //只有不相同時可以載入
+      otherSetting.lang = lang;
+      Model.instance.setOtherSetting(otherSetting);
+      await Model.instance.saveOtherSetting();
+      await Model.instance.clearCourseTableList();
+      await Model.instance.clearCourseSetting();
+    }
+  }
+
+  /// 使用者選過的語言；沒選過或存的值認不得時回 null。
+  static Locale? savedLocale() =>
+      _matchSupportLocale(Model.instance.getOtherSetting().lang);
 
   static String locale2String(Locale locale) {
     String countryCode = locale.countryCode ?? "";

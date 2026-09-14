@@ -12,4 +12,9 @@
     <files-path
         name="internal_files"
         path="." />
+    <!-- FileUtils.openFile 一律從這個根開、網址帶完整路徑：下載的檔案在課名資料夾裡，
+         也可能在使用者自選的公用資料夾（例如 Download 底下），上面幾個根都蓋不到。 -->
+    <root-path
+        name="root"
+        path="." />
 </paths>

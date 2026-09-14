@@ -19,7 +19,7 @@ import 'package:flutter_app/ui/other/tat_dialog.dart';
 import 'package:flutter_app/ui/pages/announcement/announcement_page.dart';
 import 'package:flutter_app/ui/pages/announcement/components/announcement_banner.dart';
 import 'package:flutter_app/ui/pages/announcement/components/notification_empty_view.dart';
-import 'package:flutter_app/ui/pages/announcement/components/notification_groups.dart';
+import 'package:flutter_app/src/util/notification_groups.dart';
 import 'package:flutter_app/ui/pages/announcement/notification_tile.dart';
 import 'package:get/get.dart';
 

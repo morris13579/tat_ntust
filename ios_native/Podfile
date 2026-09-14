@@ -1,0 +1,90 @@
+# 原生版的 Podfile。
+#
+# **不要再手動塞 build/ios-framework 的 xcframework。** 那條路踩到三個坑：
+# Firebase 的 umbrella 標頭沒被輸出（GeneratedPluginRegistrant 編不過）、
+# 模擬器與實機要不同的 framework、native asset 的 objective_c.framework
+# 是平鋪的 *.framework 會被漏掉。改用 Flutter 官方的 add-to-app 整合之後
+# 三個都由工具鏈自己處理。
+#
+# podhelper 吃的是「Flutter App 的 ios 目錄」，也就是這個 repo 既有的 ../ios。
+# 兩個 Podfile 會裝同一批外掛 pod，各自有自己的 Pods/ 與 .symlinks/，互不影響。
+
+platform :ios, '17.0'
+
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+project 'TATNative', {
+  'Debug' => :debug,
+  'Release' => :release,
+}
+
+# Flutter App 的 ios 目錄。
+flutter_ios_path = File.expand_path(File.join('..', '..', 'ios'), __FILE__)
+
+def flutter_root(ios_path)
+  generated = File.join(ios_path, 'Flutter', 'Generated.xcconfig')
+  unless File.exist?(generated)
+    raise "#{generated} 不存在。先在 repo 根目錄跑 flutter pub get。"
+  end
+  File.foreach(generated) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+  raise "#{generated} 裡沒有 FLUTTER_ROOT"
+end
+
+require File.expand_path(
+  File.join('packages', 'flutter_tools', 'bin', 'podhelper'),
+  flutter_root(flutter_ios_path))
+
+flutter_ios_podfile_setup
+
+target 'TATNative' do
+  use_frameworks!
+  use_modular_headers!
+
+  flutter_install_all_ios_pods flutter_ios_path
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.0'
+
+      # Firebase 的 Flutter 外掛（firebase_core / crashlytics / remote_config）
+      # 的標頭 `#import <Firebase/Firebase.h>`，而 Firebase 那個 pod 是刻意
+      # 「只有標頭、沒有模組」的 umbrella。編譯 firebase_* 的模組時就會撞上
+      # -Wnon-modular-include-in-framework-module，而 Xcode 預設把它當錯誤。
+      #
+      # 這個旗標把它降回警告。放寬的範圍僅止於「framework 模組裡 include 了
+      # 非模組化的標頭」，不影響任何型別檢查。
+      #
+      # **附帶一提，我沒查出 ../ios 的 Runner 為什麼不會撞到同一件事**：
+      # 兩邊的 CLANG_ENABLE_MODULES、bridging header 與 pod 的 xcconfig 都一樣。
+      # 差異只在這裡是新的 derived data、那邊是既有的。日後若查清楚，
+      # 這一行也許可以拿掉。
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+      # 與 ../ios/Podfile 同一份清單，理由見那裡：只留真的會用到的權限，
+      # 其餘關掉，否則送審時會被判定「宣告了用不到的隱私權限」。
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        'PERMISSION_EVENTS=0',
+        'PERMISSION_EVENTS_FULL_ACCESS=0',
+        'PERMISSION_REMINDERS=0',
+        'PERMISSION_CONTACTS=0',
+        'PERMISSION_CAMERA=0',
+        'PERMISSION_MICROPHONE=0',
+        'PERMISSION_SPEECH_RECOGNIZER=0',
+        'PERMISSION_PHOTOS=0',
+        'PERMISSION_LOCATION=0',
+        'PERMISSION_MEDIA_LIBRARY=0',
+        'PERMISSION_SENSORS=0',
+        'PERMISSION_BLUETOOTH=0',
+        'PERMISSION_APP_TRACKING_TRANSPARENCY=0',
+        'PERMISSION_CRITICAL_ALERTS=0',
+        'PERMISSION_ASSISTANT=0',
+      ]
+    end
+  end
+end

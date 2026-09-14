@@ -13,6 +13,7 @@ import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/repository/moodle_repository.dart';
 import 'package:flutter_app/src/service/task_ui_delegate.dart';
 import 'package:flutter_app/src/util/moodle_assign_attempt_utils.dart';
+import 'package:flutter_app/src/util/moodle_assign_detail_text.dart';
 import 'package:flutter_app/src/util/moodle_assign_submit_utils.dart';
 import 'package:flutter_app/src/util/moodle_assign_utils.dart';
 import 'package:flutter_app/ui/components/card/section_card.dart';
@@ -298,24 +299,13 @@ class _CourseAssignmentDetailPageState
           title: R.current.assignPreviousAttempts,
         ),
         SectionCard([
-          SectionField(
-            R.current.assignCurrentAttempt,
-            label.total > 0
-                ? sprintf(R.current.assignAttemptLabelOf,
-                    [label.current, label.total])
-                : sprintf(R.current.assignAttemptLabel, [label.current]),
-          ),
+          SectionField(R.current.assignCurrentAttempt,
+              MoodleAssignDetailText.attemptLabel(label)),
           if (s.previousattempts.isNotEmpty) const SectionDivider(),
           for (final p in s.previousattempts)
             SectionField(
               sprintf(R.current.assignAttemptLabel, [p.attemptnumber + 1]),
-              // 成績優先；還沒評過就講那一次交出去的時間。
-              (p.grade?.hasDisplay ?? false)
-                  ? p.grade!.gradefordisplay
-                  : ((p.submission?.timemodified ?? 0) > 0
-                      ? CourseAssignmentDetailPage.formatUnix(
-                          p.submission!.timemodified)
-                      : R.current.assignNotGraded),
+              MoodleAssignDetailText.previousAttemptValue(p),
             ),
         ]),
       ],
@@ -339,22 +329,8 @@ class _CourseAssignmentDetailPageState
           title: R.current.assignTeamSubmission,
         ),
         SectionCard([
-          switch (state) {
-            AssignTeamState.noGroup =>
-              InlineNote(R.current.assignTeamNoGroup, blocking: true),
-            AssignTeamState.multipleGroups =>
-              InlineNote(R.current.assignTeamMultipleGroups, blocking: true),
-            AssignTeamState.notTeam ||
-            AssignTeamState.ok =>
-              InlineNote(R.current.assignTeamNotice),
-          },
-          // 全部交完時這個陣列是空的，照樣 sprintf 就會變成「還有 0 位組員
-          // 尚未送出」——一句警告形狀的話貼在最好的那個狀態上。
-          if (state == AssignTeamState.ok && a.requiresAllTeamMembersSubmit)
-            InlineNote(s.pendingGroupMembers.isEmpty
-                ? R.current.assignTeamAllSubmitted
-                : sprintf(R.current.assignTeamPendingMembers,
-                    [s.pendingGroupMembers.length])),
+          for (final note in MoodleAssignDetailText.teamNotes(a, s))
+            InlineNote(note.text, blocking: note.blocking),
           if (state == AssignTeamState.multipleGroups) ...[
             const SizedBox(height: 12),
             FilledButton.tonalIcon(
@@ -425,17 +401,7 @@ class _CourseAssignmentDetailPageState
     final status = statusResult.data;
     final block = MoodleAssignSubmitUtils.blockOf(a, status);
     if (block != null) {
-      final hint = switch (block) {
-        AssignSubmitBlock.unsupportedPlugin =>
-          R.current.assignSubmitWebOnlyPlugin,
-        AssignSubmitBlock.noGroup => R.current.assignTeamNoGroup,
-        AssignSubmitBlock.multipleGroups => R.current.assignTeamMultipleGroups,
-        // 伺服器說不能交時入口根本不存在，也不對著沒權限的人喊話。
-        AssignSubmitBlock.closed ||
-        AssignSubmitBlock.noSubmission ||
-        AssignSubmitBlock.noPlugin =>
-          null,
-      };
+      final hint = MoodleAssignDetailText.blockHint(block);
       if (hint == null) return const SizedBox.shrink();
       return Padding(
         padding: const EdgeInsets.only(bottom: 12),
@@ -444,15 +410,7 @@ class _CourseAssignmentDetailPageState
     }
 
     final actions = _actionsOf(a);
-    // 標籤跟著 Moodle 網頁那張按鈕表走，不是自己看 submission 是不是 null。
-    final String entryLabel;
-    if (actions.contains(AssignAction.addNewAttempt)) {
-      entryLabel = R.current.assignStartNewAttempt;
-    } else if (actions.contains(AssignAction.editSubmission)) {
-      entryLabel = R.current.assignEditSubmission;
-    } else {
-      entryLabel = R.current.assignAddSubmission;
-    }
+    final entryLabel = MoodleAssignDetailText.entryLabel(actions);
     final canRemoveHere = actions.contains(AssignAction.editSubmission) &&
         !MoodleWebApiConnector.canRemoveSubmission;
     final copyBlocked = (status.submissionFor(a)?.isReopened ?? false) &&
@@ -492,10 +450,7 @@ class _CourseAssignmentDetailPageState
   Future<void> _onCopyPrevious(MoodleAssignment a) async {
     final confirmed = await _confirm(
       R.current.assignCopyPrevious,
-      a.tracksDrafts
-          ? R.current.assignCopyPreviousConfirm
-          : '${R.current.assignCopyPreviousConfirm}\n\n'
-              '${R.current.assignCopyPreviousSubmitsNow}',
+      MoodleAssignDetailText.copyConfirm(a),
     );
     if (confirmed != true) return;
     final result = await _controller.copyPreviousAttempt();
@@ -509,15 +464,10 @@ class _CourseAssignmentDetailPageState
   Future<void> _onRemoveSubmission(MoodleAssignment a) async {
     final s = _controller.status.value?.dataOrNull;
     if (s == null) return;
-    final c = MoodleAssignAttemptUtils.removeConsequences(a, s);
     final confirmed = await _confirm(
       R.current.assignRemoveSubmission,
-      [
-        R.current.assignRemoveConfirm,
-        if (c.wipesTeam) R.current.assignRemoveConfirmTeam,
-        if (c.unsubmits) R.current.assignRemoveConfirmSubmitted,
-        if (c.keepsTimer) R.current.assignRemoveKeepsTimer,
-      ].join('\n\n'),
+      MoodleAssignDetailText.removeConfirm(
+          MoodleAssignAttemptUtils.removeConsequences(a, s)),
     );
     if (confirmed != true) return;
     final result = await _controller.removeSubmission();
@@ -773,7 +723,7 @@ class _CourseAssignmentDetailPageState
           if (a.isBlindMarking || s.isBlindMarking)
             InlineNote(R.current.assignBlindMarkingNote),
         ]),
-        if (fb != null && _hasFeedbackContent(fb)) ...[
+        if (fb != null && MoodleAssignDetailText.hasFeedbackContent(fb)) ...[
           SectionHeader(
             icon: LucideIcons.fileCheck2,
             title: R.current.assignSectionGradeFeedback,
@@ -783,13 +733,6 @@ class _CourseAssignmentDetailPageState
       ],
     );
   }
-
-  /// 四段全部落空時整個群組不畫，否則會多一張空卡。
-  static bool _hasFeedbackContent(MoodleAssignFeedback fb) =>
-      fb.gradefordisplay.trim().isNotEmpty ||
-      (fb.gradeddate ?? 0) > 0 ||
-      fb.commentsHtml.trim().isNotEmpty ||
-      fb.files.isNotEmpty;
 
   Widget _feedbackCard(MoodleAssignment a, MoodleAssignFeedback fb) {
     final scheme = context.scheme;

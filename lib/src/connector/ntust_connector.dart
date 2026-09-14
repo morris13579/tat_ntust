@@ -13,7 +13,6 @@ import 'package:flutter_app/src/connector/core/connector_parameter.dart';
 import 'package:flutter_app/src/model/ntust/ap_tree_json.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:html/dom.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class NTUSTConnector {
   static const String host = "https://i.ntust.edu.tw";
@@ -47,7 +46,7 @@ class NTUSTConnector {
       // cookie 跨啟動存活、iOS 的 WKWebView 不保證，兩者不同步時會跳過唯一
       // 會種平台 store 的 headless 登入，結果是「登入永遠成功、成績永遠失敗」。
       final platformSignedIn =
-          await CookieBridge.hasPlatformCookies(url: WebUri(ntustLoginUrl));
+          await CookieBridge.hasPlatformCookies(url: ntustLoginUrl);
       Log.d("[sso-probe] len=${ntustLoginPage.length} signedIn=$signedIn "
           "platformCookies=$platformSignedIn");
       if (signedIn && platformSignedIn) {

@@ -1,4 +1,5 @@
 import 'package:flutter_app/src/config/section_time.dart';
+import 'package:flutter_app/src/model/classroom/classroom_option.dart';
 import 'package:flutter_app/src/model/classroom/classroom_usage_json.dart';
 
 /// 一間教室在某一節次上的可用性。
@@ -41,7 +42,8 @@ class ClassroomVacancy {
 
   /// 空到幾點——連續空堂裡最後一節的結束時刻。沒空著就是 null。
   SectionTime? get freeUntil => isFree
-      ? sectionTimes[(section + freeSections - 1).clamp(0, sectionTimes.length - 1)]
+      ? sectionTimes[
+          (section + freeSections - 1).clamp(0, sectionTimes.length - 1)]
       : null;
 
   /// 幾點被趕——下一個佔用的開始時刻。到放學都空著就是 null。
@@ -86,6 +88,46 @@ enum ClassroomRunFilter {
 /// 把一次查詢的結果翻成可用性。
 class ClassroomAvailability {
   const ClassroomAvailability._();
+
+  /// 開場預設、而且在清單裡排第一個的大樓。
+  ///
+  /// `TR` 是研揚大樓，借用系統裡教室最多的一棟（38 間，第二多的國際大樓 33
+  /// 間），最有機會一進來就看到空教室。站台沒有「哪一棟最常用」這種欄位，
+  /// 所以寫在這裡；代號不存在時（學校把它移出借用系統）自動退回站台給的
+  /// 第一棟，不會變成查不到東西的畫面。
+  static const String preferredBuilding = 'TR';
+
+  /// 只把偏好的那一棟提到最前面，其餘維持站台給的順序——站台的順序本身
+  /// 是有意義的（大致照校區配置），整個重排只會讓熟悉的人找不到。
+  static List<ClassroomOptionJson> orderedBuildings(
+      List<ClassroomOptionJson> buildings) {
+    final index = buildings.indexWhere((b) => b.code == preferredBuilding);
+    if (index <= 0) return buildings;
+    return [
+      buildings[index],
+      ...buildings.where((b) => b.code != preferredBuilding),
+    ];
+  }
+
+  /// 開場選哪個校區的哪一棟。
+  ///
+  /// 記住的那一棟還在清單裡才用它：學校把一棟從借用系統拿掉時，開場不該是一個
+  /// 查不到東西的大樓代號。沒有的話開在**大樓最多的那個校區**——站台的下拉是
+  /// 華夏校區排在校本部前面，照順序取第一個會讓絕大多數人一進來看到華夏的那一棟；
+  /// 「哪個是主校區」站台沒有欄位講，大樓數量是手上唯一的訊號。
+  static (String campus, String building)? initialBuilding(
+      List<ClassroomCampusJson> campuses, String? remembered) {
+    for (final campus in campuses) {
+      for (final building in campus.buildings) {
+        if (building.code == remembered) return (campus.code, building.code);
+      }
+    }
+    if (campuses.isEmpty) return null;
+    final main = campuses
+        .reduce((a, b) => b.buildings.length > a.buildings.length ? b : a);
+    final ordered = orderedBuildings(main.buildings);
+    return ordered.isEmpty ? null : (main.code, ordered.first.code);
+  }
 
   /// 每一間教室在第 [section] 節的可用性，順序照站台給的順序。
   static List<ClassroomVacancy> of(ClassroomUsageJson usage, int section) {
@@ -180,8 +222,8 @@ class ClassroomAvailability {
         return (DateTime(now.year, now.month, now.day), i);
       }
     }
-    final tomorrow = DateTime(now.year, now.month, now.day)
-        .add(const Duration(days: 1));
+    final tomorrow =
+        DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
     return (tomorrow, 0);
   }
 }

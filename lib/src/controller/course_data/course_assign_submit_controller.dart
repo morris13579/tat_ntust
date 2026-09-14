@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart' show CancelToken;
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart'
@@ -6,9 +8,11 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_assign_get_assign
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_assign_get_submission_status.dart';
 import 'package:flutter_app/src/repository/moodle_repository.dart';
 import 'package:flutter_app/src/repository/result.dart';
+import 'package:flutter_app/src/util/file_utils.dart';
 import 'package:flutter_app/src/util/moodle_assign_attempt_utils.dart';
 import 'package:flutter_app/src/util/moodle_assign_submit_utils.dart';
 import 'package:get/get.dart';
+import 'package:sprintf/sprintf.dart';
 
 /// 繳交編輯頁的狀態。普通類別而不是 GetxController：生命週期就是那一個頁面，
 /// 同 CourseAssignmentController。
@@ -338,6 +342,49 @@ class CourseAssignSubmitController {
       transferFile.value = null;
       _cancelToken = null;
     }
+  }
+
+  /// 挑回來的檔案逐一擋：類型不合、太大、重名的跳過，超過數量就停。回傳要 toast 的理由。
+  ///
+  /// `filetypeslist` 伺服器端根本不驗，所以只有這裡擋得住；超過大小與數量的檔案
+  /// 伺服器是靜靜丟掉，不先擋就會以為交上去了。
+  Future<List<String>> addPicked(List<File> picked) async {
+    final types = MoodleAssignSubmitUtils.fileTypes(assignment);
+    final maxBytes = MoodleAssignSubmitUtils.maxBytes(assignment);
+    final maxFiles = MoodleAssignSubmitUtils.maxFiles(assignment);
+    final messages = <String>[];
+    for (final file in picked) {
+      final name = _basename(file.path);
+      if (MoodleAssignSubmitUtils.checkFileType(name, types) ==
+          FileTypeCheck.rejected) {
+        messages.add(sprintf(R.current.assignFileTypeRejected, [name]));
+        continue;
+      }
+      final bytes = await file.length();
+      if (MoodleAssignSubmitUtils.exceedsSize(bytes, maxBytes)) {
+        messages.add(sprintf(R.current.assignFileTooLarge,
+            [name, FileUtils.formatBytes(maxBytes, 1)]));
+        continue;
+      }
+      final candidate = LocalDraftFile(file, name, size: bytes);
+      if (MoodleAssignSubmitUtils.duplicateFilename([...files, candidate]) !=
+          null) {
+        messages.add(R.current.assignFileDuplicateName);
+        continue;
+      }
+      if (files.length >= maxFiles) {
+        messages.add(
+            sprintf(R.current.assignFileCountExceeded, [maxFiles.toString()]));
+        break;
+      }
+      files.add(candidate);
+    }
+    return messages;
+  }
+
+  static String _basename(String path) {
+    final index = path.lastIndexOf(RegExp(r'[/\\]'));
+    return index < 0 ? path : path.substring(index + 1);
   }
 
   /// 取消進行中的傳輸。只擋得住下載與上傳那幾趟——`save_submission` 一旦送出

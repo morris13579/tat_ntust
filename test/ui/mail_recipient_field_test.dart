@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/src/model/mail/mail_contact.dart';
+import 'package:flutter_app/src/util/mail_address.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:flutter_app/ui/pages/mail/components/mail_recipient_field.dart';
 import 'package:flutter_test/flutter_test.dart';

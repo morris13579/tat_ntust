@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_app/ui/auth/moodle_login_page.dart';
+import 'package:flutter_app/src/auth/interactive_login_flow.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';

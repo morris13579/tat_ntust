@@ -2,7 +2,7 @@ import 'dart:io' as io;
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter_app/debug/log/log.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_app/src/service/platform_cookies.dart';
 
 /// 兩套 cookie store 之間的唯一橋樑。
 ///
@@ -32,12 +32,12 @@ class CookieBridge {
   /// [NTUSTConnector.login] 跳過唯一會種平台 store 的登入。問不到時回 true，
   /// 「不否決」是保守的那一邊。
   static Future<bool> hasPlatformCookies({
-    required WebUri url,
-    CookieManager? manager,
+    required String url,
+    PlatformCookieSource? source,
   }) async {
     try {
       final cookies =
-          await (manager ?? CookieManager.instance()).getCookies(url: url);
+          await (source ?? PlatformCookieSource.instance).cookies(url);
       return cookies.isNotEmpty;
     } catch (e, stack) {
       Log.eWithStack(e.toString(), stack);
@@ -49,13 +49,13 @@ class CookieBridge {
   ///
   /// 回傳搬了幾顆。零代表 WebView 那邊也沒有，通常表示登入其實沒成功。
   static Future<int> mirrorToDio({
-    required WebUri url,
+    required String url,
     required CookieJar jar,
-    CookieManager? manager,
+    PlatformCookieSource? source,
   }) async {
     try {
       final cookies =
-          await (manager ?? CookieManager.instance()).getCookies(url: url);
+          await (source ?? PlatformCookieSource.instance).cookies(url);
       final ioCookies = <io.Cookie>[];
       for (final c in cookies) {
         final k = io.Cookie(c.name, c.value)
@@ -65,8 +65,8 @@ class CookieBridge {
           // InAppWebViewPage.setCookies 之後又會以 isSecure: false 灌回
           // WebView——配上 android:usesCleartextTraffic 就等於允許這些已登入
           // 的 SSO cookie 走明文 http 送出。取不到時預設 true，寧可保守。
-          ..secure = c.isSecure ?? true
-          ..httpOnly = c.isHttpOnly ?? false;
+          ..secure = c.secure ?? true
+          ..httpOnly = c.httpOnly ?? false;
         ioCookies.add(k);
       }
       if (ioCookies.isEmpty) return 0;
@@ -75,7 +75,7 @@ class CookieBridge {
       // 那會蓋過網域版本；整批取代最單純，而且權威在另一邊，jar 沒有獨有
       // 資料可以損失。
       await jar.deleteAll();
-      await jar.saveFromResponse(url, ioCookies);
+      await jar.saveFromResponse(Uri.parse(url), ioCookies);
       Log.d("[cookie-bridge] 鏡射 ${ioCookies.length} 顆到 Dio jar");
       return ioCookies.length;
     } catch (e, stack) {

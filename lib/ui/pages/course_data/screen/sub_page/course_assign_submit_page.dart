@@ -15,6 +15,7 @@ import 'package:flutter_app/src/service/task_ui_delegate.dart';
 import 'package:flutter_app/src/util/file_utils.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
 import 'package:flutter_app/src/util/moodle_assign_attempt_utils.dart';
+import 'package:flutter_app/src/util/moodle_assign_detail_text.dart';
 import 'package:flutter_app/src/util/moodle_assign_submit_utils.dart';
 import 'package:flutter_app/ui/components/card/section_card.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
@@ -129,8 +130,6 @@ class _CourseAssignSubmitPageState extends State<CourseAssignSubmitPage> {
   }
 
   int get _maxFiles => MoodleAssignSubmitUtils.maxFiles(_assignment);
-
-  int get _maxBytes => MoodleAssignSubmitUtils.maxBytes(_assignment);
 
   List<String> get _fileTypes => MoodleAssignSubmitUtils.fileTypes(_assignment);
 
@@ -337,14 +336,6 @@ class _CourseAssignSubmitPageState extends State<CourseAssignSubmitPage> {
     final scheme = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     final full = count >= _maxFiles;
-    final hints = <String>[
-      sprintf(R.current.assignFileLimit, [_maxFiles.toString()]),
-      if (_maxBytes > 0)
-        sprintf(R.current.assignFileSizeLimit,
-            [FileUtils.formatBytes(_maxBytes, 1)]),
-      if (_fileTypes.isNotEmpty)
-        sprintf(R.current.assignFileTypes, [_fileTypes.join(', ')]),
-    ];
     return ListTile(
       dense: true,
       contentPadding: EdgeInsets.zero,
@@ -359,9 +350,7 @@ class _CourseAssignSubmitPageState extends State<CourseAssignSubmitPage> {
               fontWeight: FontWeight.w500,
               color: full ? scheme.onSurfaceVariant : scheme.primary)),
       subtitle: Text(
-        full
-            ? sprintf(R.current.assignFileLimitReached, [_maxFiles.toString()])
-            : hints.join(' · '),
+        MoodleAssignDetailText.pickerHint(_assignment, count),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: text.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
@@ -567,23 +556,12 @@ class _CourseAssignSubmitPageState extends State<CourseAssignSubmitPage> {
 
   /// 超過字數上限而文字框又打不開時要換一句：叫使用者刪減他在 App 裡
   /// 根本碰不到的文字是句廢話。
-  String _saveBlockMessage(AssignSaveBlock block) => switch (block) {
-        AssignSaveBlock.filesEmptied => R.current.assignFilesEmptiedWebOnly,
-        AssignSaveBlock.overWordLimit => _controller.onlineTextEditable
-            ? R.current.assignWordCountExceeded
-            : R.current.assignWordCountExceededReadOnly,
-        AssignSaveBlock.statementNotAccepted =>
-          R.current.assignBlockedStatement,
-        AssignSaveBlock.noChanges => R.current.assignBlockedNoChanges,
-      };
+  String _saveBlockMessage(AssignSaveBlock block) =>
+      MoodleAssignDetailText.saveBlockMessage(block,
+          textEditable: _controller.onlineTextEditable);
 
-  /// 前兩個是「這樣交出去會壞掉」，後兩個只是「還沒輪到」。
-  static bool _saveBlockIsError(AssignSaveBlock block) => switch (block) {
-        AssignSaveBlock.filesEmptied || AssignSaveBlock.overWordLimit => true,
-        AssignSaveBlock.statementNotAccepted ||
-        AssignSaveBlock.noChanges =>
-          false,
-      };
+  static bool _saveBlockIsError(AssignSaveBlock block) =>
+      MoodleAssignDetailText.saveBlockIsError(block);
 
   Widget _transferRow() {
     final name = _controller.transferFile.value;
@@ -594,14 +572,8 @@ class _CourseAssignSubmitPageState extends State<CourseAssignSubmitPage> {
           children: [
             Expanded(
               child: Text(
-                name == null
-                    ? R.current.assignSubmit
-                    : sprintf(
-                        _controller.transferPhase.value ==
-                                AssignTransferPhase.download
-                            ? R.current.assignPreparingFile
-                            : R.current.assignUploadingFile,
-                        [name]),
+                MoodleAssignDetailText.transferLabel(
+                    name, _controller.transferPhase.value),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodySmall,
@@ -626,11 +598,8 @@ class _CourseAssignSubmitPageState extends State<CourseAssignSubmitPage> {
   Future<void> _onStartAttempt() async {
     final confirmed = await _confirm(
         R.current.assignStartAttempt,
-        '${sprintf(R.current.assignTimeLimitNotice, [
-              MoodleAssignAttemptUtils.formatDuration(
-                  MoodleAssignAttemptUtils.effectiveTimeLimit(
-                      _assignment, _controller.currentStatus))
-            ])}\n\n${R.current.assignStartConfirm}');
+        MoodleAssignDetailText.startConfirmation(
+            _assignment, _controller.currentStatus));
     if (confirmed != true) return;
 
     final outcome = await _controller.startTimedAttempt();
@@ -650,39 +619,20 @@ class _CourseAssignSubmitPageState extends State<CourseAssignSubmitPage> {
   Future<void> _onSave() async {
     // 對話框會讓出好幾幀，回來時可能已經有一趟在跑了。
     if (_controller.isBusy) return;
-    final already = _controller.currentStatus.submissionFor(_assignment);
-    final expired = _timerState == AssignTimerState.expired;
-    // 這一次儲存會從 Moodle 上刪掉幾個已經交出去的檔案。草稿階段的存檔本來
-    // 不跳確認框，但「儲存」在這裡是不可逆的，那就一定要問。
-    final removals = _controller.pendingServerRemovals;
     // 沒有草稿階段的作業「存檔」就是繳交、團隊作業會蓋掉整組的、時限過了會被
-    // 標成遲交——這幾件事都得在按下去之前講。
-    if (!_assignment.tracksDrafts ||
-        _assignment.isTeamSubmission ||
-        expired ||
-        removals > 0) {
-      final body = StringBuffer(_assignment.tracksDrafts
-          ? R.current.assignConsequenceDraft
-          : R.current.assignSubmitDirectConfirm);
-      if (removals > 0) {
-        body.write(
-            '\n\n${sprintf(R.current.assignRemoveFilesWarning, [removals])}');
-      }
-      if (!_assignment.tracksDrafts && (already?.isSubmitted ?? false)) {
-        body.write('\n\n${R.current.assignSubmitAgainWarning}');
-      }
-      if (_assignment.isTeamSubmission) {
-        body.write('\n\n${R.current.assignTeamOverwriteWarning}');
-      }
-      // 對話框裡講，但那顆鈕從頭到尾沒有被停用過：伺服器照收，只標記遲交。
-      if (expired) {
-        body.write('\n\n${R.current.assignTimeExpiredStillEditable}');
-      }
+    // 標成遲交、這一次會從 Moodle 刪掉已經交出去的檔案——都得在按下去之前講。
+    final body = MoodleAssignDetailText.saveConfirmation(
+      _assignment,
+      _controller.currentStatus,
+      expired: _timerState == AssignTimerState.expired,
+      removals: _controller.pendingServerRemovals,
+    );
+    if (body != null) {
       final confirmed = await _confirm(
           _assignment.tracksDrafts
               ? R.current.assignSaveDraft
               : R.current.assignSubmit,
-          body.toString());
+          body);
       if (confirmed != true) return;
     }
 
@@ -725,10 +675,7 @@ class _CourseAssignSubmitPageState extends State<CourseAssignSubmitPage> {
   Future<void> _pickFiles() async {
     final remaining = _maxFiles - _controller.files.length;
     if (remaining <= 0) return;
-    final types = _fileTypes;
-    final extensions = types.isNotEmpty && _allExtensions(types)
-        ? [for (final t in types) t.startsWith('.') ? t.substring(1) : t]
-        : const <String>[];
+    final extensions = MoodleAssignDetailText.pickerExtensions(_fileTypes);
 
     final List<File> picked;
     try {
@@ -743,52 +690,9 @@ class _CourseAssignSubmitPageState extends State<CourseAssignSubmitPage> {
       return;
     }
     if (picked.isEmpty) return;
-
-    for (final file in picked) {
-      final name = _basename(file.path);
-      if (MoodleAssignSubmitUtils.checkFileType(name, types) ==
-          FileTypeCheck.rejected) {
-        TaskUiDelegate.instance
-            .toast(sprintf(R.current.assignFileTypeRejected, [name]));
-        continue;
-      }
-      final bytes = await file.length();
-      if (MoodleAssignSubmitUtils.exceedsSize(bytes, _maxBytes)) {
-        TaskUiDelegate.instance.toast(sprintf(R.current.assignFileTooLarge,
-            [name, FileUtils.formatBytes(_maxBytes, 1)]));
-        continue;
-      }
-      final next = [
-        ..._controller.files,
-        LocalDraftFile(file, name, size: bytes)
-      ];
-      if (MoodleAssignSubmitUtils.duplicateFilename(next) != null) {
-        TaskUiDelegate.instance.toast(R.current.assignFileDuplicateName);
-        continue;
-      }
-      if (_controller.files.length >= _maxFiles) {
-        TaskUiDelegate.instance.toast(
-            sprintf(R.current.assignFileCountExceeded, [_maxFiles.toString()]));
-        break;
-      }
-      _controller.files.add(LocalDraftFile(file, name, size: bytes));
+    for (final message in await _controller.addPicked(picked)) {
+      TaskUiDelegate.instance.toast(message);
     }
-  }
-
-  static bool _allExtensions(List<String> types) {
-    for (final t in types) {
-      if (MoodleAssignSubmitUtils.checkFileType('probe.$t', types) ==
-          FileTypeCheck.unverifiable) {
-        return false;
-      }
-      if (t.contains('/')) return false;
-    }
-    return true;
-  }
-
-  static String _basename(String path) {
-    final index = path.lastIndexOf(RegExp(r'[/\\]'));
-    return index < 0 ? path : path.substring(index + 1);
   }
 
   /// 返回鍵與系統手勢共用的出口。

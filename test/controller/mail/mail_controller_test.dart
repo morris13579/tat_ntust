@@ -1,6 +1,7 @@
 import 'package:flutter_app/src/controller/mail/mail_controller.dart';
 import 'package:flutter_app/src/model/mail/mail_message_json.dart';
 import 'package:flutter_app/src/model/mail/mail_page.dart';
+import 'package:flutter_app/src/model/mail/mail_search_hit.dart';
 import 'package:flutter_app/src/repository/mail_repository.dart';
 import 'package:flutter_app/src/repository/result.dart';
 import 'package:flutter_app/src/store/credentials_store.dart';
@@ -10,7 +11,11 @@ import '../../helpers/reset_statics.dart';
 
 class _FakeRepo extends MailRepository {
   List<MailMessageJson> inbox = [];
-  List<MailMessageJson> searchResult = [];
+  List<MailSearchHit> searchResult = [];
+  final seenFolders = <String>[];
+  final trashedFrom = <String>[];
+  final archivedFrom = <String>[];
+  String? lastMoveFrom;
   int? unread;
   String? lastFolder;
   String? lastKeyword;
@@ -32,6 +37,7 @@ class _FakeRepo extends MailRepository {
   Future<bool> moveToFolder(int uid, String targetPath,
       {String folderPath = MailRepository.inboxPath}) async {
     lastMoveTarget = targetPath;
+    lastMoveFrom = folderPath;
     return moveSucceeds;
   }
 
@@ -50,18 +56,28 @@ class _FakeRepo extends MailRepository {
       {required bool seen,
       String folderPath = MailRepository.inboxPath}) async {
     seenCalls++;
+    seenFolders.add(folderPath);
     return seenSucceeds;
   }
 
   @override
   Future<bool> moveToTrash(int uid,
-          {String folderPath = MailRepository.inboxPath}) async =>
-      trashSucceeds;
+      {String folderPath = MailRepository.inboxPath}) async {
+    trashedFrom.add(folderPath);
+    return trashSucceeds;
+  }
+
+  @override
+  Future<bool> moveToArchive(int uid,
+      {String folderPath = MailRepository.inboxPath}) async {
+    archivedFrom.add(folderPath);
+    return true;
+  }
 
   List<String>? lastSearchAllPaths;
 
   @override
-  Future<Result<List<MailMessageJson>>> search(String keyword,
+  Future<Result<List<MailSearchHit>>> search(String keyword,
       {String folderPath = MailRepository.inboxPath,
       List<String>? allFolderPaths}) async {
     lastKeyword = keyword;
@@ -78,6 +94,9 @@ class _FakeRepo extends MailRepository {
 
 MailMessageJson message(int uid, {bool seen = false}) =>
     MailMessageJson(uid: uid, subject: '主旨 $uid', seen: seen);
+
+MailSearchHit hit(String folderPath, int uid) =>
+    MailSearchHit(folderPath, message(uid));
 
 void main() {
   late _FakeRepo repo;
@@ -158,7 +177,7 @@ void main() {
 
   test('換資料夾會清掉關鍵字', () async {
     // 留著舊關鍵字會讓人以為換資料夾沒生效——看到的還是搜尋結果。
-    repo.searchResult = [message(9)];
+    repo.searchResult = [hit(MailRepository.inboxPath, 9)];
     await controller.searchFor('公告');
     expect(controller.isSearching, isTrue);
 
@@ -170,14 +189,14 @@ void main() {
 
   test('有關鍵字時走搜尋，沒有時走資料夾清單', () async {
     repo.inbox = [message(1)];
-    repo.searchResult = [message(2)];
+    repo.searchResult = [hit(MailRepository.inboxPath, 2)];
 
     await controller.load();
     expect(controller.messages.value!.dataOrNull!.single.uid, 1);
 
     await controller.searchFor('  公告  ');
     expect(repo.lastKeyword, '公告', reason: '前後空白要修掉');
-    expect(controller.messages.value!.dataOrNull!.single.uid, 2);
+    expect(controller.results.value!.dataOrNull!.single.message.uid, 2);
   });
 
   test('搜尋會帶著目前的資料夾', () async {
@@ -363,5 +382,69 @@ void main() {
 
     expect(repo.lastMoveTarget, '&Vt5lNntS-');
     expect(controller.messages.value?.dataOrNull?.map((m) => m.uid), [2]);
+  });
+
+  group('跨資料夾搜尋', () {
+    const sent = '寄件備份匣';
+    const inbox = MailRepository.inboxPath;
+
+    setUp(() async {
+      repo.inbox = [message(1)];
+      repo.unread = 3;
+      await controller.load();
+      // 兩個資料夾各有一封 UID 7：跨資料夾之後 UID 不再唯一。
+      repo.searchResult = [hit(inbox, 7), hit(sent, 7)];
+      await controller.setSearchAllFolders(true);
+      await controller.searchFor('報告');
+      await Future<void>.delayed(Duration.zero);
+    });
+
+    List<(String, bool)> rows() => [
+          for (final h in controller.results.value!.dataOrNull!)
+            (h.folderPath, h.message.seen),
+        ];
+
+    test('標已讀打的是那一封自己的資料夾，同 UID 的另一封不動', () async {
+      await controller.markSeen(7, folderPath: sent);
+
+      expect(repo.seenFolders, [sent]);
+      expect(rows(), [(inbox, false), (sent, true)]);
+    });
+
+    test('別的資料夾的信標已讀，不動正在看的資料夾的未讀數', () async {
+      await controller.markSeen(7, folderPath: sent);
+      expect(controller.unread.value, 3);
+
+      await controller.markSeen(7, folderPath: inbox);
+      expect(controller.unread.value, 2);
+    });
+
+    test('刪除與封存從那一封自己的資料夾搬走，只拿掉那一列', () async {
+      expect(await controller.moveToTrash(7, folderPath: sent), isTrue);
+      expect(repo.trashedFrom, [sent]);
+      expect(rows(), [(inbox, false)]);
+
+      expect(await controller.moveToArchive(7, folderPath: inbox), isTrue);
+      expect(repo.archivedFrom, [inbox]);
+      expect(controller.results.value!.dataOrNull, isEmpty);
+    });
+
+    test('搬到別的資料夾也從那一封自己的資料夾搬', () async {
+      expect(await controller.moveToFolder(7, 'Archive', folderPath: sent),
+          isTrue);
+      expect(repo.lastMoveFrom, sent);
+      expect(rows(), [(inbox, false)]);
+    });
+
+    test('沒給資料夾就是正在看的那一個', () async {
+      await controller.setSeen(7, seen: true);
+
+      expect(repo.seenFolders, [inbox]);
+      expect(rows(), [(inbox, true), (sent, false)]);
+    });
+
+    test('搜尋結果另外放，不會蓋掉資料夾清單', () {
+      expect(controller.messages.value!.dataOrNull!.single.uid, 1);
+    });
   });
 }

@@ -8,7 +8,8 @@ import 'package:flutter_app/ui/pages/other/page/privacy_policy_view.dart';
 import 'package:flutter_app/ui/screen/privacy_policy/privacy_policy_controller.dart';
 import 'package:get/get.dart';
 
-/// 首次啟動的同意閘門，也是 `Model.setAgreeContributor(true)` 唯一的寫入點。
+/// 首次啟動的同意閘門，也是 Flutter 版 `Model.setAgreeContributor(true)` 唯一的寫入點
+/// （原生版在 `CoreBridge.agreePrivacyPolicy`）。
 class PrivacyPolicyScreen extends StatefulWidget {
   const PrivacyPolicyScreen({super.key});
 

@@ -6,7 +6,7 @@ import 'package:flutter_app/src/config/app_tokens.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/service/task_ui_delegate.dart';
-import 'package:flutter_app/src/util/file_utils.dart';
+import 'package:flutter_app/src/util/forum_attachment_checks.dart';
 import 'package:flutter_app/src/util/moodle_forum_edit_utils.dart';
 import 'package:flutter_app/ui/components/tile/moodle_file_tile.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
@@ -372,31 +372,21 @@ class ForumComposerBarState extends State<ForumComposerBar> {
     if (remaining <= 0) return;
     final picked = await widget.onPickFiles(remaining);
     if (picked.isEmpty || !mounted) return;
-    for (final file in picked) {
-      final name = MoodleForumEditUtils.basename(file.path);
-      final bytes = await file.length();
-      if (!mounted) return;
-      // 逐檔本地擋三件事，一律 toast——列要維持一行高，不在上面長紅字。
-      if (MoodleForumEditUtils.exceedsSize(bytes, widget.maxBytes)) {
-        _toast(sprintf(R.current.forumAttachmentTooLarge,
-            [name, FileUtils.formatBytes(widget.maxBytes, 1)]));
-        continue;
-      }
-      if (MoodleForumEditUtils.duplicateFilename([
-            for (final f in _files) MoodleForumEditUtils.basename(f.path),
-            name,
-          ]) !=
-          null) {
-        _toast(R.current.forumAttachmentDuplicateName);
-        continue;
-      }
-      if (_files.length >= widget.maxAttachments) {
-        _toast(sprintf(R.current.forumAttachmentCountExceeded,
-            [widget.maxAttachments.toString()]));
-        break;
-      }
-      setState(() => _files.add(file));
-    }
+    // 逐檔本地擋三件事，一律 toast——列要維持一行高，不在上面長紅字。
+    final checked = await ForumAttachmentChecks.check(
+      existingNames: [
+        for (final f in _files) MoodleForumEditUtils.basename(f.path),
+      ],
+      picked: picked,
+      policy: ForumAttachPolicy(
+        enabled: widget.canAttach,
+        maxFiles: widget.maxAttachments,
+        maxBytes: widget.maxBytes,
+      ),
+    );
+    if (!mounted) return;
+    checked.messages.forEach(_toast);
+    setState(() => _files.addAll(checked.accepted));
     widget.onDraftChanged(_hasDraft);
   }
 

@@ -97,6 +97,16 @@ typedef ForumPostEdit = ({
   List<MoodleForumFile> attachments,
 });
 
+/// 站台對這個 token 開放了哪幾支討論區 function。由 connector 的 `wsFunctionBlocked`
+/// 決定、傳進來，這個檔案不 import connector。
+typedef ForumApiAvailability = ({
+  bool canPost,
+  bool canEdit,
+  bool canRead,
+  bool canDelete,
+  bool canPrepareDraft,
+});
+
 /// 按下編輯時要開哪一種編輯器。
 ///
 /// 三種都是真的能編輯，沒有一條是死路：
@@ -296,6 +306,31 @@ class MoodleForumEditUtils {
       rawFormat == MoodleForumUtils.formatHtml
           ? htmlToPlain(rawMessage)
           : rawMessage;
+
+  /// 伺服器算的 `capabilities.reply` 是唯一判準（**不是** `urls.reply`：
+  /// `selfenrol` 會讓那個網址在不能回覆時也非 null）；站台沒開放這支 function 時整排都不畫。
+  static bool canReplyTo(MoodleForumPost p,
+          {required ForumApiAvailability api}) =>
+      MoodleForumUtils.canReply(p) && api.canPost;
+
+  /// 編輯的閘門。缺席 ＝ null ＝ 不知道 ＝ 不畫。
+  ///
+  /// [fresh] 是「手上這份是這一趟真的抓到的」：能力旗標是抓取當下的快照，而編輯窗
+  /// 長度讀不到，快取時它們就開始說謊。有附件而站台沒開
+  /// `prepare_draft_area_for_post` 時整個不給：那條路只剩「不送 attachmentsid」，
+  /// 而那會把主題清單的迴紋針清掉。
+  static bool canEditPost(MoodleForumPost p,
+          {required bool fresh, required ForumApiAvailability api}) =>
+      fresh &&
+      api.canEdit &&
+      api.canRead &&
+      p.capabilities?.edit == true &&
+      !p.isdeleted &&
+      (p.attachments.isEmpty || api.canPrepareDraft);
+
+  static bool canDeletePost(MoodleForumPost p,
+          {required bool fresh, required ForumApiAvailability api}) =>
+      fresh && api.canDelete && p.capabilities?.delete == true && !p.isdeleted;
 
   /// 路徑的最後一段。挑檔回來的是完整路徑，送出去與畫面上要的是檔名。
   static String basename(String path) {

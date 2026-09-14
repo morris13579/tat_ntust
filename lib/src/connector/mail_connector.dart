@@ -12,6 +12,7 @@ import 'package:flutter_app/src/model/mail/mail_draft.dart';
 import 'package:flutter_app/src/model/mail/mail_folder_json.dart';
 import 'package:flutter_app/src/model/mail/mail_page.dart';
 import 'package:flutter_app/src/model/mail/mail_message_json.dart';
+import 'package:flutter_app/src/model/mail/mail_search_hit.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/mail_text_decoder.dart';
 import 'package:flutter_app/src/util/html_style_inliner.dart';
@@ -315,14 +316,14 @@ class MailConnector {
     }
   }
 
-  /// 在多個資料夾裡搜尋，結果照日期合併成一份。
+  /// 在多個資料夾裡搜尋，結果照日期合併成一份，每一筆帶著自己的資料夾。
   ///
   /// **一條連線掃完所有資料夾。** 每個資料夾各開一次連線的話，光是 TLS 交握
   /// 加登入就是七輪往返——而實測七個資料夾裡六個是空的，真正的工作量遠小於
   /// 建立連線的成本。
   ///
   /// 任何一個資料夾失敗只讓那一個沒有結果，其餘照樣回；全部都失敗才回 null。
-  static Future<List<MailMessageJson>?> searchFolders(
+  static Future<List<MailSearchHit>?> searchFolders(
     List<String> folderPaths,
     String keyword,
   ) async {
@@ -334,7 +335,7 @@ class MailConnector {
       client = await _openWithStoredCredentials();
       if (client == null) return null;
 
-      final hits = <MailMessageJson>[];
+      final byFolder = <String, Iterable<MailMessageJson>>{};
       var anySucceeded = false;
       for (final path in folderPaths) {
         try {
@@ -347,22 +348,35 @@ class MailConnector {
             MessageSequence.fromRange(start, total),
             "(UID ENVELOPE FLAGS)",
           );
-          hits.addAll(sortedByDate(result.messages)
-              .where((m) => matchesKeyword(m, needle)));
+          byFolder[path] = sortedByDate(result.messages);
         } catch (e) {
           Log.d('mail searchFolders: $path 失敗，跳過：$e');
         }
       }
       if (!anySucceeded) return null;
-      // 跨資料夾之後 UID 不再唯一，排序只靠日期。
-      hits.sort((a, b) => b.dateMillis.compareTo(a.dateMillis));
-      return hits;
+      return mergeHits(byFolder, needle);
     } catch (e, stack) {
       Log.eWithStack("mail searchFolders failed: $e", stack);
       return null;
     } finally {
       await _quietLogout(client);
     }
+  }
+
+  /// 各資料夾裡符合關鍵字的信照日期合併成一份，每一筆記著自己的資料夾。
+  /// **純函式，測試直接打這裡。** [needle] 的前提同 [matchesKeyword]。
+  static List<MailSearchHit> mergeHits(
+    Map<String, Iterable<MailMessageJson>> byFolder,
+    String needle,
+  ) {
+    final hits = [
+      for (final MapEntry(key: path, value: messages) in byFolder.entries)
+        for (final message in messages)
+          if (matchesKeyword(message, needle)) MailSearchHit(path, message),
+    ];
+    // 跨資料夾之後 UID 不再唯一，排序只靠日期。
+    hits.sort((a, b) => b.message.dateMillis.compareTo(a.message.dateMillis));
+    return hits;
   }
 
   /// 一封信符不符合關鍵字。**純函式，測試直接打這裡。**

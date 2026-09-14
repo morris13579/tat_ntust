@@ -10,13 +10,13 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/store/extra_table_store.dart';
 import 'package:flutter_app/src/util/course_table_conflict.dart';
 import 'package:flutter_app/src/util/course_table_control.dart';
+import 'package:flutter_app/src/util/simulation_draft.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/components/page/notice_bar.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
 import 'package:flutter_app/ui/pages/course_table/simulation/draft_course_sheet.dart';
 import 'package:flutter_app/ui/pages/course_table/simulation/simulation_table.dart';
-import 'package:sprintf/sprintf.dart';
 
 /// 模擬排課。
 ///
@@ -85,29 +85,11 @@ class _SimulationPageState extends State<SimulationPage> {
     _refreshControl();
   }
 
-  /// 隱藏週六日與 N/A-D 節的規則要同時看實際課表與草稿，不然草稿加了一門週六
-  /// 的課，那一欄還是不會出現。
-  void _refreshControl() {
-    final merged = CourseTableJson(
-      courseSemester: _draft.courseSemester,
-      studentId: _draft.studentId,
-    );
-    for (final source in [widget.base, _draft]) {
-      if (source == null) continue;
-      for (final day in Day.values) {
-        final row = source.courseInfoMap[day];
-        if (row == null) continue;
-        row.forEach((section, course) {
-          merged.courseInfoMap[day]![section] ??= course;
-        });
-      }
-    }
-    _control.set(merged);
-  }
+  void _refreshControl() =>
+      _control.set(SimulationDraft.merged(widget.base, _draft));
 
-  List<ConflictCell> get _conflicts => widget.base == null
-      ? const []
-      : CourseTableConflict.findConflicts(widget.base!, _draft);
+  List<ConflictCell> get _conflicts =>
+      SimulationDraft.conflictsOf(widget.base, _draft);
 
   @override
   Widget build(BuildContext context) {
@@ -128,16 +110,9 @@ class _SimulationPageState extends State<SimulationPage> {
     );
   }
 
-  /// 「3 處衝堂 · 三 3、四 6、四 7」。列出是哪幾格，使用者才知道要去看哪裡。
   Widget _banner(List<ConflictCell> conflicts) {
-    final where = conflicts
-        .map((c) => '${_control.getDayString(c.day.index)} '
-            '${_control.getSectionString(c.section.index)}')
-        .toSet()
-        .join('、');
     return NoticeBar(
-      message: sprintf(
-          R.current.simulationConflictBanner, [conflicts.length, where]),
+      message: SimulationDraft.conflictBanner(_control, conflicts),
       kind: NoticeKind.error,
     );
   }
@@ -174,8 +149,6 @@ class _SimulationPageState extends State<SimulationPage> {
   Widget _summary(List<ConflictCell> conflicts) {
     final scheme = context.scheme;
     final text = context.text;
-    final draftCredit = _draft.getTotalCredit();
-    final total = (widget.base?.getTotalCredit() ?? 0) + draftCredit;
     return Material(
       color: context.tokens.card,
       child: SafeArea(
@@ -198,14 +171,12 @@ class _SimulationPageState extends State<SimulationPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            sprintf(R.current.simulationDraftSummary,
-                                [_draft.getCourseIdList().length, draftCredit]),
+                            SimulationDraft.draftSummary(_draft),
                             style: AppTypography.tabular(text.titleSmall!)
                                 .copyWith(color: scheme.onSurface),
                           ),
                           const SizedBox(height: 2),
-                          if (draftCredit == 0 &&
-                              _draft.getCourseIdList().isEmpty)
+                          if (SimulationDraft.isEmpty(_draft))
                             Text(
                               R.current.simulationEmptyHint,
                               style: text.bodySmall
@@ -213,11 +184,8 @@ class _SimulationPageState extends State<SimulationPage> {
                             )
                           else
                             Text(
-                              '${sprintf(R.current.simulationTotalSummary, [
-                                    total
-                                  ])} · ${conflicts.isEmpty ? R.current.simulationNoConflict : sprintf(R.current.simulationConflictCount, [
-                                      conflicts.length
-                                    ])}',
+                              SimulationDraft.totalLine(
+                                  widget.base, _draft, conflicts),
                               style: AppTypography.tabular(text.bodySmall!)
                                   .copyWith(
                                       color: conflicts.isEmpty
@@ -285,39 +253,18 @@ class _SimulationPageState extends State<SimulationPage> {
   }
 
   bool _contains(String courseId) =>
-      _draft.getCourseIdList().contains(courseId);
+      SimulationDraft.contains(_draft, courseId);
 
-  /// 加課不能走 `addCourseDetailByCourseInfo`：它一遇衝堂就整門拒絕，而這一頁
-  /// 就是要讓使用者先排進去、再看到哪裡撞。所以逐格自己放。
   void _addCourse(CourseMainInfoJson course) {
-    final info = CourseInfoJson()..main = course;
-    var placed = false;
-    for (final day in CourseTableConflict.days) {
-      for (final section
-          in CourseTableConflict.sectionsOf(course.course.time[day])) {
-        _draft.courseInfoMap[day]![section] = info;
-        placed = true;
-      }
-    }
-    if (!placed) {
-      // 沒有時間的課塞進 unKnown 那一欄，跟主課表同一套規則。
-      _draft.setCourseDetailByTime(Day.unKnown, SectionNumber.t_UnKnown, info);
-    }
+    SimulationDraft.addCourse(_draft, course);
     setState(_refreshControl);
   }
 
   void _removeCourse(String courseId) {
-    for (final day in Day.values) {
-      final row = _draft.courseInfoMap[day];
-      if (row == null) continue;
-      row.removeWhere((_, course) => course.main.course.id == courseId);
-    }
+    SimulationDraft.removeCourse(_draft, courseId);
     setState(_refreshControl);
     unawaited(_save());
   }
 
-  Future<void> _save() {
-    widget.draft.savedAt = DateTime.now();
-    return ExtraTableStore.instance.upsertDraft(widget.draft);
-  }
+  Future<void> _save() => SimulationDraft.save(widget.draft);
 }

@@ -2,6 +2,7 @@
 
 > 臺灣科技大學校務 App（`club.ntust.tat`）的架構說明。
 > 本文描述 repo 現況，所有路徑以 repo 根目錄為準。
+> iOS 原生版（SwiftUI 畫面，底下跑同一份 Dart 核心）見 [IOS_NATIVE_ARCHITECTURE.md](IOS_NATIVE_ARCHITECTURE.md)。
 
 ## 這是什麼專案
 

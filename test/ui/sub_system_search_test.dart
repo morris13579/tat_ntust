@@ -3,6 +3,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/ntust/ap_tree_json.dart';
 import 'package:flutter_app/src/repository/ntust_repository.dart';
 import 'package:flutter_app/src/repository/result.dart';
+import 'package:flutter_app/src/util/sub_system_pins.dart';
 import 'package:flutter_app/ui/pages/subsystem/sub_system_category.dart';
 import 'package:flutter_app/ui/pages/subsystem/sub_system_page.dart';
 import 'package:flutter_test/flutter_test.dart';

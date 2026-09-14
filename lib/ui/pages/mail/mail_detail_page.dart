@@ -12,6 +12,7 @@ import 'package:flutter_app/src/repository/mail_repository.dart';
 import 'package:flutter_app/src/repository/result.dart';
 import 'package:flutter_app/src/store/model.dart';
 import 'package:flutter_app/src/util/file_utils.dart';
+import 'package:flutter_app/src/util/mail_text.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/card/section_card.dart';
 import 'package:flutter_app/ui/components/html/no_embedded_web_view_factory.dart';
@@ -136,7 +137,7 @@ class _MailDetailPageState extends State<MailDetailPage> {
       final dir = await FileStore.getDownloadDir(context, R.current.mailTitle);
       if (!mounted) return;
       if (dir.isEmpty) return; // 沒有權限，FileStore 已經提示過了。
-      final path = '$dir/${attachment.name}';
+      final path = '$dir/${FileStore.safeName(attachment.name)}';
       await File(path).writeAsBytes(bytes);
       if (!mounted) return;
       _toast(R.current.mailDownloaded);
@@ -177,37 +178,20 @@ class _MailDetailPageState extends State<MailDetailPage> {
   String get _quotedBody {
     final html = _content.value?.dataOrNull?.html ?? '';
     if (html.isEmpty) return '';
-    return MailConnector.htmlToPlainText(html)
-        .split('\n')
-        .map((line) => '> ${line.trimRight()}')
-        .join('\n');
+    return MailText.quote(MailConnector.htmlToPlainText(html));
   }
 
   Future<void> _reply({required bool all}) async {
     final message = widget.message;
-    final to = <String>[
-      if (message.fromEmail.isNotEmpty) message.fromEmail,
-      // 全部回覆才把原信的收件者與副本帶上，而且要把自己剔掉——不然每回一次
-      // 就多寄一封給自己。
-      if (all) ...[...message.to, ...message.cc],
-    ];
-    final own = MailConnector.accountToAddress(Model.instance.getAccount())
-        .toLowerCase();
-    final unique = <String>[];
-    for (final address in to) {
-      final normalized = address.trim();
-      if (normalized.isEmpty) continue;
-      if (normalized.toLowerCase() == own) continue;
-      if (unique.any((e) => e.toLowerCase() == normalized.toLowerCase())) {
-        continue;
-      }
-      unique.add(normalized);
-    }
-
     await Get.to(
       () => MailComposePage(
-        initialTo: unique,
-        initialSubject: _prefixed('Re: ', message.subject),
+        initialTo: MailText.replyRecipients(
+          message,
+          all: all,
+          ownAddress:
+              MailConnector.accountToAddress(Model.instance.getAccount()),
+        ),
+        initialSubject: MailText.prefixed('Re: ', message.subject),
         initialBody: '\n\n$_quotedBody',
       ),
       transition: RouteUtils.transition,
@@ -217,18 +201,12 @@ class _MailDetailPageState extends State<MailDetailPage> {
   Future<void> _forward() async {
     await Get.to(
       () => MailComposePage(
-        initialSubject: _prefixed('Fwd: ', widget.message.subject),
+        initialSubject: MailText.prefixed('Fwd: ', widget.message.subject),
         initialBody: '\n\n$_quotedBody',
       ),
       transition: RouteUtils.transition,
     );
   }
-
-  /// 已經有前綴就不再加一次，免得變成 `Re: Re: Re:`。
-  static String _prefixed(String prefix, String subject) =>
-      subject.toLowerCase().startsWith(prefix.toLowerCase())
-          ? subject
-          : '$prefix$subject';
 
   @override
   Widget build(BuildContext context) {
@@ -473,7 +451,7 @@ class _MailDetailPageState extends State<MailDetailPage> {
                       overflow: TextOverflow.ellipsis,
                       style: context.text.bodyLarge
                           ?.copyWith(color: scheme.onSurface)),
-                  if (_attachmentMeta(attachment) case final meta?)
+                  if (MailText.attachmentMeta(attachment) case final meta?)
                     Text(meta,
                         style: context.text.bodySmall
                             ?.copyWith(color: scheme.onSurfaceVariant)),
@@ -506,17 +484,6 @@ class _MailDetailPageState extends State<MailDetailPage> {
         ),
       ),
     );
-  }
-
-  /// 「PNG · 1.2 MB」。兩個都問不到就不畫這一行。
-  String? _attachmentMeta(MailAttachment attachment) {
-    final size = attachment.readableSize;
-    final type = attachment.mediaType.split('/').last.toUpperCase();
-    final parts = [
-      if (type.isNotEmpty) type,
-      if (size != null) size,
-    ];
-    return parts.isEmpty ? null : parts.join(' · ');
   }
 
   /// 遠端圖片的提示。
@@ -570,17 +537,9 @@ class _MailDetailPageState extends State<MailDetailPage> {
     );
   }
 
-  /// 信件裡有沒有指向外部的 `<img>`。
-  ///
-  /// 只看 http(s)：`cid:` 是信件自己夾帶的 part（connector 已經換成 `data:`），
-  /// 顯示它不會對外發任何請求。
-  static bool hasRemoteImages(String html) =>
-      RegExp("""<img[^>]+src=[\\"']?https?://""", caseSensitive: false)
-          .hasMatch(html);
-
   Widget _buildContent(MailContent content) {
     final html = content.html;
-    final blocked = !_showRemoteImages && hasRemoteImages(html);
+    final blocked = !_showRemoteImages && MailText.hasRemoteImages(html);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

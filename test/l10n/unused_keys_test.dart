@@ -23,13 +23,20 @@ void main() {
 
     // 只看程式碼不看註解：註解裡提到某個 key（通常是在說明它為什麼被改掉）
     // 不算讀取點。
+    // iOS 原生版（ios_native/）共用同一份 ARB，經產生的 `L10n` 讀取。
+    // 小工具 extension（TATWidget）也是，設定畫面的 App Intents 直接寫 key 字串。
+    const sources = {
+      'lib': '.dart',
+      'test': '.dart',
+      'ios_native/TATNative': '.swift',
+      'ios_native/TATWidget': '.swift',
+    };
     final used = <String>{};
-    for (final dir in ['lib', 'test']) {
+    for (final MapEntry(key: dir, value: extension) in sources.entries) {
       for (final file in Directory(dir).listSync(recursive: true)) {
-        if (file is! File || !file.path.endsWith('.dart')) continue;
-        if (file.path.contains('/generated/') || file.path.contains('/l10n/')) {
-          continue;
-        }
+        if (file is! File || !file.path.endsWith(extension)) continue;
+        final path = file.path.toLowerCase();
+        if (path.contains('/generated/') || path.contains('/l10n/')) continue;
         final code = file
             .readAsLinesSync()
             .where((l) => !l.trimLeft().startsWith('//'))

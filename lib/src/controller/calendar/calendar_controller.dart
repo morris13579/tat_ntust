@@ -8,8 +8,8 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_core_calendar_action_
 import 'package:flutter_app/src/repository/calendar_repository.dart';
 import 'package:flutter_app/src/repository/moodle_repository.dart';
 import 'package:flutter_app/src/repository/result.dart';
+import 'package:flutter_app/src/util/school_calendar_utils.dart';
 import 'package:get/get.dart';
-import 'package:icalendar_parser/icalendar_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarController extends GetxController {
@@ -68,32 +68,8 @@ class CalendarController extends GetxController {
         .getCalendarFile(forceUpdate: forceUpdate);
     final savePath = result.dataOrNull;
     if (savePath != null) {
-      final icsLines = await File(savePath).readAsLines();
-      final iCalendar = ICalendar.fromLines(icsLines);
-      for (var i in iCalendar.data) {
-        if (!i.containsKey("dtstart") || !i.containsKey("summary")) {
-          continue;
-        }
-
-        // 單筆解析失敗只跳過該筆，否則例外會讓畫面停在半份行事曆。
-        try {
-          IcsDateTime timeStart = i["dtstart"];
-          DateTime dt = DateTime.parse(timeStart.dt);
-          var time = DateTime.utc(dt.year, dt.month, dt.day);
-          String event = i["summary"];
-          for (var raw in event.split("  ")) {
-            // 剝掉開頭的編號前綴。不可換成固定長度切割：編號可能是兩位數。
-            final item = raw
-                .replaceAll(" ", "")
-                .replaceFirst(RegExp(r'^\d+[.、,:]?'), '');
-            if (item.isEmpty) continue;
-            events.putIfAbsent(time, () => []).add(item);
-          }
-        } catch (e, stack) {
-          Log.eWithStack(e.toString(), stack);
-          continue;
-        }
-      }
+      events.addAll(
+          SchoolCalendarUtils.parse(await File(savePath).readAsLines()));
       var today = DateTime.now().toUtc();
       today = today.add(const Duration(hours: 8)); //to TW time
 

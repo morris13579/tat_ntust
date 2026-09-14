@@ -89,6 +89,22 @@ class CourseQueryFilter {
       intensiveOnly ||
       ntustOnly;
 
+  /// 課表上最多課的系所代碼，搜尋頁一進來先查它。
+  ///
+  /// 課號前兩碼就是系所，從課表取眾數就得到，不必再問伺服器。數字開頭的是通識與
+  /// 共同科目，不算。
+  static String? homeDepartmentOf(Iterable<String> courseIds) {
+    final counts = <String, int>{};
+    for (final id in courseIds) {
+      if (id.length < 2) continue;
+      final prefix = id.substring(0, 2).toUpperCase();
+      if (!RegExp(r'^[A-Z]{2}$').hasMatch(prefix)) continue;
+      counts[prefix] = (counts[prefix] ?? 0) + 1;
+    }
+    if (counts.isEmpty) return null;
+    return counts.entries.reduce((a, b) => b.value > a.value ? b : a).key;
+  }
+
   CourseQueryFilter copyWith({
     String? courseNo,
     DepartmentJson? department,
