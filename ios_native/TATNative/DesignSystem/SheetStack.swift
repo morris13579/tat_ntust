@@ -7,7 +7,9 @@ struct SheetStack<Content: View>: View {
   var closeLabel = L10n.close
   @ViewBuilder var content: () -> Content
   @Environment(\.dismiss) private var dismiss
-  @State private var height: CGFloat?
+  @State private var detents: Set<PresentationDetent> = [.medium, .large]
+  @State private var selection: PresentationDetent = .medium
+  @State private var measured = false
 
   var body: some View {
     NavigationStack {
@@ -17,15 +19,29 @@ struct SheetStack<Content: View>: View {
         .listSectionSpacing(.compact)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { SheetCloseButton(label: closeLabel) { dismiss() } }
-        .modifier(ContentHeightReader(height: $height))
+        .modifier(ContentHeightReader { fit($0) })
     }
-    .presentationDetents(detents)
+    .presentationDetents(detents, selection: $selection)
     .presentationDragIndicator(.visible)
   }
 
-  private var detents: Set<PresentationDetent> {
-    guard let height else { return [.medium, .large] }
-    return [.height(height.rounded())]
+  /// 開著的時候內容變高變矮（例如展開空的資料夾），直接把 detent 換掉 sheet 會一格跳到新高度；
+  /// 先把新高度加進去再選它，系統才會用動畫過去，動畫結束再拿掉舊的。
+  private func fit(_ height: CGFloat) {
+    let next = PresentationDetent.height(height.rounded())
+    guard next != selection else { return }
+    guard measured else {
+      measured = true
+      detents = [next]
+      selection = next
+      return
+    }
+    detents.insert(next)
+    selection = next
+    Task {
+      try? await Task.sleep(for: .milliseconds(600))
+      if selection == next { detents = [next] }
+    }
   }
 
   @ViewBuilder private var titled: some View {
@@ -41,7 +57,7 @@ struct SheetStack<Content: View>: View {
 /// sheet 還在動的時候，它自己的底部安全區域與內距各自在 0 與 34 之間跳，兩個一減會多出一段，
 /// 內容接近整頁時就先撐成不透明的整頁、再縮回玻璃，看起來像閃一下。iOS 17 量不到，sheet 維持半頁與整頁兩段。
 private struct ContentHeightReader: ViewModifier {
-  @Binding var height: CGFloat?
+  let onChange: (CGFloat) -> Void
 
   func body(content: Content) -> some View {
     if #available(iOS 18, *) {
@@ -52,7 +68,7 @@ private struct ContentHeightReader: ViewModifier {
         let bottom = homeIndicator.map { max(0, geometry.contentInsets.bottom - $0) } ?? 0
         return geometry.contentSize.height + geometry.contentInsets.top + bottom
       } action: { _, value in
-        if let value { height = value }
+        if let value { onChange(value) }
       }
     } else {
       content

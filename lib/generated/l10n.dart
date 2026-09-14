@@ -4989,16 +4989,6 @@ class S {
     return Intl.message('%s credits', name: 'creditCount', desc: '', args: []);
   }
 
-  /// `Assignment and exam scores during the term`
-  String get moodleCourseGradesSubtitle {
-    return Intl.message(
-      'Assignment and exam scores during the term',
-      name: 'moodleCourseGradesSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Copy`
   String get copyAction {
     return Intl.message('Copy', name: 'copyAction', desc: '', args: []);

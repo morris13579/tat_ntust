@@ -601,7 +601,6 @@
 "moodleCourseGrades" = "Moodle running totals";
 "moodleCourseGradesEmpty" = "No Moodle totals to show for this semester";
 "moodleCourseGradesHint" = "These are running totals calculated from grading on Moodle, not your official NTUST grades. A course shows \"-\" when it has no total yet — the teacher may not have graded it, or may have hidden the total.";
-"moodleCourseGradesSubtitle" = "Assignment and exam scores during the term";
 "moodleNotSignedIn" = "Not signed in to Moodle";
 "moodle_setting" = "Moodle setting";
 "moodle_setting_description" = "Sync NTUST Moodle website settings";

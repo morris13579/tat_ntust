@@ -1204,8 +1204,6 @@ extension L10n {
   static var moodleCourseGradesEmpty: String { tr("moodleCourseGradesEmpty") }
   /// 這是老師在 Moodle 上評分算出的即時總分，不是學校的正式成績；顯示「-」代表這門課還沒有總分，可能是老師還沒...
   static var moodleCourseGradesHint: String { tr("moodleCourseGradesHint") }
-  /// 學期中的作業與考試分數
-  static var moodleCourseGradesSubtitle: String { tr("moodleCourseGradesSubtitle") }
   /// 尚未登入 Moodle
   static var moodleNotSignedIn: String { tr("moodleNotSignedIn") }
   /// Moodle 設定

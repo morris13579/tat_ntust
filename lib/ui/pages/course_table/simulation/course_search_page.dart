@@ -8,6 +8,7 @@ import 'package:flutter_app/src/config/app_typography.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course/course_department.dart';
 import 'package:flutter_app/src/model/course/course_query_filter.dart';
+import 'package:flutter_app/src/util/course_search_merge.dart';
 import 'package:flutter_app/src/util/course_table_conflict.dart';
 import 'package:flutter_app/src/util/course_table_control.dart';
 import 'package:flutter_app/ui/components/chip/tat_filter_chip.dart';
@@ -381,7 +382,7 @@ class _CourseSearchPageState extends State<CourseSearchPage> {
     final results = await widget.search(filter);
     if (!mounted) return;
     setState(() {
-      _results = results;
+      _results = CourseSearchMerge.byCourseId(results);
       _loading = false;
     });
   }

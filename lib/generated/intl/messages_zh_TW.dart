@@ -917,9 +917,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "moodleCourseGradesHint": MessageLookupByLibrary.simpleMessage(
       "這是老師在 Moodle 上評分算出的即時總分，不是學校的正式成績；顯示「-」代表這門課還沒有總分，可能是老師還沒評分，也可能是把總分隱藏起來。",
     ),
-    "moodleCourseGradesSubtitle": MessageLookupByLibrary.simpleMessage(
-      "學期中的作業與考試分數",
-    ),
     "moodleNotSignedIn": MessageLookupByLibrary.simpleMessage("尚未登入 Moodle"),
     "moodle_setting": MessageLookupByLibrary.simpleMessage("Moodle 設定"),
     "moodle_setting_description": MessageLookupByLibrary.simpleMessage(

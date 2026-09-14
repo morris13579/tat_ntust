@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -70,14 +71,34 @@ class _SharedTablePageState extends State<SharedTablePage> {
         subtitle: _summary(),
         isShowBack: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(8, 4, 8, 24),
+      body: SafeArea(
+        top: false,
         child: Column(
           children: [
-            _badge(context),
-            if (_progress != null) _restoring(context),
-            const SizedBox(height: 8),
-            _grid(context, control),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+              child: Column(
+                children: [
+                  _badge(context),
+                  if (_progress != null) _restoring(context),
+                ],
+              ),
+            ),
+            // 同課表頁：九節剛好一屏，多的往下捲。列高寫死的話，節數少的課表底下會空一大截。
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  child: _grid(
+                    context,
+                    control,
+                    math.max(
+                        0.0,
+                        (constraints.maxHeight - CourseConfig.dayHeight) /
+                            CourseConfig.showCourseTableNum),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -123,13 +144,14 @@ class _SharedTablePageState extends State<SharedTablePage> {
         ),
       );
 
-  Widget _grid(BuildContext context, CourseTableControl control) {
+  Widget _grid(
+      BuildContext context, CourseTableControl control, double rowHeight) {
     final sections = control.getSectionIntList;
     return Column(
       children: [
         _header(context, control),
         for (var i = 0; i < sections.length; i++)
-          _row(context, control, sections[i], i),
+          _row(context, control, sections[i], i, rowHeight),
       ],
     );
   }
@@ -153,10 +175,10 @@ class _SharedTablePageState extends State<SharedTablePage> {
       );
 
   Widget _row(BuildContext context, CourseTableControl control, int section,
-          int index) =>
+          int index, double height) =>
       Container(
         color: UIUtils.getListColor(index),
-        height: 56,
+        height: height,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

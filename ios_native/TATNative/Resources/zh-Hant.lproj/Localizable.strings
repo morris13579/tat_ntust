@@ -601,7 +601,6 @@
 "moodleCourseGrades" = "Moodle 目前成績";
 "moodleCourseGradesEmpty" = "這學期在 Moodle 上沒有可以顯示的總分";
 "moodleCourseGradesHint" = "這是老師在 Moodle 上評分算出的即時總分，不是學校的正式成績；顯示「-」代表這門課還沒有總分，可能是老師還沒評分，也可能是把總分隱藏起來。";
-"moodleCourseGradesSubtitle" = "學期中的作業與考試分數";
 "moodleNotSignedIn" = "尚未登入 Moodle";
 "moodle_setting" = "Moodle 設定";
 "moodle_setting_description" = "同步臺科Moodle設定";

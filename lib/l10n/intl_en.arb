@@ -550,7 +550,6 @@
   "scorePassed": "Passed",
   "courseCount": "%s courses",
   "creditCount": "%s credits",
-  "moodleCourseGradesSubtitle": "Assignment and exam scores during the term",
   "copyAction": "Copy",
   "courseAndPracticalTimes": "Class / lab",
   "hoursValue": "%s / %s hr",

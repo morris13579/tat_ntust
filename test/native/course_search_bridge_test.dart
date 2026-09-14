@@ -232,6 +232,35 @@ void main() {
           isNot(contains('CS4001301')));
     });
 
+    test('同一個課號回兩筆時併成一門：其中一筆衝堂就整門藏起來、加不進去', () async {
+      found = [
+        course('EE2001301', '電路學', {Day.tuesday: '1'}),
+        course('EE2001301', '電路學', {Day.monday: '4'}),
+      ];
+      await bridge.search(filter('EE'), true, []);
+
+      expect(bridge.results(true, []).courses, isEmpty);
+      expect(bridge.results(false, []).courses.single.conflicts, isNotEmpty);
+      final change = await bridge.add('EE2001301');
+      expect(change.applied, isFalse);
+      expect(CourseModel().getCourseSettingInfo()!.getCourseIdList(),
+          isNot(contains('EE2001301')));
+    });
+
+    test('同一個課號回兩筆、都不衝堂時列一門，加進去每一節都在課表上', () async {
+      found = [
+        course('EE2001301', '電路學', {Day.tuesday: '1'}),
+        course('EE2001301', '電路學', {Day.thursday: '5'}),
+      ];
+      await bridge.search(filter('EE'), true, []);
+
+      expect(bridge.results(true, []).courses.single.id, 'EE2001301');
+      expect((await bridge.add('EE2001301')).applied, isTrue);
+      final map = CourseModel().getCourseSettingInfo()!.courseInfoMap;
+      expect(map[Day.tuesday]![SectionNumber.t_1]?.main.course.id, 'EE2001301');
+      expect(map[Day.thursday]![SectionNumber.t_5]?.main.course.id, 'EE2001301');
+    });
+
     test('不在這次結果裡的課號加不進去', () async {
       expect((await bridge.add('XX0000000')).applied, isFalse);
     });

@@ -550,7 +550,6 @@
   "scorePassed": "通過",
   "courseCount": "%s 門課",
   "creditCount": "%s 學分",
-  "moodleCourseGradesSubtitle": "學期中的作業與考試分數",
   "copyAction": "複製",
   "courseAndPracticalTimes": "上課／實習",
   "hoursValue": "%s / %s 小時",

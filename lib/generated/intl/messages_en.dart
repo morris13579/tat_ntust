@@ -1275,9 +1275,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "moodleCourseGradesHint": MessageLookupByLibrary.simpleMessage(
       "These are running totals calculated from grading on Moodle, not your official NTUST grades. A course shows \"-\" when it has no total yet — the teacher may not have graded it, or may have hidden the total.",
     ),
-    "moodleCourseGradesSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Assignment and exam scores during the term",
-    ),
     "moodleNotSignedIn": MessageLookupByLibrary.simpleMessage(
       "Not signed in to Moodle",
     ),

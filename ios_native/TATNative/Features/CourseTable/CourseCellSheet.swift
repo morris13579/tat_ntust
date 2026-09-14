@@ -97,17 +97,19 @@ struct CourseCellSheet: View {
   private func actionButton(
     _ icon: LucideIcon, _ title: String, role: ButtonRole? = nil, action: @escaping () -> Void
   ) -> some View {
-    Button(role: role, action: action) {
+    let color = role == .destructive ? Color(.systemRed) : Color.tatBrand
+    return Button(role: role, action: action) {
       Label {
         Text(title)
       } icon: {
-        LucideImage(icon, size: 18)
+        // 自己畫的圖示不吃按鈕的 role，破壞性的按鈕字變紅、圖示卻還是 tint 的藍，要自己上色。
+        LucideImage(icon, size: 18).foregroundStyle(color)
       }
       .frame(maxWidth: .infinity)
     }
     .buttonStyle(.bordered)
     .controlSize(.large)
-    .tint(role == .destructive ? Color(.systemRed) : Color.tatBrand)
+    .tint(color)
   }
 
   /// 先交出去再關：呼叫端等 sheet 關掉才開下一個畫面。

@@ -10,6 +10,7 @@ import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/native/course_table_bridge.dart';
 import 'package:flutter_app/src/native/simulation_sessions.dart';
 import 'package:flutter_app/src/store/extra_table_store.dart';
+import 'package:flutter_app/src/util/course_search_merge.dart';
 import 'package:flutter_app/src/util/course_table_conflict.dart';
 import 'package:flutter_app/src/util/course_table_control.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
@@ -96,7 +97,7 @@ class CourseSearchBridge implements TatCourseSearchApi {
     final query = _query ?? _model.getQueryCourse;
     final found = await query(table.courseSemester, _toQuery(filter));
     if (generation != _generation) return null;
-    _results = found;
+    _results = CourseSearchMerge.byCourseId(found);
     return results(hideConflict, slots);
   }
 
