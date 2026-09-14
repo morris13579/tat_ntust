@@ -10,7 +10,7 @@ import 'package:flutter_app/ui/components/page/web_view_opener.dart';
 import 'package:flutter_app/ui/components/tile/moodle_file_tile.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_app/src/util/forum_feed_utils.dart';
 
 /// 討論串裡的一則貼文。
 ///
@@ -142,7 +142,7 @@ class ForumPostBlock extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Text(
-            _initialOf(name),
+            forumInitialOf(name),
             style: text.labelMedium?.copyWith(
               color: _isRoot ? scheme.primary : scheme.onSurfaceVariant,
               height: 1,
@@ -173,20 +173,12 @@ class ForumPostBlock extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          _timeLabel(p),
+          forumPostTimeLabel(p),
           style: AppTypography.tabular((text.bodySmall ?? const TextStyle())
               .copyWith(color: scheme.onSurfaceVariant)),
         ),
       ],
     );
-  }
-
-  /// 姓名首字。用 runes 取，不是 substring(0, 1)——後者會把一個代理對切成
-  /// 半個字元，畫面上就是一個豆腐。
-  static String _initialOf(String name) {
-    final trimmed = name.trim();
-    if (trimmed.isEmpty) return "?";
-    return String.fromCharCode(trimmed.runes.first);
   }
 
   Widget _body(BuildContext context, MoodleForumPost p) {
@@ -207,20 +199,6 @@ class ForumPostBlock extends StatelessWidget {
       dirName: dirName,
       openWebView: openWebView,
     );
-  }
-
-  /// 建立時間，被改過就接一句「已編輯」——少了這個記號，討論串會默默改寫歷史。
-  /// `isdeleted` 的貼文 timecreated 是 null（post_exporter 這時不載內容）。
-  static String _timeLabel(MoodleForumPost p) {
-    final unix = p.timecreated ?? p.timemodified ?? 0;
-    if (unix <= 0) return "";
-    final formatted = DateFormat.MMMd()
-        .add_jm()
-        .format(DateTime.fromMillisecondsSinceEpoch(unix * 1000));
-    final created = p.timecreated;
-    final modified = p.timemodified;
-    final edited = created != null && modified != null && modified > created;
-    return edited ? '$formatted · ${R.current.forumEdited}' : formatted;
   }
 }
 

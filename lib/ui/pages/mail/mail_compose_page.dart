@@ -11,6 +11,7 @@ import 'package:flutter_app/src/controller/mail/mail_outbox_controller.dart';
 import 'package:flutter_app/src/model/mail/mail_draft.dart';
 import 'package:flutter_app/src/repository/mail_repository.dart';
 import 'package:flutter_app/src/service/file_pick_service.dart';
+import 'package:flutter_app/src/util/mail_address.dart';
 import 'package:flutter_app/src/util/rich_editor_bridge_utils.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';

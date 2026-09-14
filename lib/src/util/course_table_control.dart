@@ -4,6 +4,7 @@ import 'package:flutter_app/src/config/section_time.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/util/course_table_conflict.dart';
+import 'package:flutter_app/src/util/course_table_share_codec.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 
 /// 課表用的星期名稱，索引對齊 [Day] 的順序。
@@ -51,6 +52,7 @@ class CourseTableControl {
   /// getter 而不是欄位：這個物件是 CourseController 的欄位，而 GetX 的
   /// controller 不會被 forceAppUpdate 重建，存成欄位會凍在建立時的語言。
   List<String> get dayStringList => courseDayNames();
+
   /// 節次的顯示時間，與 [sectionStringList] 逐格對位。
   ///
   /// 時刻本身在 `lib/src/config/section_time.dart`，那是全 App 唯一一份
@@ -70,7 +72,11 @@ class CourseTableControl {
 
   static int dayLength = 8;
   static int sectionLength = 14;
-  late Map<String, Color> colorMap;
+
+  /// 課號 → 格子顏色，第一次要顏色時才算。配色讀的是 Flutter 的主題（`Get.theme`），
+  /// 原生版的核心只要知道顯示哪幾天、哪幾節，不該因為這一步碰到 UI。
+  Map<String, Color>? _colorMap;
+  Map<String, Color> get colorMap => _colorMap ??= _buildColorMap();
 
   void set(CourseTableJson value) {
     courseTable = value;
@@ -85,7 +91,7 @@ class CourseTableControl {
     isHideA &= (isHideB & isHideC & isHideD);
     isHideB &= (isHideC & isHideD);
     isHideC &= isHideD;
-    _initColorList();
+    _colorMap = null;
   }
 
   List<int> get getDayIntList {
@@ -118,16 +124,17 @@ class CourseTableControl {
     return Colors.white;
   }
 
-  void _initColorList() {
-    colorMap = {};
+  Map<String, Color> _buildColorMap() {
+    final map = <String, Color>{};
     List<String> courseInfoList = courseTable!.getCourseIdList();
     int colorCount = courseInfoList.length;
 
     final colors = UIUtils.generateHarmoniousColors(12)..shuffle();
 
     for (int i = 0; i < colorCount; i++) {
-      colorMap[courseInfoList[i]] = colors[i % colors.length];
+      map[courseInfoList[i]] = colors[i % colors.length];
     }
+    return map;
   }
 
   List<int> get getSectionIntList {
@@ -153,6 +160,39 @@ class CourseTableControl {
 
   String getSectionString(int section) {
     return sectionStringList[section];
+  }
+
+  /// 分享碼上一門課的節次，「一 2·3　三 4」：同一天的節次併在一起，天與天之間用全形空白分開，
+  /// 中間點才不會被誤讀成跨天。
+  String sharedSlotsLabel(List<SharedSlot> slots) {
+    final byDay = <Day, List<String>>{};
+    for (final slot in slots) {
+      // 節次標籤只有 14 格，沒有 t_UnKnown；收的是外部資料，越界會直接炸掉整張選單。
+      if (slot.section.index >= sectionLength) continue;
+      byDay
+          .putIfAbsent(slot.day, () => [])
+          .add(getSectionString(slot.section.index));
+    }
+    return [
+      for (final entry in byDay.entries)
+        '${getDayString(entry.key.index)} ${entry.value.join('·')}',
+    ].join('　');
+  }
+
+  /// 撞到的格子照星期併成「三 9、四 3·4」。
+  ///
+  /// 撞到的節次要全部列出來：只印第一節會讓使用者以為只差一節，退掉一節就排得進去。
+  String conflictSlotsLabel(List<ConflictCell> cells) {
+    final byDay = <Day, List<String>>{};
+    for (final cell in cells) {
+      byDay
+          .putIfAbsent(cell.day, () => [])
+          .add(getSectionString(cell.section.index));
+    }
+    return [
+      for (final entry in byDay.entries)
+        '${getDayString(entry.key.index)} ${entry.value.join('·')}',
+    ].join('、');
   }
 
   /// 一門課的上課時段，「三 8　四 3·4」。

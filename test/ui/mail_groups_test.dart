@@ -1,5 +1,5 @@
 import 'package:flutter_app/src/model/mail/mail_message_json.dart';
-import 'package:flutter_app/ui/pages/mail/components/mail_groups.dart';
+import 'package:flutter_app/src/util/mail_groups.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';

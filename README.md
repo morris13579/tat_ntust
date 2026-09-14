@@ -61,6 +61,9 @@ python3 tool/deps.py --check         # CI 模式，超過棘輪門檻時失敗
 
 ### 文件
 - [架構地圖](docs/ARCHITECTURE.md) — 五層堆疊、請求路徑、登入策略、外部系統
+- [iOS 原生版架構](docs/IOS_NATIVE_ARCHITECTURE.md) — SwiftUI 畫面與 Dart 核心的分工、Pigeon 通訊、啟動、建置與上架
+- [Flutter 專案接上原生 iOS](docs/FLUTTER_NATIVE_IOS_GUIDE.md) — 不綁本專案的通用做法：無畫面的引擎、Pigeon、CocoaPods 整合、資料延續
+- [iOS 原生化研究計畫](docs/IOS_SWIFTUI_RESEARCH.md) — 選型、可行性尖刺的實測紀錄與踩過的坑
 - [內建信箱 IMAP 化](docs/WEBMAIL_IMAP.md) — 通訊協定探測結果、分層設計、分階段開發流程
 
 ## 貢獻者

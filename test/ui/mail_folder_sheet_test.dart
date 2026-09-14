@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/enum/mail_folder_role.dart';
 import 'package:flutter_app/src/model/mail/mail_folder_json.dart';
+import 'package:flutter_app/src/util/mail_folders.dart';
 import 'package:flutter_app/ui/components/sheet/tat_bottom_sheet.dart';
 import 'package:flutter_app/ui/pages/mail/components/mail_folder_sheet.dart';
 import 'package:flutter_test/flutter_test.dart';

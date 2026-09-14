@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_app/debug/log/log.dart';
-
-import 'package:flutter_app/src/util/web_view_utils.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_app/src/service/web_view_session.dart';
 
 /// 在 ssoam2 的登入頁上填表、等 Turnstile、按下登入的**唯一**一份實作。
 ///
@@ -97,8 +95,8 @@ class Ssoam2Login {
   ///
   /// 回傳一段 JSON 字串，只有結構性資訊，不含任何頁面內容或憑證。
   static Future<String> diagnoseTurnstile(
-      InAppWebViewController controller) async {
-    final result = await controller.evaluateJavascript(source: r'''
+      WebViewDriver web) async {
+    final result = await web.evaluateJavascript(r'''
       (function () {
         var field = document.querySelector('[name="cf-turnstile-response"]');
         var frames = document.querySelectorAll(
@@ -168,10 +166,10 @@ class Ssoam2Login {
   /// **呼叫端一定要在再送出表單之前先問這個。** 登入失敗後站台是把登入頁
   /// 連同錯誤訊息重新吐回來，網址仍是登入頁，先送出再檢查等於永遠檢查不到。
   static Future<String?> credentialError(
-      InAppWebViewController controller) async {
+      WebViewDriver web) async {
     try {
       final raw =
-          await controller.evaluateJavascript(source: _credentialErrorJs);
+          await web.evaluateJavascript(_credentialErrorJs);
       if (raw == null) return null;
       final decoded = jsonDecode(raw.toString());
       if (decoded is! Map) return null;
@@ -191,8 +189,8 @@ class Ssoam2Login {
 
   /// 站台是不是在頁面上回報了登入錯誤。判準與 [credentialError] 同一份。
   static Future<bool> hasValidationError(
-          InAppWebViewController controller) async =>
-      await credentialError(controller) != null;
+          WebViewDriver web) async =>
+      await credentialError(web) != null;
 
   /// 這份 HTML 是不是「已經登入」的帳號資訊頁。
   ///
@@ -211,48 +209,48 @@ class Ssoam2Login {
   ///
   /// [turnstileTimeout] 預設沿用 `waitForElement` 的 5 秒。
   static Future<Ssoam2LoginOutcome> submit(
-    InAppWebViewController controller, {
+    WebViewDriver web, {
     required String account,
     required String password,
     Duration turnstileTimeout = const Duration(seconds: 5),
     Duration turnstileAppearTimeout = const Duration(seconds: 3),
   }) async {
-    if (!await controller.waitForElement(condition: _formReady)) {
+    if (!await web.waitForElement(condition: _formReady)) {
       return Ssoam2LoginOutcome.formNotFound;
     }
 
-    await controller.evaluateJavascript(
-        source: 'document.getElementById("Username").value = '
+    await web.evaluateJavascript(
+        'document.getElementById("Username").value = '
             '${jsonEncode(account)};');
-    await controller.evaluateJavascript(
-        source: 'document.getElementById("Password").value = '
+    await web.evaluateJavascript(
+        'document.getElementById("Password").value = '
             '${jsonEncode(password)};');
 
     // 先給挑戰一點時間「出現」。script 是非同步載入的，剛 onLoadStop 時
     // 通常還看不到；但如果這一頁根本沒有挑戰，等再久也不會出現——所以等的
     // 條件是「有挑戰」**或**「確定不會有挑戰」，兩者都算塵埃落定。
     await Future<void>.delayed(_turnstileGrace);
-    await controller.waitForElement(
+    await web.waitForElement(
         condition: _turnstileSettled, timeout: turnstileAppearTimeout);
     final active =
-        await controller.evaluateJavascript(source: _turnstileActive) == true;
+        await web.evaluateJavascript(_turnstileActive) == true;
     // 記下走了哪一條。學校哪天開始下發挑戰時，這一行會從「無挑戰」變成
     // 「有挑戰」——那是行為改變的第一個訊號。
     Log.d("[ssoam2] turnstile ${active ? "有挑戰，等它完成" : "無挑戰，直接送出"}");
     if (!active) {
       // 沒有挑戰在跑就直接送出。伺服器若真的要 Turnstile 會拒絕，
       // 那時頁面上會有 validation-summary-errors，呼叫端看得到。
-      await controller.evaluateJavascript(source: _clickLogin);
+      await web.evaluateJavascript(_clickLogin);
       return Ssoam2LoginOutcome.submitted;
     }
 
     // 有挑戰，等它完成。
-    if (!await controller.waitForElement(
+    if (!await web.waitForElement(
         condition: _turnstileDone, timeout: turnstileTimeout)) {
       return Ssoam2LoginOutcome.turnstileTimeout;
     }
 
-    await controller.evaluateJavascript(source: _clickLogin);
+    await web.evaluateJavascript(_clickLogin);
     return Ssoam2LoginOutcome.submitted;
   }
 }

@@ -122,15 +122,10 @@ class FileUtils {
 
     if (Platform.isAndroid) {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      String packageName = packageInfo.packageName;
-      String fileName = path.split("/").last;
-      String contentUri =
-          "content://$packageName.fileProvider/internal_files/$fileName";
-
       final intent = AndroidIntent(
         action: 'action_view',
-        data: contentUri,
-        type: mime(fileName),
+        data: contentUriOf(originFile.absolute.path, packageInfo.packageName),
+        type: mime(p.basename(path)),
         flags: <int>[
           Flag.FLAG_GRANT_READ_URI_PERMISSION,
           Flag.FLAG_ACTIVITY_NEW_TASK,
@@ -142,5 +137,13 @@ class FileUtils {
     }
 
     await OpenFilex.open(originFile.path);
+  }
+
+  /// 給檢視器開的網址：App 的 FileProvider 的 `root`（`res/xml/filepaths.xml`）加上完整路徑。
+  /// 以前只給檔名，FileProvider 會到 App 目錄的最上層找，而下載的檔案在課名資料夾或使用者自選的公用資料夾裡。
+  /// 字串自己組：`Uri` 會把 host 轉成小寫，authority 卻分大小寫。
+  static String contentUriOf(String path, String packageName) {
+    final segments = p.posix.split(path).where((s) => s != '/').map(Uri.encodeComponent);
+    return 'content://$packageName.fileProvider/root/${segments.join('/')}';
   }
 }

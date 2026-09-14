@@ -1,6 +1,9 @@
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 
+/// 課程佔用的一個格子。
+typedef CourseSlot = (Day, SectionNumber);
+
 /// 一格衝堂：同一個 (星期, 節次) 上有兩門課。
 class ConflictCell {
   const ConflictCell({
@@ -87,6 +90,21 @@ class CourseTableConflict {
       }
     }
     return cells;
+  }
+
+  /// [course] 的每一格都落在 [slots] 裡；[slots] 是空的就是不篩。
+  ///
+  /// 用「完全落在」而不是「有交集」：勾 1、2 是因為那兩節有空，一門橫跨 1–3
+  /// 的課列出來也排不進去。沒有排定時間的課（querycourse 的 `Node` 是 null，
+  /// 例如體育校隊）不算「在某幾節」，一律排除。
+  static bool fitsSlots(CourseMainInfoJson course, Set<CourseSlot> slots) {
+    if (slots.isEmpty) return true;
+    final cells = [
+      for (final day in days)
+        for (final section in sectionsOf(course.course.time[day]))
+          (day, section),
+    ];
+    return cells.isNotEmpty && cells.every(slots.contains);
   }
 
   /// 課表上這門課佔到的節次。

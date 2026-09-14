@@ -2,6 +2,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_setting_entity.dart';
+import 'package:flutter_app/src/util/moodle_setting_utils.dart';
 import 'package:get/get.dart';
 
 class MoodleSettingController extends GetxController
@@ -66,12 +67,8 @@ class MoodleSettingController extends GetxController
       }
       settingList.value = res.preferences.components;
 
-      // 行動裝置（airnotifier）那一頁不顯示：它管的是 Moodle 官方 App 的推播，
-      // 在這個 App 裡打開也收不到，只會讓人以為設定沒生效。
-      tab.value = res.preferences.processors
-          .where((e) => e.name != 'airnotifier')
-          .toList();
-      tab.sort((a, b) => a.displayname.compareTo(b.displayname));
+      tab.value =
+          MoodleSettingUtils.visibleProcessors(res.preferences.processors);
 
       // GetSingleTickerProviderStateMixin 一輩子只發一個 ticker（dispose 之後
       // 也不會還回去），所以 getSettingData 只能走這一次，onInit 是唯一呼叫端。
@@ -92,23 +89,12 @@ class MoodleSettingController extends GetxController
       isToggling.value = true;
       isError.value = false;
 
-      var values = settingList
-          .firstWhere((e) {
-            var setting = e.notifications
-                .firstWhereOrNull((element) => element.preferencekey == key);
-            return setting != null;
-          })
-          .notifications
-          .firstWhere((element) => element.preferencekey == key)
-          .processors
-          .where((p) => p.enabled)
-          .map((p) => p.name)
-          .toList();
-
-      if (checked) {
-        values.add(type);
-      } else {
-        values.remove(type);
+      final values =
+          MoodleSettingUtils.valuesAfterToggle(settingList, key, type, checked);
+      if (values == null) {
+        isError.value = true;
+        errorMsg.value = R.current.somethingError;
+        return;
       }
 
       final ok = await MoodleWebApiConnector.toggleSetting(key, values);

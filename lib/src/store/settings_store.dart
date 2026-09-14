@@ -23,6 +23,15 @@ class SettingsStore {
 
   ThemeMode themeModeOf(int index) => ThemeMode.values[index];
 
+  /// 原生版的主題色，ARGB；沒有就是預設的品牌色。
+  static const themeColorKey = 'themeColor';
+
+  Future<int?> get themeColor => _store.readInt(themeColorKey);
+
+  Future<void> setThemeColor(int? argb) => argb == null
+      ? _store.remove(themeColorKey)
+      : _store.writeInt(themeColorKey, argb);
+
   // ---- 檔案總管 ------------------------------------------------------------
   static const showHiddenFilesKey = 'hidden';
   static const fileSortKey = 'sort';

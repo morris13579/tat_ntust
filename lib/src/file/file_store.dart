@@ -28,13 +28,19 @@ class FileStore {
       // 照樣接成 '/$name'——那是檔案系統根目錄，create() 必然失敗。
       return "";
     }
-    final savedDir = Directory('$basePath/$name');
+    final savedDir = Directory('$basePath/${safeName(name)}');
     // 一定要 await：不然下載可能在目錄還沒建好時就開始寫檔，建立失敗也只是
     // 沒人接的非同步錯誤。recursive 是因為使用者自選的上層目錄也可能不存在；
     // 對已存在的目錄 create(recursive: true) 是 no-op，不必先 exists()。
     await savedDir.create(recursive: true);
     return savedDir.path;
   }
+
+  /// 使用者自選的下載資料夾在公用儲存空間，那裡照 FAT 的規則：名稱帶 `\ / : * ? " < > |` 或控制字元時
+  /// 檔案建不出來，App 自己的目錄卻可以，所以換了資料夾才會壞。課名與檔名一律把這些字換成底線。
+  static String safeName(String name) => name.replaceAll(_unsafeNameChars, '_');
+
+  static final _unsafeNameChars = RegExp(r'[\x00-\x1f\x7f\\/:*?"<>|]');
 
   static Future<bool> setFilePath(String? directory) async {
     if (directory == null) return false;

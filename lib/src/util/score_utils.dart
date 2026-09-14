@@ -1,3 +1,4 @@
+import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/score/score_json.dart';
 
 class ScoreUtils {
@@ -45,4 +46,32 @@ class ScoreUtils {
   /// 不及格門數。
   static int failedCount(List<ScoreItemJson> courseList) =>
       courseList.where((c) => c.isFailScore).length;
+
+  /// 學期新到舊，每學期裡的課照等第高到低。
+  static void sortForDisplay(List<SemesterScoreJson> semesters) {
+    semesters.sort((a, b) {
+      final year = (int.tryParse(b.semester.year) ?? 0)
+          .compareTo(int.tryParse(a.semester.year) ?? 0);
+      if (year != 0) return year;
+      return (int.tryParse(b.semester.semester) ?? 0)
+          .compareTo(int.tryParse(a.semester.semester) ?? 0);
+    });
+    for (final semester in semesters) {
+      semester.item.sort((a, b) =>
+          gradeToGP[b.score]?.compareTo(gradeToGP[a.score] ?? 0) ?? 0);
+    }
+  }
+
+  /// 學校把及格與否寫成中文字串，英文語系照搬會夾一段中文。
+  static const _passLiterals = {'通過', 'Pass'};
+
+  /// 分數欄要顯示的字。沒有等第時退回備註（抵免、停修…），兩者皆無就是還沒
+  /// 評分——設計稿要的是字，不是一個看不出意思的「-」。
+  static String scoreLabel(ScoreItemJson score) {
+    final grade = score.score.trim();
+    final text = (grade.isEmpty || grade == '-') ? score.remark.trim() : grade;
+    if (text.isEmpty) return R.current.assignNotGraded;
+    if (_passLiterals.contains(text)) return R.current.scorePassed;
+    return text;
+  }
 }

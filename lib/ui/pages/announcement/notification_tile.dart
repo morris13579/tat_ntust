@@ -8,7 +8,7 @@ import 'package:flutter_app/ui/components/html/moodle_html_view.dart';
 import 'package:flutter_app/ui/components/page/web_view_opener.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
-import 'package:flutter_app/ui/pages/announcement/components/notification_groups.dart';
+import 'package:flutter_app/src/util/notification_groups.dart';
 
 /// 站內通知的一列：類型圖示、標題、「來源 · 時間」，右側一個 chevron。
 ///
@@ -47,25 +47,18 @@ class NotificationTile extends StatelessWidget {
   final int length;
 
   /// 伺服器的 `iconurl` 刻意不用：那是站台主題圖，每一列要多一次網路請求，
-  /// 深色模式也不會反相。
-  static IconData iconFor(String? component, {String? eventtype}) {
-    // 成績通知在 Moodle 是 core 的 `moodle` 元件加上 grade 開頭的 eventtype，
-    // 光看 component 會落到大聲公。設計稿把成績另外畫成學士帽。
-    if (_isGrade(component, eventtype)) return LucideIcons.graduationCap;
-    final name = component ?? '';
-    return switch (name) {
-      'mod_assign' => LucideIcons.clipboardList,
-      'mod_forum' => LucideIcons.messagesSquare,
-      'mod_quiz' => LucideIcons.fileQuestion,
-      'mod_feedback' || 'mod_choice' || 'mod_survey' => LucideIcons.vote,
-      'mod_lesson' || 'mod_scorm' => LucideIcons.bookOpen,
-      _ => name.startsWith('mod_') ? LucideIcons.puzzle : LucideIcons.bell,
-    };
-  }
-
-  static bool _isGrade(String? component, String? eventtype) =>
-      (eventtype ?? '').toLowerCase().contains('grade') ||
-      (component ?? '').startsWith('gradereport_');
+  /// 深色模式也不會反相。設計稿把成績另外畫成學士帽。
+  static IconData iconFor(String? component, {String? eventtype}) =>
+      switch (MoodleNotificationUtils.kindOf(component, eventtype: eventtype)) {
+        NotificationKind.grade => LucideIcons.graduationCap,
+        NotificationKind.assign => LucideIcons.clipboardList,
+        NotificationKind.forum => LucideIcons.messagesSquare,
+        NotificationKind.quiz => LucideIcons.fileQuestion,
+        NotificationKind.feedback => LucideIcons.vote,
+        NotificationKind.lesson => LucideIcons.bookOpen,
+        NotificationKind.module => LucideIcons.puzzle,
+        NotificationKind.system => LucideIcons.bell,
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +108,7 @@ class NotificationTile extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         _MetaLine(
-                          source: _sourceLabel(),
+                          source: NotificationGroups.sourceLabelOf(notification),
                           time: NotificationGroups.formatCreatedTime(
                               notification.createdTime, now),
                         ),
@@ -165,13 +158,6 @@ class NotificationTile extends StatelessWidget {
     );
   }
 
-  /// 來源，也就是 Moodle 的活動名稱。core 的系統通知沒有 contexturlname。
-  String _sourceLabel() {
-    final source = notification.contexturlname?.trim();
-    return (source == null || source.isEmpty)
-        ? R.current.notificationUnknownSource
-        : source;
-  }
 }
 
 /// 「來源 · 時間」。兩段分開排版而不是一個 `Text`：活動名稱是老師打的、

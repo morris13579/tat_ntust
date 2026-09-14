@@ -1,3 +1,4 @@
+import 'package:flutter_app/src/util/announcement_text.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ import 'package:flutter_app/ui/pages/announcement/announcement_center_page.dart'
 import 'package:flutter_app/ui/pages/announcement/announcement_page.dart';
 import 'package:flutter_app/ui/pages/announcement/components/announcement_banner.dart';
 import 'package:flutter_app/ui/pages/announcement/components/notification_empty_view.dart';
-import 'package:flutter_app/ui/pages/announcement/components/notification_groups.dart';
+import 'package:flutter_app/src/util/notification_groups.dart';
 import 'package:flutter_app/ui/pages/announcement/notification_tile.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -471,7 +472,7 @@ void main() {
 
   test('公告卡的摘要是純文字：Markdown 的記號與網址都不佔那三行', () {
     expect(
-      AnnouncementBanner.plainExcerpt(
+      AnnouncementText.plainExcerpt(
           '## 標題\n\n- **分享課表**：產生 [QR](https://example.com) 讓同學掃。'),
       '標題 分享課表：產生 QR 讓同學掃。',
     );
@@ -486,7 +487,7 @@ void main() {
       'lib/ui/pages/announcement/notification_tile.dart',
       'lib/ui/pages/announcement/components/announcement_banner.dart',
       'lib/ui/pages/announcement/components/notification_empty_view.dart',
-      'lib/ui/pages/announcement/components/notification_groups.dart',
+      'lib/src/util/notification_groups.dart',
     ]) {
       final source = File(path).readAsStringSync();
       for (final forbidden in [

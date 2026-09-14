@@ -8,6 +8,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_discuss
 import 'package:flutter_app/src/repository/result.dart';
 import 'package:flutter_app/src/service/task_ui_delegate.dart';
 import 'package:flutter_app/src/util/file_utils.dart';
+import 'package:flutter_app/src/util/forum_attachment_checks.dart';
 import 'package:flutter_app/src/util/moodle_forum_edit_utils.dart';
 import 'package:flutter_app/src/util/moodle_forum_utils.dart';
 import 'package:flutter_app/ui/components/card/section_card.dart';
@@ -453,35 +454,17 @@ class _CourseForumComposePageState extends State<CourseForumComposePage> {
     if (remaining <= 0) return;
     final picked = await widget.onPickFiles(remaining);
     if (picked.isEmpty || !mounted) return;
-    for (final file in picked) {
-      final name = MoodleForumEditUtils.basename(file.path);
-      final bytes = await file.length();
-      if (!mounted) return;
-      if (MoodleForumEditUtils.exceedsSize(bytes, policy.maxBytes)) {
-        TaskUiDelegate.instance.toast(sprintf(R.current.forumAttachmentTooLarge,
-            [name, FileUtils.formatBytes(policy.maxBytes, 1)]));
-        continue;
-      }
-      // 跨「保留的既有附件」與「新挑的」兩份清單一起擋重名：既有附件會被
-      // prepare_draft_area_for_post 種進 draft 區，同名的新檔案會回
-      // filenameexist，而那時 draft 區已經是半套的。
-      if (MoodleForumEditUtils.duplicateFilename([
-            for (final f in _kept) f.filename,
-            for (final f in _files) MoodleForumEditUtils.basename(f.path),
-            name,
-          ]) !=
-          null) {
-        TaskUiDelegate.instance.toast(R.current.forumAttachmentDuplicateName);
-        continue;
-      }
-      if (_total >= policy.maxFiles) {
-        TaskUiDelegate.instance.toast(sprintf(
-            R.current.forumAttachmentCountExceeded,
-            [policy.maxFiles.toString()]));
-        break;
-      }
-      setState(() => _files.add(file));
-    }
+    final checked = await ForumAttachmentChecks.check(
+      existingNames: [
+        for (final f in _kept) f.filename,
+        for (final f in _files) MoodleForumEditUtils.basename(f.path),
+      ],
+      picked: picked,
+      policy: policy,
+    );
+    if (!mounted) return;
+    checked.messages.forEach(TaskUiDelegate.instance.toast);
+    setState(() => _files.addAll(checked.accepted));
   }
 
   void _onProgress(ForumTransferProgress progress) {

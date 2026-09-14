@@ -3,6 +3,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_assign_get_assignments.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_assign_get_submission_status.dart';
 import 'package:flutter_app/src/util/moodle_assign_attempt_utils.dart';
+import 'package:flutter_app/src/util/moodle_assign_detail_text.dart';
 import 'package:flutter_app/src/util/moodle_assign_utils.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/widgets/assign_status_chip.dart';
@@ -40,30 +41,10 @@ class AssignSubmitStatusHeader extends StatelessWidget {
   /// 不捲動又沒有高度上限，六個區塊全開時在 360x640 上會把編輯區壓到零。
   final bool compact;
 
-  /// Zone A 底下那一句「按下儲存會發生什麼事」。原本這句話只活在按下去之後
-  /// 的確認框裡，提前講出來才會把那個對話框從「告知」變成「確認」。
-  String _consequence(MoodleAssignSubmission? sub) {
-    if (sub != null && sub.isReopened) {
-      // 重新開放**又**有草稿階段時兩件事都要講：只講「不影響上一次的成績」
-      // 的話，最容易誤以為交完了的那一條路反而沒被告知還要按送出評分。
-      return sprintf(
-          assignment.tracksDrafts
-              ? R.current.assignConsequenceReopenedDraft
-              : R.current.assignConsequenceReopened,
-          [MoodleAssignAttemptUtils.attemptLabel(assignment, status).current]);
-    }
-    if (assignment.tracksDrafts) return R.current.assignConsequenceDraft;
-    if (sub != null && sub.isSubmitted) {
-      return R.current.assignConsequenceOverwrite;
-    }
-    return R.current.assignConsequenceDirect;
-  }
-
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
-    final sub = status.submissionFor(assignment);
     final due = MoodleAssignUtils.effectiveDueDate(assignment, status);
     // 染紅的條件與那顆籤同源，照抄詳情頁的 _deadlineCard，否則會出現
     // 「已評分」卻紅字說已逾期。
@@ -116,7 +97,7 @@ class AssignSubmitStatusHeader extends StatelessWidget {
       if (!compact)
         _spaced(
             8,
-            Text(_consequence(sub),
+            Text(MoodleAssignDetailText.consequence(assignment, status),
                 style:
                     text.bodyMedium?.copyWith(color: scheme.onSurfaceVariant))),
     ];
@@ -155,10 +136,7 @@ class AssignSubmitStatusHeader extends StatelessWidget {
 
     final (String label, TextStyle? style, Color color) = switch (state) {
       AssignTimerState.notStarted => (
-          sprintf(R.current.assignTimeLimitNotice, [
-            MoodleAssignAttemptUtils.formatDuration(
-                MoodleAssignAttemptUtils.effectiveTimeLimit(assignment, status))
-          ]),
+          MoodleAssignDetailText.timeLimitNotice(assignment, status),
           text.bodySmall,
           scheme.onSurfaceVariant
         ),
@@ -236,10 +214,7 @@ class AssignSubmitStatusHeader extends StatelessWidget {
     return _spaced(
       4,
       Text(
-        label.total > 0
-            ? sprintf(
-                R.current.assignAttemptLabelOf, [label.current, label.total])
-            : sprintf(R.current.assignAttemptLabel, [label.current]),
+        MoodleAssignDetailText.attemptLabel(label),
         style: text.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
       ),
     );

@@ -5,8 +5,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
-import 'package:flutter_app/src/util/file_icon_utils.dart';
-import 'package:flutter_app/src/util/file_utils.dart';
+import 'package:flutter_app/src/util/course_section_tree.dart';
 import 'package:flutter_app/src/util/moodle_folder_utils.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/card/section_card.dart';
@@ -15,7 +14,6 @@ import 'package:flutter_app/ui/components/page/empty_state.dart';
 import 'package:flutter_app/ui/components/tile/moodle_file_tile.dart';
 import 'package:flutter_app/ui/service/file_download.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
@@ -103,7 +101,7 @@ class CourseFolderPage extends StatelessWidget {
     return MoodleFileTile(
       filename: c.filename,
       mimetype: c.mimetype,
-      subtitle: _fileSubtitle(c),
+      subtitle: CourseModuleUtils.folderFileSubtitle(c),
       onTap: () => unawaited(FileDownload.download(
         context,
         MoodleWebApiConnector.fileUrlWithToken(c.fileurl),
@@ -129,20 +127,4 @@ class CourseFolderPage extends StatelessWidget {
       )),
     );
   }
-
-  /// 「PDF · 2.4 MB · 3/1/2025 10:00」。副檔名排在最前面，和檔案分頁的
-  /// 檔案列同一個順序。全部都沒有時回 null，那一列就維持單行。
-  String? _fileSubtitle(Contents c) {
-    final extension = FileIconUtils.extensionOf(c.filename)?.toUpperCase();
-    final parts = [
-      if (extension != null && extension.isNotEmpty) extension,
-      if (c.filesize > 0) FileUtils.formatBytes(c.filesize, 1),
-      if (c.timemodified > 0) _formatTime(c.timemodified),
-    ];
-    return parts.isEmpty ? null : parts.join(' · ');
-  }
-
-  static String _formatTime(int unix) => DateFormat.yMd()
-      .add_jm()
-      .format(DateTime.fromMillisecondsSinceEpoch(unix * 1000));
 }

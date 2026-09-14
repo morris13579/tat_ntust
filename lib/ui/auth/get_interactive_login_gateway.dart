@@ -1,5 +1,4 @@
 import 'package:flutter_app/src/model/moodle_token_entity.dart';
-import 'package:flutter_app/src/enum/ntust_login_status.dart';
 import 'package:flutter_app/src/service/interactive_login_gateway.dart';
 import 'package:flutter_app/ui/auth/moodle_login_page.dart';
 import 'package:flutter_app/ui/auth/ntust_login_page.dart';
@@ -16,18 +15,11 @@ class GetInteractiveLoginGateway implements InteractiveLoginGateway {
   Future<NtustInteractiveLoginResult?> signInNtust({
     required String account,
     required String password,
-  }) async {
-    // LoginNTUSTPage 用 Get.back(result:) 回傳 "status" 與 "message"；
-    // 使用者按返回鍵時沒有 result。
-    final value = await Get.to<Map<String, dynamic>>(
-      () => LoginNTUSTPage(username: account, password: password),
-    );
-    if (value == null) return null;
-    return NtustInteractiveLoginResult(
-      status: value["status"] as NTUSTLoginStatus,
-      message: value["message"] as String?,
-    );
-  }
+  }) async =>
+      // 使用者按返回鍵時沒有 result。
+      await Get.to<NtustInteractiveLoginResult>(
+        () => LoginNTUSTPage(username: account, password: password),
+      );
 
   @override
   Future<MoodleTokenEntity?> signInMoodle({

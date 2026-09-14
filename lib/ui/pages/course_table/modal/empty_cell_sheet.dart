@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_tokens.dart';
-import 'package:flutter_app/src/config/section_time.dart';
+import 'package:flutter_app/src/util/empty_slot_text.dart';
 import 'package:flutter_app/ui/components/sheet/tat_bottom_sheet.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
-import 'package:intl/intl.dart';
-import 'package:sprintf/sprintf.dart';
 
 /// 課表上一個空堂格的選單。回傳 true 代表使用者要去找空教室。
 ///
@@ -21,7 +19,6 @@ Future<bool> showEmptyCellSheet({
   required DateTime date,
   required int section,
 }) async {
-  final time = sectionTimes[section];
   final result = await showTatContentSheet<bool>(
     context: context,
     builder: (context) => Column(
@@ -33,18 +30,13 @@ Future<bool> showEmptyCellSheet({
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 星期取自真正要查的那一天，不是課表表頭那個「一」——使用者
-              // 待會查的是最近的那個週一，講清楚是哪一天比較不會誤會。
               Text(
-                '${DateFormat.E().format(date)} '
-                '${sprintf(R.current.classroomSectionLabel, [
-                      sectionLabels[section]
-                    ])}',
+                EmptySlotText.title(date, section),
                 style: context.text.titleMedium?.copyWith(height: 1.3),
               ),
               const SizedBox(height: 2),
               Text(
-                '${time.start}–${time.end} · ${R.current.classroomFreeCell}',
+                EmptySlotText.subtitle(section),
                 style: context.text.bodySmall?.copyWith(
                     height: 1.35, color: context.scheme.onSurfaceVariant),
               ),

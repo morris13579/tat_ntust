@@ -3,6 +3,7 @@ import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/config/app_tokens.dart';
 import 'package:flutter_app/src/config/app_typography.dart';
 import 'package:flutter_app/src/model/announcement/announcement_json.dart';
+import 'package:flutter_app/src/util/announcement_text.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +36,7 @@ class AnnouncementBanner extends StatelessWidget {
     // startTime 是 UTC 欄位裝著台北的牆上時間（見 RemoteConfigUtils），
     // toLocal() 會讓每一則公告的日期整整位移八小時。
     final date = DateFormat.MMMd().format(info.startTime);
-    final excerpt = plainExcerpt(info.content);
+    final excerpt = AnnouncementText.plainExcerpt(info.content);
 
     return Material(
       color: scheme.primaryContainer,
@@ -122,25 +123,4 @@ class AnnouncementBanner extends StatelessWidget {
       ),
     );
   }
-
-  /// 公告內文是 Markdown，摘要要的是純文字：卡片上只有三行，`**粗體**` 的
-  /// 星號與整串網址佔掉的是那三行裡的字。
-  static String plainExcerpt(String markdown) {
-    var value = markdown
-        .replaceAll(_codeFence, ' ')
-        .replaceAll(_image, ' ')
-        .replaceAllMapped(_link, (m) => m[1] ?? '')
-        .replaceAll(_bullet, '')
-        .replaceAll(_marks, '');
-    value = value.replaceAll(_whitespace, ' ').trim();
-    return value;
-  }
-
-  static final RegExp _codeFence = RegExp(r'```[\s\S]*?```');
-  static final RegExp _image = RegExp(r'!\[[^\]]*\]\([^)]*\)');
-  static final RegExp _link = RegExp(r'\[([^\]]*)\]\([^)]*\)');
-  static final RegExp _bullet =
-      RegExp(r'^[ \t]*(?:[-+*]|\d+\.)[ \t]+', multiLine: true);
-  static final RegExp _marks = RegExp(r'[*_`>#~]');
-  static final RegExp _whitespace = RegExp(r'\s+');
 }

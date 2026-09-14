@@ -7,9 +7,6 @@ import 'package:flutter_app/src/util/course_table_control.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
 
-/// 課程佔用的一個格子。
-typedef CourseSlot = (Day, SectionNumber);
-
 /// 挑「哪幾節」。
 ///
 /// querycourse 的節次篩選**不在伺服器端**：官方前端送出去的 body 裡根本沒有

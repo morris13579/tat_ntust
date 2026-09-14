@@ -1,0 +1,11 @@
+# 產出物：用 generate_project.rb 重新產生，之後 pod install。
+TATNative.xcodeproj/
+TATNative.xcworkspace/
+build/
+
+# CocoaPods 的產出物，與 ios/.gitignore 同一套規則。
+Pods/
+.symlinks/
+
+# Firebase 設定，與 ios/Runner 的同一份，不進版控。
+TATNative/Resources/GoogleService-Info.plist

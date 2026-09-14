@@ -17,7 +17,7 @@ import 'package:flutter_app/src/controller/mail/mail_watch_controller.dart';
 import 'package:flutter_app/src/controller/main_page/main_controller.dart';
 import 'package:flutter_app/src/model/mail/mail_message_json.dart';
 import 'package:flutter_app/src/repository/mail_repository.dart';
-import 'package:sprintf/sprintf.dart';
+import 'package:flutter_app/src/util/mail_text.dart';
 import 'package:flutter_app/src/util/analytics_utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
@@ -96,13 +96,10 @@ class _MainScreenState extends State<MainScreen>
   void _onNewMail(List<MailMessageJson> fresh) {
     if (!mounted || fresh.isEmpty) return;
     final newest = fresh.first;
-    final subject = newest.subject.trim();
     InAppBanner.show(
       icon: LucideIcons.mail,
-      title: fresh.length == 1
-          ? newest.displayFrom
-          : sprintf(R.current.mailNewMessages, [fresh.length]),
-      message: subject.isEmpty ? R.current.mailNoSubject : subject,
+      title: MailText.arrivalTitle(fresh),
+      message: MailText.subjectOf(newest.subject),
       onTap: () => unawaited(_openMail(newest)),
     );
   }

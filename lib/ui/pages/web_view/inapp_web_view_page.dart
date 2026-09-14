@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/debug/log/log.dart';
 import 'package:flutter_app/src/R.dart';
-import 'package:flutter_app/src/service/ssoam2_login.dart';
+import 'package:flutter_app/src/service/browser_auto_login.dart';
+import 'package:flutter_app/src/service/web_view_session.dart';
 import 'package:flutter_app/src/connector/core/dio_connector.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/ui/service/file_download.dart';
@@ -55,7 +55,6 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
   Uri url = Uri();
   double progress = 0;
   Uri? lastLoadUri;
-  final String ntustLoginUri = "https://ssoam.ntust.edu.tw/nidp/app/login";
 
   /// 正在代填帳密。認出登入頁時打開，離開登入頁就關掉。
   bool _autoLogin = false;
@@ -154,7 +153,7 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                         lastLoadUri = url;
                         this.url = url!;
                         // 離開登入頁就把代填／驗證碼的提示收起來。
-                        if (!_isLoginPage(url)) {
+                        if (!BrowserAutoLogin.isLoginPage(url)) {
                           _autoLogin = false;
                           _captcha = false;
                         }
@@ -172,27 +171,17 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
                             urlRequest: URLRequest(url: widget.fallbackUrl));
                         return;
                       }
-                      if (url.toString().startsWith(ntustLoginUri)) {
+                      if (BrowserAutoLogin.isLoginPage(url)) {
                         setState(() => _autoLogin = true);
-                        await controller.evaluateJavascript(
-                            source:
-                                'document.getElementsByName("Ecom_User_ID")[0].value = ${jsonEncode(Model.instance.getAccount())};');
-                        await controller.evaluateJavascript(
-                            source:
-                                'document.getElementsByName("Ecom_Password")[0].value = ${jsonEncode(Model.instance.getPassword())};');
-                        await controller.evaluateJavascript(
-                            source:
-                                'document.getElementById("loginButton2").click();');
-                      } else if (Ssoam2Login.isLoginPage(url)) {
-                        setState(() => _autoLogin = true);
-                        final outcome = await Ssoam2Login.submit(
-                          controller,
+                        final outcome = await BrowserAutoLogin.run(
+                          InAppWebViewDriver(controller),
+                          url,
                           account: Model.instance.getAccount(),
                           password: Model.instance.getPassword(),
                         );
                         // 代填失敗最常見的原因就是驗證碼。提示留在畫面上而不是
                         // 跳 toast——人還在那一頁，toast 幾秒就沒了。
-                        if (outcome != Ssoam2LoginOutcome.submitted) {
+                        if (outcome == BrowserAutoLoginOutcome.needsHuman) {
                           setState(() {
                             _autoLogin = false;
                             _captcha = true;
@@ -244,11 +233,6 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
       widget.fallbackUrl != null &&
       !fellBack &&
       MoodleWebApiConnector.isAutologinScript(url);
-
-  bool _isLoginPage(Uri? url) =>
-      url != null &&
-      (url.toString().startsWith(ntustLoginUri) ||
-          Ssoam2Login.isLoginPage(url));
 
   /// host 不屬於學校。這是「帶著登入狀態開任意 http(s)」唯一的可見防線——
   /// `WebViewUrlPolicy` 只驗 scheme，課程 HTML 裡的連結可以帶去任何地方。

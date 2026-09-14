@@ -97,4 +97,19 @@ void main() {
     expect(path, '');
     expect(Directory('/tat_root_dir_probe').existsSync(), isFalse);
   });
+
+  test('課名帶公用儲存空間不收的字元時換成底線：自選的下載位置在那裡，檔案會建不出來', () async {
+    await SettingsStore.instance.setDownloadPath(tempRoot.path);
+
+    final path = await FileStore.getDownloadDir(context, 'CS1006302: 線性代數?');
+
+    expect(path, '${tempRoot.path}/CS1006302_ 線性代數_');
+    expect(Directory(path).existsSync(), isTrue);
+  });
+
+  test('safeName 只換掉 FAT 不收的字元，其餘原樣', () {
+    expect(FileStore.safeName(r'a\b/c:d*e?f"g<h>i|j'), 'a_b_c_d_e_f_g_h_i_j');
+    expect(FileStore.safeName('tab\there'), 'tab_here');
+    expect(FileStore.safeName('線性代數 (一) 第1週.pdf'), '線性代數 (一) 第1週.pdf');
+  });
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:alice_lightweight/alice.dart';
+import 'package:flutter_app/src/connector/interceptors/http_call_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -98,6 +99,7 @@ class DioConnector {
       dio.interceptors.add(RequestInterceptors());
       if (kDebugMode) {
         dio.interceptors.add(alice.getDioInterceptor());
+        dio.interceptors.add(HttpCallLog.instance);
       }
       await FkUserAgent.init();
       if (FkUserAgent.webViewUserAgent != null) {

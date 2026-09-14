@@ -3,12 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_app/src/R.dart';
+import 'package:flutter_app/src/util/mail_folders.dart';
+import 'package:flutter_app/src/util/mail_groups.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/src/controller/mail/mail_controller.dart';
 import 'package:flutter_app/src/controller/mail/mail_outbox_controller.dart';
 import 'package:flutter_app/src/controller/mail/mail_watch_controller.dart';
 import 'package:flutter_app/src/model/mail/mail_outbox_item.dart';
 import 'package:flutter_app/src/model/mail/mail_message_json.dart';
+import 'package:flutter_app/src/model/mail/mail_search_hit.dart';
 import 'package:flutter_app/ui/components/card/section_card.dart';
 import 'package:flutter_app/ui/components/chip/tat_filter_chip.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
@@ -23,7 +26,6 @@ import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:flutter_app/ui/components/toast/tat_toast.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
 import 'package:flutter_app/ui/pages/mail/components/mail_folder_sheet.dart';
-import 'package:flutter_app/ui/pages/mail/components/mail_groups.dart';
 import 'package:flutter_app/ui/pages/mail/components/mail_outbox_tile.dart';
 import 'package:flutter_app/ui/pages/mail/components/mail_swipe_action.dart';
 import 'package:flutter_app/ui/pages/mail/components/mail_tile.dart';
@@ -120,13 +122,13 @@ class _MailListPageState extends State<MailListPage> {
     unawaited(_controller.loadFolders());
   }
 
-  Future<void> _openMessage(MailMessageJson message) async {
-    unawaited(_controller.markSeen(message.uid));
+  /// [folderPath] 是這封信所在的資料夾：跨資料夾的搜尋結果不在正在看的那一個。
+  Future<void> _openMessage(MailMessageJson message,
+      {String? folderPath}) async {
+    final folder = folderPath ?? _controller.folderPath.value;
+    unawaited(_controller.markSeen(message.uid, folderPath: folder));
     final changed = await Get.to<bool>(
-      () => MailDetailPage(
-        message: message,
-        folderPath: _controller.folderPath.value,
-      ),
+      () => MailDetailPage(message: message, folderPath: folder),
       transition: RouteUtils.transition,
     );
     // 內頁封存或刪除之後那一列就不該還在，重抓比就地猜省事也不會出錯。
@@ -193,6 +195,7 @@ class _MailListPageState extends State<MailListPage> {
     return Obx(() {
       // Obx 要在這裡而不是包住清單：標題、chip 與結果數都讀得到同一批 Rx。
       _controller.messages.value;
+      _controller.results.value;
       _controller.hasMore.value;
       _controller.loadingMore.value;
       _controller.loadMoreFailed.value;
@@ -297,8 +300,8 @@ class _MailListPageState extends State<MailListPage> {
                   icon: LucideIconsThin.mail,
                   message: R.current.mailSearchHint,
                 )
-              : ResultView<List<MailMessageJson>>(
-                  state: _controller.messages,
+              : ResultView<List<MailSearchHit>>(
+                  state: _controller.results,
                   onRetry: _controller.load,
                   errorBuilder: (message) => InlineErrorView(
                       message: message, onRetry: _controller.load),
@@ -309,10 +312,10 @@ class _MailListPageState extends State<MailListPage> {
     );
   }
 
-  Widget _buildResults(List<MailMessageJson> messages) {
+  Widget _buildResults(List<MailSearchHit> hits) {
     final now = DateTime.now();
     final canWiden = !_controller.searchAllFolders.value;
-    if (messages.isEmpty) {
+    if (hits.isEmpty) {
       return ListView(
         padding: const EdgeInsets.fromLTRB(16, 24, 16, _listBottomPadding),
         children: [
@@ -328,19 +331,22 @@ class _MailListPageState extends State<MailListPage> {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, _listBottomPadding),
       children: [
         SectionHeader(
-          title: sprintf(R.current.mailSearchResultCount, [messages.length]),
+          title: sprintf(R.current.mailSearchResultCount, [hits.length]),
           first: true,
         ),
-        for (var i = 0; i < messages.length; i++) ...[
+        for (var i = 0; i < hits.length; i++) ...[
           if (i > 0) const SizedBox(height: 2),
           MailTile(
-            key: ValueKey('mail-hit-${messages[i].uid}'),
-            message: messages[i],
+            // 跨資料夾之後 UID 會撞，key 要連資料夾一起算。
+            key: ValueKey(
+                'mail-hit-${hits[i].folderPath}/${hits[i].message.uid}'),
+            message: hits[i].message,
             now: now,
             index: i,
-            length: messages.length,
+            length: hits.length,
             highlight: _controller.keyword.value,
-            onTap: () => unawaited(_openMessage(messages[i])),
+            onTap: () => unawaited(
+                _openMessage(hits[i].message, folderPath: hits[i].folderPath)),
           ),
         ],
         if (canWiden) _widenSearchRow(),

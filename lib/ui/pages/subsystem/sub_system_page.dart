@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/controller/subsystem/sub_system_controller.dart';
 import 'package:flutter_app/src/model/ntust/ap_tree_json.dart';
+import 'package:flutter_app/src/util/sub_system_pins.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
 import 'package:flutter_app/ui/components/page/result_view.dart';
@@ -144,12 +145,6 @@ class _SubSystemPageState extends State<SubSystemPage> {
     return Column(children: sections);
   }
 }
-
-/// 空教室釘在哪一類底下：`service-6`＝「校園資訊」，那是使用者原本會去翻
-/// 的位置。代號與名稱的對照只有 `subSystemCategoryName` 一份，改那裡就要
-/// 回來看這裡——守門測試在 test/ui/sub_system_search_test.dart。
-@visibleForTesting
-const String classroomPinnedCategory = 'service-6';
 
 /// 釘住的那一列也要吃搜尋：關鍵字不是空的時候，對不上就不畫。
 bool _matchesKeyword(String keyword, String name) =>

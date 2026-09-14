@@ -28,19 +28,6 @@ class ScoreRow extends StatelessWidget {
   final int index;
   final int length;
 
-  /// 學校把及格與否寫成中文字串，英文語系照搬會夾一段中文。
-  static const _passLiterals = {'通過', 'Pass'};
-
-  /// 分數欄要顯示的字。沒有等第時退回備註（抵免、停修…），兩者皆無就是還沒
-  /// 評分——設計稿要的是字，不是一個看不出意思的「-」。
-  static String scoreLabel(ScoreItemJson score) {
-    final grade = score.score.trim();
-    final text = (grade.isEmpty || grade == '-') ? score.remark.trim() : grade;
-    if (text.isEmpty) return R.current.assignNotGraded;
-    if (_passLiterals.contains(text)) return R.current.scorePassed;
-    return text;
-  }
-
   static String _subtitle(ScoreItemJson score) => [
         score.courseId,
         sprintf(R.current.creditCount, [ScoreUtils.parseCredit(score.credit)]),
@@ -54,7 +41,7 @@ class ScoreRow extends StatelessWidget {
     final tokens = context.tokens;
     final failed = score.isFailScore;
     final borderRadius = UIUtils.getBorderRadius(index, length);
-    final label = scoreLabel(score);
+    final label = ScoreUtils.scoreLabel(score);
     final subtitle = _subtitle(score);
 
     return InkWell(
