@@ -32,9 +32,18 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:toastification/toastification.dart';
 
+// ignore: unused_import
+import 'core_main.dart';
 import 'debug/log/log.dart';
 import 'generated/l10n.dart';
 
+/// 這個檔案沒有用到 `core_main.dart` 的任何東西，但那個 import **不可以拿掉**。
+///
+/// `coreMain` 是原生版的 Dart 進入點，靠 `@pragma('vm:entry-point')` 不被搖掉。
+/// 但那個 pragma 只保護「已經在編譯單元裡」的宣告——AOT 是從建置目標
+/// （`lib/main.dart`）開始找可達的函式庫，沒有人 import 的檔案根本不會被編譯。
+/// 實測：拿掉這一行之後 `App.xcframework` 裡連 `flutter_app/core_main.dart`
+/// 這個字串都沒有，原生端 `run(withEntrypoint: "coreMain")` 會找不到進入點。
 Future<void> main() async {
   await runZonedGuarded(() async {
     final binding = WidgetsFlutterBinding.ensureInitialized();

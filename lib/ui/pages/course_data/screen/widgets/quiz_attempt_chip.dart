@@ -1,59 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_quiz_get_quizzes_by_courses.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_quiz_get_user_attempts.dart';
 import 'package:flutter_app/src/repository/result.dart';
+import 'package:flutter_app/src/util/moodle_quiz_text.dart';
 import 'package:flutter_app/src/util/moodle_quiz_utils.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/widgets/status_pill.dart';
-import 'package:sprintf/sprintf.dart';
 
-/// [QuizWindowHint] 對映成畫面文字。住在 UI 層是因為要 R.current。
-String quizWindowHintText(QuizWindowHint hint) => switch (hint.hint) {
-      QuizHintKind.always => R.current.quizAlwaysOpen,
-      QuizHintKind.opensInDays =>
-        sprintf(R.current.quizOpensInDays, [hint.count]),
-      QuizHintKind.opensInHours =>
-        sprintf(R.current.quizOpensInHours, [hint.count]),
-      QuizHintKind.opensSoon => R.current.quizOpensSoon,
-      QuizHintKind.openNoClose => R.current.quizOpenNoClose,
-      QuizHintKind.closesInDays =>
-        sprintf(R.current.quizClosesInDays, [hint.count]),
-      QuizHintKind.closesInHours =>
-        sprintf(R.current.quizClosesInHours, [hint.count]),
-      QuizHintKind.closesSoon => R.current.quizClosesSoon,
-      QuizHintKind.closedDays =>
-        sprintf(R.current.quizClosedDays, [hint.count]),
-      QuizHintKind.closedHours =>
-        sprintf(R.current.quizClosedHours, [hint.count]),
-      QuizHintKind.closedJustNow => R.current.quizClosedJustNow,
-    };
-
-String quizGradeMethodText(QuizGradeMethod method) => switch (method) {
-      QuizGradeMethod.highest => R.current.quizGradeMethodHighest,
-      QuizGradeMethod.average => R.current.quizGradeMethodAverage,
-      QuizGradeMethod.first => R.current.quizGradeMethodFirst,
-      QuizGradeMethod.last => R.current.quizGradeMethodLast,
-      QuizGradeMethod.unknown => R.current.quizGradeMethodUnknown,
-    };
-
-String quizAttemptStateText(QuizAttemptState state) => switch (state) {
-      QuizAttemptState.notStarted => R.current.quizAttemptStateNotStarted,
-      QuizAttemptState.inProgress => R.current.quizAttemptStateInProgress,
-      QuizAttemptState.submitted => R.current.quizAttemptStateSubmitted,
-      QuizAttemptState.overdue => R.current.quizAttemptStateOverdue,
-      QuizAttemptState.finished => R.current.quizAttemptStateFinished,
-      QuizAttemptState.abandoned => R.current.quizAttemptStateAbandoned,
-      QuizAttemptState.unknown => R.current.quizAttemptStateUnknown,
-    };
-
-/// 秒數對映成「X 小時 Y 分鐘」。分鐘無條件進位，30 秒的時限不會寫成 0 分鐘。
-String quizDurationText(int seconds) {
-  final d = MoodleQuizUtils.hoursMinutes(seconds);
-  final hours = sprintf(R.current.quizDurationHours, [d.hours]);
-  final minutes = sprintf(R.current.quizDurationMinutes, [d.minutes]);
-  if (d.hours > 0 && d.minutes > 0) return "$hours $minutes";
-  return d.hours > 0 ? hours : minutes;
-}
+export 'package:flutter_app/src/util/moodle_quiz_text.dart'
+    show
+        quizAttemptStateText,
+        quizDurationText,
+        quizGradeMethodText,
+        quizWindowHintText;
 
 /// 一次作答的狀態籤；外觀走共用的 [StatusPill]，刻意不 import 任何頁面。
 class QuizAttemptStateChip extends StatelessWidget {
@@ -116,13 +74,12 @@ class QuizAttemptsChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final exhausted = !quiz.isUnlimitedAttempts && used >= quiz.attempts;
     return StatusPill(
-      tone: exhausted ? StatusPillTone.overdue : StatusPillTone.pending,
+      tone: QuizAttemptsText.exhausted(quiz, used)
+          ? StatusPillTone.overdue
+          : StatusPillTone.pending,
       stale: stale,
-      label: quiz.isUnlimitedAttempts
-          ? R.current.quizAttemptsUnlimited
-          : sprintf(R.current.quizAttemptsUsedOf, [used, quiz.attempts]),
+      label: QuizAttemptsText.label(quiz, used),
     );
   }
 }

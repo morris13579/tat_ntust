@@ -1,5 +1,6 @@
 import 'package:flutter_app/src/model/mail/mail_folder_json.dart';
 import 'package:flutter_app/src/model/mail/mail_message_json.dart';
+import 'package:flutter_app/src/model/mail/mail_search_hit.dart';
 import 'package:flutter_app/src/repository/mail_repository.dart';
 import 'package:flutter_app/src/repository/result.dart';
 import 'dart:async';
@@ -12,8 +13,11 @@ import 'package:get/get.dart';
 /// 只回資料、不開對話框——「密碼還沒設定」是由 [needsPassword] 讓頁面自己去
 /// 決定要開哪個對話框，controller 不碰 UI。
 class MailController {
-  /// null 代表還在載入。
+  /// 目前資料夾裡的信。null 代表還在載入。
   final messages = Rxn<Result<List<MailMessageJson>>>();
+
+  /// 搜尋結果，每一筆帶著自己的資料夾：跨資料夾之後 UID 不再唯一。null 代表還在找。
+  final results = Rxn<Result<List<MailSearchHit>>>();
 
   final folders = Rxn<Result<List<MailFolderJson>>>();
 
@@ -44,8 +48,8 @@ class MailController {
     // 這一趟之後，還在飛的 loadMore 拿到的那一頁就不該接上去了。
     _generation++;
     if (isSearching) {
-      messages.value = null;
-      messages.value = await MailRepository.instance.search(
+      results.value = null;
+      results.value = await MailRepository.instance.search(
         keyword.value,
         folderPath: folderPath.value,
         allFolderPaths: searchAllFolders.value ? _allFolderPaths : null,
@@ -116,22 +120,10 @@ class MailController {
   ///
   /// 伺服器沒有 `CONDSTORE`，重抓等於把整批 envelope 再拉一次；只改一顆旗標
   /// 不值得。失敗就不動畫面，讓下一次重新整理去對齊。
-  Future<void> markSeen(int uid) async {
-    final current = messages.value?.dataOrNull;
-    if (current == null) return;
-    final index = current.indexWhere((m) => m.uid == uid);
-    if (index < 0 || current[index].seen) return;
-
-    if (!await MailRepository.instance
-        .setSeen(uid, seen: true, folderPath: folderPath.value)) {
-      return;
-    }
-
-    final updated = List<MailMessageJson>.from(current)
-      ..[index] = current[index].copyWith(seen: true);
-    messages.value = Ok(updated);
-    final count = unread.value;
-    if (count != null && count > 0) unread.value = count - 1;
+  ///
+  /// [folderPath] 是這封信所在的資料夾，沒給就是正在看的那一個。
+  Future<void> markSeen(int uid, {String? folderPath}) async {
+    await setSeen(uid, seen: true, folderPath: folderPath);
   }
 
   /// 還有沒有更舊的信可以載。第一次載入之前當成「可能有」。
@@ -191,55 +183,112 @@ class MailController {
   ///
   /// [markSeen] 是「開信時順手標已讀」的單向版本；這一個是使用者主動切換，
   /// 所以兩個方向都要，未讀數也要跟著加回去。
-  Future<bool> setSeen(int uid, {required bool seen}) async {
-    final current = messages.value?.dataOrNull;
-    if (current == null) return false;
-    final index = current.indexWhere((m) => m.uid == uid);
-    if (index < 0 || current[index].seen == seen) return false;
+  Future<bool> setSeen(int uid,
+      {required bool seen, String? folderPath}) async {
+    final folder = _folderOr(folderPath);
+    final message = _find(uid, folder);
+    if (message == null || message.seen == seen) return false;
 
     if (!await MailRepository.instance
-        .setSeen(uid, seen: seen, folderPath: folderPath.value)) {
+        .setSeen(uid, seen: seen, folderPath: folder)) {
       return false;
     }
 
-    final updated = List<MailMessageJson>.from(current)
-      ..[index] = current[index].copyWith(seen: seen);
-    messages.value = Ok(updated);
+    _patch(uid, folder, (m) => m.copyWith(seen: seen));
+    // 未讀數是正在看的那個資料夾的，別的資料夾的信不算。
     final count = unread.value;
-    if (count != null) unread.value = seen ? max(0, count - 1) : count + 1;
+    if (count != null && folder == this.folderPath.value) {
+      unread.value = seen ? max(0, count - 1) : count + 1;
+    }
     return true;
   }
 
   /// 搬到指定的資料夾並就地把那一列拿掉。
-  Future<bool> moveToFolder(int uid, String targetPath) => _remove(
-      uid,
-      () => MailRepository.instance
-          .moveToFolder(uid, targetPath, folderPath: folderPath.value));
+  Future<bool> moveToFolder(int uid, String targetPath, {String? folderPath}) {
+    final folder = _folderOr(folderPath);
+    return _remove(
+        uid,
+        folder,
+        () => MailRepository.instance
+            .moveToFolder(uid, targetPath, folderPath: folder));
+  }
 
   /// 丟進回收筒並就地把那一列拿掉。回傳是否成功，訊息由頁面決定怎麼講。
-  Future<bool> moveToTrash(int uid) => _remove(
-      uid,
-      () => MailRepository.instance
-          .moveToTrash(uid, folderPath: folderPath.value));
+  Future<bool> moveToTrash(int uid, {String? folderPath}) {
+    final folder = _folderOr(folderPath);
+    return _remove(uid, folder,
+        () => MailRepository.instance.moveToTrash(uid, folderPath: folder));
+  }
 
   /// 封存並就地把那一列拿掉。
-  Future<bool> moveToArchive(int uid) => _remove(
-      uid,
-      () => MailRepository.instance
-          .moveToArchive(uid, folderPath: folderPath.value));
+  Future<bool> moveToArchive(int uid, {String? folderPath}) {
+    final folder = _folderOr(folderPath);
+    return _remove(uid, folder,
+        () => MailRepository.instance.moveToArchive(uid, folderPath: folder));
+  }
 
-  Future<bool> _remove(int uid, Future<bool> Function() action) async {
+  Future<bool> _remove(
+      int uid, String folder, Future<bool> Function() action) async {
     if (!await action()) return false;
-
-    final current = messages.value?.dataOrNull;
-    if (current != null) {
-      messages.value = Ok(current.where((m) => m.uid != uid).toList());
-    }
+    _patch(uid, folder, (_) => null);
     return true;
+  }
+
+  String _folderOr(String? path) => path ?? folderPath.value;
+
+  /// 畫面上那份清單裡的那一封。搜尋中比對 UID 也比對資料夾：跨資料夾之後 UID 會撞。
+  MailMessageJson? _find(int uid, String folder) {
+    if (isSearching) {
+      for (final hit in results.value?.dataOrNull ?? const <MailSearchHit>[]) {
+        if (hit.message.uid == uid && hit.folderPath == folder) {
+          return hit.message;
+        }
+      }
+      return null;
+    }
+    if (folder != folderPath.value) return null;
+    for (final message
+        in messages.value?.dataOrNull ?? const <MailMessageJson>[]) {
+      if (message.uid == uid) return message;
+    }
+    return null;
+  }
+
+  /// 就地換掉那一列，[change] 回 null 就是拿掉。
+  void _patch(int uid, String folder,
+      MailMessageJson? Function(MailMessageJson message) change) {
+    if (isSearching) {
+      final hits = results.value?.dataOrNull;
+      if (hits == null) return;
+      final next = <MailSearchHit>[];
+      for (final hit in hits) {
+        if (hit.message.uid != uid || hit.folderPath != folder) {
+          next.add(hit);
+          continue;
+        }
+        final updated = change(hit.message);
+        if (updated != null) next.add(MailSearchHit(hit.folderPath, updated));
+      }
+      results.value = Ok(next);
+      return;
+    }
+    final current = messages.value?.dataOrNull;
+    if (current == null || folder != folderPath.value) return;
+    final next = <MailMessageJson>[];
+    for (final message in current) {
+      if (message.uid != uid) {
+        next.add(message);
+        continue;
+      }
+      final updated = change(message);
+      if (updated != null) next.add(updated);
+    }
+    messages.value = Ok(next);
   }
 
   void dispose() {
     messages.close();
+    results.close();
     folders.close();
     folderPath.close();
     keyword.close();

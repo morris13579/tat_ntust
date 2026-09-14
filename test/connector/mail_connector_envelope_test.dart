@@ -146,6 +146,27 @@ body
     });
   });
 
+  group('mergeHits（跨資料夾搜尋）', () {
+    MailMessageJson mail(int uid, String subject, int day) => MailMessageJson(
+          uid: uid,
+          subject: subject,
+          dateMillis: DateTime(2026, 9, day).millisecondsSinceEpoch,
+        );
+
+    test('每一筆記著自己的資料夾，同 UID 也分得開，整份照日期新到舊', () {
+      final hits = MailConnector.mergeHits({
+        'INBOX': [mail(7, '期末報告', 1), mail(8, '社團活動', 3)],
+        '寄件備份匣': [mail(7, 'Re: 期末報告', 2)],
+      }, '報告');
+
+      expect(
+          hits.map((h) => (h.folderPath, h.message.uid, h.message.subject)), [
+        ('寄件備份匣', 7, 'Re: 期末報告'),
+        ('INBOX', 7, '期末報告'),
+      ]);
+    });
+  });
+
   group('htmlToPlainText（回覆引言）', () {
     test('style / script / head 要連內容整段拿掉', () {
       // 真機上踩過：只剝標籤的話，Outlook 的 CSS 會整片跑進引言，使用者按下

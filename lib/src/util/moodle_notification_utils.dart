@@ -6,11 +6,37 @@ import 'package:flutter_app/src/util/html_utils.dart';
 /// 站內通知的純解析：內文挑欄位、customdata、可開啟的位址與排序。
 ///
 /// component 對應的 icon 刻意不放這裡：util 層不 import material。
+/// 站內通知的類型，畫面依它挑圖示。
+enum NotificationKind { grade, assign, forum, quiz, feedback, lesson, module, system }
+
 class MoodleNotificationUtils {
   MoodleNotificationUtils._();
 
   static final RegExp _tag = RegExp(r'<[^>]*>');
   static final RegExp _whitespace = RegExp(r'\s+');
+
+  /// 成績通知在 Moodle 是 core 的 `moodle` 元件加上 grade 開頭的 eventtype，
+  /// 光看 component 會落到一般通知。
+  static NotificationKind kindOf(String? component, {String? eventtype}) {
+    if ((eventtype ?? '').toLowerCase().contains('grade') ||
+        (component ?? '').startsWith('gradereport_')) {
+      return NotificationKind.grade;
+    }
+    final name = component ?? '';
+    return switch (name) {
+      'mod_assign' => NotificationKind.assign,
+      'mod_forum' => NotificationKind.forum,
+      'mod_quiz' => NotificationKind.quiz,
+      'mod_feedback' ||
+      'mod_choice' ||
+      'mod_survey' =>
+        NotificationKind.feedback,
+      'mod_lesson' || 'mod_scorm' => NotificationKind.lesson,
+      _ => name.startsWith('mod_')
+          ? NotificationKind.module
+          : NotificationKind.system,
+    };
+  }
 
   /// 詳情要算繪的 HTML。`@@PLUGINFILE@@` 沒被伺服器換掉時那段 HTML 的圖是壞的，
   /// 退回 `text`（smallmessage 的 HTML 版），再退回逸出後的 `fullmessage`。

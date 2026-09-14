@@ -22,13 +22,8 @@ class ClassroomController {
     _section = section;
   }
 
-  /// 開場預設、而且在清單裡排第一個的大樓。
-  ///
-  /// `TR` 是研揚大樓，借用系統裡教室最多的一棟（38 間，第二多的國際大樓 33
-  /// 間），最有機會一進來就看到空教室。站台沒有「哪一棟最常用」這種欄位，
-  /// 所以寫在這裡；代號不存在時（學校把它移出借用系統）自動退回站台給的
-  /// 第一棟，不會變成查不到東西的畫面。
-  static const String preferredBuilding = 'TR';
+  static const String preferredBuilding =
+      ClassroomAvailability.preferredBuilding;
 
   final campuses = Rxn<Result<List<ClassroomCampusJson>>>();
 
@@ -76,22 +71,11 @@ class ClassroomController {
     final list = campuses.value?.dataOrNull ?? const <ClassroomCampusJson>[];
     final code = campusCode.value;
     for (final campus in list) {
-      if (campus.code == code) return _ordered(campus.buildings);
+      if (campus.code == code) {
+        return ClassroomAvailability.orderedBuildings(campus.buildings);
+      }
     }
     return const [];
-  }
-
-  /// 只把偏好的那一棟提到最前面，其餘維持站台給的順序——站台的順序本身
-  /// 是有意義的（大致照校區配置），整個重排只會讓熟悉的人找不到。
-  static List<ClassroomOptionJson> _ordered(
-      List<ClassroomOptionJson> buildings) {
-    final index =
-        buildings.indexWhere((b) => b.code == preferredBuilding);
-    if (index <= 0) return buildings;
-    return [
-      buildings[index],
-      ...buildings.where((b) => b.code != preferredBuilding),
-    ];
   }
 
   ClassroomOptionJson? get currentBuilding {
@@ -136,29 +120,12 @@ class ClassroomController {
     final list = campuses.value?.dataOrNull ?? const <ClassroomCampusJson>[];
     if (list.isEmpty) return;
 
-    final remembered = await SettingsStore.instance.classroomBuilding;
-    // 記住的那一棟還在清單裡才用它。學校把一棟從借用系統拿掉時，開場不該是
-    // 一個查不到東西的大樓代號。
-    for (final campus in list) {
-      for (final building in campus.buildings) {
-        if (building.code == remembered) {
-          campusCode.value = campus.code;
-          buildingCode.value = building.code;
-          await loadBuilding(building.code);
-          return;
-        }
-      }
-    }
-    // 沒有記住的那一棟時開在**大樓最多的那個校區**。站台的下拉是華夏校區
-    // 排在校本部前面，照順序取第一個會讓絕大多數人一進來看到的是華夏的
-    // 那一棟樓。「哪個是主校區」站台沒有欄位講，大樓數量是手上唯一的訊號。
-    final main = list.reduce(
-        (a, b) => b.buildings.length > a.buildings.length ? b : a);
-    campusCode.value = main.code;
-    final ordered = _ordered(main.buildings);
-    if (ordered.isEmpty) return;
-    buildingCode.value = ordered.first.code;
-    await loadBuilding(ordered.first.code);
+    final selection = ClassroomAvailability.initialBuilding(
+        list, await SettingsStore.instance.classroomBuilding);
+    if (selection == null) return;
+    campusCode.value = selection.$1;
+    buildingCode.value = selection.$2;
+    await loadBuilding(selection.$2);
   }
 
   /// 抓一棟。手上已經有這一棟這一天的結果就不重抓，除非 [force]。

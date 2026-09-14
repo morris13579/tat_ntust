@@ -2,7 +2,7 @@
 """產生 lib/ui/other/lucide_icons.dart。
 
 用法:
-    python3 tool/gen_lucide_icons.py           # 掃描 lib/ 實際用到的圖示並重產
+    python3 tool/gen_lucide_icons.py           # 掃描 lib/ 與 ios_native/ 實際用到的圖示並重產
     python3 tool/gen_lucide_icons.py --check   # 只檢查，有差異就非零離開
     python3 tool/gen_lucide_icons.py --list foo-bar baz   # 查這幾個名稱的碼位
 
@@ -34,6 +34,10 @@ pubspec 補上 family: LucideThick。
 要更新對照表就重抓那個套件：
     curl -sSL https://pub.dev/api/archives/lucide_icons_flutter-3.1.18.tar.gz | tar xz
 
+iOS 原生版共用同一份字體與對照表：Swift 寫 `Lucide.eyeOff`，這支會掃出來並產生
+ios_native/TATNative/Resources/Generated/Lucide.swift。粗細在 Swift 是繪製時才選的
+（`LucideImage(..., weight:)`），沒有 tree-shaking 的限制，所以只有一個列舉。
+
 對照表有一批 glyph 沿用 Lucide 舊名（例如 alert-circle 之後改叫 circle-alert），
 ALIASES 就是新名到舊名的對照。
 """
@@ -48,6 +52,8 @@ PUBSPEC = os.path.join(ROOT, "pubspec.yaml")
 CODEPOINTS = os.path.join(ROOT, "tool", "lucide_codepoints.json")
 OUT = os.path.join(ROOT, "lib", "ui", "other", "lucide_icons.dart")
 SCAN_DIRS = [os.path.join(ROOT, "lib"), os.path.join(ROOT, "test")]
+SWIFT_DIR = os.path.join(ROOT, "ios_native", "TATNative")
+SWIFT_OUT = os.path.join(SWIFT_DIR, "Resources", "Generated", "Lucide.swift")
 
 # 類別名 -> (font family, 說明)。順序就是產出的順序。
 WEIGHTS = [
@@ -137,6 +143,45 @@ def scan_usages():
     return used
 
 
+def scan_swift_usages():
+    """ios_native 裡（App 與小工具 extension）的 `Lucide.xxx`。註解行不算：散文裡的 lucide.dev 不是圖示。"""
+    used = set()
+    pattern = re.compile(r"\bLucide\.([a-zA-Z][a-zA-Z0-9]*)")
+    for swift_dir in (SWIFT_DIR, os.path.join(ROOT, "ios_native", "TATWidget")):
+        for dirpath, dirnames, filenames in os.walk(swift_dir):
+            dirnames[:] = [d for d in dirnames if d != "Generated"]
+            for filename in filenames:
+                if not filename.endswith(".swift"):
+                    continue
+                with open(os.path.join(dirpath, filename), encoding="utf-8") as handle:
+                    code = "\n".join(line for line in handle
+                                     if not line.lstrip().startswith("//"))
+                used.update(pattern.findall(code))
+    return used
+
+
+def render_swift(used, codepoints):
+    out = [
+        "// 產生的檔案，不要手改：python3 tool/gen_lucide_icons.py",
+        "// 名稱查 https://lucide.dev/icons/ ，碼位查 tool/lucide_codepoints.json。",
+        "",
+        "enum Lucide {",
+    ]
+    missing = []
+    for index, camel in enumerate(sorted(used)):
+        kebab = camel_to_kebab(camel)
+        codepoint = resolve(kebab, codepoints)
+        if codepoint is None:
+            missing.append(f"Lucide.{camel} ({kebab})")
+            continue
+        if index:
+            out.append("")
+        out.append(f"  /// {kebab}")
+        out.append(f"  static let {camel} = LucideIcon(0x{codepoint:04x})")
+    out.append("}")
+    return "\n".join(out) + "\n", missing
+
+
 def resolve(kebab, codepoints):
     """圖示名 -> 碼位，找不到回 None。"""
     for candidate in (kebab, ALIASES.get(kebab)):
@@ -213,6 +258,9 @@ def main():
         return 1
 
     content, missing = render(used, codepoints)
+    swift_used = scan_swift_usages()
+    swift_content, swift_missing = render_swift(swift_used, codepoints)
+    missing += swift_missing
     if missing:
         print("對照表裡找不到這些圖示，先改用別的名稱或補進 ALIASES：",
               file=sys.stderr)
@@ -221,19 +269,26 @@ def main():
         return 1
 
     total = sum(len(v) for v in used.values())
-    with open(OUT, encoding="utf-8") as handle:
-        current = handle.read()
-    if current == content:
-        print(f"已是最新，{total} 個圖示")
+    outputs = {OUT: content}
+    if os.path.isdir(SWIFT_DIR):
+        outputs[SWIFT_OUT] = swift_content
+    stale = [path for path, text in outputs.items()
+             if not os.path.exists(path)
+             or open(path, encoding="utf-8").read() != text]
+    if not stale:
+        print(f"已是最新，Flutter {total} 個、iOS {len(swift_used)} 個圖示")
         return 0
     if args.check:
-        print(f"lucide_icons.dart 與用法不同步（應有 {total} 個圖示）",
-              file=sys.stderr)
+        for path in stale:
+            print(f"{os.path.relpath(path, ROOT)} 與用法不同步", file=sys.stderr)
         return 1
-    with open(OUT, "w", encoding="utf-8") as handle:
-        handle.write(content)
-    print(f"已更新 {OUT}，{total} 個圖示 " +
-          ", ".join(f"{cls}={len(used[cls])}" for cls, _, _ in WEIGHTS))
+    for path in stale:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as handle:
+            handle.write(outputs[path])
+    print(f"已更新 {', '.join(os.path.relpath(p, ROOT) for p in stale)}：Flutter {total} 個 " +
+          ", ".join(f"{cls}={len(used[cls])}" for cls, _, _ in WEIGHTS) +
+          f"；iOS {len(swift_used)} 個")
     return 0
 
 

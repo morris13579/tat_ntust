@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
+import 'package:flutter_app/src/util/moodle_pluginfile_utils.dart';
 import 'package:flutter_app/src/util/web_view_url_policy.dart';
 import 'package:flutter_app/ui/components/html/no_embedded_web_view_factory.dart';
 import 'package:flutter_app/ui/components/page/web_view_opener.dart';
@@ -71,15 +72,9 @@ class MoodleHtmlView extends StatelessWidget {
     );
   }
 
-  /// 網址最後一段當檔名。`pathSegments` 是解碼過的，`..` 或帶分隔符的一段接進
-  /// 儲存路徑會寫到下載目錄外面，這種一律回空字串改讓伺服器的標頭決定。
-  static String downloadNameOf(String url) {
-    final segments = Uri.tryParse(url)?.pathSegments ?? const <String>[];
-    final name = segments.isEmpty ? "" : segments.last;
-    const unsafe = ['/', r'\', '\u0000'];
-    if (name == '.' || name == '..' || unsafe.any(name.contains)) return "";
-    return name;
-  }
+  /// 見 [MoodlePluginFileUtils.downloadNameOf]。
+  static String downloadNameOf(String url) =>
+      MoodlePluginFileUtils.downloadNameOf(url);
 
   /// 只接手自家 pluginfile 的 `<img>`（那種圖要帶 token）；其餘回 null 交回
   /// 預設 factory，用 `Image.network` 去載 `data:` 只會得到破圖。

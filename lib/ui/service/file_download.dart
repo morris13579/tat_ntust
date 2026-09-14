@@ -77,7 +77,7 @@ class FileDownload {
       return;
     }
     referer = referer ?? url;
-    String savePath = "$path/$name";
+    String savePath = "$path/${FileStore.safeName(name)}";
     String realFileName = "";
     // 先用呼叫端給的檔名試一次：命中就連 HEAD 都不必送，離線也開得起來。
     // 下面那次 HEAD 只是為了拿 content-disposition 裡的真實檔名。
@@ -86,7 +86,7 @@ class FileDownload {
       var downloadReq = await DioConnector.instance.dio.head(url);
       Map<String, List<String>> headers = downloadReq.headers.map;
       realFileName = getFileNameByHeader(headers) ?? name;
-      savePath = "$path/$realFileName";
+      savePath = "$path/${FileStore.safeName(realFileName)}";
     } catch (e) {
       Log.d(e);
     }

@@ -8,7 +8,6 @@ import 'package:flutter_app/src/config/app_typography.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
 import 'package:flutter_app/src/model/course/course_department.dart';
 import 'package:flutter_app/src/model/course/course_query_filter.dart';
-import 'package:flutter_app/src/model/course_table/course_time.dart';
 import 'package:flutter_app/src/util/course_table_conflict.dart';
 import 'package:flutter_app/src/util/course_table_control.dart';
 import 'package:flutter_app/ui/components/chip/tat_filter_chip.dart';
@@ -90,7 +89,10 @@ class _CourseSearchPageState extends State<CourseSearchPage> {
   @override
   void initState() {
     super.initState();
-    final prefix = _homeDepartmentPrefix();
+    final prefix = CourseQueryFilter.homeDepartmentOf([
+      for (final table in [widget.editor.base, widget.editor.draft])
+        ...?table?.getCourseIdList(),
+    ]);
     if (prefix == null) return;
     _keyword.text = prefix;
     _filter = _filter.copyWith(courseNo: prefix);
@@ -105,21 +107,6 @@ class _CourseSearchPageState extends State<CourseSearchPage> {
   void dispose() {
     _keyword.dispose();
     super.dispose();
-  }
-
-  String? _homeDepartmentPrefix() {
-    final counts = <String, int>{};
-    for (final table in [widget.editor.base, widget.editor.draft]) {
-      for (final id in table?.getCourseIdList() ?? const <String>[]) {
-        if (id.length < 2) continue;
-        final prefix = id.substring(0, 2).toUpperCase();
-        // 數字開頭的不是系所代碼（通識與共同科目就長這樣）。
-        if (!RegExp(r'^[A-Z]{2}$').hasMatch(prefix)) continue;
-        counts[prefix] = (counts[prefix] ?? 0) + 1;
-      }
-    }
-    if (counts.isEmpty) return null;
-    return counts.entries.reduce((a, b) => b.value > a.value ? b : a).key;
   }
 
   @override
@@ -240,26 +227,8 @@ class _CourseSearchPageState extends State<CourseSearchPage> {
 
   List<CourseMainInfoJson> _visible() => _results
       .where((c) => !_hideConflict || _conflictsOf(c).isEmpty)
-      .where(_fitsSlots)
+      .where((course) => CourseTableConflict.fitsSlots(course, _slots))
       .toList();
-
-  /// 這門課的每一格都要落在勾選的節次裡。
-  ///
-  /// 用「完全落在」而不是「有交集」：勾 1、2 是因為那兩節有空，一門橫跨 1–3
-  /// 的課列出來也排不進去。沒有排定時間的課（querycourse 的 `Node` 是 null，
-  /// 例如體育校隊）不算「在某幾節」，一律排除。
-  bool _fitsSlots(CourseMainInfoJson course) {
-    if (_slots.isEmpty) return true;
-    final cells = <CourseSlot>{};
-    for (final day in CourseTableConflict.days) {
-      for (final section
-          in CourseTableConflict.sectionsOf(course.course.time[day])) {
-        cells.add((day, section));
-      }
-    }
-    if (cells.isEmpty) return false;
-    return cells.every(_slots.contains);
-  }
 
   /// 這門課會撞到什麼。實際課表與草稿都要看：草稿裡剛加的課也算數。
   List<ConflictCell> _conflictsOf(CourseMainInfoJson course) {
@@ -373,23 +342,9 @@ class _CourseSearchPageState extends State<CourseSearchPage> {
       for (final cells in byCourse.values)
         sprintf(R.current.courseSearchConflictWith, [
           cells.first.base.main.course.name,
-          _slotsOfCells(cells),
+          _control.conflictSlotsLabel(cells),
         ]),
     ];
-  }
-
-  /// 撞到的格子照星期併成「三 9、四 3·4」。
-  String _slotsOfCells(List<ConflictCell> cells) {
-    final byDay = <Day, List<String>>{};
-    for (final cell in cells) {
-      byDay
-          .putIfAbsent(cell.day, () => [])
-          .add(_control.getSectionString(cell.section.index));
-    }
-    return [
-      for (final entry in byDay.entries)
-        '${_control.getDayString(entry.key.index)} ${entry.value.join('·')}',
-    ].join('、');
   }
 
   Widget _toggle(CourseMainInfoJson course, bool added) {

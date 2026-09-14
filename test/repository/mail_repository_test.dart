@@ -4,6 +4,7 @@ import 'package:flutter_app/src/enum/mail_folder_role.dart';
 import 'package:flutter_app/src/model/mail/mail_draft.dart';
 import 'package:flutter_app/src/model/mail/mail_folder_json.dart';
 import 'package:flutter_app/src/model/mail/mail_message_json.dart';
+import 'package:flutter_app/src/model/mail/mail_search_hit.dart';
 import 'package:flutter_app/src/repository/mail_repository.dart';
 import 'package:flutter_app/src/repository/result.dart';
 import 'package:flutter_app/src/service/connectivity_probe.dart';
@@ -22,6 +23,21 @@ class _FakeRepo extends MailRepository {
   String? lastPath;
   bool sendSucceeds = true;
   MailDraft? sentDraft;
+  List<MailMessageJson>? found;
+  List<MailSearchHit>? foundAll;
+  String? searchedPath;
+
+  @override
+  Future<List<MailMessageJson>?> searchMessages(
+      String path, String keyword) async {
+    searchedPath = path;
+    return found;
+  }
+
+  @override
+  Future<List<MailSearchHit>?> searchAllMessages(
+          List<String> paths, String keyword) async =>
+      foundAll;
 
   @override
   Future<List<MailMessageJson>?> fetchFolder(String path) async {
@@ -269,6 +285,32 @@ void main() {
       await MailRepository.instance.getMessages();
 
       expect(await suggest('   '), isEmpty);
+    });
+  });
+
+  group('搜尋', () {
+    test('只找一個資料夾時，每一筆都記著那個資料夾', () async {
+      repo.found = [message(1), message(2)];
+
+      final result = await repo.search('選課', folderPath: '寄件備份匣');
+
+      expect(repo.searchedPath, '寄件備份匣');
+      expect(result.dataOrNull!.map((h) => (h.folderPath, h.message.uid)),
+          [('寄件備份匣', 1), ('寄件備份匣', 2)]);
+    });
+
+    test('跨資料夾時每一筆留著自己的資料夾，不換成正在看的那一個', () async {
+      repo.foundAll = [
+        MailSearchHit(MailRepository.inboxPath, message(7)),
+        MailSearchHit('寄件備份匣', message(7)),
+      ];
+
+      final result = await repo.search('選課',
+          folderPath: MailRepository.inboxPath,
+          allFolderPaths: const [MailRepository.inboxPath, '寄件備份匣']);
+
+      expect(result.dataOrNull!.map((h) => h.folderPath),
+          [MailRepository.inboxPath, '寄件備份匣']);
     });
   });
 

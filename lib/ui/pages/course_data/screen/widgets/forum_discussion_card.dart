@@ -5,7 +5,7 @@ import 'package:flutter_app/ui/other/theme_context.dart';
 import 'package:flutter_app/src/R.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_app/src/util/forum_feed_utils.dart';
 import 'package:sprintf/sprintf.dart';
 
 /// 討論串清單的一列。公告分頁與一般討論區頁共用，兩邊長得一樣才對——
@@ -126,7 +126,7 @@ class ForumDiscussionCard extends StatelessWidget {
   /// 「學號 @ 姓名」，名字要讀、學號要查，兩件事各有各的位置。認不出學號時
   /// 那一段就不畫——**不補「老師」也不猜**：伺服器沒說那個人是誰。
   Widget _meta(TextStyle style) {
-    final author = _AuthorName.of(discussion.userfullname);
+    final author = ForumAuthorName.of(discussion.userfullname);
     return Text.rich(
       TextSpan(children: [
         TextSpan(text: author.name),
@@ -153,38 +153,7 @@ class ForumDiscussionCard extends StatelessWidget {
   ///
   /// 同一天的改印時間：那是唯一一個「幾號」分不出先後的情況。其餘一律不印
   /// 時間——公告不是聊天訊息，「上午 10:52」沒有影響任何決定（設計稿 7e）。
-  String _dayLabel() {
-    // 用建立時間：modified 是第一篇貼文被編輯過的時間，詳情頁那邊印的是建立時間。
-    final created =
-        DateTime.fromMillisecondsSinceEpoch(discussion.created * 1000);
-    final today = now ?? DateTime.now();
-    final sameDay = created.year == today.year &&
-        created.month == today.month &&
-        created.day == today.day;
-    return sameDay
-        ? DateFormat.jm().format(created)
-        : DateFormat.d().format(created);
-  }
-}
-
-/// 拆開 Moodle 的 `userfullname`。
-class _AuthorName {
-  const _AuthorName(this.name, this.studentId);
-
-  final String name;
-
-  /// null ＝這一串裡沒有學號（老師、或站台的格式不一樣）。
-  final String? studentId;
-
-  /// 臺科 Moodle 的格式是「B11000004 @ 王小明」；老師只有名字。認不出來時
-  /// 整串當名字，不從名字裡「湊」一個學號出來。
-  static _AuthorName of(String fullname) {
-    final raw = fullname.trim();
-    final at = raw.indexOf('@');
-    if (at <= 0 || at == raw.length - 1) return _AuthorName(raw, null);
-    final id = raw.substring(0, at).trim();
-    final name = raw.substring(at + 1).trim();
-    if (id.isEmpty || name.isEmpty) return _AuthorName(raw, null);
-    return _AuthorName(name, id);
-  }
+  String _dayLabel() =>
+      // 用建立時間：modified 是第一篇貼文被編輯過的時間，詳情頁那邊印的是建立時間。
+      forumDayLabel(discussion.created, now ?? DateTime.now());
 }

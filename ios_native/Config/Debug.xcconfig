@@ -1,0 +1,7 @@
+// Pods 的設定（pod install 產生）。用 #include? 是因為第一次 pod install
+// 之前它不存在，而產生專案的腳本要能先跑。
+#include? "../Pods/Target Support Files/Pods-TATNative/Pods-TATNative.debug.xcconfig"
+
+// Flutter 的設定：FLUTTER_ROOT、FLUTTER_APPLICATION_PATH、FLUTTER_TARGET…
+// 由 flutter pub get 產生在 Flutter App 的 ios 目錄底下，兩邊共用同一份。
+#include "../../ios/Flutter/Generated.xcconfig"

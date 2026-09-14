@@ -1,5 +1,5 @@
 import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/widgets/course_section_list.dart';
+import 'package:flutter_app/src/util/course_section_tree.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// 檔案分頁的分組規則。純資料，不需要 pump。

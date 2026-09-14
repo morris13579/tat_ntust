@@ -564,6 +564,26 @@ class S {
     );
   }
 
+  /// `Add to table`
+  String get importCourseAdd {
+    return Intl.message(
+      'Add to table',
+      name: 'importCourseAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove from table`
+  String get importCourseRemove {
+    return Intl.message(
+      'Remove from table',
+      name: 'importCourseRemove',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Timetable options`
   String get courseTableOptions {
     return Intl.message(
@@ -7122,6 +7142,216 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Close`
+  String get close {
+    return Intl.message('Close', name: 'close', desc: '', args: []);
+  }
+
+  /// `Previous`
+  String get announcementPrevious {
+    return Intl.message(
+      'Previous',
+      name: 'announcementPrevious',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forward`
+  String get browserForward {
+    return Intl.message('Forward', name: 'browserForward', desc: '', args: []);
+  }
+
+  /// `Back`
+  String get back {
+    return Intl.message('Back', name: 'back', desc: '', args: []);
+  }
+
+  /// `Previous month`
+  String get previousMonth {
+    return Intl.message(
+      'Previous month',
+      name: 'previousMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next month`
+  String get nextMonth {
+    return Intl.message('Next month', name: 'nextMonth', desc: '', args: []);
+  }
+
+  /// `Theme color`
+  String get themeColor {
+    return Intl.message('Theme color', name: 'themeColor', desc: '', args: []);
+  }
+
+  /// `Custom color`
+  String get themeColorCustom {
+    return Intl.message(
+      'Custom color',
+      name: 'themeColorCustom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Very light or dark colors are adjusted so text and button labels stay readable.`
+  String get themeColorNote {
+    return Intl.message(
+      'Very light or dark colors are adjusted so text and button labels stay readable.',
+      name: 'themeColorNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Blue`
+  String get themeColorBlue {
+    return Intl.message('Blue', name: 'themeColorBlue', desc: '', args: []);
+  }
+
+  /// `Purple`
+  String get themeColorPurple {
+    return Intl.message('Purple', name: 'themeColorPurple', desc: '', args: []);
+  }
+
+  /// `Pink`
+  String get themeColorPink {
+    return Intl.message('Pink', name: 'themeColorPink', desc: '', args: []);
+  }
+
+  /// `Red`
+  String get themeColorRed {
+    return Intl.message('Red', name: 'themeColorRed', desc: '', args: []);
+  }
+
+  /// `Orange`
+  String get themeColorOrange {
+    return Intl.message('Orange', name: 'themeColorOrange', desc: '', args: []);
+  }
+
+  /// `Green`
+  String get themeColorGreen {
+    return Intl.message('Green', name: 'themeColorGreen', desc: '', args: []);
+  }
+
+  /// `Teal`
+  String get themeColorTeal {
+    return Intl.message('Teal', name: 'themeColorTeal', desc: '', args: []);
+  }
+
+  /// `Graphite`
+  String get themeColorGraphite {
+    return Intl.message(
+      'Graphite',
+      name: 'themeColorGraphite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your next class, classes today and the whole week`
+  String get widgetDescription {
+    return Intl.message(
+      'Your next class, classes today and the whole week',
+      name: 'widgetDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In class`
+  String get widgetInClass {
+    return Intl.message('In class', name: 'widgetInClass', desc: '', args: []);
+  }
+
+  /// `Next`
+  String get widgetNextClass {
+    return Intl.message('Next', name: 'widgetNextClass', desc: '', args: []);
+  }
+
+  /// `Today`
+  String get widgetToday {
+    return Intl.message('Today', name: 'widgetToday', desc: '', args: []);
+  }
+
+  /// `Tomorrow`
+  String get widgetTomorrow {
+    return Intl.message('Tomorrow', name: 'widgetTomorrow', desc: '', args: []);
+  }
+
+  /// `%s`
+  String get widgetWeekday {
+    return Intl.message('%s', name: 'widgetWeekday', desc: '', args: []);
+  }
+
+  /// `Ends %s`
+  String get widgetEndsAt {
+    return Intl.message('Ends %s', name: 'widgetEndsAt', desc: '', args: []);
+  }
+
+  /// `%s more`
+  String get widgetClassesLeft {
+    return Intl.message(
+      '%s more',
+      name: 'widgetClassesLeft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Done for today`
+  String get widgetDoneToday {
+    return Intl.message(
+      'Done for today',
+      name: 'widgetDoneToday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No classes today`
+  String get widgetNoClassToday {
+    return Intl.message(
+      'No classes today',
+      name: 'widgetNoClassToday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open TAT to load your timetable`
+  String get widgetOpenApp {
+    return Intl.message(
+      'Open TAT to load your timetable',
+      name: 'widgetOpenApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Semester`
+  String get widgetSemester {
+    return Intl.message('Semester', name: 'widgetSemester', desc: '', args: []);
+  }
+
+  /// `Latest semester`
+  String get widgetLatestSemester {
+    return Intl.message(
+      'Latest semester',
+      name: 'widgetLatestSemester',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Then`
+  String get widgetThen {
+    return Intl.message('Then', name: 'widgetThen', desc: '', args: []);
   }
 }
 

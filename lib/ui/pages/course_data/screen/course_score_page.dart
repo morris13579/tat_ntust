@@ -12,6 +12,7 @@ import 'package:flutter_app/src/connector/moodle_webapi_connector.dart'
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_gradereport_get_grade_items.dart';
 import 'package:flutter_app/src/repository/result.dart';
+import 'package:flutter_app/src/util/moodle_grade_utils.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/components/page/error_page.dart';
 import 'package:flutter_app/ui/components/page/result_view.dart';
@@ -93,29 +94,16 @@ class _CourseScorePageState extends State<CourseScorePage>
     );
   }
 
-  /// 這一列要顯示的標題。
-  ///
-  /// 伺服器對課程總分與類別總分不送 itemname，那兩類要由 App 自己補字。判斷一律
-  /// 用 itemType，不要比對中文字串——「課程總分」那幾個字是 Moodle 依**使用者的
-  /// Moodle 介面語言**產生的，與 App 語系無關，比字串在英文介面下會靜靜失效。
-  String _titleOf(MoodleGradeItemEntity item) {
-    final name = item.itemName?.trim();
-    if (name != null && name.isNotEmpty) return name;
-    if (item.isCourseTotal) return R.current.courseTotal;
-    if (item.isCategoryTotal) return R.current.categoryTotal;
-    return "";
-  }
-
   /// 一列成績。分數靠右、細節收在標題底下那一行——十幾列疊起來時，眼睛只需要
   /// 掃右邊那一欄。老師回饋是唯一會展開的東西，其餘四個值全在同一行講完。
   Widget _buildGradeItem(MoodleGradeItemEntity item, int index, int length) {
     final scheme = context.scheme;
     final text = context.text;
-    final hasFeedback = _hasFeedback(item.feedback);
+    final hasFeedback = MoodleGradeUtils.hasFeedback(item.feedback);
     final expanded = _expanded.contains(item.id);
     final emphasised = item.isCourseTotal || item.isCategoryTotal;
     // 三階：課程總分粗體、類別總分半粗、其餘一般。判斷一律用 itemType，
-    // 不要比對中文字串——理由見 [_titleOf]。
+    // 不要比對中文字串——理由見 [MoodleGradeUtils.titleOf]。
     final weight = item.isCourseTotal
         ? FontWeight.bold
         : (item.isCategoryTotal ? FontWeight.w600 : FontWeight.w500);
@@ -144,14 +132,17 @@ class _CourseScorePageState extends State<CourseScorePage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _titleOf(item),
+                            MoodleGradeUtils.titleOf(item),
                             style: text.titleMedium?.copyWith(
                                 color: scheme.onSurface, fontWeight: weight),
                           ),
-                          if (_metaOf(item, hasFeedback).isNotEmpty) ...[
+                          if (MoodleGradeUtils.metaOf(item,
+                                  hasFeedback: hasFeedback)
+                              .isNotEmpty) ...[
                             const SizedBox(height: 4),
                             Text(
-                              _metaOf(item, hasFeedback),
+                              MoodleGradeUtils.metaOf(item,
+                                  hasFeedback: hasFeedback),
                               style: AppTypography.tabular(
                                   (text.bodySmall ?? const TextStyle())
                                       .copyWith(
@@ -186,8 +177,8 @@ class _CourseScorePageState extends State<CourseScorePage>
   Widget _score(MoodleGradeItemEntity item, bool emphasised) {
     final scheme = context.scheme;
     final text = context.text;
-    final grade = _plain(item.gradeFormatted);
-    if (!_hasContent(grade)) {
+    final grade = MoodleGradeUtils.plain(item.gradeFormatted);
+    if (!MoodleGradeUtils.hasContent(grade)) {
       return Text(
         R.current.assignNotGraded,
         style: text.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
@@ -202,22 +193,6 @@ class _CourseScorePageState extends State<CourseScorePage>
         height: 1.2,
       )),
     );
-  }
-
-  /// 標題底下那一行：百分比、權量、全距，最後在有回饋時補一個「回饋」，
-  /// 那是這一列可以點開的唯一提示——沒有這一個字的話，十幾列長得一模一樣，
-  /// 看不出哪一列按下去會有東西。
-  String _metaOf(MoodleGradeItemEntity item, bool hasFeedback) {
-    final parts = [
-      if (_hasContent(item.percentageFormatted))
-        _plain(item.percentageFormatted),
-      if (_hasContent(item.weightFormatted))
-        "${R.current.weight} ${_plain(item.weightFormatted)}",
-      if (_hasContent(item.rangeFormatted))
-        "${R.current.fullRange} ${_plain(item.rangeFormatted)}",
-      if (hasFeedback) R.current.gradeFeedbackTag,
-    ];
-    return parts.join(" · ");
   }
 
   /// 展開後的老師回饋：小標題、右邊的「收起」、回饋本文，附件由
@@ -259,46 +234,6 @@ class _CourseScorePageState extends State<CourseScorePage>
       ],
     );
   }
-
-  /// Moodle 對「沒有值」送的是空字串或整串 `&nbsp;`（解碼邊界還原之後是
-  /// U+00A0），兩種都要當成空。
-  ///
-  /// 還有第三種：未評分的項目 `gradeformatted`／`percentageformatted` 送的是
-  /// 一個破折號。照字串長度算的話分數欄會印一個裸的「-」、副標第一段也會是
-  /// 「-」，都是看起來像壞掉的畫面。整串只有破折號才算空——全距的 `0–100`
-  /// 也含破折號，但它有數字。
-  static bool _hasContent(String? content) {
-    final plain = _plain(content);
-    return plain.isNotEmpty && !_onlyDashes.hasMatch(plain);
-  }
-
-  static final RegExp _onlyDashes = RegExp(r"^[-\u2010-\u2015\s]+$");
-
-  /// 這一列有沒有老師回饋。
-  ///
-  /// 不能拿 [_hasContent] 來問：`feedback` 是 HTML，Moodle 對「沒有回饋」
-  /// 也可能送一個 `<div class="no-overflow"></div>` 這樣的空殼。照字串長度算
-  /// 的話每一列都會掛上「回饋」，等於這個提示不存在，也等於每一列都點得開、
-  /// 點開卻是空的。
-  static bool _hasFeedback(String? content) {
-    final html = content ?? "";
-    if (html.trim().isEmpty) return false;
-    // 只有圖片或附件、一個字都沒有的回饋照樣算數。
-    if (_mediaTag.hasMatch(html)) return true;
-    return _hasContent(html.replaceAll(_anyTag, " "));
-  }
-
-  static final RegExp _anyTag = RegExp(r"<[^>]*>");
-  static final RegExp _mediaTag =
-      RegExp(r"<\s*(img|a|video|audio|iframe)\b", caseSensitive: false);
-
-  /// `*formatted` 是純文字（HTML 實體已在 `MoodleRepository.normalizeScore`
-  /// 還原），只是伺服器會用不換行空格當單位的間隔（`85.00\u00a0%`），
-  /// 排版上要當成普通空白。
-  static String _plain(String? content) => (content ?? "")
-      .replaceAll("\u00a0", " ")
-      .replaceAll("&nbsp;", " ")
-      .trim();
 
   /// 回饋仍然走 HtmlWidget：`feedback` 是 HTML（feedbackformat 是 Moodle 的
   /// format id），而且可能含 `<img>`，點下去要能開 PhotoView。

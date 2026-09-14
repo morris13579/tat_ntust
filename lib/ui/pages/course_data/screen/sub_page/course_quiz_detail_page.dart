@@ -10,6 +10,7 @@ import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_quiz_get_quizzes_
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_quiz_get_user_attempts.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_quiz_get_user_best_grade.dart';
 import 'package:flutter_app/src/util/language_utils.dart';
+import 'package:flutter_app/src/util/moodle_quiz_text.dart';
 import 'package:flutter_app/src/util/moodle_quiz_utils.dart';
 import 'package:flutter_app/ui/components/card/section_card.dart';
 import 'package:flutter_app/ui/components/custom_appbar.dart';
@@ -20,7 +21,6 @@ import 'package:flutter_app/ui/components/page/section_empty_state.dart';
 import 'package:flutter_app/ui/components/page/web_view_opener.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/widgets/quiz_attempt_chip.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 
@@ -47,9 +47,7 @@ class CourseQuizDetailPage extends StatefulWidget {
   final Widget Function(String message) errorBuilder;
   final WebViewOpener openWebView;
 
-  static String formatUnix(int unix) => DateFormat.yMd()
-      .add_jm()
-      .format(DateTime.fromMillisecondsSinceEpoch(unix * 1000));
+  static String formatUnix(int unix) => quizFormatUnix(unix);
 
   @override
   State<CourseQuizDetailPage> createState() => _CourseQuizDetailPageState();

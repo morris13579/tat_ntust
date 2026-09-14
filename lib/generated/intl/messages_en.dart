@@ -61,6 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "announcementNoForum": MessageLookupByLibrary.simpleMessage(
       "This course has no announcements forum",
     ),
+    "announcementPrevious": MessageLookupByLibrary.simpleMessage("Previous"),
     "announcementPublishedAt": MessageLookupByLibrary.simpleMessage(
       "Published",
     ),
@@ -489,6 +490,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "avatarUploadDisabled": MessageLookupByLibrary.simpleMessage(
       "File upload is turned off on this Moodle site",
     ),
+    "back": MessageLookupByLibrary.simpleMessage("Back"),
     "browserAutoLoginNotice": MessageLookupByLibrary.simpleMessage(
       "TAT is signing you in — no need to type your password",
     ),
@@ -505,6 +507,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "browserExternalSite": MessageLookupByLibrary.simpleMessage(
       "This is an external site, not a school system",
     ),
+    "browserForward": MessageLookupByLibrary.simpleMessage("Forward"),
     "browserOpenExternalNote": MessageLookupByLibrary.simpleMessage(
       "An external browser does not have your sign-in",
     ),
@@ -624,6 +627,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "classroomTitle": MessageLookupByLibrary.simpleMessage("Free classrooms"),
     "classroomViewDay": MessageLookupByLibrary.simpleMessage("Whole day"),
     "classroomViewList": MessageLookupByLibrary.simpleMessage("List"),
+    "close": MessageLookupByLibrary.simpleMessage("Close"),
     "collapse": MessageLookupByLibrary.simpleMessage("Collapse"),
     "contactInfo": MessageLookupByLibrary.simpleMessage("Contact"),
     "continueMeansAgree": MessageLookupByLibrary.simpleMessage(
@@ -1064,8 +1068,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Import this table?",
     ),
     "importCourse": MessageLookupByLibrary.simpleMessage("Import course"),
+    "importCourseAdd": MessageLookupByLibrary.simpleMessage("Add to table"),
     "importCourseHint": MessageLookupByLibrary.simpleMessage(
       "Add a course by its code or name",
+    ),
+    "importCourseRemove": MessageLookupByLibrary.simpleMessage(
+      "Remove from table",
     ),
     "importDone": MessageLookupByLibrary.simpleMessage("Imported %s\'s table"),
     "importMoreCourses": MessageLookupByLibrary.simpleMessage("and %s more"),
@@ -1281,6 +1289,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Need validate captcha",
     ),
     "networkError": MessageLookupByLibrary.simpleMessage("Network error"),
+    "nextMonth": MessageLookupByLibrary.simpleMessage("Next month"),
     "noFunction": MessageLookupByLibrary.simpleMessage("No function"),
     "noPermission": MessageLookupByLibrary.simpleMessage("Permission denied"),
     "noSupport": MessageLookupByLibrary.simpleMessage(" not support"),
@@ -1352,6 +1361,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "prepareDownload": MessageLookupByLibrary.simpleMessage(
       "Prepare download...",
     ),
+    "previousMonth": MessageLookupByLibrary.simpleMessage("Previous month"),
     "privacyAgreeContinue": MessageLookupByLibrary.simpleMessage(
       "Agree and continue",
     ),
@@ -1613,6 +1623,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "tableSwitcherTitle": MessageLookupByLibrary.simpleMessage(
       "Choose a table",
     ),
+    "themeColor": MessageLookupByLibrary.simpleMessage("Theme color"),
+    "themeColorBlue": MessageLookupByLibrary.simpleMessage("Blue"),
+    "themeColorCustom": MessageLookupByLibrary.simpleMessage("Custom color"),
+    "themeColorGraphite": MessageLookupByLibrary.simpleMessage("Graphite"),
+    "themeColorGreen": MessageLookupByLibrary.simpleMessage("Green"),
+    "themeColorNote": MessageLookupByLibrary.simpleMessage(
+      "Very light or dark colors are adjusted so text and button labels stay readable.",
+    ),
+    "themeColorOrange": MessageLookupByLibrary.simpleMessage("Orange"),
+    "themeColorPink": MessageLookupByLibrary.simpleMessage("Pink"),
+    "themeColorPurple": MessageLookupByLibrary.simpleMessage("Purple"),
+    "themeColorRed": MessageLookupByLibrary.simpleMessage("Red"),
+    "themeColorTeal": MessageLookupByLibrary.simpleMessage("Teal"),
     "theme_dark": MessageLookupByLibrary.simpleMessage("Dark"),
     "theme_light": MessageLookupByLibrary.simpleMessage("Light"),
     "theme_setting": MessageLookupByLibrary.simpleMessage("Theme setting"),
@@ -1652,6 +1675,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Weeks with content",
     ),
     "weight": MessageLookupByLibrary.simpleMessage("weight"),
+    "widgetClassesLeft": MessageLookupByLibrary.simpleMessage("%s more"),
+    "widgetDescription": MessageLookupByLibrary.simpleMessage(
+      "Your next class, classes today and the whole week",
+    ),
+    "widgetDoneToday": MessageLookupByLibrary.simpleMessage("Done for today"),
+    "widgetEndsAt": MessageLookupByLibrary.simpleMessage("Ends %s"),
+    "widgetInClass": MessageLookupByLibrary.simpleMessage("In class"),
+    "widgetLatestSemester": MessageLookupByLibrary.simpleMessage(
+      "Latest semester",
+    ),
+    "widgetNextClass": MessageLookupByLibrary.simpleMessage("Next"),
+    "widgetNoClassToday": MessageLookupByLibrary.simpleMessage(
+      "No classes today",
+    ),
+    "widgetOpenApp": MessageLookupByLibrary.simpleMessage(
+      "Open TAT to load your timetable",
+    ),
+    "widgetSemester": MessageLookupByLibrary.simpleMessage("Semester"),
+    "widgetThen": MessageLookupByLibrary.simpleMessage("Then"),
+    "widgetToday": MessageLookupByLibrary.simpleMessage("Today"),
+    "widgetTomorrow": MessageLookupByLibrary.simpleMessage("Tomorrow"),
+    "widgetWeekday": MessageLookupByLibrary.simpleMessage("%s"),
     "willRestart": MessageLookupByLibrary.simpleMessage(
       "Will restart automatically",
     ),

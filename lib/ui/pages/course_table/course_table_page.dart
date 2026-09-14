@@ -8,7 +8,7 @@ import 'package:flutter_app/ui/pages/course_table/modal/semester_dialog.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/favorite_dialog.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/table_switcher_sheet.dart';
 import 'package:flutter_app/ui/pages/course_table/manage_tables_page.dart';
-import 'package:flutter_app/src/util/course_table_conflict.dart';
+import 'package:flutter_app/src/util/simulation_draft.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/course_cell_sheet.dart';
 import 'package:flutter_app/ui/pages/course_table/modal/course_options_sheet.dart';
@@ -487,19 +487,8 @@ class CourseTablePage extends GetView<CourseController> {
             DateFormat.Md().format(table.savedAt)
           ])}';
 
-  String _draftSummary(ExtraTable draft) {
-    final base = controller.courseTableData;
-    final conflicts = base == null
-        ? const <ConflictCell>[]
-        : CourseTableConflict.findConflicts(base, draft.table);
-    final parts = [
-      sprintf(R.current.courseCount, [draft.table.getCourseIdList().length]),
-      sprintf(R.current.creditCount, [draft.table.getTotalCredit()]),
-      if (conflicts.isNotEmpty)
-        sprintf(R.current.simulationConflictCount, [conflicts.length]),
-    ];
-    return parts.join(' · ');
-  }
+  String _draftSummary(ExtraTable draft) =>
+      SimulationDraft.listSummary(controller.courseTableData, draft.table);
 
   /// 分享自己的課表。存成圖片交給系統的分享面板——寫進相簿要一個本專案刻意
   /// 沒有的權限。
@@ -668,29 +657,12 @@ class CourseTablePage extends GetView<CourseController> {
       );
       if (chosen == null) return;
       final studentId = controller.studentId.value;
-      final id = 'draft-$studentId-$chosen';
-      target = ExtraTableStore.instance.findDraft(id) ??
-          ExtraTable(
-            id: id,
-            label: sprintf(R.current.simulationDraftLabel,
-                ['${chosen.year}-${chosen.semester}']),
-            table:
-                CourseTableJson(courseSemester: chosen, studentId: studentId),
-            savedAt: DateTime.now(),
-          );
+      target = ExtraTableStore.instance
+              .findDraft(SimulationDraft.idOf(studentId, chosen)) ??
+          SimulationDraft.create(studentId, chosen);
     }
     final bound = target;
-    final semester = bound.table.courseSemester;
-    // 只有同一學期的實際課表才能當底圖。
-    // firstWhereOrNull 需要 collection 套件，這裡自己找一輪就好。
-    CourseTableJson? base;
-    for (final table in controller.favorites) {
-      if (table.studentId == bound.table.studentId &&
-          table.courseSemester == semester) {
-        base = table;
-        break;
-      }
-    }
+    final base = SimulationDraft.baseOf(bound, controller.favorites);
     unawaited(Get.to(() => SimulationPage(
           draft: bound,
           base: base,

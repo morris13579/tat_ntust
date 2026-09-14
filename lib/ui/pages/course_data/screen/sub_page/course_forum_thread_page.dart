@@ -659,30 +659,20 @@ class _CourseForumThreadPageState extends State<CourseForumThreadPage> {
   String _replySubject(MoodleForumPost parent) =>
       parent.replysubject.isNotEmpty ? parent.replysubject : _title;
 
-  /// 伺服器算的 `capabilities.reply` 是唯一判準（**不是** `urls.reply`：
-  /// `selfenrol` 會讓那個網址在不能回覆時也非 null）；站台沒開放這支
-  /// function 時整排都不畫。
+  ForumApiAvailability get _api => (
+        canPost: MoodleWebApiConnector.canPostToForum,
+        canEdit: MoodleWebApiConnector.canEditForumPost,
+        canRead: MoodleWebApiConnector.canReadForumPost,
+        canDelete: MoodleWebApiConnector.canDeleteForumPost,
+        canPrepareDraft: MoodleWebApiConnector.canPrepareForumDraftArea,
+      );
+
   bool _canReply(MoodleForumPost p) =>
-      MoodleForumUtils.canReply(p) && MoodleWebApiConnector.canPostToForum;
+      MoodleForumEditUtils.canReplyTo(p, api: _api);
 
-  /// 編輯與刪除的閘門。缺席 ＝ null ＝ 不知道 ＝ 不畫（照抄 `canReply` 的態度）。
-  ///
-  /// `_controller.fresh` 那一項是 0-a：能力旗標是抓取當下的快照，而編輯窗長度
-  /// 讀不到，`Stale`（快取／離線／送出後重抓失敗）時它們就開始說謊。
-  bool _canEdit(MoodleForumPost p) =>
-      _controller.fresh &&
-      MoodleWebApiConnector.canEditForumPost &&
-      MoodleWebApiConnector.canReadForumPost &&
-      p.capabilities?.edit == true &&
-      !p.isdeleted &&
-      // 有附件而站台沒開 `prepare_draft_area_for_post` 時整個不給編輯：那條路
-      // 只剩「不送 attachmentsid」，而那會把主題清單的迴紋針清掉。與其在存檔
-      // 那一刻才拒絕，不如一開始就不給入口。
-      (p.attachments.isEmpty || MoodleWebApiConnector.canPrepareForumDraftArea);
+  bool _canEdit(MoodleForumPost p) => MoodleForumEditUtils.canEditPost(p,
+      fresh: _controller.fresh, api: _api);
 
-  bool _canDelete(MoodleForumPost p) =>
-      _controller.fresh &&
-      MoodleWebApiConnector.canDeleteForumPost &&
-      p.capabilities?.delete == true &&
-      !p.isdeleted;
+  bool _canDelete(MoodleForumPost p) => MoodleForumEditUtils.canDeletePost(p,
+      fresh: _controller.fresh, api: _api);
 }

@@ -6,6 +6,7 @@ import 'package:flutter_app/src/config/app_typography.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/src/controller/course_detail/course_detail_controller.dart';
 import 'package:flutter_app/src/model/course/course_main_extra_json.dart';
+import 'package:flutter_app/src/util/course_extra_info_utils.dart';
 import 'package:flutter_app/src/util/course_grading_utils.dart';
 import 'package:flutter_app/ui/components/page/result_view.dart';
 import 'package:flutter_app/ui/components/toast/tat_toast.dart';
@@ -74,43 +75,12 @@ class CourseInfoPage extends StatelessWidget {
     ];
   }
 
-  List<Widget> _buildFactRows(BuildContext context, CourseExtraInfoJson info) {
-    final rows = <Widget>[];
-
-    void add(String label, String value, {String? footnote}) {
-      if (value.trim().isEmpty) return;
-      rows.add(_FactRow(label: label, value: value, footnote: footnote));
-    }
-
-    add(R.current.instructor, info.courseTeacher);
-    add(R.current.classRoomNo, info.classRoomNo);
-    if (info.courseTimes.isNotEmpty || info.practicalTimes.isNotEmpty) {
-      add(
-        R.current.courseAndPracticalTimes,
-        sprintf(R.current.hoursValue, [info.courseTimes, info.practicalTimes]),
-      );
-    }
-    add(
-      R.current.enrolledCount,
-      info.allStudent.isEmpty
-          ? ''
-          : sprintf(R.current.enrolledCountValue,
-              [info.allStudent, info.chooseStudent, info.threeStudent]),
-      footnote: _limitSummary(info),
-    );
-
-    return rows;
-  }
-
-  /// 三個上限任何一個缺就整條不顯示——半條數字比沒有還難懂。
-  String? _limitSummary(CourseExtraInfoJson info) {
-    final ntu = int.tryParse(info.nTURestrict.trim());
-    final ntnu = int.tryParse(info.nTNURestrict.trim());
-    if (info.restrict1.isEmpty || info.restrict2.isEmpty) return null;
-    if (ntu == null || ntnu == null) return null;
-    return sprintf(R.current.enrollmentLimitSummary,
-        [info.restrict1, info.restrict2, ntu + ntnu]);
-  }
+  List<Widget> _buildFactRows(BuildContext context, CourseExtraInfoJson info) =>
+      [
+        for (final fact in CourseExtraInfoUtils.facts(info))
+          _FactRow(
+              label: fact.label, value: fact.value, footnote: fact.footnote),
+      ];
 
   List<Widget> _buildSections(BuildContext context, CourseExtraInfoJson info) {
     final sections = <Widget>[];
@@ -135,13 +105,7 @@ class CourseInfoPage extends StatelessWidget {
 
     // 其餘長欄位收進折疊列。攤開來排是 18 張一樣大的卡片，正是這次要改掉的
     // 東西；真的要看的人點一下就好。
-    final more = <_CollapsibleItem>[
-      (title: R.current.courseContent, body: info.courseContent.trim()),
-      (title: _booksTitle(info), body: _books(info)),
-      (title: R.current.courseNote, body: info.courseNote.trim()),
-      (title: R.current.coreAbility, body: info.coreAbility.trim()),
-      (title: R.current.courseRemark, body: info.courseRemark.trim()),
-    ].where((item) => item.body.isNotEmpty).toList();
+    final more = CourseExtraInfoUtils.moreFields(info);
 
     final url = info.courseURL.trim();
     final hasUrl = url.isNotEmpty && onOpenUrl != null;
@@ -157,17 +121,6 @@ class CourseInfoPage extends StatelessWidget {
     return sections;
   }
 
-  String _booksTitle(CourseExtraInfoJson info) {
-    if (info.courseTextbook.trim().isEmpty) return R.current.courseRefbook;
-    if (info.courseRefbook.trim().isEmpty) return R.current.courseTextbook;
-    return R.current.courseTextbookAndRefbook;
-  }
-
-  String _books(CourseExtraInfoJson info) {
-    return [info.courseTextbook.trim(), info.courseRefbook.trim()]
-        .where((text) => text.isNotEmpty)
-        .join('\n');
-  }
 }
 
 /// 課名、課號與學年期，以及必修／學分／全年這三個標籤。
@@ -179,15 +132,8 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.scheme;
-    final subtitle = [info.courseNo, info.semester]
-        .where((text) => text.trim().isNotEmpty)
-        .join(' · ');
-    final chips = [
-      info.requireOption.trim(),
-      if (info.creditPoint.trim().isNotEmpty)
-        sprintf(R.current.creditCount, [info.creditPoint.trim()]),
-      info.allYear.trim(),
-    ].where((text) => text.isNotEmpty).toList();
+    final subtitle = CourseExtraInfoUtils.subtitle(info);
+    final chips = CourseExtraInfoUtils.chips(info);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

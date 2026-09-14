@@ -14,7 +14,7 @@ import 'package:flutter_app/ui/components/page/result_view.dart';
 import 'package:flutter_app/ui/components/page/web_view_opener.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_forum_thread_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/widgets/forum_discussion_card.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/widgets/forum_month_groups.dart';
+import 'package:flutter_app/src/util/forum_feed_utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 

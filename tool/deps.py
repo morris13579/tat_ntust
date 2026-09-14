@@ -49,10 +49,14 @@ MAX_UPWARD_BY_PAIR = {}
 # rank 越小代表越上層。A -> B 若 rank(B) < rank(A) 就是上行邊。
 LAYER_RULES = [
     ("lib/main.dart", "main"),
+    ("lib/core_main.dart", "main"),
     ("lib/firebase_options.dart", "config"),
     ("lib/src/R.dart", "config"),
     ("lib/ui/", "ui"),
     ("lib/src/controller/", "controller"),
+    # 原生版的邊界實作：呼叫 repository、把結果翻成 Pigeon 的型別。
+    # 和 controller 同層——它對 UI 的角色就是 controller，只是那個 UI 在 Swift。
+    ("lib/src/native/", "controller"),
     ("lib/src/repository/", "repository"),
     ("lib/src/auth/", "auth"),
     ("lib/src/connector/", "connector"),
@@ -192,6 +196,38 @@ def check_log_is_a_leaf(graph):
     return sorted(bad)
 
 
+def check_core_main_is_ui_free(graph):
+    """`lib/core_main.dart` 是 headless 原生版的進入點，不可以碰到 lib/ui/。
+
+    上行邊檢查抓不到這件事：ui 排在 main 底下，main -> ui 是合法的下行邊。
+    所以這裡直接算可達集合——只要從 core_main 出發走得到任何一個 lib/ui/
+    的檔案，那份 UI 就會被連進原生版的 AOT，而且遲早有人在核心裡呼叫它。
+
+    回傳 (違規的 lib/ui 檔案, 一條示範路徑)；空清單代表前提成立。
+    """
+    entry = "lib/core_main.dart"
+    if entry not in graph:
+        return [], []
+    seen = {entry}
+    parent = {}
+    queue = [entry]
+    while queue:
+        cur = queue.pop(0)
+        for nxt in graph.get(cur, ()):
+            if nxt in seen:
+                continue
+            seen.add(nxt)
+            parent[nxt] = cur
+            queue.append(nxt)
+    bad = sorted(f for f in seen if f.startswith("lib/ui/"))
+    if not bad:
+        return [], []
+    path = [bad[0]]
+    while path[-1] in parent:
+        path.append(parent[path[-1]])
+    return bad, list(reversed(path))
+
+
 def main():
     repo = os.getcwd()
     check = "--check" in sys.argv
@@ -234,6 +270,14 @@ def main():
         return 0
 
     failed = False
+    ui_in_core, sample_path = check_core_main_is_ui_free(graph)
+    if ui_in_core:
+        print(f"\nFAIL: lib/core_main.dart 走得到 {len(ui_in_core)} 個 lib/ui/ 檔案。")
+        print("      headless 進入點不可以連到 UI，否則那份 UI 會被連進原生版的 AOT。")
+        print("      示範路徑：")
+        for step in sample_path:
+            print(f"        {step}")
+        failed = True
     leaks = check_log_is_a_leaf(graph)
     if leaks:
         print("\nFAIL: lib/debug/ 依賴了自己以外的專案檔案，"

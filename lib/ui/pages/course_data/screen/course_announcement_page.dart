@@ -6,7 +6,6 @@ import 'package:flutter_app/src/connector/moodle_webapi_connector.dart';
 import 'package:flutter_app/src/controller/course_data/course_data_controller.dart';
 import 'package:flutter_app/src/controller/course_data/course_forum_controller.dart';
 import 'package:flutter_app/src/model/course_table/course_table_json.dart';
-import 'package:flutter_app/src/model/moodle_webapi/moodle_core_course_get_contents.dart';
 import 'package:flutter_app/src/model/moodle_webapi/moodle_mod_forum_get_forum_discussions.dart';
 import 'package:flutter_app/src/repository/result.dart';
 import 'package:flutter_app/ui/components/card/section_card.dart';
@@ -16,7 +15,7 @@ import 'package:flutter_app/ui/components/page/result_view.dart';
 import 'package:flutter_app/ui/components/page/web_view_opener.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/sub_page/course_forum_thread_page.dart';
 import 'package:flutter_app/ui/pages/course_data/screen/widgets/forum_discussion_card.dart';
-import 'package:flutter_app/ui/pages/course_data/screen/widgets/forum_month_groups.dart';
+import 'package:flutter_app/src/util/forum_feed_utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter_app/ui/other/lucide_icons.dart';
 import 'package:sprintf/sprintf.dart';
@@ -89,22 +88,14 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
     // 0）時只剩名稱這條線索。
     final announcementForumId = _state.value?.dataOrNull?.forumId ?? 0;
     if (_forums.isNotEmpty || contents == null) return;
-    final found = <_MergedForum>[];
-    final seen = <int>{};
-    for (final section in contents) {
-      for (final m in section.modules) {
-        if (m.modname != _forumModName || m.instance <= 0) continue;
-        // 公告區不併進來——它已經是這一頁的主體。id 是 0 的舊快取還有名稱
-        // 這條退路（connector 找公告區時用的是同一組線索）。
-        if (m.instance == announcementForumId) continue;
-        if (announcementForumId == 0 &&
-            MoodleWebApiConnector.looksLikeAnnouncementName(m.name)) {
-          continue;
-        }
-        if (!seen.add(m.instance)) continue;
-        found.add(_MergedForum(m));
-      }
-    }
+    final found = [
+      for (final id in forumModulesToMerge(
+        contents,
+        announcementForumId: announcementForumId,
+        looksLikeAnnouncement: MoodleWebApiConnector.looksLikeAnnouncementName,
+      ))
+        _MergedForum(id),
+    ];
     if (found.isEmpty) return;
     _forums.addAll(found);
     // 請求排到這一幀之後：在 build 中途寫 Rx 會撞到正在進行的重建。
@@ -115,8 +106,6 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
       }
     });
   }
-
-  static const String _forumModName = 'forum';
 
   @override
   Widget build(BuildContext context) {
@@ -299,9 +288,7 @@ class _CourseAnnouncementPageState extends State<CourseAnnouncementPage>
 
 /// 併進公告頁的一個課程討論區。
 class _MergedForum {
-  _MergedForum(Modules module)
-      : id = module.instance,
-        controller = CourseForumController(forumId: module.instance);
+  _MergedForum(this.id) : controller = CourseForumController(forumId: id);
 
   final int id;
   final CourseForumController controller;

@@ -5,7 +5,7 @@ import 'package:flutter_app/src/config/app_typography.dart';
 import 'package:flutter_app/src/model/mail/mail_message_json.dart';
 import 'package:flutter_app/src/util/ui_utils.dart';
 import 'package:flutter_app/ui/other/theme_context.dart';
-import 'package:flutter_app/ui/pages/mail/components/mail_groups.dart';
+import 'package:flutter_app/src/util/mail_groups.dart';
 
 /// 信件清單的一列：第一行「寄件者 · 時間」，第二行主旨。
 ///

@@ -52,4 +52,14 @@ class MoodlePluginFileUtils {
   }
 
   static final RegExp _queryOrFragment = RegExp(r'[?#]');
+
+  /// 網址最後一段當檔名。`pathSegments` 是解碼過的，`..` 或帶分隔符的一段接進
+  /// 儲存路徑會寫到下載目錄外面，這種一律回空字串改讓伺服器的標頭決定。
+  static String downloadNameOf(String url) {
+    final segments = Uri.tryParse(url)?.pathSegments ?? const <String>[];
+    final name = segments.isEmpty ? "" : segments.last;
+    const unsafe = ['/', r'\', '\u0000'];
+    if (name == '.' || name == '..' || unsafe.any(name.contains)) return "";
+    return name;
+  }
 }
