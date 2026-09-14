@@ -25,7 +25,7 @@ BUNDLE_ID  = 'club.ntust.tat.72QP2FGS73'
 TEAM       = '72QP2FGS73'
 # 原生版的版號，App 與小工具 extension 必須相同。接在 Flutter 版上架過的 2.1.0（124）之後，minor 加一，不跳大版本。
 MARKETING_VERSION = '2.2.0'
-BUILD_NUMBER      = '125'
+BUILD_NUMBER      = '127'
 
 # 小工具 extension 向 App 借的檔案（相對 TATNative/）：畫面與資料格式、字串、Lucide、課表配色。
 # extension 裡沒有 Flutter 引擎，借來的檔案不可以用到核心的型別。
@@ -194,7 +194,8 @@ target.build_configurations.each do |config|
     'SWIFT_VERSION'              => '5.0',
     'SWIFT_OBJC_BRIDGING_HEADER' => 'TATNative/Core/TATNative-Bridging-Header.h',
     'IPHONEOS_DEPLOYMENT_TARGET' => '17.0',
-    'TARGETED_DEVICE_FAMILY'     => '1',
+    # iPhone 與 iPad。要改在這裡：Xcode 專案是這支腳本產生的，在 Xcode 裡改的下次產生就被蓋掉。
+    'TARGETED_DEVICE_FAMILY'     => '1,2',
     'ASSETCATALOG_COMPILER_APPICON_NAME' => 'AppIcon',
     'CLANG_ENABLE_MODULES'       => 'YES',
     # firebase_* 外掛 `#import <Firebase/Firebase.h>`，而那個 pod 刻意沒有模組，Xcode 預設把
@@ -218,7 +219,7 @@ widget.build_configurations.each do |config|
     'GENERATE_INFOPLIST_FILE'        => 'NO',
     'SWIFT_VERSION'                  => '5.0',
     'IPHONEOS_DEPLOYMENT_TARGET'     => '17.0',
-    'TARGETED_DEVICE_FAMILY'         => '1',
+    'TARGETED_DEVICE_FAMILY'         => '1,2',
     'MARKETING_VERSION'              => MARKETING_VERSION,
     'CURRENT_PROJECT_VERSION'        => BUILD_NUMBER,
     'APPLICATION_EXTENSION_API_ONLY' => 'YES',
